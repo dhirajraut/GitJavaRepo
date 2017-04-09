@@ -1,0 +1,7 @@
+package beanpack;
+
+public class Address {
+
+	private String streetName ,city, pin;
+	
+}

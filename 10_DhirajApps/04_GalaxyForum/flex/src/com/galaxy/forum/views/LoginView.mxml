@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox label="Authentication"
+    width="100%" height="100%" horizontalCenter="0" verticalCenter="0"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:forms="com.galaxy.forum.forms.*">
+    
+    <mx:HBox width="100%" height="100%" horizontalAlign="center">
+        <mx:Image source="@Embed(source='../styles/assets/Forum2.gif')" verticalCenter="0" />
+        <mx:VBox>
+            <forms:LoginForm id="loginForm" verticalCenter="0"/>
+            <mx:Label text="Latest News" styleName="txtBold" paddingTop="20"/>
+            <forms:Ticker />
+       </mx:VBox>
+    </mx:HBox>
+</mx:VBox>

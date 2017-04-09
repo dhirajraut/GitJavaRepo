@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/phoenix/!svn/ver/7229/branches/phx2.1/conf/xsl
+END
+invoice.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/xsl/invoice.xsl
+END
+command_templates.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/7216/branches/phx2.1/conf/xsl/command_templates.xsl
+END
+exxon.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/xsl/exxon.xsl
+END

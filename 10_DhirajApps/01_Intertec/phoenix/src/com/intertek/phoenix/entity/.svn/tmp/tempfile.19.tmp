@@ -1,0 +1,777 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ */
+package com.intertek.phoenix.entity;
+
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Index;
+
+import com.intertek.entity.Branch;
+import com.intertek.entity.ServiceLocation;
+import com.intertek.entity.Test;
+import com.intertek.entity.User;
+
+/**
+ * 
+ * @author richard.qin
+ */
+@Entity(name="com.intertek.phoenix.entity.JobTest")
+@Table(name="PHX_JOB_TEST")
+//@Inheritance(strategy = InheritanceType.JOINED)
+public class JobTest {
+	
+    @Id
+    @SequenceGenerator(name="PHX_JobTest_seq", sequenceName = "PHX_JOB_TEST_SEQ")
+    @GeneratedValue(generator = "PHX_JobTest_seq" )
+    @Column(name = "ID")
+    private Long id; 
+
+    @Column(name = "JOB_SERVICE_LEVEL_ID", updatable = false, insertable = false)
+    private Long jobServiceLevelId;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "JOB_SERVICE_LEVEL_ID")
+    @Index(name="PHX_JOB_TEST_IDX_JOB_SRVC_LVL")
+    private JobServiceLevel jobServiceLevel;
+    
+    @Column(name = "TEST_ID", updatable = false, insertable = false)
+    private String testId;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "TEST_ID")
+    @Index(name="PHX_JOB_TEST_IDX_TEST")
+    private Test test;
+    
+    @Column(name = "QUANTITY", precision = 38, scale = 4)
+    private double quantity;
+    
+    @Column(name = "QUOTED_AMOUNT", precision = 38, scale = 4)
+    private double quotedAmount;
+    
+    @Column(name = "OT", precision = 1, scale = 0)
+    @org.hibernate.annotations.Type(type = "yes_no")
+    private boolean ot;
+    
+    @Column(name = "LINE_DESCRIPTION", length = 1024)
+    private String lineDescription;
+    
+    @Column(name = "CONTRACT_REF_NO", length = 45)
+    private String contractRefNo;
+    
+    @Column(name = "IS_MANUAL_TEST")
+    @org.hibernate.annotations.Type(type = "yes_no")
+    private boolean isManualTest;
+    
+    @Column(name = "UNIT_PRICE", precision = 38, scale = 4)
+    private double unitPrice;
+    
+    // TODO not sure is the pricing info belong here
+//    @Column(name = "DISCOUNT", precision = 38, scale = 4)
+//    private double discount;
+//    
+//    @Column(name = "TOTAL_PRICE", precision = 38, scale = 4)
+//    private double totalPrice;
+    
+    @Column(name = "SAMPLE_DESCRIPTION", columnDefinition = "NVARCHAR2(1024)")
+    private String sampleDescription;
+
+    @Column(name = "START_DATE")
+    private Timestamp startDate;
+    @Column(name = "END_DATE")
+    private Timestamp endDate;
+    @Column(name = "TASK_READY_DATE")
+    private Timestamp taskReadyDate;
+
+    @Column(name = "BRANCH_NAME", updatable = false, insertable = false)
+    private String branchName;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "BRANCH_NAME")
+    @Index(name="PHX_CE_JOBTEST_IDX_BRANCH")
+    private Branch branch;
+
+    @Column(name = "MODEL_NUMBER", columnDefinition = "NVARCHAR2(1024)")
+    private String modelNumber;
+
+    @Column(name = "TASK_MANAGER_ID", updatable = false, insertable = false)
+    private String taskManagerId;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "TASK_MANAGER_ID")
+    @Index(name="PHX_CE_JOBTEST_IDX_TSK_MGR")
+    private User taskManager;
+
+    @Column(name = "CREDIT_OVERRIDE_BY_ID", updatable = false, insertable = false)
+    private String creditOverrideById;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "CREDIT_OVERRIDE_BY_ID")
+    @Index(name="PHX_CE_JOBTEST_IDX_CRDT")
+    private User creditOverrideBy;
+
+    @Column(name = "SERVICE_LOCATION_CODE", updatable = false, insertable = false)
+    private String serviceLocationCode;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "SERVICE_LOCATION_CODE")
+    @Index(name="PHX_CE_JOBTEST_IDX_LOCT")
+    private ServiceLocation serviceLocation;
+    
+    @Column(name = "BILLING_STATUS", length = 20)
+    @Enumerated(EnumType.STRING)
+    private BillingStatus billingStatus;
+    @Column(name = "OPERATIONAL_STATUS", length = 20)
+    @Enumerated(EnumType.STRING)
+    private OperationalStatus operationalStatus;
+    
+    @OneToMany(mappedBy = "jobTest", fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    private Set<Estimation> estimations;
+
+    @Column(name = "FORCASED_REVENUE")
+    private double forcastedRevenue;
+    @Column(name = "UOM")
+    private String uom;
+    
+    @Column(name = "PO_NUMBER", length = 128, updatable = false, insertable = false)
+    private String poNumber;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "PO_NUMBER", referencedColumnName = "PO_NUMBER")
+    @Index(name="PHX_JOBTEST_IDX_PO")
+    private PurchaseOrder purchaseOrder;
+
+    @Column(name = "QUOTE_LINE_ID", updatable = false, insertable = false)
+    private Long quoteLineId;
+    @OneToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "QUOTE_LINE_ID")
+    @Index(name = "PHX_JOLI_IDX_QUOTE_LINE")
+    private QuoteLine quoteLine;
+
+    @Column(name = "QUOTED_PRICE", precision = 38, scale = 4)
+    private double quotedPrice;
+
+    @Column(name = "SERVICE_OFFERING_ID", updatable = false, insertable = false)
+    private Long serviceOfferingId;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "SERVICE_OFFERING_ID")
+    @Index(name="PHX_CE_JOBTEST_IDX_SERV_OFR")
+    private ServiceOffering serviceOffering;
+
+    @Column(name = "FUNDED_AMOUNT", precision = 38, scale = 4)
+    private double fundedAmount;
+    
+    @Column(name = "MASTER_ID", updatable = false, insertable = false)
+    private Long masterId;
+    @ManyToOne()
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    @JoinColumn(name = "MASTER_ID")
+    @Index(name="PHX_JOB_TEST_IDX_MASTER") // invalid index, must be replaced
+    private JobTest master;
+
+    @Column(name = "NOT_INVOICEABLE", precision = 1, scale = 0)
+    @org.hibernate.annotations.Type(type = "yes_no")
+    private boolean notInvoiceable;
+
+    
+    // Note, this field is for "split" line items
+    @OneToMany(mappedBy="master", fetch = FetchType.LAZY)
+    private Set<JobTest> related;
+    
+    @OneToMany( mappedBy="jobTest", fetch = FetchType.LAZY)
+    private Set<JobContractTest> jobContractTests;
+
+<<<<<<< .mine
+    @OneToMany(mappedBy = "jobTest", fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    
+    //    @JoinColumn(name = "JOB_TEST_ID")
+    private Set<JobTestNote> notes;    
+
+    @OneToMany(mappedBy = "jobTest", fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    //@JoinColumn(name = "JOB_TEST_ID")
+    private Set<JobTestAttachment> attachments;
+
+    @Column(name = "LINE_NUMBER")
+    private long linenumber;
+    
+=======
+    @OneToMany(mappedBy = "jobTest", fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    private Set<JobTestNote> notes;    
+
+    @OneToMany(mappedBy = "jobTest", fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+        org.hibernate.annotations.CascadeType.MERGE})
+    private Set<JobTestAttachment> attachments;
+
+    @Column(name = "LINE_NUMBER")
+    private long linenumber;
+    
+>>>>>>> .r6341
+    public JobTest() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getJobServiceLevelId() {
+        return jobServiceLevelId;
+    }
+
+    public void setJobServiceLevelId(Long jobServiceLevelId) {
+        this.jobServiceLevelId = jobServiceLevelId;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public JobServiceLevel getJobServiceLevel() {
+        return jobServiceLevel;
+    }
+
+    public void setJobServiceLevel(JobServiceLevel jobServiceLevel) {
+        this.jobServiceLevelId = jobServiceLevel.getId();
+        this.jobServiceLevel = jobServiceLevel;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.testId = test.getTestId();
+        this.test = test;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public boolean getOt() {
+        return ot;
+    }
+
+    public void setOt(boolean ot) {
+        this.ot = ot;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getLineDescription() {
+        return lineDescription;
+    }
+
+    public void setLineDescription(String lineDescription) {
+        this.lineDescription = lineDescription;
+    }
+
+    public String getContractRefNo() {
+        return contractRefNo;
+    }
+
+    public void setContractRefNo(String contractRefNo) {
+        this.contractRefNo = contractRefNo;
+    }
+
+    public boolean isManualTest() {
+        return isManualTest;
+    }
+
+    public void setManualTest(boolean isManualTest) {
+        this.isManualTest = isManualTest;
+    }
+
+    public Set<JobContractTest> getJobContractTests() {
+        if(jobContractTests == null){
+            jobContractTests = new HashSet<JobContractTest>();
+        }
+        return jobContractTests;
+    }
+
+    public boolean addJobContractTest(JobContractTest jct){
+        return this.getJobContractTests().add(jct);
+    }
+
+    public boolean removeJobContractTest(JobContractTest jct){
+        return this.getJobContractTests().remove(jct);
+    }
+    
+    public void setQuotedAmount(double amount){
+        this.quotedAmount = amount;
+    }
+
+    public double getQuotedAmount() {
+        return this.quotedAmount;
+    }
+
+    public String getSampleDescription() {
+        return sampleDescription;
+    }
+
+    public void setSampleDescription(String sampleDescription) {
+        this.sampleDescription = sampleDescription;
+    }
+
+    public Timestamp getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Timestamp startDate) {
+        this.startDate = startDate;
+    }
+
+    public Timestamp getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
+    }
+
+    public Timestamp getTaskReadyDate() {
+        return taskReadyDate;
+    }
+
+    public void setTaskReadyDate(Timestamp taskReadyDate) {
+        this.taskReadyDate = taskReadyDate;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
+    }
+
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getTaskManagerId() {
+        return taskManagerId;
+    }
+
+    public void setTaskManagerId(String taskManagerId) {
+        this.taskManagerId = taskManagerId;
+    }
+
+    public User getTaskManager() {
+        return taskManager;
+    }
+
+    public void setTaskManager(User taskManager) {
+        this.taskManager = taskManager;
+    }
+
+    public String getCreditOverrideById() {
+        return creditOverrideById;
+    }
+
+    public void setCreditOverrideById(String creditOverrideById) {
+        this.creditOverrideById = creditOverrideById;
+    }
+
+    public User getCreditOverrideBy() {
+        return creditOverrideBy;
+    }
+
+    public void setCreditOverrideBy(User creditOverrideBy) {
+        this.creditOverrideBy = creditOverrideBy;
+    }
+
+    public String getServiceLocationCode() {
+        return serviceLocationCode;
+    }
+
+    public void setServiceLocationCode(String serviceLocationCode) {
+        this.serviceLocationCode = serviceLocationCode;
+    }
+
+    public ServiceLocation getServiceLocation() {
+        return serviceLocation;
+    }
+
+    public void setServiceLocation(ServiceLocation serviceLocation) {
+        this.serviceLocation = serviceLocation;
+    }
+
+    public BillingStatus getBillingStatus() {
+        return billingStatus;
+    }
+
+    public void setBillingStatus(BillingStatus billingStatus) {
+        this.billingStatus = billingStatus;
+    }
+
+    public OperationalStatus getOperationalStatus() {
+        return operationalStatus;
+    }
+
+    public void setOperationalStatus(OperationalStatus operationalStatus) {
+        this.operationalStatus = operationalStatus;
+    }
+
+    public double getForcastedRevenue() {
+        return forcastedRevenue;
+    }
+
+    public void setForcastedRevenue(double forcastedRevenue) {
+        this.forcastedRevenue = forcastedRevenue;
+    }
+
+    public String getUom() {
+        return uom;
+    }
+
+    public void setUom(String uom) {
+        this.uom = uom;
+    }
+
+    public String getPoNumber() {
+        return poNumber;
+    }
+
+    public void setPoNumber(String poNumber) {
+        this.poNumber = poNumber;
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public Long getQuoteLineId() {
+        return quoteLineId;
+    }
+
+    public void setQuoteLineId(Long quoteLineId) {
+        this.quoteLineId = quoteLineId;
+    }
+
+    public QuoteLine getQuoteLine() {
+        return quoteLine;
+    }
+
+    public void setQuoteLine(QuoteLine quoteLine) {
+        this.quoteLine = quoteLine;
+    }
+
+    public double getQuotedPrice() {
+        return quotedPrice;
+    }
+
+    public void setQuotedPrice(double quotedPrice) {
+        this.quotedPrice = quotedPrice;
+    }
+
+    public Long getServiceOfferingId() {
+        return serviceOfferingId;
+    }
+
+    public void setServiceOfferingId(Long serviceOfferingId) {
+        this.serviceOfferingId = serviceOfferingId;
+    }
+
+    public ServiceOffering getServiceOffering() {
+        return serviceOffering;
+    }
+
+    public void setServiceOffering(ServiceOffering serviceOffering) {
+        this.serviceOffering = serviceOffering;
+    }
+
+    public double getFundedAmount() {
+        return fundedAmount;
+    }
+
+    public void setFundedAmount(double fundedAmount) {
+        this.fundedAmount = fundedAmount;
+    }
+
+    public Long getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(Long masterId) {
+        this.masterId = masterId;
+    }
+
+    public JobTest getMaster() {
+        return master;
+    }
+
+    public void setMaster(JobTest master) {
+        this.masterId = master.getId();
+        this.master = master;
+    }
+
+    public Set<Estimation> getEstimations() {
+        if(this.estimations == null){
+            this.estimations = new HashSet<Estimation>();
+        }
+        return estimations;
+    }
+    
+    public boolean addEstimation(Estimation est){
+        return this.getEstimations().add(est);
+    }
+    
+    public boolean removeEstimation(Estimation est){
+        return this.getEstimations().remove(est);
+    }
+
+    public Set<JobTest> getRelated() {
+        if(this.related == null){
+            this.related = new HashSet<JobTest>();
+        }
+        return related;
+    }
+    
+    public boolean addRelated(JobTest jobTest){
+        
+        jobTest.setMaster(this);
+        int max=0;
+        for(JobTest jt:this.getRelated()) {             
+            if(max <jt.getLinenumber()) {                   
+                max = (int) jt.getLinenumber();
+            }               
+        }  
+        max++;
+        jobTest.setLinenumber(max);
+
+        return this.getRelated().add(jobTest);
+    }
+    
+    public boolean removeRelated(JobTest jobTest){
+        return this.getRelated().remove(jobTest);
+    }
+
+    //this method convert Set to array, to make an iteration in JSP
+    public JobTest[] getSplit(){
+        JobTest[] jobTest=null;        
+        if(related !=null && related.size()>0){
+             jobTest= related.toArray(new JobTest[related.size()]);
+        }
+        return jobTest;
+    }
+
+    public boolean isNotInvoiceable() {
+        return notInvoiceable;
+    }
+
+    public void setNotInvoiceable(boolean notInvoiceable) {
+        this.notInvoiceable = notInvoiceable;
+    }
+<<<<<<< .mine
+
+
+    public Set<JobTestNote> getNotes() {
+        if (notes == null) {
+            notes = new HashSet<JobTestNote>();
+        }
+        return notes;
+    }
+
+    public boolean addNote(JobTestNote note) {
+        return getNotes().add(note);
+    }
+
+    public boolean removeNote(Note note) {
+        return getNotes().remove(note);
+    }
+
+    public Set<JobTestNote> removeNotes(JobTestNote... notes) {
+        Set<JobTestNote> removed = new HashSet<JobTestNote>();
+        if (notes == null) {
+            return removed;
+        }
+
+        Set<JobTestNote> myNotes = this.getNotes();
+        // removing all the notes
+        for (JobTestNote note: this.getNotes()) {
+            if (myNotes.remove(note)) {
+                removed.add(note);
+                note.setJobTest(null);
+            }
+        }
+        return removed;
+    }
+
+    
+    public void setNotes(Set<JobTestNote> notes) {
+        this.notes = notes;
+    }
+
+    public Set<JobTestAttachment> getAttachments() {
+        if (attachments == null) {
+            attachments = new HashSet<JobTestAttachment>();
+        }
+        return attachments;
+    }
+    
+    public void setAttachments(Set<JobTestAttachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public boolean addAttachment(JobTestAttachment attachment) {
+        System.out.println("inside the JobTEst add Attachment method is"+ getAttachments());
+        return getAttachments().add(attachment);
+    }
+
+    public boolean removeAttachment(Attachment attachment) {
+        return getAttachments().remove(attachment);
+    }
+
+    public long getLinenumber() {
+        return linenumber;
+    }
+
+    public void setLinenumber(long linenumber) {
+        this.linenumber = linenumber;
+    }
+
+=======
+
+
+    public Set<JobTestNote> getNotes() {
+        if (notes == null) {
+            notes = new HashSet<JobTestNote>();
+        }
+        return notes;
+    }
+
+    public boolean addNote(JobTestNote note) {
+        return getNotes().add(note);
+    }
+
+    public boolean removeNote(Note note) {
+        return getNotes().remove(note);
+    }
+
+    public Set<JobTestNote> removeNotes(JobTestNote... notes) {
+        Set<JobTestNote> removed = new HashSet<JobTestNote>();
+        if (notes == null) {
+            return removed;
+        }
+
+        Set<JobTestNote> myNotes = this.getNotes();
+        // removing all the notes
+        for (JobTestNote note: this.getNotes()) {
+            if (myNotes.remove(note)) {
+                removed.add(note);
+                note.setJobTest(null);
+            }
+        }
+        return removed;
+    }
+
+    
+    public void setNotes(Set<JobTestNote> notes) {
+        this.notes = notes;
+    }
+
+    public Set<JobTestAttachment> getAttachments() {
+        if (attachments == null) {
+            attachments = new HashSet<JobTestAttachment>();
+        }
+        return attachments;
+    }
+    
+    public void setAttachments(Set<JobTestAttachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public boolean addAttachment(JobTestAttachment attachment) {
+        return getAttachments().add(attachment);
+    }
+
+    public boolean removeAttachment(Attachment attachment) {
+        return getAttachments().remove(attachment);
+    }
+
+    public long getLinenumber() {
+        return linenumber;
+    }
+
+    public void setLinenumber(long linenumber) {
+        this.linenumber = linenumber;
+    }
+
+>>>>>>> .r6341
+}

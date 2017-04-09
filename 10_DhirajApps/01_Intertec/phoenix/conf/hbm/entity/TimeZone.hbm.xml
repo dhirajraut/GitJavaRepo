@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TimeZone" table="TIME_ZONES">
+    <id name="timeZone" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="TIME_ZONE" length="8" />
+    </id>
+    <property name="timeZoneDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="TIME_ZONE_DESC" length="50" />
+    </property>
+    <property name="timeZoneLabel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="TIME_ZONE_STD_LBL" length="8" />
+    </property>
+       <property name="utcOffset" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="UTC_OFFSET" length="8"  />
+    </property>
+
+  </class>
+</hibernate-mapping>
+

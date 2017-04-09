@@ -1,0 +1,10 @@
+package com.assignment;
+
+public class Department {
+
+	private int deptId;
+	private String deptName;
+	private String location;
+	
+	
+}

@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="basename"><value>messages</value></property>
+  </bean> 
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:db.properties</value>
+        <value>classpath:config.properties</value>
+      </list>
+    </property>    
+  </bean>
+
+  <bean id="entityDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${db.driver}"/>
+    <property name="url" value="${db.url}"/>
+    <property name="username" value="${db.user}"/>
+    <property name="password" value="${db.password}"/>
+    <property name="initialSize" value="0"/>
+    <property name="maxActive" value="30"/>
+    <property name="minIdle" value="0"/>
+    <property name="testOnBorrow" value="true"/>
+    <property name="testOnReturn" value="true"/>
+    <property name="testWhileIdle" value="true"/>
+    <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+    <property name="validationQuery" value="select 1 from dual"/>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="entitySessionFactory"/>
+  </bean>
+
+  <bean id="entitySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <property name="dataSource"><ref local="entityDataSource"/></property>
+    <property name="mappingDirectoryLocations" value="classpath:hbm/entity"/>
+    <property name="annotatedClasses">
+        <list>
+<<<<<<< .mine
+            <!-- <value>com.intertek.phoenix.entity.CEInvoiceLineItem</value> -->
+=======
+            <!--<value>com.intertek.phoenix.entity.CEInvoiceLineItem</value>-->
+>>>>>>> .r5731
+        </list>
+    </property>
+
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+      </props>
+    </property>
+  </bean>
+
+  <aop:config>
+    <aop:pointcut id="serviceMethods" expression="execution(* com.intertek.service.*.*(..))"/>
+    <aop:advisor advice-ref="transactionAdvice" pointcut-ref="serviceMethods"/>
+  </aop:config>
+  
+  <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <tx:method name="*" propagation="REQUIRED"/>
+    </tx:attributes>
+  </tx:advice>
+  
+  <bean id="keyGenerator" class="com.intertek.util.KeyGenerator">
+    <property name="dataSource"><ref local="entityDataSource"/></property>
+  </bean>
+  
+  <bean id="dao" class="com.intertek.dao.DaoImpl">
+    <property name="sessionFactory">
+      <ref bean="entitySessionFactory" />
+    </property>
+  </bean>
+  
+  <bean id="criteriaService" class="com.intertek.service.CriteriaServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="adminService" class="com.intertek.service.AdminServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="adminService2" class="com.intertek.phoenix.service.AdminServiceImpl2">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="projectService" class="com.intertek.service.ProjectServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="userService" class="com.intertek.service.UserServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="menuService" class="com.intertek.service.MenuServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="jobService" class="com.intertek.service.JobServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+   <bean id="jobTypeService" class="com.intertek.service.JobTypeServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="customerService" class="com.intertek.service.CustomerServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="contractService" class="com.intertek.service.ContractServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="shippingAgentService" class="com.intertek.service.ShippingAgentServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="towingCompanyService" class="com.intertek.service.TowingCompanyServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="serviceLocationService" class="com.intertek.service.ServiceLocationServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="sequenceNumberService" class="com.intertek.service.SequenceNumberServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="countryService" class="com.intertek.service.CountryServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="currencyService" class="com.intertek.service.CurrencyServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="calculatorService" class="com.intertek.service.CalculatorServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="testService" class="com.intertek.service.TestServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="slateService" class="com.intertek.service.SlateServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="creditAnalystService" class="com.intertek.service.CreditAnalystServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+      
+  <bean id="collectorService" class="com.intertek.service.CollectorServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="timeZoneService" class="com.intertek.service.TimeZoneServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="jobContractResultService" class="com.intertek.service.JobContractResultServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="taxService" class="com.intertek.service.TaxServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="prebillService" class="com.intertek.service.PrebillServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="autoNumberService" class="com.intertek.service.AutoNumberServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="pricingModelService" class="com.intertek.service.PricingModelServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="serviceTypeService" class="com.intertek.service.ServiceTypeServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="bankService" class="com.intertek.service.BankServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="bankAccountService" class="com.intertek.service.BankAccountServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="bankAccountCurrService" class="com.intertek.service.BankAccountCurrServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="currencyRateService" class="com.intertek.service.CurrencyRateServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="paymentTermService" class="com.intertek.service.PaymentTermServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="lockingService" class="com.intertek.service.ApplicationLevelLockServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="jobContractSrc" class="com.intertek.service.JobContractSrcImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+   <bean id="dropdownService" class="com.intertek.service.DropdownServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  <bean id="jobVesselService" class="com.intertek.service.JobVesselServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  <bean id="wsService" class="com.intertek.service.WSServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="glService" class="com.intertek.service.GLServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="consolidatedInvoiceService" class="com.intertek.service.ConsolidatedInvoiceServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="requiredFieldService" class="com.intertek.service.RequiredFieldServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="zoneService" class="com.intertek.service.ZoneServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="inspectionRateService" class="com.intertek.service.InspectionRateServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="langService" class="com.intertek.service.LangServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+  
+  <bean id="notesService" class="com.intertek.service.NotesServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="rbService" class="com.intertek.service.RbServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+ <bean id="purchaseOrderService" class="com.intertek.phoenix.service.PurchaseOrderServiceImpl" />
+
+<!-- To be used for the invoice preview page
+ <bean id="ceInvoiceService" class="com.intertek.phoenix.invoice.InvoiceServiceImpl" />
+  
+-->
+  <bean id="productGroupService" class="com.intertek.service.ProductGroupServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="vesselTypeService" class="com.intertek.service.VesselTypeServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="serviceRateService" class="com.intertek.service.ServiceRateServiceImpl">
+    <property name="dao">
+      <ref bean="dao"/>
+    </property>   
+  </bean>
+
+  <bean id="hashGenerator" class="com.intertek.util.HashGenerator">
+    <property name="algorithm"><value>SHA1</value></property>
+  </bean>
+
+  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <props>
+        <prop key="resource.loader">class</prop>
+        <prop key="class.resource.loader.class">
+          org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+        </prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host">
+      <value>${email.host}</value>
+    </property>
+    <property name="port">
+      <value>${email.port}</value>
+    </property>
+    <property name="username">
+      <value>${email.username}</value>
+    </property>
+    <property name="password">
+      <value>${email.password}</value>
+    </property>
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">false</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+      </props>
+    </property>
+  </bean>    
+
+  <bean id="passwordMailPreparator" class="com.intertek.mail.VelocityMimeMessagePreparator" scope="prototype">
+    <property name="from">
+      <value>${email.from}</value>
+    </property>
+    <property name="subject">
+      <value>Password Reset</value>
+    </property>
+    <property name="bodyTemplatePath">
+      <value>vm/password.vm</value>
+    </property>
+    <property name="velocityEngine">
+      <ref bean="velocityEngine"/>
+    </property>
+  </bean>   
+
+  <bean id="integrationMailPreparator" class="com.intertek.mail.VelocityMimeMessagePreparator" scope="prototype">
+    <property name="from">
+      <value>${email.from}</value>
+    </property>
+    <property name="to">
+      <value>${email.to}</value>
+    </property>
+    <property name="subject">
+      <value>Phoenix Integration Message</value>
+    </property>
+    <property name="bodyTemplatePath">
+      <value>vm/integration.vm</value>
+    </property>
+    <property name="velocityEngine">
+      <ref bean="velocityEngine"/>
+    </property>
+  </bean>   
+
+  <bean id="propertyConfig" class="com.intertek.util.PropertyConfig">
+    <property name="propertyMap">
+      <map>
+        <entry key="hostingUrl"><value>${hosting.url}</value></entry>
+        <entry key="invoiceDir"><value>${invoice.dir}</value></entry>
+        <entry key="jasperDir"><value>${jasper.dir}</value></entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="metaDataMgr" class="com.intertek.meta.MetaDataManager">
+    <property name="location" value="meta/meta.xml"/>
+  </bean>
+
+  <bean id="dropDownMgr" class="com.intertek.meta.dropdown.DropDownManager">
+    <property name="location" value="meta/dropdown/dropdown.xml"/>
+  </bean>
+
+  <bean id="stateMachineMgr" class="com.intertek.statemachine.StateMachineManager">
+    <property name="location" value="statemachine/statemachine.xml"/>
+  </bean>
+  
+  <bean id="sendInvoiceToAribaManager" class="com.intertek.ariba.SendInvoiceToAribaManager">
+    <property name="dataTransporter">
+       <bean class="com.intertek.tool.datatransporter.impl.DataTransporterImpl">
+         <property name="url">
+           <value>${outbound.transporter.invoice.exxon.url}</value>
+         </property>
+       </bean>
+    </property>
+    <property name="dataTransformer">
+      <bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+        <property name="stylesheet" value="classpath:xsl/exxon.xsl"/>
+      </bean>
+    </property>
+  </bean>
+  
+  <bean id="oxmManager" class="com.intertek.tool.oxm.castor.CastorOxmManager">
+    <property name="mappingLocation" value="classpath:castor/castor-mapping-Entity.xml"/>
+  </bean>
+
+  <bean id="jobOrderService" class="com.intertek.phoenix.jobOrder.JobOrderServiceImpl"/>
+  <bean id="referenceDataService" class="com.intertek.phoenix.common.ReferenceDataServiceImpl"/>
+  <bean id="ceInvoiceService" class="com.intertek.phoenix.invoice.InvoiceServiceImpl"/>
+    
+  <bean id="searchService" class="com.intertek.phoenix.search.SearchServiceImpl"/>
+  <!--To be used for invoice page 
+   <bean id="invoiceService" class="com.intertek.phoenix.invoice.InvoiceServiceImpl">
+  </bean> 
+ -->
+ 
+ <bean id="esbService" class="com.intertek.phoenix.esb.ESBServiceImpl"/>
+<bean id="esbProjectUpdater" class="com.intertek.phoenix.esb.ESBSender">
+	<property name="url" value="http://127.0.0.1:8080/Quickstart_publish_as_webservice/ESBServiceSample/HelloWorldPubService?wsdl" />
+	<property name="dataTransformer">
+		<ref bean="jobOrderEntityTransformer"/>
+	</property> 
+</bean>
+  <bean id="jobOrderEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/CEJobOrder.xsl"/>
+  </bean>
+
+  <bean id="hibernateDao" class="com.intertek.phoenix.dao.HibernateDao" scope="prototype">
+      <property name="sesseionFactory">
+          <ref bean="entitySessionFactory"/>
+      </property>
+  </bean>
+</beans>

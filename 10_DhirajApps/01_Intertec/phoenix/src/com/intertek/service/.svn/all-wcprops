@@ -1,0 +1,209 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service
+END
+TaxServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/TaxServiceImpl.java
+END
+TestService.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/TestService.java
+END
+ProductGroupServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ProductGroupServiceImpl.java
+END
+TowingCompanyServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/TowingCompanyServiceImpl.java
+END
+ShippingAgentServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ShippingAgentServiceImpl.java
+END
+CustomerServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/CustomerServiceImpl.java
+END
+VesselTypeServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/VesselTypeServiceImpl.java
+END
+CountryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/CountryServiceImpl.java
+END
+ServiceLocationService.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ServiceLocationService.java
+END
+PrebillService.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/PrebillService.java
+END
+ProductGroupService.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ProductGroupService.java
+END
+ZoneServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ZoneServiceImpl.java
+END
+ServiceRateServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ServiceRateServiceImpl.java
+END
+UserServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/UserServiceImpl.java
+END
+CustomerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/CustomerService.java
+END
+VesselTypeService.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/VesselTypeService.java
+END
+InspectionRateServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/InspectionRateServiceImpl.java
+END
+ZoneService.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ZoneService.java
+END
+ServiceRateService.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ServiceRateService.java
+END
+UserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/UserService.java
+END
+RbServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/RbServiceImpl.java
+END
+InspectionRateService.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/InspectionRateService.java
+END
+ProjectServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ProjectServiceImpl.java
+END
+SlateServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/SlateServiceImpl.java
+END
+JobServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/JobServiceImpl.java
+END
+ContractServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ContractServiceImpl.java
+END
+TestServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/TestServiceImpl.java
+END
+RbService.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/RbService.java
+END
+JobService.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/JobService.java
+END
+AdminServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/AdminServiceImpl.java
+END
+PrebillServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/PrebillServiceImpl.java
+END
+CalculatorServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/CalculatorServiceImpl.java
+END
+ServiceLocationServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ServiceLocationServiceImpl.java
+END
+ContractService.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/service/ContractService.java
+END

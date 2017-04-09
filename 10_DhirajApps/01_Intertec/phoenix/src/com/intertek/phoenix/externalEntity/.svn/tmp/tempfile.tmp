@@ -1,0 +1,162 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ */
+package com.intertek.phoenix.externalEntity;
+
+import java.util.Date;
+
+import com.intertek.phoenix.entity.JobTest;;
+
+/**
+ * Object to send to ESB
+ * 
+ * @author Eric.Nguyen
+ */
+
+public class ProjectActivityX {
+    private String businessUnit;
+    private String jobNumber;
+    private String jobLineNumber;
+    private String jobLineDescription;
+    private String jobLineDetailDescription;
+    private String jobLineStatus;
+    private Date jobLineStatusEffDt;
+    private String operatingUnit;
+    private String departmentId;
+    private String product;
+    private String serviceOffering;
+    private Date chartfieldEffDt;
+    private String msgAction;
+
+    public ProjectActivityX() {
+
+    }
+    
+    public ProjectActivityX(String bu, String jobNumber, JobTest jt) {
+        this.businessUnit=bu;
+        this.jobNumber=jobNumber;
+        
+        //this.jobLineNumber=TODO: // Line number 1, 2, 3
+        this.jobLineDescription=jt.getTestId();
+        this.jobLineDetailDescription=jt.getLineDescription();
+<<<<<<< .mine
+        this.jobLineStatus=jt.getOperationalStatus().getValue(); //opertional status (Billing status - Rafiq)
+=======
+        this.jobLineStatus=jt.getOperationalStatus().status()+""; //opertional status (Billing status - Rafiq)
+>>>>>>> .r6280
+        this.jobLineStatusEffDt=null;
+        this.operatingUnit=jt.getBranchName();
+        //this.departmentId= -- TODO:
+        //this.product=TODO: -- product group id 
+        this.serviceOffering=jt.getServiceOfferingId()+"";
+        this.chartfieldEffDt=null;
+        this.msgAction="U"; //TODO: calculate this value -- N -- nothing change, U--update, C--Create
+    }
+    
+    public String getBusinessUnit() {
+        return businessUnit;
+    }
+
+    public void setBusinessUnit(String businessUnit) {
+        this.businessUnit = businessUnit;
+    }
+
+    public String getJobNumber() {
+        return jobNumber;
+    }
+
+    public void setJobNumber(String jobNumber) {
+        this.jobNumber = jobNumber;
+    }
+
+    public String getJobLineNumber() {
+        return jobLineNumber;
+    }
+
+    public void setJobLineNumber(String jobLineNumber) {
+        this.jobLineNumber = jobLineNumber;
+    }
+
+    public String getJobLineDescription() {
+        return jobLineDescription;
+    }
+
+    public void setJobLineDescription(String jobLineDescription) {
+        this.jobLineDescription = jobLineDescription;
+    }
+
+    public String getJobLineDetailDescription() {
+        return jobLineDetailDescription;
+    }
+
+    public void setJobLineDetailDescription(String jobLineDetailDescription) {
+        this.jobLineDetailDescription = jobLineDetailDescription;
+    }
+
+    public String getJobLineStatus() {
+        return jobLineStatus;
+    }
+
+    public void setJobLineStatus(String jobLineStatus) {
+        this.jobLineStatus = jobLineStatus;
+    }
+
+    public Date getJobLineStatusEffDt() {
+        return jobLineStatusEffDt;
+    }
+
+    public void setJobLineStatusEffDt(Date jobLineStatusEffDt) {
+        this.jobLineStatusEffDt = jobLineStatusEffDt;
+    }
+
+    public String getOperatingUnit() {
+        return operatingUnit;
+    }
+
+    public void setOperatingUnit(String operatingUnit) {
+        this.operatingUnit = operatingUnit;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getServiceOffering() {
+        return serviceOffering;
+    }
+
+    public void setServiceOffering(String serviceOffering) {
+        this.serviceOffering = serviceOffering;
+    }
+
+    public Date getChartfieldEffDt() {
+        return chartfieldEffDt;
+    }
+
+    public void setChartfieldEffDt(Date chartfieldEffDt) {
+        this.chartfieldEffDt = chartfieldEffDt;
+    }
+
+    public String getMsgAction() {
+        return msgAction;
+    }
+
+    public void setMsgAction(String msgAction) {
+        this.msgAction = msgAction;
+    }
+
+}

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/bank
+END
+edit_bank_account.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/bank/edit_bank_account.jsp
+END
+search_bank_account.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/bank/search_bank_account.jsp
+END

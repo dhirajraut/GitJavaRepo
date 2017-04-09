@@ -1,0 +1,9 @@
+package beanpack;
+
+public class AccountPojo {
+
+	private int acctId;
+	private String holderName;
+	private double balance;
+	
+}

@@ -1,0 +1,2658 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">
+    org.springmodules.validation.bean.conf.loader.annotation.handler.*
+  </meta>
+
+  <class name="Organization" table="ORGANIZATIONS">    
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="ORG_NAME" length="128" />
+    </id>
+
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+            
+    <set name="businessUnits" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="ORG_NAME" />
+      <one-to-many class="BusinessUnit" />
+    </set>
+  </class>
+  
+  <class name="BusinessUnit" table="BUSINESS_UNITS">    
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BU_NAME" length="5" />
+    </id>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="currencyBase" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="CURRENCY_BASE" length="32" />
+    </property>
+
+    <property name="description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta> 
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <property name="shortDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="SHORT_DESCR" length="128" />
+    </property>
+
+    <property name="defaultBu" type="java.lang.Boolean">
+      <column name="DEFAULT_BU"/>
+    </property>
+
+    <property name="handleVAT" type="java.lang.Boolean">
+      <column name="HANDLE_VAT"/>
+    </property>
+
+   <property name="defaultBuInd" type="java.lang.Boolean">
+      <column name="DEFAULT_BU_IND"/>
+    </property>
+
+    <property name="vatEnabledInd" type="java.lang.Boolean">
+      <column name="VAT_ENABLED_IND"/>
+    </property>
+
+    <property name="orgName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="ORG_NAME" length="128" not-null="true" />
+    </property>
+
+    <many-to-one name="organization"
+                 column="ORG_NAME"
+                 class="Organization" 
+                 insert="false" update="false" />
+                
+    <set name="branches" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="BU_NAME" />
+      <one-to-many class="Branch" />
+    </set>
+
+    <set name="busUnitVatLocs" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="BU_NAME" />
+      <one-to-many class="BusUnitVatLoc"/>
+    </set>
+  </class>
+  
+  <class name="BusUnitVatLoc" table="BUS_UNIT_VAT_LOC">    
+		<composite-id name="busUnitVatLocId" class="BusUnitVatLocId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="stateCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta> 
+			  <column name="STATE_CODE" length="6"/>
+			</key-property>
+      <key-property name="countryCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+			  <column name="COUNTRY_CODE" length="3"/>
+			</key-property>
+      <key-property name="buName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+			  <column name="BU_NAME" length="5"/>
+			</key-property>
+    </composite-id>
+
+    <property name="defaultLocInd" type="java.lang.Boolean">
+      <column name="DEFAULT_LOC_IND" />
+    </property>
+
+		<many-to-one name="country" 
+		             class="Country" 
+		             column="COUNTRY_CODE" 
+		             insert="false" update="false"/>
+		             
+    <many-to-one name="state" class="State" insert="false" update="false">    
+      <column name="STATE_CODE" />
+      <column name="COUNTRY_CODE" />
+    </many-to-one>
+
+		<many-to-one name="businessUnit" 
+		             class="BusinessUnit" 
+		             column="BU_NAME" 
+		             insert="false" update="false"/>
+  </class>
+  
+  <class name="Branch" table="BRANCHES">    
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="BRANCH_NAME" length="8" />
+    </id>
+
+    <property name="description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta> 
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="type" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="BRANCH_TYPE" length="4" />
+    </property>
+
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS1" length="55" />
+    </property>
+
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS2" length="55" />
+    </property>
+
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS3" length="55" />
+    </property>
+
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS4" length="55" />
+    </property>
+
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="CITY" length="30" />
+    </property>
+
+    <property name="num1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+      <column name="NUM1" length="6" />
+    </property>
+
+    <property name="num2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="NUM2" length="4" />
+    </property>
+
+    <property name="houseType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta> 
+      <column name="HOUSE_TYPE" length="2" />
+    </property>
+
+    <property name="addrField1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta> 
+      <column name="ADDR_FIELD1" length="2" />
+    </property>
+
+    <property name="addrField2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="ADDR_FIELD2" length="4" />
+    </property>
+
+    <property name="addrField3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="ADDR_FIELD3" length="4" />
+    </property>
+    
+    <property name="county" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="COUNTY" length="30" />
+    </property>
+
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta> 
+      <column name="POSTAL" length="12" />
+    </property>
+
+    <property name="phonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="PHONE_PREFIX" length="3" />
+    </property>
+
+    <property name="phoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta> 
+      <column name="PHONE_NUMBER" length="24" />
+    </property>
+
+    <property name="phoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+      <column name="PHONE_EXTENSION" length="6" />
+    </property>
+
+    <property name="fax" type="int">
+      <column name="FAX" sql-type="NUMBER" />
+    </property>
+
+    <property name="branchEmail" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="BRANCH_EMAIL" length="70" />
+    </property>
+
+    <property name="logoName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="LOGO_NAME " length="30" />
+    </property>
+
+    <property name="busUnitName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=150) private</meta> 
+      <column name="BUS_UNIT_NAME" length="150" />
+    </property>
+
+		<property name="stateCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+			<column name="STATE_CODE" length="6" />
+		</property>    
+		<property name="countryCode" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+			<column name="COUNTRY_CODE" length="3" not-null="true" />
+		</property>
+
+    <many-to-one name="country"
+                 column="COUNTRY_CODE"
+                 class="Country" 
+                 insert="false" update="false"/>    
+
+    <many-to-one name="state" class="State" insert="false" update="false">    
+      <column name="STATE_CODE" />
+      <column name="COUNTRY_CODE" />
+    </many-to-one>
+
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BU_NAME" length="5" not-null="true" />
+    </property>
+
+    <many-to-one name="businessUnit"
+                 column="BU_NAME"
+                 class="BusinessUnit" 
+                 insert="false" update="false" />
+  
+    <property name="opsBranchName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="OPS_BRANCH_NAME" length="8" />
+    </property>
+
+    <property name="labBranchName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="LAB_BRANCH_NAME" length="8" />
+    </property>
+
+		<many-to-one name="opsBranch"
+							 column="OPS_BRANCH_NAME"
+							 class="Branch" 
+							 insert="false" update="false" />
+
+    <many-to-one name="labBranch"
+                 column="LAB_BRANCH_NAME"
+                 class="Branch" 
+                 insert="false" update="false" />
+                
+    <set name="users" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="BRANCH_NAME" />
+      <one-to-many class="User" />
+    </set>
+
+    <set name="assocBranch" table="ASSOC_BRANCH" cascade="all-delete-orphan" lazy="true" inverse="true" >
+      <key column="BRANCH_NAME" />
+      <many-to-many class="Branch" column="ASSOC_BRANCH_NAME" />
+    </set>
+  </class>
+  
+  <class name="User" table="USERS">    
+    <id name="loginName" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="LOGIN_NAME" length="128" />
+    </id>
+
+    <property name="password" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="password" length="128" not-null="true" />
+    </property>
+
+    <property name="firstName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="first_name" length="128"  />
+    </property>
+
+    <property name="middleName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="middle_name" length="128"  />
+    </property>
+    
+    <property name="lastName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="last_name" length="128" />
+    </property>
+
+    <property name="workFunction" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta> 
+      <column name="work_function" length="5" />
+    </property>
+    
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta> 
+      <column name="email" length="70" />
+    </property>
+
+    <property name="createTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+
+    <property name="updateTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="date" />
+    </property>
+
+    <property name="salt" type="string">
+      <column name="salt" length="255" />
+    </property>
+
+    <property name="activationCode" type="java.lang.Integer">
+      <column name="activation_code" sql-type="NUMBER" />
+    </property>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="employeeType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="emp_type" length="1" />
+    </property>
+
+    <property name="regularTemp" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="reg_temp_flag" length="1" />
+    </property>
+
+    <property name="fullPartTime" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="full_part_flag" length="1" />
+    </property>
+
+    <property name="isApprover" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="approver_flag" length="1" />
+    </property>
+
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BU_NAME" length="5" not-null="true"/>
+    </property>
+
+    <many-to-one name="businessUnit"
+                 column="BU_NAME"
+                 class="BusinessUnit" 
+                 insert="false" update="false" />
+                 
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="BRANCH_NAME" length="8" not-null="true" />
+    </property>
+
+    <many-to-one name="branch"
+                 column="BRANCH_NAME"
+                 class="Branch" 
+                 insert="false" update="false" />
+
+    <property name="jobCodeValue" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="JOB_CODE" length="8" />
+    </property>
+
+    <many-to-one name="jobCode"
+                 column="JOB_CODE"
+                 class="JobCode"
+                 insert="false" update="false"  />
+
+    <many-to-one name="employee"
+                 column="EMPLOYEE_ID"
+                 class="Employee"/>
+
+    <many-to-one name="supervisor"
+                 column="SUPERVISOR_ID"
+                 class="Employee" />
+
+		<property name="countryCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+			<column name="COUNTRY_CODE" length="3" />
+		</property>
+
+    <many-to-one name="country"
+                 column="COUNTRY_CODE"
+                 class="Country" 
+                 insert="false" update="false"/>    
+                 
+    <set name="roles" table="USER_ROLE_MAP" cascade="save-update" lazy="true" >
+      <key column="LOGIN_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+  </class>
+
+  <class name="Role" table="ROLES">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="ROLE_NAME" length="128" />
+    </id>
+
+    <set name="users" table="USER_ROLE_MAP" cascade="save-update" lazy="true">
+      <key column="ROLE_NAME" />
+      <many-to-many class="User" column="LOGIN_NAME" />
+    </set>
+
+    <set name="permissions" table="ROLE_PERM_MAP" cascade="save-update" lazy="true" >
+      <key column="ROLE_NAME" />
+      <many-to-many class="Permission" column="PERM_NAME" />
+    </set>
+
+    <set name="solutions" table="SOLUTION_ROLE_MAP" cascade="save-update" lazy="true" >
+      <key column="ROLE_NAME" />
+      <many-to-many class="Solution" column="SOLUTION_NAME" />
+    </set>
+  </class>
+
+  <class name="Permission" table="PERMS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+      <column name="PERM_NAME" length="256" />
+    </id>
+
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <set name="roles" table="ROLE_PERM_MAP" cascade="save-update" lazy="true" >
+      <key column="PERM_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+  </class>
+
+  <class name="Solution" table="SOLUTIONS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+      <column name="SOLUTION_NAME" length="256" />
+    </id>
+
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <property name="seqNumber" type="int" >
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />      
+    </property>
+
+    <set name="menus" table="SOLUTION_MENU_MAP" lazy="true" cascade="save-update" >
+      <key column="SOLUTION_NAME" />
+      <many-to-many class="Menu" column="MENU_NAME" />
+    </set>
+
+    <set name="roles" table="SOLUTION_ROLE_MAP" cascade="save-update" lazy="true" >
+      <key column="SOLUTION_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+  </class>
+
+  <class name="Menu" table="MENUS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+      <column name="MENU_NAME" length="256" />
+    </id>
+
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <property name="seqNumber" type="int" >
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />      
+    </property>
+
+    <set name="solutions" table="SOLUTION_MENU_MAP" lazy="true" cascade="save-update" >
+      <key column="MENU_NAME" />
+      <many-to-many class="Solution" column="SOLUTION_NAME" />
+    </set>
+
+    <property name="parentMenuName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta> 
+      <column name="PARENT_MENU_NAME" length="256" />
+    </property>
+
+    <many-to-one name="parentMenu"
+                 column="PARENT_MENU_NAME"
+                 class="Menu" 
+                 insert="false" update="false"/>
+
+    <set name="childMenus" lazy="true" inverse="true" cascade="all-delete-orphan" >
+      <key column="MENU_NAME" />
+      <one-to-many class="Menu" />
+    </set>
+    
+    <set name="links" table="MENU_LINK_MAP" cascade="save-update" lazy="true" >
+      <key column="MENU_NAME" />
+      <many-to-many class="Link" column="LINK_NAME" />
+    </set>
+  </class>
+
+  <class name="Link" table="LINKS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+      <column name="LINK_NAME" length="256" />
+    </id>
+
+    <property name="url" type="string">
+      <column name="URL" length="512" not-null="true" />
+    </property>
+
+    <property name="seqNumber" type="int" >
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />      
+    </property>
+
+    <set name="menus" table="MENU_LINK_MAP" inverse="true" cascade="save-update" lazy="true" >
+      <key column="LINK_NAME" />
+      <many-to-many class="Menu" column="MENU_NAME" />
+    </set>
+
+    <set name="permissions" table="LINK_PERMISSION_MAP" cascade="save-update" lazy="true" >
+      <key column="LINK_NAME" />
+      <many-to-many class="Permission" column="PERM_NAME" />
+    </set>
+  </class>
+  
+  <class name="JobOrder" table="JOB_ORDERS">    
+    <id name="jobNumber" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="JOB_NUMBER" length="128" />
+    </id>
+
+    <property name="jobStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="JOB_STATUS" length="4" />
+    </property>
+
+    <property name="jobFinishDate" type="date">
+      <column name="JOB_FINISH_DATE" sql-type="date"/>
+    </property>
+    
+    <property name="jobType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="JOB_TYPE" length="4" />
+    </property>
+    
+    <property name="nominationDate" type="timestamp">
+      <column name="NOMINATION_DT" sql-type="date" />
+    </property>
+
+    <property name="nominationTime" type="int">
+      <column name="NOMINATION_TIME" sql-type="number" />
+    </property>  
+
+    <property name="nominationTimeTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta> 
+      <column name="NOMINATION_TIME_TZ" length="9" />
+    </property>
+
+    <property name="receivedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="RECEIVED_BY" length="128" />
+    </property>
+
+    <many-to-one name="receivedBy"
+                 column="RECEIVED_BY"
+                 class="User" 
+                 insert="false" update="false" />
+                 
+    <property name="etaDate" type="timestamp">
+      <column name="ETA_DATE" sql-type="date" />
+    </property>
+
+    <property name="etaTime" type="int">
+      <column name="ETA_TIME" sql-type="number" />
+    </property>
+
+    <property name="etaTimeTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta> 
+      <column name="ETA_TIME_TZ" length="9" />
+    </property>
+
+    <property name="operation" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="OPERATION" length="4" />
+    </property>
+
+    <property name="shipToCustId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="SHIP_TO_CUST_CODE" length="15" />
+    </property>
+
+    <property name="shipToAddrNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="SHIP_TO_ADDR_NUM" length="3" />
+    </property>
+
+    <property name="vesselNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta> 
+      <column name="VESSEL_NAMES" length="254" />
+    </property>
+
+    <property name="productNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta> 
+      <column name="PRODUCT_NAMES" length="254" />
+    </property>
+
+    <property name="jobDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta> 
+      <column name="JOB_DESCRIPTION" length="1024" />
+    </property>
+    <property name="retainPeriod" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="RETAIN_PERIOD" length="4" />
+    </property>
+    <property name="labAnalysis" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="LAB_ANALYSIS" length="1" />
+    </property>
+    <property name="otApproved" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="OT_APPROVED" length="1" />
+    </property>
+    <property name="otApprovedby" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="OT_APPROVED_BY" length="15" />
+    </property>
+    <property name="inspInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="INSP_INSTRUCTIONS" length="390" />
+    </property>
+    <property name="billInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="BILL_INSTRUCTIONS" length="390" />
+    </property>
+    <property name="sampInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="SAMP_INSTRUCTIONS" length="390" />
+    </property>
+    <property name="otherInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="OTHER_INSTRUCTIONS" length="390" />
+    </property>
+    <property name="labInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="LAB_INSTRUCTIONS" length="390" />
+    </property>
+    <property name="shipInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="SHIP_INSZTRUCTIONS" length="390" />
+    </property>
+    <property name="reptInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=390) private</meta> 
+      <column name="REPT_INSTUCTIONS" length="390" />
+    </property>
+    <property name="revisionNumber" type="int">
+      <column name="REVISION_NUMBER" sql-type="number" />
+    </property>
+    <property name="revisionDttm" type="timestamp">
+      <column name="REVISION_DTTM" sql-type="date" />
+    </property>
+    <property name="revisionNotes" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta> 
+      <column name="REVISION_NOTES" length="254" />
+    </property>
+    <property name="turnaroundTime" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=100) private</meta> 
+      <column name="TURNAROUND_TIME" length="100" />
+    </property>    
+    <property name="payByCreditCardInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="PAY_BY_CC_IND" length="1" />
+    </property>       
+    <property name="payByCreditAppInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="PAY_BY_CREDIT_APP_IND" length="1" />
+    </property>       
+    <property name="payByEstablishedAcctInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="PAY_BY_ESTABLISHED_ACCT_IND" length="1" />
+    </property>           
+    <property name="createTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+
+    <property name="updateTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="date" />
+    </property>
+
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="BRANCH_NAME" length="8" not-null="true" />
+    </property>
+
+    <many-to-one name="branch"
+                 column="BRANCH_NAME"
+                 class="Branch" 
+                 insert="false" update="false" />
+
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BU_NAME" length="5" not-null="true"/>
+    </property>
+
+    <many-to-one name="businessUnit"
+                 column="BU_NAME"
+                 class="BusinessUnit" 
+                 insert="false" update="false" />
+            
+    <property name="shippingAgentName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="SHIPPING_AGENT_NAME" length="128" />
+    </property>
+                 
+    <many-to-one name="shippingAgent"
+                 column="SHIPPING_AGENT_NAME"
+                 class="ShippingAgent" 
+                 insert="false" update="false" />
+                 
+    <property name="towingCompanyName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="TOW_COMP_NAME" />
+    </property>
+
+    <many-to-one name="towingCompany"
+                 column="TOW_COMP_NAME"
+                 class="TowingCompany" 
+                 insert="false" update="false" />
+
+    <property name="serviceLocationCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="SERVICE_LOCATION_CODE" length="15" />
+    </property>
+
+    <many-to-one name="serviceLocation"
+                 column="SERVICE_LOCATION_CODE"
+                 class="ServiceLocation" 
+                 insert="false" update="false" />
+                 
+    <many-to-one name="quote"
+                 column="QUOTE_ID"
+                 class="Quote" 
+                 insert="false" update="false" />      
+                 
+    <many-to-one name="project"
+                 column="PROJECT_ID"
+                 class="Project" 
+                 insert="false" update="false" />                        
+  </class>
+  
+  <class name="JobVessel" table="JOB_VESSELS">    
+		<composite-id name="jobVesselId" class="JobVesselId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobVesselName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+				<column name="JOB_VESSEL_NAME" length="256"/>
+      </key-property>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+			  <column name="JOB_NUMBER" length="128"/>
+			</key-property>
+    </composite-id>
+
+    <many-to-one name="jobOrder" class="JobOrder" column="JOB_NUMBER" insert="false" update="false"/>
+
+    <property name="type" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=16) private</meta> 
+      <column name="VESSEL_TYPE" length="16" not-null="true" />
+    </property>
+  </class>
+
+  <class name="JobProd" table="JOB_PRODS">    
+		<composite-id name="jobProdId" class="JobProdId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobProductName" type="string">
+        <column name="JOB_PRODUCT_NAME" length="256" />
+      </key-property>
+      <key-property name="jobVesselName" type="string">
+				<column name="JOB_VESSEL_NAME" length="256"/>
+      </key-property>
+      <key-property name="jobNumber" type="string">
+			  <column name="JOB_NUMBER" length="128"/>
+			</key-property>
+    </composite-id>
+
+		<many-to-one name="jobVessel" class="JobVessel" insert="false" update="false"> 
+			<column name="JOB_VESSEL_NAME" /> 
+			<column name="JOB_NUMBER" /> 
+		</many-to-one> 
+
+    <property name="destination" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta> 
+      <column name="DESTINATION" length="256" />
+    </property>   
+    
+    <property name="group" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=16) private</meta> 
+      <column name="JOB_PRODUCT_GROUP" length="16" not-null="true" />
+    </property>
+
+    <property name="option" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="JOB_PRODUCT_OPTION" length="4"  />
+    </property>
+
+    <property name="plusMinus" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="PLUS_MINUS" length="4" />
+    </property>
+
+    <property name="drafts" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="JOB_PRODUCT_DRAFTS" length="30"  />
+    </property>
+
+    <property name="tanks" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=60) private</meta> 
+      <column name="JOB_PRODUCT_TANKS" length="4" />
+    </property>
+
+    <property name="plusMinusPct" type="int">
+      <column name="PLUS_MINUS_PCT" sql-type="NUMBER" />
+    </property>
+
+    <property name="productQty" type="double">
+      <column name="PRODUCT_QTY" sql-type="NUMBER(12, 3)" />
+    </property>
+
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="UOM" length="4" not-null="true" />
+    </property>
+
+    <set name="jobProdContracts" table="JOB_PROD_CONTRACT" cascade="save-update" lazy="true" >
+			<key>
+        <column name="JOB_PRODUCT_NAME" />
+				<column name="JOB_VESSEL_NAME" /> 
+				<column name="JOB_NUMBER" /> 
+			</key>
+      <many-to-many class="JobContract">
+				<column name="JOB_CONTRACT_ID" /> 
+      </many-to-many>
+    </set>
+  </class>
+
+  <class name="JobProdSample" table="JOB_PROD_SAMPLES">    
+		<composite-id name="jobProdSampleId" class="JobProdSampleId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobSampleLocation" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+        <column name="JOB_SAMPLE_LOCATION" length="4" />
+      </key-property>
+      <key-property name="jobProductName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+        <column name="JOB_PRODUCT_NAME" length="256" />
+      </key-property>
+      <key-property name="jobVesselName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+			  <column name="JOB_VESSEL_NAME" length="256"/>
+			</key-property>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+			  <column name="JOB_NUMBER" length="128"/>
+			</key-property>
+    </composite-id>
+
+    <many-to-one name="jobProd" class="JobProd" insert="false" update="false"> 
+			<column name="JOB_PRODUCT_NAME" /> 
+			<column name="JOB_VESSEL_NAME" /> 
+			<column name="JOB_NUMBER" /> 
+		</many-to-one> 
+
+    <property name="tankNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="TANK_NUMBER" length="64" />
+    </property>
+
+    <property name="sampleTiming" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="SAMPLE_TIMING" length="4"  />
+    </property>
+  </class>
+
+  <class name="JobSampleMethod" table="JOB_SAMPLE_METHODS">    
+		<composite-id name="jobSampleMethodId" class="JobSampleMethodId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobSampleMethodName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+        <column name="JOB_SAMPLE_METHOD_NAME" length="128" />
+      </key-property>
+      <key-property name="jobSampleLocation" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+        <column name="JOB_SAMPLE_LOCATION" length="4" />
+      </key-property>
+      <key-property name="jobProductName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+        <column name="JOB_PRODUCT_NAME" length="256" />
+      </key-property>
+      <key-property name="jobVesselName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+			  <column name="JOB_VESSEL_NAME" length="256"/>
+			</key-property>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+			  <column name="JOB_NUMBER" length="128"/>
+			</key-property>
+    </composite-id>
+
+    <many-to-one name="jobProdSample" class="JobProdSample" insert="false" update="false"> 
+				<column name="SAMPLE_LOCATION" /> 
+				<column name="JOB_PRODUCT_NAME" /> 
+				<column name="JOB_VESSEL_NAME" /> 
+				<column name="JOB_NUMBER" /> 
+		</many-to-one> 
+  </class>
+
+  <class name="JobInspectionEvent" table="JOB_INSPECTION_EVENTS">    
+		<composite-id name="jobInspectionEventId" class="JobInspectionEventId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobInspEvtName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+        <column name="JOB_INSP_EVT_NAME" length="128" />
+      </key-property>
+      <key-property name="jobProductName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+        <column name="JOB_PRODUCT_NAME" length="256" />
+      </key-property>
+      <key-property name="jobVesselName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta> 
+			  <column name="JOB_VESSEL_NAME" length="256"/>
+			</key-property>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+			  <column name="JOB_NUMBER" length="128"/>
+			</key-property>
+    </composite-id>
+
+    <many-to-one name="inspectionEventTbl" class="InspectionEventTbl" insert="false" update="false"> 
+			<column name="JOB_INSP_EVT_NAME" /> 
+		</many-to-one> 
+
+		<many-to-one name="jobProd" class="JobProd" insert="false" update="false"> 
+			<column name="JOB_PRODUCT_NAME" /> 
+			<column name="JOB_VESSEL_NAME" /> 
+			<column name="JOB_NUMBER" /> 
+		</many-to-one> 
+
+    <property name="instructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta> 
+      <column name="INSTRUCTIONS" length="512"/>
+    </property>    
+  </class>
+
+  <class name="InspectionEventTbl" table="INSPECTION_EVENT_TBLS">    
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="INSP_EVT_NAME" length="128" />
+    </id>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="instructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta> 
+      <column name="INSTRUCTIONS" length="512"/>
+    </property>    
+  </class>
+
+  <class name="JobNote" table="JOB_NOTES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_NOTE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_NOTE_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="noteSummary" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="NOTE_SUMMARY" length="128" not-null="true" />
+    </property>
+
+    <property name="note" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta> 
+      <column name="NOTE" length="1024" />
+    </property>
+
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="JOB_NUMBER" length="128" not-null="true"  />
+    </property>
+
+    <many-to-one name="jobOrder"
+                 column="JOB_NUMBER"
+                 class="JobOrder" 
+                 insert="false" update="false" />
+  </class>
+
+  <class name="JobAttach" table="JOB_ATTACHES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_ATTACH_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_ATTACH_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="fileName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="FILE_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="systemFileName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="SYSTEM_FILE_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="JOB_NUMBER" length="128" not-null="true"  />
+    </property>
+
+    <many-to-one name="jobOrder"
+                 column="JOB_NUMBER"
+                 class="JobOrder" 
+                 insert="false" update="false" />
+  </class>
+
+  <class name="JobContract" table="JOB_CONTRACTS">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CONTRACT_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CONTRACT_SEQ</param>
+      </generator>
+    </id>
+    
+    <property name="jobNumber" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="JOB_NUMBER" length="128" not-null="true" unique-key="JOB_CONTRACT_UK" />
+    </property>
+
+    <many-to-one name="jobOrder"
+                 column="JOB_NUMBER"
+                 class="JobOrder" 
+                 insert="false" update="false" />
+
+		<property name="custCode" type="string">
+		  <meta attribute="use-in-equals">true</meta>
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+			<column name="CUST_CODE" length="15" not-null="true" unique-key="JOB_CONTRACT_UK" />
+		</property>
+		<property name="contractCode" type="string">
+		  <meta attribute="use-in-equals">true</meta>
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+			<column name="CONTRACT_CODE" length="15" not-null="true" unique-key="JOB_CONTRACT_UK" />
+		</property>
+
+		<many-to-one name="contractCustContact" class="ContractCustContact" insert="false" update="false"> 
+			<column name="CUST_CODE" /> 
+			<column name="CONTRACT_CODE" /> 
+			<column name="CONTACT_ID" /> 			
+		</many-to-one> 
+
+    <property name="nominationFlag" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="NNOMINATION_FLAG" length="1"/>
+    </property>
+    <property name="invoice" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=22) private</meta> 
+      <column name="INVOICE" length="22"/>
+    </property>
+    <property name="custRefNum" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta> 
+      <column name="CUST_REF_NUM" length="40"/>
+    </property>
+    <property name="billingContactName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta> 
+      <column name="BILLING_CONTACT_NAME" length="50" />
+    </property>
+    <property name="creditInd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="CREDIT_IND" length="1" />
+    </property>
+    <property name="reasonCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="REASON_CODE" length="4"/>
+    </property>
+    <property name="reasonDescr" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=60) private</meta> 
+      <column name="REASON_DESCR" length="60"/>
+    </property>
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="INVOICE_TYPE" length="3" />
+    </property>
+    <property name="bankCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BANK_CD" length="5"/>
+    </property>
+    <property name="bankAcctKey" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="BANK_ACCT_KEY" length="4"/>
+    </property>
+    <property name="depositNo" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="DEPOSIT_NO" length="30"/>
+    </property>
+    <property name="pymntTermsCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="PYMNT_TERMS_CD" length="5"/>
+    </property>
+    <property name="pymntType" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="PYMNT_TYPE" length="4"/>
+    </property>
+    <property name="invoiceDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta> 
+      <column name="INVOICE_DESCR"  length="1024"/>
+    </property>
+    <property name="custSentBy" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="CUST_SENT_BY" length="4" />
+    </property>
+    <property name="transactionCurrencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="TRANSACT_CURRENCY_CD" length="3"/>
+    </property>
+    <property name="productType" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=20) private</meta> 
+      <column name="PRODUCT_TYPE" length="20"/>
+    </property>   
+    <property name="zone" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="ZONE" length="30"/>
+    </property>      
+    <property name="invoiceLabel1" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_LABEL1" length="64" />
+    </property>
+    <property name="invoiceValue1" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_VALUE1" length="64" />
+    </property>
+    <property name="invoiceLabel2" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_LABEL2" length="64" />
+    </property>
+    <property name="invoiceValue2" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_VALUE2" length="64" />
+    </property>
+    <property name="invoiceLabel3" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_LABEL3" length="64" />
+    </property>
+    <property name="invoiceValue3" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_VALUE3" length="64" />
+    </property>
+    <property name="invoiceLabel4" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_LABEL4" length="64" />
+    </property>
+    <property name="invoiceValue4" type="int">
+      <column name="INVOICE_VALUE4" sql-type="NUMBER" />
+    </property>
+    <property name="invoiceLabel5" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=64) private</meta> 
+      <column name="INVOICE_LABEL5" length="64" />
+    </property>
+    <property name="invoiceValue5" type="int">
+      <column name="INVOICE_VALUE5" sql-type="NUMBER" />
+    </property>
+
+    <many-to-one name="billingContact"
+                 column="CONTACT_ID"
+                 class="Contact" 
+                 not-null="true"/>
+                 
+    <many-to-one name="monthlyJobNumber"
+                 column="MONTHLY_JOB_NUMBER"
+                 class="JobOrder" 
+                 insert="false" update="false" />                 
+    
+    <set name="jobProdContracts" table="JOB_PROD_CONTRACT" cascade="save-update" lazy="true">
+			<key>
+				<column name="JOB_CONTRACT_ID" /> 
+			</key>
+      <many-to-many class="JobProd">
+				<column name="JOB_PRODUCT_NAME" /> 
+				<column name="JOB_VESSEL_NAME" /> 
+				<column name="JOB_NUMBER" /> 
+			</many-to-many>
+    </set>
+
+    <set name="prebills" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<key>
+				<column name="JOB_CONTRACT_ID" /> 
+			</key>
+      <one-to-many class="Prebill" />
+    </set>
+
+    <set name="jobContractInvoices" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<key>
+				<column name="JOB_CONTRACT_ID" /> 
+			</key>
+      <one-to-many class="JobContractInvoice" />
+    </set>
+  </class>
+
+  <class name="JobContractInvoice" table="JOB_CONTRACT_INVOICE">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CONTRACT_INVOICE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CONTRACT_INVOICE_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="invoice" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=22) private</meta> 
+      <column name="INVOICE" length="22" not-null="true" />
+    </property>
+    <property name="runcntlid" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="RUNCNTLID" length="30" not-null="true" />
+    </property>
+  </class>
+
+  <class name="Prebill" table="PREBILLS">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="PREBILL_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">PREBILL_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="lineDescription" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=254) private</meta> 
+      <column name="LINE_DESCRIPTION" length="254"/>
+    </property>
+    <property name="unitPrice" type="double">
+      <column name="UNIT_PRICE" sql-type="NUMBER(10,4)" />
+    </property>
+    <property name="splitPct" type="double">
+      <column name="SPLIT_PCT" sql-type="NUMBER(3,3)" />
+    </property>
+    <property name="discountPct" type="double">
+      <column name="DISCOUNT_PCT" sql-type="NUMBER(3,2)" />
+    </property>
+    <property name="netPrice" type="double">
+      <column name="NET_PRICE" sql-type="NUMBER(11,4)" />
+    </property>
+    <property name="currencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="CURRENCY_CD" length="3"/>
+    </property>
+    <property name="primaryBranchCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta> 
+      <column name="PRIMARY_BRANCH_CD" length="10"/>
+    </property>
+    <property name="level0" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta> 
+      <column name="LEVEL0" length="50"/>
+    </property>
+    <property name="level1" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta> 
+      <column name="LEVEL1" length="50"/>
+    </property>
+    <property name="level2" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta> 
+      <column name="LEVEL2" length="50"/>
+    </property>
+    <property name="configuredInd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="CONFIGURED_IND" length="1"/>
+    </property>
+    <property name="auditFlag" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="AUDIT_FLAG" length="1"/>
+    </property>
+    <property name="productGroup" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta> 
+      <column name="PRODUCT_GROUP" length="6"/>
+    </property>
+    <property name="deptid" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta> 
+      <column name="DEPTID" length="10"/>
+    </property>
+    <property name="busStreamCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=35) private</meta> 
+      <column name="BUS_STREAM_CODE" length="35"/>
+    </property>
+
+    <many-to-one name="jobContract" class="JobContract">
+			<column name="JOB_CONTRACT_ID" /> 
+		</many-to-one>
+
+    <set name="prebillSplits" lazy="true" inverse="true" cascade="all-delete-orphan" >
+      <key column="PREBILL_ID" />
+      <one-to-many class="PrebillSplit" />
+    </set>
+
+    <set name="prebillHistories" lazy="true" inverse="true" cascade="all-delete-orphan" >
+      <key column="PREBILL_ID" />
+      <one-to-many class="PrebillHistory" />
+    </set>
+  </class>
+
+  <class name="PrebillSplit" table="PREBILL_SPLITS">    
+		<composite-id name="prebillSplitId" class="PrebillSplitId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="prebillId" type="long">
+			  <column name="PREBILL_ID" sql-type="NUMBER" />
+			</key-property>
+      <key-property name="branchName" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+        <column name="BRANCH_NAME" length="8" />
+      </key-property>
+    </composite-id>
+
+    <many-to-one name="prebill" class="Prebill" insert="false" update="false"> 
+			<column name="PREBILL_ID" /> 
+		</many-to-one> 
+		
+		<many-to-one name="branch" class="Branch" insert="false" update="false"> 
+			<column name="BRANCH_NAME" /> 
+		</many-to-one> 
+  </class>
+
+  <class name="PrebillHistory" table="PREBILL_HISTORIES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="PREBILL_HISTORY_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">PREBILL_HISTORY_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one name="prebill"
+                 column="PREBILL_ID"
+                 class="Prebill" 
+                 not-null="true" />
+
+  </class>
+
+  <class name="Contract" table="CONTRACTS">    
+    <id name="contractCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="CONTRACT_CODE" length="15" />
+    </id>
+    
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta> 
+      <column name="DESCRIPTION" length="512" />
+    </property>
+
+    <property name="workingUOM" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="WORKING_UOM" length="32" />
+    </property>
+
+    <property name="workingPB" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="WORKING_PB" length="32" />
+    </property>
+
+    <property name="masterListDate" type="date">
+      <column name="MASTER_LIST_DATE" sql-type="date"/>
+    </property>
+
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="INVOICE_TYPE" length="32" />
+    </property>
+
+    <property name="statusDate" type="date">
+      <column name="STATUS_DATE" sql-type="date"/>
+    </property>
+
+    <property name="expireDate" type="date">
+      <column name="EXPIRE_DATE" sql-type="date"/>
+    </property>
+    
+    <property name="signatoryUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="SIGNATORY_USER_NAME" length="128" />
+    </property>
+
+    <many-to-one name="signatory"
+                 column="SIGNATORY_USER_NAME"
+                 class="User" 
+                 insert="false" update="false" />
+
+    <property name="originatorUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="ORIGINATOR_USER_NAME" length="128" />
+    </property>
+
+    <many-to-one name="originator"
+                 column="ORIGINATOR_USER_NAME"
+                 class="User" 
+                 insert="false" update="false"/>
+
+    <property name="paymentTermsCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="PAYMENT_TERMS_CD" length="32" />
+    </property>
+
+    <set name="contractAttaches" lazy="true" inverse="true" cascade="all-delete-orphan" >
+      <key column="CONTRACT_CODE" />
+      <one-to-many class="ContractAttach" />
+    </set>
+                
+  </class>
+
+  <class name="ContractAttach" table="CONTRACT_ATTACHES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CONTRACT_ATTACH_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CONTRACT_ATTACH_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="fileName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="FILE_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="systemFileName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="SYSTEM_FILE_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="attachType" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="ATTACH_TYPE" length="4" not-null="true" />
+    </property>
+    
+    <property name="attachDescr" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="ATTACH_DESCR" length="128" not-null="true" />
+    </property> 
+
+    <property name="audience" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="AUDIENCE" length="4" not-null="true" />
+    </property> 
+    
+    <property name="dateTimeAdded" type="timestamp">
+      <column name="DATETIME_ADDED" sql-type="timestamp"/>
+    </property>     
+    
+    <property name="addedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="ADDED_BY_USER_NAME" length="128" />
+    </property>
+
+    <many-to-one name="addedBy"
+                 column="ADDED_BY_USER_NAME"
+                 class="User" 
+                 insert="false" update="false"/>    
+
+    <property name="contractCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="CONTRACT_CODE" length="15" not-null="true" />
+    </property>
+
+    <many-to-one name="contract"
+                 column="CONTRACT_CODE"
+                 class="Contract" 
+                 insert="false" update="false" />
+  </class>
+
+  <class name="Customer" table="CUSTOMERS">    
+    <id name="custCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="CUST_CODE" length="15" />
+    </id>
+
+    <property name="name" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="Name" length="128" />
+    </property>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="statusDate" type="date">
+      <column name="STATUS_DATE" sql-type="date"/>
+    </property>
+    
+    <property name="sinceDate" type="date">
+      <column name="SINCE_DATE" sql-type="date"/>
+    </property>
+    <property name="addDate" type="date">
+      <column name="ADD_DATE" sql-type="date"/>
+    </property>
+
+    <property name="industry" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="INDUSTRY" length="30" />
+    </property>
+
+    <property name="type" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="TYPE" length="1" />
+    </property>
+    
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="INVOICE_TYPE" length="3" />
+    </property>
+    
+    <property name="locationType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="LOCATION_TYPE" length="4" />
+    </property>
+
+    <property name="accountOwnerName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="ACCOUNT_OWNER_NAME" length="128" />
+    </property>
+
+    <many-to-one name="accountOwner"
+                 column="ACCOUNT_OWNER_NAME"
+                 class="User" 
+                 insert="false" update="false" />
+
+    <property name="creditHoldInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="CREDIT_HOLD_IND" length="1" />
+    </property>
+    
+    <property name="parentCustCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="PARENT_CUST_CODE" length="15" />
+    </property>
+
+    <many-to-one name="parentCustomer"
+                 column="PARENT_CUST_CODE"
+                 class="Customer" 
+                 insert="false" update="false" />    
+    
+    <property name="creditLimit" type="double">
+      <column name="CREDIT_LIMIT" sql-type="NUMBER(12,4)" />
+    </property>    
+
+    <property name="currencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="CURRENCY_CD" length="3"/>
+    </property>
+
+    <property name="creditAnalystName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="CREDIT_ANALYST_NAME" length="128" />
+    </property>
+
+    <many-to-one name="creditAnalyst"
+                 column="CREDIT_ANALYST_NAME"
+                 class="CreditAnalyst" 
+                 insert="false" update="false" />    
+
+    <property name="collectorName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+      <column name="COLLECTOR_NAME" length="128" />
+    </property>
+
+    <many-to-one name="collector"
+                 column="COLLECTOR_NAME"
+                 class="Collector" 
+                 insert="false" update="false" />    
+
+    <property name="interunitInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="INTERUNIT_IND" length="1" />
+    </property>
+
+    <property name="interunitBusUnitName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta> 
+      <column name="INTERUNIT_BU_NAME" length="5" />
+    </property>
+ 
+    <many-to-one name="interunitBusUnit"
+                 column="INTERUNIT_BU_NAME"
+                 class="BusinessUnit"
+                 insert="false" update="false" />   
+
+    <property name="shipTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="SHIP_TO" length="1" />
+    </property>
+
+    <property name="billTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="BILL_TO" length="1" />
+    </property>
+
+    <property name="soldTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="SOLD_TO" length="1" />
+    </property>
+
+    <set name="contractCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="ContractCust" />
+    </set>
+
+    <set name="contactCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="ContactCust" />
+    </set>
+
+    <set name="custAddrSeqs" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="CustAddrSeq" />
+    </set>
+                
+  </class>
+
+  <class name="ContractCust" table="CONTRACT_CUSTS">    
+		<composite-id name="contractCustId" class="ContractCustId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="custCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+      <key-property name="contractCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CONTRACT_CODE" length="15" />
+      </key-property>
+    </composite-id>
+
+    <many-to-one name="customer" class="Customer" insert="false" update="false"> 
+			<column name="CUST_CODE" /> 
+		</many-to-one> 
+		
+		<many-to-one name="contract" class="Contract" insert="false" update="false"> 
+			<column name="CONTRACT_CODE" /> 
+		</many-to-one> 
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+  </class>
+
+  <class name="ContractCustContact" table="CONTRACT_CUST_CONTACTS">    
+		<composite-id name="contractCustContactId" class="ContractCustContactId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contactId" type="long">
+        <column name="CONTACT_ID" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="custCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+      <key-property name="contractCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CONTRACT_CODE" length="15" />
+      </key-property>
+    </composite-id>
+
+    <many-to-one name="contact" class="Contact" insert="false" update="false"> 
+			<column name="CONTACT_ID" /> 
+		</many-to-one> 
+		
+		<many-to-one name="contractCust" class="ContractCust" insert="false" update="false"> 
+			<column name="CUST_CODE" /> 
+			<column name="CONTRACT_CODE" /> 
+		</many-to-one> 
+                     
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+  </class>  
+
+  <class name="ContactCust" table="CONTACT_CUSTS">    
+		<composite-id name="contactCustId" class="ContactCustId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contactId" type="long">
+        <column name="CONTACT_ID" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="custCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+			<key-property name="locationNumber" type="java.lang.Integer">
+				<column name="LOCATION_NUMBER" sql-type="NUMBER" />
+			</key-property>    
+    </composite-id>
+
+    <many-to-one name="customer" class="Customer" insert="false" update="false"> 
+			<column name="CUST_CODE" /> 
+		</many-to-one> 
+			
+		<many-to-one name="contact" class="Contact" insert="false" update="false"> 
+			<column name="CONTACT_ID" /> 
+		</many-to-one> 
+			
+		<many-to-one name="custAddrSeq" class="CustAddrSeq" insert="false" update="false"> 
+			<column name="LOCATION_NUMBER" />
+			<column name="CUST_CODE" /> 
+		</many-to-one> 
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="billTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="BILL_TO" length="1" />
+    </property>
+    <property name="soldTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="SOLD_TO" length="1" />
+    </property>
+    <property name="shipTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="SHIP_TO" length="1"/>
+    </property>
+  </class>
+
+  <class name="Contact" table="CONTACTS">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CONTACT_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CONTACT_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="firstName" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="FIRST_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="lastName" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="LAST_NAME" length="128" not-null="true" />
+    </property>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="title" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="TITLE" length="32" />
+    </property>
+    <property name="workEmail" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="WORK_EMAIL" length="70" />
+    </property>
+    <property name="personalEmail" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="PERSONAL_EMAIL" length="70" />
+    </property>
+    <property name="workPhone" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="WORK_PHONE" length="64" />
+    </property>
+    <property name="personalPhone" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="PERSONAL_PHONE" length="64" />
+    </property>
+    <property name="cellPhone" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="CELL_PHONE" length="64" />
+    </property>
+    <property name="salutationCd" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="SALUTATION_CD" length="8" />
+    </property>
+    <property name="contactFlag" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="CONTACT_FLAG" length="8" />
+    </property>
+    <property name="prefCommunication" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="PREF_COMMUNICATION" length="8" />
+    </property>
+    
+    <set name="contractCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CONTACT_ID" />
+      <one-to-many class="ContractCust" />
+    </set>
+
+    <set name="contactCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CONTACT_ID" />
+      <one-to-many class="ContactCust" />
+    </set>
+                
+  </class>
+
+  <class name="CustAddrSeq" table="CUST_ADDR_SEQS">   
+		<composite-id name="custAddrSeqId" class="CustAddrSeqId">
+      <meta attribute="use-in-equals">true</meta>
+			<key-property name="locationNumber" type="java.lang.Integer">
+				<column name="LOCATION_NUMBER" sql-type="NUMBER" />
+			</key-property>    
+      <key-property name="custCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+    </composite-id>
+
+    <many-to-one name="customer" class="Customer" insert="false" update="false"> 
+			<column name="CUST_CODE" /> 
+		</many-to-one> 
+
+    <property name="addressDescr" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="ADDRESS_DESCR" length="30" />
+    </property>
+    <property name="corresponence" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="CORRESPONENENCE" length="1" />
+    </property>
+    <property name="billTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="BILL_TO" length="1" />
+    </property>
+    <property name="soldTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="SOLD_TO" length="1" />
+    </property>
+    <property name="shipTo" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="SHIP_TO" length="1"/>
+    </property>
+    
+    <set name="contactCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<key>
+					<column name="LOCATION_NUMBER"/>
+					<column name="CUST_CODE"/>
+			</key>
+      <one-to-many class="ContactCust" />
+    </set>
+
+    <set name="custAddresses" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<key>
+					<column name="LOCATION_NUMBER"/>
+					<column name="CUST_CODE"/>
+			</key>
+      <one-to-many class="CustAddress" />
+    </set>
+
+  </class>
+
+
+  <class name="CustAddress" table="CUST_ADDRESSES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CUST_ADDRESS_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CUST_ADDRESS_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="effDate" type="date">
+      <column name="EFF_DATE" sql-type="date"/>
+    </property>
+
+    <property name="effStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="EFF_STATUS" length="1" />
+    </property>
+
+    <property name="address1" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS1" length="55" />
+    </property>
+
+    <property name="address2" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="CITY" length="30" />
+    </property>
+    <property name="county" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="COUNTY" length="30" />
+    </property> 
+    <property name="country" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="COUNTRY" length="3" />
+    </property>
+
+    <property name="state" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+      <column name="STATE" length="6" />
+    </property>
+
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta> 
+      <column name="POSTAL" length="12" />
+    </property>
+
+    <property name="phonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="PHONE_PREFIX" length="3" />
+    </property>
+
+    <property name="phoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta> 
+      <column name="PHONE_NUMBER" length="24" />
+    </property>
+
+    <property name="phoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+      <column name="PHONE_EXTENSION" length="6" />
+    </property>
+
+    <property name="fax" type="int">
+      <column name="FAX" sql-type="NUMBER" />
+    </property>
+
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="CUST_EMAIL" length="70" />
+    </property>
+
+		<property name="custCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+			<column name="CUST_CODE" length="15" />
+		</property>
+		<property name="locationNumber" type="java.lang.Integer">
+			<column name="LOCATION_NUMBER" sql-type="NUMBER" />
+		</property>    
+
+    <many-to-one name="custAddrSeq" class="CustAddrSeq" insert="false" update="false" >
+			<column name="LOCATION_NUMBER" />
+			<column name="CUST_CODE" /> 
+    </many-to-one>
+
+    <property name="taxCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="TAX_CODE" length="3" />
+    </property>
+
+    <many-to-one name="taxRate"
+                 column="TAX_CODE" 
+                 class="TaxRate" 
+                 insert="false" update="false" />
+  </class>
+  
+  <class name="TowingCompany" table="TOWING_COMPANY">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="TOW_COMP_NAME" />
+    </id>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="CITY" length="64" />
+    </property>
+    <property name="phone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="TOWING_COMPANY_PHONE" length="32"/>
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="TOWN_COMP_EMAIL" length="70" />
+    </property>
+
+		<property name="stateCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+			<column name="STATE_CODE" length="6" />
+		</property>    
+		<property name="countryCode" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+			<column name="COUNTRY_CODE" length="3" not-null="true" />
+		</property>
+
+    <many-to-one name="country"
+                 column="COUNTRY_CODE"
+                 class="Country" insert="false" update="false"/>    
+
+    <many-to-one name="state" class="State" insert="false" update="false">    
+      <column name="STATE_CODE" />
+      <column name="COUNTRY_CODE" />
+    </many-to-one>
+
+  </class>
+
+  <class name="Country" table="COUNTRY">    
+    <id name="countryCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="COUNTRY_CODE" length="3" />
+    </id>
+
+    <property name="name" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="NAME" length="30"/>
+    </property>
+    <property name="shortName" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta> 
+      <column name="SHORT_NAME" length="5"/>
+    </property>
+    <property name="country2" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta> 
+      <column name="COUNTRY2" length="2"/>
+    </property>
+    <property name="euMemberId" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="EU_MEMBER_ID" length="1"/>
+    </property>
+    <property name="addr1Lbl" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="ADDR1_LBL" length="15"/>
+    </property>
+    <property name="addr1Avail" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="ADDR1_AVAIL" length="1"/>
+    </property>
+    <property name="addr2Lbl" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="ADDR2_LBL" length="15"/>
+    </property>
+    <property name="addr2Avail" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="ADDR2_AVAIL" length="1"/>
+    </property>
+    <property name="otherLabel" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+      <column name="OTHER_LABEL" length="15"/>
+    </property>
+    <property name="otherAvail" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="OTHER_AVAIL" length="1"/>
+    </property>
+
+    <property name="vatCountry" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="VAT_COUNTRY" length="1"/>
+    </property>
+
+    <property name="vatByProvince" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="VAT_BY_PROVINCE" length="1"/>
+    </property>
+
+    <property name="foreignBuyer" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="FOREIGN_BUYER" length="3"/>
+    </property>
+    
+    <set name="states" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="COUNTRY_CODE" />
+      <one-to-many class="State" />
+    </set>
+  </class>
+
+  <class name="State" table="STATE">
+		<composite-id name="stateId" class="StateId">
+      <meta attribute="use-in-equals">true</meta>
+			<key-property name="stateCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta> 
+				<column name="STATE_CODE" length="6" />
+			</key-property>    
+      <key-property name="countryCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+				<column name="COUNTRY_CODE" length="3" />
+      </key-property>
+    </composite-id>
+
+    <many-to-one name="country" class="Country" insert="false" update="false"> 
+			<column name="COUNTRY_CODE" /> 
+		</many-to-one> 
+    
+    <property name="name" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="STATE_NAME" length="32" />
+    </property>
+
+    <property name="numericCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta> 
+      <column name="NUMERIC_CD" length="2"/>
+    </property>
+  </class>
+
+  <class name="CountryVAT" table="COUNTRY_VAT">
+		<composite-id name="countryVATId" class="CountryVATId">
+      <meta attribute="use-in-equals">true</meta>
+			<key-property name="vatCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+				<column name="VAT_CODE" length="3" />
+			</key-property>    
+      <key-property name="countryCode" type="string">
+				<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+				<column name="COUNTRY_CODE" length="3" />
+      </key-property>
+      <key-property name="stateCode" type="string">
+      				<meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta> 
+      				<column name="STATE_CODE" length="6" />
+      </key-property>
+      <key-property name="effDate" type="date">
+      <column name="EFF_DATE" sql-type="date"/>
+      </key-property>   
+
+    </composite-id>
+
+    <many-to-one name="country" class="Country" insert="false" update="false"> 
+			<column name="COUNTRY_CODE" /> 
+		</many-to-one> 
+    
+    <property name="zeroRatedVATCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta> 
+      <column name="ZERO_RATE_VAT_CODE" length="3" />
+    </property>
+    
+  </class>
+
+  <class name="ServiceLocation" table="SERVICE_LOCATION">    
+    <id name="serviceLocationCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="SERVICE_LOCATION_CODE" length="15" />
+    </id>
+    
+    <property name="name" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta> 
+      <column name="NAME" length="254"/>
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+
+    <property name="address1" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS1" length="55" />
+    </property>
+
+    <property name="address2" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta> 
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="CITY" length="30"/>
+    </property>
+    <property name="num1" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=6) private</meta> 
+      <column name="NUM1" length="6"/>
+    </property>
+    <property name="num2" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=4) private</meta> 
+      <column name="NUM2" length="4"/>
+    </property>
+    <property name="houseType" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=2) private</meta> 
+      <column name="HOUSE_TYPE" length="2"/>
+    </property>
+    <property name="addrField1" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=2) private</meta> 
+      <column name="ADDR_FIELD1" length="2"/>
+    </property>
+    <property name="addrField2" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=4) private</meta> 
+      <column name="ADDR_FIELD2" length="4"/>
+    </property>
+    <property name="addrField3" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=4) private</meta> 
+      <column name="ADDR_FIELD3" length="4"/>
+    </property>
+    <property name="postal" type="string" >
+      <meta attribute="scope-field"> @Length(min=0, max=12) private</meta> 
+      <column name="POSTAL" length="12"/>
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="EMAIL" length="70" />
+    </property>
+    <property name="phone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="PHONE" length="32"/>
+    </property>    
+
+		<property name="stateCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+			<column name="STATE_CODE" length="6" />
+		</property>    
+		<property name="countryCode" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+			<column name="COUNTRY_CODE" length="3" not-null="true" />
+		</property>
+
+    <many-to-one name="country"
+                 column="COUNTRY_CODE"
+                 class="Country" insert="false" update="false"/>    
+
+    <many-to-one name="state" class="State" insert="false" update="false">    
+      <column name="STATE_CODE" />
+      <column name="COUNTRY_CODE" />
+    </many-to-one>
+                 
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta> 
+      <column name="BRANCH_NAME" length="8" />
+    </property>
+
+	  <many-to-one name="branch"
+                 column="BRANCH_NAME"
+                 class="Branch"
+                 insert="false" update="false" />
+                 
+    <many-to-one name="shipToCustomer"
+                 column="SHIP_TO_CUST_CODE"
+                 class="Customer"
+                 insert="false" update="false" />
+                 
+		<property name="custCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=15) private</meta> 
+			<column name="SHIP_TO_CUST_CODE" length="15" />
+		</property>
+		<property name="locationNumber" type="java.lang.Integer">
+			<column name="LOCATION_NUMBER" sql-type="NUMBER" />
+		</property>    
+
+    <many-to-one name="shipToCustAddress" class="CustAddrSeq" insert="false" update="false" >
+			<column name="LOCATION_NUMBER" />
+			<column name="SHIP_TO_CUST_CODE" /> 
+    </many-to-one>
+  </class>
+
+  <class name="Employee" table="EMPLOYEE">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="EMPLOYEE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">EMPLOYEE_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="jobCode" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta> 
+      <column name="JOB_CODE" length="6"/>
+    </property>
+    <property name="managerLevel" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=2) private</meta> 
+      <column name="MANAGER_LEVEL" length="2" />
+    </property>
+
+    <property name="supervisorId" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="SUPERVISOR_ID" length="15" />
+    </property>
+
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank  @Length(min=0, max=8) private</meta> 
+      <column name="BRANCH_NAME" length="8" not-null="true"/>
+    </property>
+ 
+    <many-to-one name="branch"
+                 column="BRANCH_NAME"
+                 class="Branch" 
+                 insert="false" update="false" />
+
+  </class>
+
+  <class name="JobProdContract" table="JOB_PROD_CONTRACT">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_PROD_CONTRACT_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_PROD_CONTRACT_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="group" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=16) private</meta> 
+      <column name="PRODUCT_GROUP" length="16" not-null="true" />
+    </property>
+
+    <property name="option" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="PRODUCT_OPTION" length="4"  />
+    </property>
+
+    <property name="plusMinus" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta> 
+      <column name="PLUS_MINUS" length="4" />
+    </property>
+
+    <property name="plusMinusPct" type="int">
+      <column name="PLUS_MINUS_PCT" sql-type="NUMBER" />
+    </property>
+
+    <property name="productQty" type="double">
+      <column name="PRODUCT_QTY" sql-type="NUMBER(12, 3)" />
+    </property>
+
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+      <column name="UOM" length="4" not-null="true" />
+    </property>
+    
+		<property name="jobVesselName" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=256) private</meta> 
+			<column name="JOB_VESSEL_NAME" length="256"/>
+		</property>
+		<property name="jobNumber" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=128) private</meta> 
+			<column name="JOB_NUMBER" length="128"/>
+		</property>
+
+    <many-to-one name="jobVessel" class="JobVessel" insert="false" update="false">
+			<column name="JOB_VESSEL_NAME" /> 
+			<column name="JOB_NUMBER" /> 
+		</many-to-one> 
+  </class>
+
+  <class name="JobContractNote" table="JOB_CONTRACT_NOTES">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CONTRACT_NOTES_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CONTRACT_NOTES_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="note" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta> 
+      <column name="JOB_CONTRACT_NOTE" length="1024" />
+    </property>
+
+		<property name="jobNumber" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+			<column name="JOB_NUMBER" length="128" not-null="true"/>
+		</property>
+
+    <many-to-one name="jobOrder"
+                 column="JOB_NUMBER"
+                 class="JobOrder" 
+                 insert="false" update="false" />
+  </class>
+
+
+  <class name="CustAcctTeam" table="CUST_ACCT_TEAM">    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CUST_ACCT_TEAM_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CUST_ACCT_TEAM_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="accountOwnerId" type="string" >
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="ACCOUNT_OWNER_ID" length="1"/>
+    </property>
+    
+    <property name="custCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta> 
+      <column name="CUST_CODE" length="15" not-null="true"/>
+    </property>
+
+    <many-to-one name="customer"
+                 column="CUST_CODE"
+                 class="Customer" 
+                 insert="false" update="false" />
+    
+    <many-to-one name="employee"
+                 column="EMPLOYEE_ID"
+                 class="Employee" 
+                 not-null="true" />
+
+  </class>
+
+  <class name="ShippingAgent" table="SHIPPING_AGENT">    
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="SHIPPING_AGENT_NAME" length="128" not-null="true"/>
+    </id>
+
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta> 
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="city" type="string" >
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="CITY" length="64"/>
+    </property>
+
+    <property name="phone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta> 
+      <column name="PHONE" length="32"/>
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=70) private</meta> 
+      <column name="EMAIL" length="70" />
+    </property>
+    
+		<property name="stateCode" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=6) private</meta> 
+			<column name="STATE_CODE" length="6" />
+		</property>    
+		<property name="countryCode" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+			<column name="COUNTRY_CODE" length="3" not-null="true" />
+		</property>
+
+    <many-to-one name="country"
+                 column="COUNTRY_CODE"
+                 class="Country" insert="false" update="false"/>    
+
+    <many-to-one name="state" class="State" insert="false" update="false">    
+      <column name="STATE_CODE" />
+      <column name="COUNTRY_CODE" />
+    </many-to-one>
+  </class>
+
+  <class name="Currency" table="CURRENCY">    
+    <id name="currencyCd" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="CURRENCY_CD" length="3" />
+    </id>
+
+    <property name="currencyDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="CURRENCY_DESCR" length="30" />
+    </property>
+  
+  </class>
+
+  
+  <class name="CreditAnalyst" table="CREDIT_ANALYST">    
+    <id name="creditAnalystCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="CR_ANALYST_CODE" length="8"  />
+    </id>
+
+    <property name="crAnalystName" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta> 
+      <column name="CR_ANALYST_NAME" length="40" not-null="true" unique="true" />
+    </property>
+  
+  </class>
+
+  <class name="Collector" table="COLLECTOR">    
+    <id name="collectorCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="COLLECTOR_CODE" length="8" />
+    </id>
+
+    <property name="collectorName" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta> 
+      <column name="COLLECTOR_NAME" length="40" not-null="true" unique="true" />
+    </property>
+  
+  </class>  
+  
+  <class name="TaxRate" table="TAX_RATES">    
+    <id name="taxCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+      <column name="TAX_CODE" length="3" />
+    </id>
+
+    <property name="taxType" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="TAX_TYPE" length="1" not-null="true"/>
+    </property>
+    
+    <property name="effDate" type="date">
+      <column name="EFF_DATE" sql-type="date"/>
+    </property>   
+
+    <property name="taxPct" type="double">
+      <column name="TAX_PCT" sql-type="NUMBER(2,4)" />
+    </property>
+  
+  </class>  
+
+  <class name="JobCode" table="JOB_CODE">    
+    <id name="jobCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta> 
+      <column name="JOB_CODE" length="8" />
+    </id>
+
+    <property name="jobCodeDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta> 
+      <column name="JOB_CODE_DESC" length="40" not-null="true" unique="true" />
+    </property>
+  
+  </class>  
+  
+  <class name="PaymentTerms" table="PAYMENT_TERMS">    
+    <id name="paymentTermsCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="PYMNT_TERMS_CODE" length="5" />
+    </id>
+
+    <property name="paymentTermsDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta> 
+      <column name="PYMNT_TERMS_DESC" length="50" not-null="true" unique="true" />
+    </property>
+  
+    <property name="paymentTermsShortDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta> 
+      <column name="PYMNT_TERMS_SHORT_DESC" length="10" not-null="true" unique="true" />
+    </property>  
+  </class>    
+  
+  <class name="Banks" table="BANKS">    
+    <id name="bankCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BUSINESS_UNIT" length="5" />
+      <column name="CURRENCY_CODE" length="3" />
+      <column name="BANK_CODE" length="5" />
+    </id>
+
+    <property name="bankDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="BANK_DESC" length="30" not-null="true" unique="true" />
+    </property>
+   
+  </class> 
+  
+  <class name="BankAccounts" table="BANK_ACCOUNTS">    
+    <id name="bankAccountCode" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+      <column name="BUSINESS_UNIT" length="5" />
+      <column name="CURRENCY_CODE" length="3" />
+      <column name="BANK_CODE" length="5" />
+      <column name="BANK_ACCT_CODE" length="4" />
+    </id>
+
+    <property name="bankDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="BANK_ACCT_DESC" length="30" not-null="true" unique="true" />
+    </property>
+   
+  </class>
+  
+  <class name="Project" table="PROJECTS">    
+    <id name="projectNumber" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta> 
+      <column name="PROJECT_NUMBER" length="128" />
+    </id>  
+  
+      <many-to-one name="customer"
+                   column="CUST_CODE"
+                 class="Customer" />
+
+    <property name="projectType" type="string">
+      <meta attribute="use-in-equals">true</meta> 
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta> 
+      <column name="PROJECT_TYPE" length="1" not-null="true"/>
+    </property>                 
+  </class>
+  
+</hibernate-mapping>

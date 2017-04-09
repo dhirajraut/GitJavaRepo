@@ -1,0 +1,620 @@
+<?xml version="1.0"?>
+
+<project name="intertek" default="main" basedir=".">
+
+  <property file="build.properties" />
+
+  <property name="build.dir" value="./build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="build.metainf.dir" value="${build.dir}/META-INF"/>
+  <property name="dist.dir" value="./dist"/>
+  <property name="src.dir" value="${project.home}/src"/>
+  <property name="build.war.dir" value="${build.dir}/war"/>
+  <property name="lib.dir" value="${project.home}/lib" />
+  <property name="web.root.dir" value="${project.home}/web" />
+  <property name="config.dir" value="${project.home}/conf" />
+  <property name="data.dir" value="${project.home}/data" />
+
+  <property name="deploy.dir" value="${application.server.home}/webapps" />
+
+  <condition property="enable.svn.tag"> 
+    <istrue value="${svn.do.tag}"/> 
+  </condition>
+  
+  <path id="base.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+      <include name="**/*.zip" />
+    </fileset>
+    <fileset dir="${application.server.home}/common/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${build.classes.dir}" />
+
+    <path location="${project.home}/hibernate-ant/hibernate-tools.jar" />
+    <path location="${project.home}/hibernate-ant/freemarker.jar" />
+  </path>
+
+  <target name="prepare">
+    <echo>building prepare...</echo>
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${build.classes.dir}" />
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${build.war.dir}"/>
+  </target>
+  
+  <target name="compile" depends="copy-properties">
+  
+    <javac
+      destdir="${build.classes.dir}"
+      debug="${debug}"
+      deprecation="off"
+      optimize="${optimize}"
+      classpathref="base.path" fork="true" memoryInitialSize="128m" memoryMaximumSize="1024m">
+      <src path="${src.dir}"/>
+    </javac>
+
+  </target>
+  
+  <target name="compile-jasper" description="Compiles the XML report design and produces the .jasper file.">
+    <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask"> 
+      <classpath refid="base.path"/>
+    </taskdef>
+    <jrc destdir="${config.dir}/invoice">
+      <src>
+        <fileset dir="${config.dir}/invoice">
+          <include name="**.jrxml"/>
+        </fileset>
+      </src>
+      <classpath refid="base.path"/>
+    </jrc> 
+  </target>
+  
+
+  <target name="copy-properties" depends="prepare">
+
+    <filter token="application.server.home" value="${application.server.home}"/>
+
+    <copy todir="${build.classes.dir}" filtering="true" overwrite="yes">
+      <fileset dir="${src.dir}">
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>  
+    <copy todir="${build.classes.dir}" filtering="true" overwrite="yes">
+      <fileset dir="${config.dir}">
+        <include name="**/*.properties" />
+        <include name="**/*.xml" />
+        <include name="**/*.dtd" />
+        <include name="**/*.vm" />
+        <include name="**/*.jrxml" />
+        <include name="**/*.xsd" />
+        <include name="**/*.xsl" />
+      </fileset>
+    </copy>  
+    <copy todir="${build.classes.dir}" filtering="false" overwrite="yes">
+      <fileset dir="${config.dir}">
+        <include name="**/*.jasper" />
+      </fileset>
+    </copy>  
+  </target>
+
+  <target name="war" depends="compile">
+     <war        
+       warfile="${dist.dir}/${project.web.war}"
+       webxml="${project.home}/web/WEB-INF/web.xml" >
+       <fileset dir="${web.root.dir}"/>
+       <classes dir="${build.classes.dir}" includes="**/*.*" />
+       <lib dir="${project.home}/lib" includes="**/*.*" />
+     </war>
+   </target>
+   
+  <target name="zip" depends="compile">
+    <zip destfile="${dist.dir}/${invoice.zip}">
+      <fileset dir="${build.classes.dir}/invoice">
+        <include name="**/*.*" />
+      </fileset>
+      <fileset dir="${web.root.dir}/images">
+        <include name="intertek.gif" />
+      </fileset>
+    </zip>   
+  </target>
+
+  <target name="dist" depends="war, zip">
+  </target>
+
+  <target name="main" depends="compile, deploy">
+  </target>
+
+  <target name="all" depends="clean, compile, clean-deploy, deploy">
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+  
+  <target name="clean-deploy">
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="${deploy.dir}">
+        <include name="${name}/" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="deploy" depends="deploy-properties, tag_svn">
+  </target>
+
+  <target name="tag_svn" if="enable.svn.tag">
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" /> 
+
+    <tstamp>
+      <format property="tag.timestamp" pattern="yyyy_MM_dd_HH_mm_ss" />
+    </tstamp>
+
+    <echo message="Build started: ${tag.timestamp}" />
+
+    <svn username="stg" password="password">
+      <mkdir url="http://172.19.92.30/svn/phoenix/tags/release_${tag.timestamp}" 
+             message="Create Tag Directory at ${tag.timestamp}" />
+      <copy srcUrl="http://172.19.92.30/svn/phoenix/trunk" 
+            destUrl="http://172.19.92.30/svn/phoenix/tags/release_${tag.timestamp}/trunk"
+            message="Tag at ${tag.timestamp}" />
+    </svn>
+  </target>
+    
+  <target name="copy-deploy" >
+    <copy todir="${deploy.dir}/${name}">
+      <fileset dir="${web.root.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}">
+      <fileset dir="${web.root.dir}">
+        <include name="**" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}/WEB-INF/classes">
+      <fileset dir="${build.classes.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}/WEB-INF/lib">
+      <fileset dir="${lib.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${invoice.dir}">
+      <fileset dir="${build.classes.dir}/invoice">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+    <copy todir="${invoice.dir}">
+      <fileset dir="${web.root.dir}/images">
+        <include name="intertek.gif" />
+      </fileset>
+    </copy>  
+  </target>
+
+  <target name="deploy-properties" depends="copy-deploy">
+
+    <filter token="application.server.home" value="${application.server.home}"/>
+
+    <copy todir="${deploy.dir}/${name}" filtering="true" overwrite="yes">
+      <fileset dir="${web.root.dir}">
+        <include name="**/*.xml" />
+        <include name="**/*.wsdd" />
+      </fileset>
+    </copy>  
+  </target>
+
+  <target name="run-create-schema" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_sequence.sql" />
+    </java>
+  </target>
+
+  <target name="run-change-schema" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_changes.sql" />
+    </java>
+  </target>
+
+  <target name="run-loader-all-data" 
+     depends="run-loader-countries,
+     run-loader-jobcodes,
+       run-loader-users, 
+       run-loader-menus, 
+       run-loader-security,       
+       run-loader-currencies,
+       run-loader-credit-analysts,
+       run-loader-collectors,
+       run-loader-time-zones,
+       run-loader-pricing-models,
+       run-loader-service-types,
+       run-loader-auto-numbers">   
+  </target>
+
+  <target name="run-loader-service-types" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/service_types.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-pricing-models" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/pricing_models.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-auto-numbers" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/auto_numbers.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-time-zones" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/time_zones.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-collectors" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/collectors.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-credit-analysts" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/credit_analysts.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-users" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/users.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-menus" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/menus.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-security" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/security.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-countries" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/countries.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-currencies" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/currencies.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-jobcodes" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/jobcodes.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-shipping-agents" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/shipping_agents.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-test-data" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/test_data.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv" 
+     depends="run-loader-csv-roles,
+       run-loader-csv-perms,
+       run-loader-csv-links, 
+       run-loader-csv-role-to-users, 
+       run-loader-csv-perm-to-roles,       
+       run-loader-csv-perm-to-links,
+       run-loader-csv-menus">   
+  </target>
+
+  <target name="run-loader-csv-roles" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/roles.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/roles.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perms" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perms.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perms.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-links" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/links.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/links.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-role-to-users" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/role_to_users.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/role_to_users.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perm-to-roles" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perm_to_roles.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perm_to_roles.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perm-to-links" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perm_to_links.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perm_to_links.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-menus" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/menus.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/menus.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-required-fields" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/required_fields.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/required_fields.ctl" />
+    </java>
+  </target>
+
+
+  <target name="run-update-schema-bubranch" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_update_bubranch.sql" />
+    </java>
+  </target>
+
+  <target name="run-test" depends="compile">
+    <java classname="com.intertek.test.UserTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-ldap" depends="compile">
+    <java classname="com.intertek.test.LdapTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-ws" depends="compile">
+    <java classname="com.intertek.test.WebServiceClientTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-invoice" depends="compile">
+    <java classname="com.intertek.test.InvoiceTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-cal" depends="compile">
+    <java classname="com.intertek.test.CalculatorTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <!-- target name="codegen" depends="codegen-java, compile, codegen-ddl, codegen-castor">   
+  </target -->
+
+  <target name="codegen">
+    <ant antfile="build.xml" target="codegen-java" />
+    <ant antfile="build.xml" target="compile" />
+    <ant antfile="build.xml" target="codegen-ddl" />
+    <ant antfile="build.xml" target="codegen-castor" />
+    <ant antfile="build.xml" target="codegen-xsd" />
+  </target>
+
+  <taskdef name="hibernatetool" 
+           classname="org.hibernate.tool.ant.HibernateToolTask" 
+           classpathref="base.path" />
+
+  <target name="codegen-java" depends="prepare">   
+    <hibernatetool destdir="${src.dir}">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbm2java jdk5="true"/>
+      
+    </hibernatetool>
+  </target>
+
+  <target name="codegen-ddl" depends="prepare">   
+    <hibernatetool destdir="${data.dir}">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+
+      <hbm2ddl update="false"
+               export="false"
+               drop="false"
+               create="false"
+               console="true"
+               outputfilename="schema.sql"
+               delimiter=";"
+               format="true"
+              />
+      
+    </hibernatetool>
+  </target>
+
+  <target name="codegen-ddl-phase2" depends="prepare">
+    <hibernatetool destdir="${data.dir}">
+      <annotationconfiguration configurationfile="${config.dir}/phase2.hibernate.cfg.xml" />
+
+      <hbm2ddl update="false"
+               export="false"
+               drop="false"
+               create="false"
+               console="true"
+               outputfilename="phase2_schema.sql"
+               delimiter=";"
+               format="true"/>
+
+    </hibernatetool>
+  </target>
+  
+  <target name="codegen-castor" depends="prepare">   
+    <hibernatetool destdir="${config.dir}/castor">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbmtemplate
+        templateprefix="dao/"
+        templatepath="${config.dir}" 
+        template="dao/spring_castor_mapping.ftl"
+        filepattern="castor-mapping-Entity.xml">        
+      </hbmtemplate>
+      
+    </hibernatetool>
+  </target>
+
+  <target name="codegen-xsd" depends="prepare">   
+    <hibernatetool destdir="${config.dir}/xsd">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbmtemplate
+        templateprefix="dao/"
+        templatepath="${config.dir}" 
+        template="dao/spring_xsd_mapping.ftl"
+        filepattern="ws.xsd">        
+      </hbmtemplate>
+      
+    </hibernatetool>
+  </target>
+  
+</project>
+

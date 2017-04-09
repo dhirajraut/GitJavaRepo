@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/country
+END
+create_country.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/country/create_country.jsp
+END
+edit_country.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/country/edit_country.jsp
+END
+search_country.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/country/search_country.jsp
+END
+search_state_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/country/search_state_popup.jsp
+END

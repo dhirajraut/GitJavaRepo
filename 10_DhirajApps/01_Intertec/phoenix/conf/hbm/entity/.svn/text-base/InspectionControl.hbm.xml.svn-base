@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="InspectionControl" table="PS_ITS_INSP_CNTRL">
+    <composite-id name="inspectionControlId" class="InspectionControlId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="serviceName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=375) private</meta>
+        <column name="ITSC_SERVICE" length="375" />
+      </key-property>
+      <key-property name="questionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=96) private</meta>
+        <column name="ITS_QUESTION_ID" length="96" />
+      </key-property>
+      <key-property name="objectName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=96) private</meta>
+        <column name="OBJECT_NAME" length="96" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="rbKey" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=450) private</meta>
+      <column name="RB_KEY" length="450" />
+    </property>
+    <property name="attributes" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=384) private</meta>
+      <column name="ATTRIBUTES" length="384" />
+    </property>
+    <property name="controlType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CONTROL_TYPE" length="30" />
+    </property>
+    <property name="parameters" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=384) private</meta>
+      <column name="PARAMETERS" length="384" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="helpUrl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=192) private</meta>
+      <column name="HELP_URL" length="192" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    <property name="pbDiscountInd" type="yes_no">
+      <column name="ITS_PB_DSCNT_IND" length="3" />
+    </property>
+    <property name="vesselMaxInd" type="yes_no">
+      <column name="ITS_VSSL_MAX_IND" length="3" />
+    </property>
+    <property name="additonalVesselInd" type="yes_no">
+      <column name="ITS_ADDL_VSSL_IND" length="3" />
+    </property>
+    <property name="towMaxInd" type="yes_no">
+      <column name="ITS_TOW_MAX_IND" length="3" />
+    </property>
+    <property name="numGradesInd" type="yes_no">
+      <column name="ITS_NUM_GRADES_IND" length="3" />
+    </property>
+    <property name="contractRateInd" type="yes_no">
+      <column name="ITS_CONTR_RATE_IND" length="3" />
+    </property>
+    <property name="rowNumber" type="java.lang.Integer">
+      <column name="ITS_ROW_NUMBER" sql-type="NUMBER" />
+    </property>
+    <property name="overrideRow" type="java.lang.Integer">
+      <column name="ITS_OVERRIDE_ROW" sql-type="NUMBER" />
+    </property>
+  </class>
+</hibernate-mapping>
+

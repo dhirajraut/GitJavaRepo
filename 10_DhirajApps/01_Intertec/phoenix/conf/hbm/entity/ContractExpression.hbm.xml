@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ContractExpression" table="PS_ITSC_CONTR_EXPN">
+    <composite-id name="contractExpressionId" class="ContractExpressionId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="serviceName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=375) private</meta>
+        <column name="ITSC_SERVICE" length="375" />
+      </key-property>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="location" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="CFG_LOCATION" length="105" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="componentType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=93) private</meta>
+      <column name="COMPONENT_TYPE" length="93" />
+    </property>
+    <property name="contractComponent" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=93) private</meta>
+      <column name="ITS_CNTR_COMPONENT" length="93" />
+    </property>
+    <property name="pbComponentType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=93) private</meta>
+      <column name="PB_COMPONENT_TYPE" length="93" />
+    </property>
+    <property name="cfgDiscountPercent" type="java.lang.Double">
+      <column name="CFG_DISCOUNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="createLi" type="java.lang.Integer">
+      <column name="CREATE_LI" sql-type="NUMBER" />
+    </property>
+    <property name="parentExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="PARENT_EXPRSSN_ID" length="105" />
+    </property>
+    <property name="siblingExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="SIBLING_EXPRSSN_ID" length="105" />
+    </property>
+    <property name="questionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_QUESTION_ID" length="96" />
+    </property>
+    <property name="serviceRateExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="ITS_SRVC_RT_EXP_ID" length="105" />
+    </property>
+    <property name="serviceLevel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_SERVICE_LEVEL" length="12" />
+    </property>
+    <property name="expressionRank" type="java.lang.Integer">
+      <column name="EXPRESSION_RANK" sql-type="NUMBER" />
+    </property>
+    <property name="useGroupId" type="java.lang.Double">
+      <column name="ITS_USE_GROUP_ID" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="useVesselId" type="java.lang.Double">
+      <column name="ITS_USE_VESSEL_ID" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="visibility" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_VISIBILITY" length="12" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    
+    <property name="primary" type="yes_no">
+      <column name="PRIMARY_CONTR" length="1" />
+    </property>
+    
+  </class>
+</hibernate-mapping>
+

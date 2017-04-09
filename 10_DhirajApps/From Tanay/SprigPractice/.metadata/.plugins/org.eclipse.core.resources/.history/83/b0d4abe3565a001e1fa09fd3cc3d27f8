@@ -1,0 +1,20 @@
+package com;
+
+public class Student {
+	int studentId;
+	StudentData scoreCard;
+	
+	public StudentData getScoreCard() {
+		return scoreCard;
+	}
+	public void setScoreCard(StudentData scoreCard) {
+		this.scoreCard = scoreCard;
+	}
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+
+}

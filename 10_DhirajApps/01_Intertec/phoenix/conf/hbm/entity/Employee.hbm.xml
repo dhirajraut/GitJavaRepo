@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Employee" table="EMPLOYEE">
+    <id name="id" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=11) private</meta>
+      <column name="EMPLOYEE_ID" length="11" />
+    </id>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="jobCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta>
+      <column name="JOB_CODE" length="6" />
+    </property>
+    <property name="managerLevel" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=2) private</meta>
+      <column name="MANAGER_LEVEL" length="2" />
+    </property>
+    <property name="supervisorId" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="SUPERVISOR_ID" length="15" />
+    </property>
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank  @Length(min=0, max=8) private</meta>
+      <column name="BRANCH_NAME" length="8" not-null="true" />
+    </property>
+    <many-to-one name="branch" column="BRANCH_NAME" class="Branch" insert="false" update="false" index="EMPLOYEE_index_0" />
+  </class>
+</hibernate-mapping>
+

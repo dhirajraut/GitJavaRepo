@@ -1,0 +1,407 @@
+/**  
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ * @Date : 4/22/2009
+ * @Author : The Phoenix Team
+ */
+
+package com.intertek.phoenix.entity;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Index;
+
+/**
+ * CEInvoice encapsulates Invoice for CE.
+ * 
+ * @author richard.qin
+ */
+@Entity
+@Table(name="PHX_INVOICE")
+public class CEInvoice extends Invoice{
+
+    @Column(name = "PS_INVOICE_NUMBER", length = 22)
+    private String psInvoiceNumber;
+
+    @Column(name = "TYPE", length = 20)
+    @Enumerated(EnumType.STRING)
+    //TODO: needed?
+    private InvoiceType type;
+
+    @Column(name = "GENERATION_TYPE", length = 20)
+    @Enumerated(EnumType.STRING)
+    private InvoiceGenerationType generationType;
+
+    @Column(name = "JOB_NUMBER", length = 128, updatable = false, insertable = false)
+    private String jobNumber;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name="JOB_NUMBER")
+    @Index(name="PHX_INVOICE_INDEX_JOB_NUMBER")
+    private CEJobOrder jobOrder;
+
+    @Column(name = "PROJECT_NUMBER", length = 128, updatable = false, insertable = false)
+    private String projectNumber;
+    @ManyToOne
+    @JoinColumn(name="PROJECT_NUMBER")
+    @Index(name="PHX_INVOICE_INDEX_PROJECT")
+    @org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private Project project;
+
+    @Column(name = "JOB_ORDER_CONTRACT_ID", updatable = false, insertable = false)
+    private Long jobOrderContractId;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "JOB_ORDER_CONTRACT_ID")
+    @Index(name="OLI_INDEX_JO_CONTRACT")
+    private CEJobContract jobContract;
+
+    @Embedded  
+    private Period invoicePeriod;
+
+    @Column(name = "INV_AMT_PRE_TAX", precision = 38, scale = 4 )
+    private double invAmtPreTax;
+    
+    @Column(name="INV_AMT_POST_TAX", precision = 38, scale = 4)
+    private double invAmtPostTax;
+
+    @Column (name = "TOTAL_TAX", precision = 38, scale = 4 )
+    private double totalTax;
+
+    @Column (name = "TOTAL_VAT", precision = 38, scale = 4 )
+    private double totalVat;
+    
+    @Column(name = "BALANCE", precision = 38, scale = 4 )
+    private double balance; // TODO
+    
+    @OneToMany (mappedBy = "invoice", fetch = FetchType.LAZY,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<CEInvoiceLineItem> invoiceLineItems;
+
+    @Transient
+    private Set<DepositInvoice> depositInvoices;
+
+    public CEInvoice() {
+//        this.status = InvoiceStatus.NEW;
+    }
+
+    public void calculateTax() {
+        double temp = 0;
+        for(CEInvoiceLineItem ili: invoiceLineItems){
+            temp += ili.getTax();
+        }
+        this.totalTax = temp;
+    }
+
+    public void calculateVat() {
+        double temp = 0;
+        for(CEInvoiceLineItem ili: invoiceLineItems){
+            temp += ili.getVat();
+        }
+        this.totalVat = temp;
+    }
+
+    public void calculatePreTaxAmount() {
+        double temp = 0;
+        for(CEInvoiceLineItem ili: invoiceLineItems){
+            temp += ili.getPreTaxAmount();
+        }
+        this.invAmtPreTax = temp;
+    }
+    
+    public void calculate(){
+        calculatePreTaxAmount();
+        calculateTax();
+        calculateVat();
+        //TODO verify the rounding issues
+        invAmtPostTax = invAmtPreTax + totalTax + totalVat;
+    }
+
+    /**
+     * Determine if a deposit invoice can be credited.
+     * <p>
+     * Only a paid invoice can be credited.
+     * 
+     * @return
+     */
+    public boolean canCredit() {
+        // According to the functional spec, any generated invoice can be credited.
+        return this.getType() != InvoiceType.DRAFT && this.getType() != InvoiceType.CREDIT;
+    }
+
+    /**
+     * Credit this invoice
+     * @param note
+     * @return
+     */
+    public CreditInvoice creditInvoice(Note note){
+        CreditInvoice ci = new CreditInvoice(this.getInvoiceNumber());
+        if(note != null){
+            ci.setCreditInvoiceNote(note);
+        }
+        ci.setRelatedInvoice(this);
+        this.setStatus(InvoiceStatus.CREDITED);
+        // TODO populate details here
+        
+        return ci;
+    }
+
+    /**
+     * @return the type
+     */
+    public InvoiceType getType() {
+        return type;
+    }
+
+    /**
+     * @param type
+     *            the type to set
+     */
+    public void setType(InvoiceType type) {
+        this.type = type;
+    }
+
+    public Long getJobOrderContractId() {
+        return jobOrderContractId;
+    }
+
+    public void setJobOrderContractId(Long jobOrderContractId) {
+        this.jobOrderContractId = jobOrderContractId;
+    }
+
+    public CEJobContract getJobContract() {
+        return jobContract;
+    }
+
+    public void setJobContract(CEJobContract jobContract) {
+        this.jobOrderContractId = jobContract.getId();
+        this.jobContract = jobContract;
+    }
+
+    /**
+     * @return the projectId
+     */
+    public String getProjectNumber() {
+        return projectNumber;
+    }
+
+    /**
+     * @param projectNumber
+     *            the projectId to set
+     */
+    public void setProjectNumber(String projectNumber) {
+        this.projectNumber = projectNumber;
+    }
+
+    /**
+     * @return the project
+     */
+    public Project getProject() {
+        return project;
+    }
+
+    /**
+     * @param project
+     *            the project to set
+     */
+    public void setProject(Project project) {
+        this.projectNumber = project.getProjectNumber();
+        this.project = project;
+    }
+
+    /**
+     * @return the invoicePeriod
+     */
+    public Period getInvoicePeriod() {
+        return invoicePeriod;
+    }
+
+    /**
+     * @param invoicePeriod
+     *            the invoicePeriod to set
+     */
+    public void setInvoicePeriod(Period invoicePeriod) {
+        this.invoicePeriod = invoicePeriod;
+    }
+    
+    public double getInvAmtPreTax() {
+        return invAmtPreTax;
+    }
+
+    public void setInvAmtPreTax(double invAmtPreTax) {
+        this.invAmtPreTax = invAmtPreTax;
+    }
+
+    public double getInvAmtPostTax() {
+        return invAmtPostTax;
+    }
+
+    public void setInvAmtPostTax(double invAmtPostTax) {
+        this.invAmtPostTax = invAmtPostTax;
+    }
+
+    /**
+     * @return the totalTax
+     */
+    public double getTotalTax() {
+        return totalTax;
+    }
+
+    /**
+     * @param totalTax
+     *            the totalTax to set
+     */
+    public void setTotalTax(double totalTax) {
+        this.totalTax = totalTax;
+    }
+
+    /**
+     * @return the totalVat
+     */
+    public double getTotalVat() {
+        return totalVat;
+    }
+
+    /**
+     * @param totalVat
+     *            the totalVat to set
+     */
+    public void setTotalVat(double totalVat) {
+        this.totalVat = totalVat;
+    }
+
+    /**
+     * @return the balance
+     */
+    public double getBalance() {
+        return balance;
+    }
+
+    /**
+     * @param balance
+     *            the balance to set
+     */
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    /**
+     * @return the invoiceLineItems
+     */
+    public Set<CEInvoiceLineItem> getInvoiceLineItems() {
+        if(invoiceLineItems == null){
+            invoiceLineItems = new HashSet<CEInvoiceLineItem>();
+        }
+        return invoiceLineItems;
+    }
+
+    /**
+     * @param invoiceLineItem
+     *            the invoiceLineItem to set
+     */
+    public boolean addInvoiceLineItems(CEInvoiceLineItem invoiceLineItem) {
+        invoiceLineItem.setInvoice(this);
+        return getInvoiceLineItems().add(invoiceLineItem);
+    }
+
+    public boolean removeInvoiceLineItems(CEInvoiceLineItem invoiceLineItem) {
+        return getInvoiceLineItems().remove(invoiceLineItem);
+    }
+
+    /**
+     * @return the depositInvoices
+     */
+    public Set<DepositInvoice> getDepositInvoices() {
+        if(depositInvoices == null){
+            depositInvoices = new HashSet<DepositInvoice>();
+        }
+        return depositInvoices;
+    }
+
+    /**
+     * @param depositInvoice
+     *            the depositInvoices to set
+     */
+    public boolean addDepositInvoices(DepositInvoice depositInvoice) {
+        return getDepositInvoices().add(depositInvoice);
+    }
+
+    public boolean removeDepositInvoices(DepositInvoice depositInvoice) {
+        return getDepositInvoices().remove(depositInvoice);
+    }
+
+    /**
+     * @param ili
+     */
+    public void addInvoiceLineItem(CEInvoiceLineItem ili) {
+        if(ili != null){
+            this.getInvoiceLineItems().add(ili);
+            ili.setInvoice(this);
+        }
+    }
+
+    /**
+     * Remove all invoice line items from an invoice.
+     * <p>It is up to the caller to determine if the invoice lines can be
+     * removed, sucha as, only a newly created invoice can have its line 
+     * items removed. Otherwise, an exception will be thrown.
+     */
+    public void removeInvoiceLines() {
+        this.getInvoiceLineItems().clear();
+    }
+
+    public InvoiceGenerationType getGenerationType() {
+        return generationType;
+    }
+
+    public void setGenerationType(InvoiceGenerationType generationType) {
+        this.generationType = generationType;
+    }
+
+    /**
+     * At the time of invoice generation, we need to remove all the invoice lines
+     * that are not selected.
+     * @return a list of removed InvoiceLineItem
+     */
+    public List<CEInvoiceLineItem> removeUnselectedLineItems() {
+        List<CEInvoiceLineItem> removed = new ArrayList<CEInvoiceLineItem>();
+        // To avoid the Concurrent Modification Exception, created new temporay
+        // variable called temp.
+        Set<CEInvoiceLineItem> temp = new HashSet<CEInvoiceLineItem>();
+        temp.addAll(getInvoiceLineItems());
+        for (CEInvoiceLineItem line : temp) {
+            if (!line.isSelected()) {
+                getInvoiceLineItems().remove(line);
+                removed.add(line);
+            }
+        }
+        return removed;
+    }
+
+	public String getPsInvoiceNumber() {
+		return psInvoiceNumber;
+	}
+
+	public void setPsInvoiceNumber(String psInvoiceNumber) {
+		this.psInvoiceNumber = psInvoiceNumber;
+	}
+
+	
+}

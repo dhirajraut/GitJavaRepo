@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+	<class name="Employees" table="Employees">
+		<property name="empId" >
+			<column name="EMP_ID" />
+		</property>
+		<property name="title" >
+			<column name="TITLE" />
+		</property>
+		<property name="firstName" >
+			<column name="FIRSTNAME" />
+		</property>
+		<property name="lastName" >
+			<column name="LASTNAME" />
+		</property>
+	</class>
+</hibernate-mapping>

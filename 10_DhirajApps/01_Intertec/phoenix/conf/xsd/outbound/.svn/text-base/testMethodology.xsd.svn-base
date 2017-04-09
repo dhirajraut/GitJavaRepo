@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by ESB (ESB) -->
+<xs:schema xmlns="http://www.intertek.com/ESB/TestMethodology" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/TestMethodology" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishTestMethodologyRequest" type="TestMethodologyType">
+		<xs:annotation>
+			<xs:documentation>Publish TestMethodology ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="TestMethodologyType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ServiceOffering" type="ServiceOfferingType" maxOccurs="unbounded"/>
+			<xs:element name="Price" type="xs:double" minOccurs="0"/>
+			<xs:element name="PriceId" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeginDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceOfferingType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ParentId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

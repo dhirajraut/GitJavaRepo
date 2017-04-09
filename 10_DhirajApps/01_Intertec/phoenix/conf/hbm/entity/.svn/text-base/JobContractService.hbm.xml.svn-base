@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractService" table="JOB_CTR_SRCS">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CTR_SRC_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CTR_SRC_SEQ</param>
+      </generator>
+    </id>
+    <many-to-one name="jobContract" column="JOB_CONTRACT_ID" class="JobContract" not-null="true" index="JOB_CTR_SRCS_index_0" />
+    <property name="serviceName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=60) private</meta>
+      <column name="ITSC_SERVICE" length="60" not-null="true" />
+    </property>
+    <property name="serviceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="SERVICE_TYPE" length="45" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+    <set name="controls" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_SRC_CTL_ID">
+      <key>
+        <column name="JOB_CTR_SRC_ID" />
+      </key>
+      <one-to-many class="JobContractServiceControl" />
+    </set>
+    <set name="results" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_SRC_RLT_ID">
+      <key>
+        <column name="JOB_CTR_SRC_ID" />
+      </key>
+      <one-to-many class="JobContractServiceResult" />
+    </set>
+  </class>
+</hibernate-mapping>
+

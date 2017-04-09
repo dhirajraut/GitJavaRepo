@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ApplicationLevelLock" table="APP_LEVEL_LOCK">
+	<composite-id name="applicationLevelLockId" class="ApplicationLevelLockId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="name" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="NAME" length="30"/>
+      </key-property>
+      <key-property name="key" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="KEY" length="30" />
+      </key-property>
+    </composite-id>
+    <property name="lockedByUser" type="string">
+      <column name="LOCKED_BY_USER" sql-type="varchar2(150)"/>
+    </property>
+    <property name="lockedDateTime" type="timestamp">
+      <column name="LOCKED_DATE_TIME" sql-type="timestamp"/>
+    </property>
+  </class>
+</hibernate-mapping>

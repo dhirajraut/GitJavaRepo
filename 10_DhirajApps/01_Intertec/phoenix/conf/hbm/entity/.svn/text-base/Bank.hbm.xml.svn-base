@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Bank" table="BANKS">
+    <id name="bankCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="BANK_CODE" length="5" />
+    </id>
+    <property name="bankDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta>
+      <column name="BANK_DESC" length="30" not-null="true" unique="true" />
+    </property>
+
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS1" length="55" />
+    </property>
+
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS2" length="55" />
+    </property>
+
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS3" length="55" />
+    </property>
+
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS4" length="55" />
+    </property>
+
+    <property name="bankIdNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="BANK_ID_NBR" length="20" />
+    </property>
+
+    <property name="stateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE_CODE" length="6" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3"/>
+    </property>
+    <many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="BANKS_index_0" />
+    <many-to-one name="state" class="State" insert="false" update="false">
+      <column name="STATE_CODE" index="BANKS_index_1" />
+      <column name="COUNTRY_CODE" index="BANKS_index_1" />
+    </many-to-one>
+
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CITY" length="30" />
+    </property>
+	<property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="POSTAL" length="12" />
+    </property>
+
+  </class>
+</hibernate-mapping>
+

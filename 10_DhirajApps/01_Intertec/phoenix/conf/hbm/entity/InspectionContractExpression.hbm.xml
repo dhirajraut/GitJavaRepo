@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="InspectionContractExpression" table="PS_ITS_INSP_CTREXP">
+    <composite-id name="inspectionContractExpressionId" class="InspectionContractExpressionId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="serviceName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=375) private</meta>
+        <column name="ITSC_SERVICE" length="375" />
+      </key-property>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="componentType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=93) private</meta>
+        <column name="COMPONENT_TYPE" length="93" />
+      </key-property>
+      <key-property name="createLi" type="java.lang.Integer">
+        <column name="CREATE_LI" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="contractComponent" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=93) private</meta>
+      <column name="ITS_CNTR_COMPONENT" length="93" />
+    </property>
+    <property name="pbComponentType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=93) private</meta>
+      <column name="PB_COMPONENT_TYPE" length="93" />
+    </property>
+    <property name="cfgDiscountPercent" type="java.lang.Double">
+      <column name="CFG_DISCOUNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="parentExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="PARENT_EXPRSSN_ID" length="105" />
+    </property>
+    <property name="siblingExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="SIBLING_EXPRSSN_ID" length="105" />
+    </property>
+    <property name="questionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_QUESTION_ID" length="96" />
+    </property>
+    <property name="serviceRateExpressionId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=105) private</meta>
+      <column name="ITS_SRVC_RT_EXP_ID" length="105" />
+    </property>
+    <property name="serviceLevel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_SERVICE_LEVEL" length="12" />
+    </property>
+    <property name="expressionRank" type="java.lang.Integer">
+      <column name="EXPRESSION_RANK" sql-type="NUMBER" />
+    </property>
+    <property name="useGroupId" type="java.lang.Double">
+      <column name="ITS_USE_GROUP_ID" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="useVesselId" type="java.lang.Double">
+      <column name="ITS_USE_VESSEL_ID" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="visibility" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_VISIBILITY" length="12" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    <property name="pbDiscountInd" type="yes_no">
+      <column name="ITS_PB_DSCNT_IND" length="3" />
+    </property>
+    <property name="vesselMaxInd" type="yes_no">
+      <column name="ITS_VSSL_MAX_IND" length="3" />
+    </property>
+    <property name="additonalVesselInd" type="yes_no">
+      <column name="ITS_ADDL_VSSL_IND" length="3" />
+    </property>
+    <property name="towMaxInd" type="yes_no">
+      <column name="ITS_TOW_MAX_IND" length="3" />
+    </property>
+    <property name="numGradesInd" type="yes_no">
+      <column name="ITS_NUM_GRADES_IND" length="3" />
+    </property>
+    <property name="contractRateInd" type="yes_no">
+      <column name="ITS_CONTR_RATE_IND" length="3" />
+    </property>
+    <property name="rowNumber" type="java.lang.Integer">
+      <column name="ITS_ROW_NUMBER" sql-type="NUMBER" />
+    </property>
+    <property name="overrideRow" type="java.lang.Integer">
+      <column name="ITS_OVERRIDE_ROW" sql-type="NUMBER" />
+    </property>
+  </class>
+</hibernate-mapping>
+

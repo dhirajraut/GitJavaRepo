@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE statemachines PUBLIC "statemachine/statemachine.dtd" "http://www.intertek.com/statemachine/statemachine.dtd">
+
+<statemachines>
+  <statemachine name="OrderStateMachine1">
+    <states>
+      <state name="created" />
+      <state name="open" />
+      <state name="closed" />
+    </states>
+
+    <transitions>    
+      <transition event="orderCreated">
+        <to name="created" />
+      </transition>
+      
+      <transition event="orderOpened">
+        <from name="created" />
+        <to name="open" />
+        <actions>
+          <action service="stateMachineService" api="orderCreated1" />
+        </actions>
+      </transition>
+      
+      <transition event="orderClosed">
+        <from name="open" />
+        <to name="closed" />
+        <actions>
+          <action service="stateMachineService" api="orderClosed1" />
+        </actions>
+      </transition>      
+    </transitions>    
+  </statemachine>
+  <statemachine name="ContractStateMachine">
+    <states>
+      <state name="INPR" />
+      <state name="APP" />
+      <state name="INAC" />
+      <state name="REJ" />
+      <state name="SUB" />
+    </states>
+
+    <transitions>      
+      <transition event="Submit">
+        <from name="INPR,REJ,INAC" />
+        <to name="SUB" />
+        <actions>
+          <action service="contractService" api="submit" />
+        </actions>
+      </transition>
+      
+      <transition event="Approve">
+        <from name="SUB,INAC,INPR,REJ" />
+        <to name="APP" />
+        <permission name="ApproveContract" />
+        <actions>
+          <action service="contractService" api="approve" />
+        </actions>
+      </transition>      
+
+      <transition event="In Progress">
+        <from name="SUB,INAC,REJ,APP" />
+        <to name="INPR" />
+        <permission name="ApproveContract" />
+        <actions>
+          <action service="contractService" api="setContractStatus" />
+        </actions>
+      </transition>      
+
+      <transition event="Deactivate">
+        <from name="APP" />
+        <to name="INAC" />
+        <permission name="ApproveContract" />
+        <actions>
+          <action service="contractService" api="deactivate" />
+        </actions>
+      </transition>      
+
+      <transition event="Reject">
+        <from name="SUB,APP" />
+        <to name="INAC" />
+        <permission name="ApproveContract" />
+        <actions>
+          <action service="contractService" api="reject" />
+        </actions>
+      </transition>      
+    </transitions>    
+  </statemachine>
+</statemachines>
+
+          
+          
+          
+          
+          
+      
+
+        

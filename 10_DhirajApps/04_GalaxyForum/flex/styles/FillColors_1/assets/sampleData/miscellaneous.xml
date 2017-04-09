@@ -1,0 +1,60 @@
+<MiscellaneousData>
+	
+	<Countries>
+		<country>
+			<id>1</id>
+			<name>Canada</name>
+		</country>
+		
+		<country>
+			<id>2</id>
+			<name>Japan</name>
+		</country>
+		
+		<country>
+			<id>3</id>
+			<name>United States</name>
+		</country>
+		
+		<country>
+			<id>4</id>
+			<name>St Vincent and Grenadines</name>
+		</country>
+		
+		<country>
+			<id>5</id>
+			<name>Fifth</name>
+		</country>
+		
+		<country>
+			<id>6</id>
+			<name>etc</name>
+		</country>
+	</Countries>
+	
+	<Texts>
+		<aboutFillColors>
+			<![CDATA[ 
+			THIS IS SAMPLE TEXT 		
+			<br /><br />
+			Fill Colors is an invitation to designers and developers to show their Flex skins. It is also an invitation to take Flex skinning to the next level. 
+			We expect you to push the limits of Flex skinning and to test your own skills while creating your design.
+			<br /><br />
+			Aenean viverra, lorem nec malesuada ullamcorper, ligula lacus sollicitudin nisi, non egestas tellus sem vel eros.
+			 Aliquam at ipsum. Proin pulvinar sapien nec ligula. Sed nec tellus blandit quam sagittis condimentum. Nullam ut felis ut pede dictum aliquam. Nulla facilisi. 
+			 Nulla eu arcu nec felis ultrices vulputate. Donec pulvinar iaculis pede. Donec egestas dolor elementum diam. Vestibulum aliquam, quam vitae hendrerit pretium, 
+			 nulla sem consectetuer lorem, eget scelerisque erat neque non nibh. Fusce convallis. Mauris tincidunt turpis eget leo.
+			  Suspendisse hendrerit lacinia massa. Pellentesque eu tortor. 
+			 Duis tincidunt. Morbi hendrerit, turpis a ultrices gravida, felis purus auctor tellus, sit amet eleifend pede diam in velit. Donec molestie. Nullam pede metus, nonummy a, pellentesque 
+			 vitae, sollicitudin sit amet, urna. Pellentesque at mauris. Fusce tempor.
+			 <br /><br />
+			Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec metus. Donec ligula erat, tincidunt nec, ornare nec, egestas in, neque. Ut risus mi,
+			 luctus id, pulvinar quis, pellentesque at, nisi. Pellentesque dapibus nisl aliquam est. 
+			 Cras commodo, diam porta rhoncus vehicula, urna mauris pretium mauris, et dapibus urna ipsum eget mauris.
+			  Mauris luctus viverra massa. Mauris vehicula sodales lorem. Ut quis felis. Fusce scelerisque, velit convallis viverra vehicula, magna dui ultricies augue, 
+			  sit amet elementum arcu orci vitae justo. Phasellus mollis, sem tempus gravida ultrices, dui neque condimentum pede, vel porta justo diam molestie elit.
+			]]>
+		</aboutFillColors>
+		
+	</Texts>
+</MiscellaneousData>

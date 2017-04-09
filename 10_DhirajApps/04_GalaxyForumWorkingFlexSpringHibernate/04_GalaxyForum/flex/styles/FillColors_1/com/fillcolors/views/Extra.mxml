@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	There are two instances of this component in this application. They are there to help the designer add an extra image or skin to the app.
+	This is a bad practice, but we are making an exception in this case.
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	mouseEnabled="false"
+	width="{Number(widthProperty.value)}" 
+	height="{Number(heightProperty.value)}" 
+	xmlns:css="com.fillcolors.css.*">
+	
+	<css:CSSProperty id="widthProperty"  defaultValue="1" styleName="{this}" property="width" />
+	<css:CSSProperty id="heightProperty" defaultValue="1" styleName="{this}" property="height" />
+	
+</mx:Canvas>

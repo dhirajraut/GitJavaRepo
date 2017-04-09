@@ -1,0 +1,36 @@
+ import java.io.*;
+ import java.util.Date;
+ 
+public class TestFileClass
+	{	public static void main(String[] args)
+			{	File fNotExists = new File("D:\\D.Chandra\\JDK\\myprograms\\Test"+"Random.dat");
+				
+				//C:\D.Chandra\ClassroomExercises\src\IOManagement
+				String filepath="C:"+File.separator+"D.Chandra"+File.separator+"ClassroomExercises"+File.separator;
+				filepath=filepath+"src"+File.separator+"IOManagement";
+				File fExists = new File(filepath+File.separator+"TestFileClass.java");
+
+				System.out.println("Is "+fNotExists.getName()+ " file exists?"+fNotExists.exists());
+				System.out.println("Is "+fExists.getName()+" file exists?"+fExists.exists());
+				
+				System.out.println("Length of "+fNotExists.getName()+" is:"+fNotExists.length());
+				System.out.println("Length of "+fExists.getName()+" is:"+fExists.length());
+				
+				System.out.println("Absolute path of "+fNotExists.getName()+" is:"+fNotExists.getAbsolutePath());
+				System.out.println("Absolute path of "+fExists.getName()+" is:"+fExists.getAbsolutePath());
+				
+				System.out.println("Parent path of "+fNotExists.getName()+" is:"+fNotExists.getParent());
+				System.out.println("Parent path of "+fExists.getName()+" is:"+fExists.getParent());
+				
+				System.out.println("Date of Last Modification "+fNotExists.getName()+" is:"+new Date(fNotExists.lastModified()));
+				System.out.println("Date of Last Modification "+fExists.getName()+" is:"+new Date(fExists.lastModified()));
+				
+				// Test for Directory Listing
+				File directorypath = new File(filepath);
+				String [] directoryList;
+				directoryList=directorypath.list();
+				for(int i=0; i<directoryList.length; i++)
+					System.out.println(directoryList[i]);
+				System.out.println("\nTotal Files"+directoryList.length);
+			}
+	}

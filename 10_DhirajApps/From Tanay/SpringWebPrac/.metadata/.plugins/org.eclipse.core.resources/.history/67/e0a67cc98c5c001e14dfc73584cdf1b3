@@ -1,0 +1,15 @@
+package dao;
+
+import model.Login;
+
+public class LoginDaoImpl implements LoginDao {
+
+	public boolean checkLogin(Login l) {
+	
+		if(l.getName().equals("user")&&l.getPassword().equals("pass")){
+		return true;
+		}
+		return false;
+	}
+
+}

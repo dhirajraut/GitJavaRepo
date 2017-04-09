@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractTest" table="JOB_CTR_TESTS">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CTR_TEST_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CTR_TEST_SEQ</param>
+      </generator>
+    </id>
+    <many-to-one name="jobContractProd" class="JobContractProd">
+      <column name="JOB_CTR_PROD_ID" index="JOB_CTR_TESTS_index_0" />
+    </many-to-one>
+    <many-to-one name="test" column="TEST_ID" class="Test" index="JOB_CTR_TESTS_index_1" />
+    <set name="prebills" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key>
+        <column name="JOB_CTR_TEST_ID" />
+      </key>
+      <one-to-many class="Prebill" />
+    </set>
+    <property name="jobTestId" type="long">
+      <column name="JOB_TEST_ID" sql-type="NUMBER" />
+    </property>
+    <property name="quantity" type="java.lang.Double">
+      <column name="QUANTITY" sql-type="NUMBER(8, 2)" />
+    </property>
+    <property name="ot" type="java.lang.Boolean">
+      <column name="OT" />
+    </property>
+    <property name="unitPrice" type="java.lang.Double">
+      <column name="CFG_UNIT_PRICE" sql-type="NUMBER(16, 6)" />
+    </property>
+    <property name="lineDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="LINE_DESCRIPTION" length="254" />
+    </property>
+    <property name="contractRefNo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="CONTRACT_REF_NO" length="45" />
+    </property>
+    <property name="discount" type="java.lang.Double">
+      <column name="DISCOUNT" sql-type="NUMBER(10, 4)" />
+    </property>
+    <property name="totalPrice" type="java.lang.Double">
+      <column name="TOTAL_PRICE" sql-type="NUMBER(30, 2)" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+  </class>
+</hibernate-mapping>
+

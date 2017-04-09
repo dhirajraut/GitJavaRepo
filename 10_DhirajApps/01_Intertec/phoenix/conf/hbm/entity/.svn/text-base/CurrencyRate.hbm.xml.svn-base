@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="CurrencyRate" table="PS_RT_RATE_TBL">
+    <composite-id name="currencyRateId" class="CurrencyRateId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="rateIndex" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta>
+        <column name="RT_RATE_INDEX" length="30" />
+      </key-property>
+      <key-property name="term" type="java.lang.Integer">
+        <column name="TERM" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="fromCurrency" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="FROM_CUR" length="9" />
+      </key-property>
+      <key-property name="toCurrency" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="TO_CUR" length="9" />
+      </key-property>
+      <key-property name="type" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+        <column name="RT_TYPE" length="15" />
+      </key-property>
+      <key-property name="effectiveDate" type="date">
+        <column name="EFFDT" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="rateMult" type="java.lang.Double">
+      <column name="RATE_MULT" sql-type="NUMBER(15,8)" />
+    </property>
+    <property name="rateDiv" type="java.lang.Double">
+      <column name="RATE_DIV" sql-type="NUMBER(15,8)" />
+    </property>
+    <property name="syncId" type="java.lang.Integer">
+      <column name="SYNCID" sql-type="NUMBER" />
+    </property>
+    <property name="lastUpdateDate" type="date">
+      <column name="LASTUPDDTTM" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>
+

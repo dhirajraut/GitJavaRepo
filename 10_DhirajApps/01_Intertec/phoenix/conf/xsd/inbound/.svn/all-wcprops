@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/phoenix/!svn/ver/7044/branches/phx2.1/conf/xsd/inbound
+END
+DCAppJobOrder.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/6983/branches/phx2.1/conf/xsd/inbound/DCAppJobOrder.xsd
+END
+employee.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/phoenix/!svn/ver/6707/branches/phx2.1/conf/xsd/inbound/employee.xsd
+END
+DCAppBillableItems.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6409/branches/phx2.1/conf/xsd/inbound/DCAppBillableItems.xsd
+END
+ECSJobOrder.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7044/branches/phx2.1/conf/xsd/inbound/ECSJobOrder.xsd
+END

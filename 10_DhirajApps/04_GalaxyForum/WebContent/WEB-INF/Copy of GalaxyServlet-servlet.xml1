@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN/EN" 
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/home">loginController</prop>
+ 				<prop key="/sessionReceiver">sessionReceiverController</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="loginController" class="com.galaxy.login.controllers.LoginController">
+		<property name="service" ref="loginService" />
+	</bean>
+	
+	<bean id="loginService" class="com.galaxy.login.impls.LoginServiceImpl" >
+		<property name="delegator" ref="loginDelegator" />
+	</bean>
+	<bean id="loginDelegator" class="com.galaxy.login.delegators.LoginDelegator">
+		<property name="dao" ref="loginDao" />
+	</bean>
+
+	<bean id="loginDao" class="com.galaxy.login.daos.LoginDao" />
+
+	<bean id="sessionReceiverController"
+		class="com.galaxy.login.controllers.SessionReceiverController">
+	</bean>
+<!-- 
+	<bean id="aopLoginController" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="loginController" /> 
+		</property>
+		
+		<property name="proxyInterfaces">
+			<value>com.galaxy.base.controllers.IController</value>
+		</property>
+		
+		<property name="interceptorNames">
+			<list>
+				<value>aroundAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+ 	<bean id="aopLoginService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="loginService" /> 
+		</property>
+		
+		<property name="proxyInterfaces">
+			<value>com.galaxy.base.services.IService</value>
+		</property>
+		
+		<property name="interceptorNames">
+			<list>
+				<value>aroundAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+ 	<bean id="aopLoginDelegator" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="loginDelegator" /> 
+		</property>
+		
+		<property name="proxyInterfaces">
+			<value>com.galaxy.base.delegators.IDelegator</value>
+		</property>
+		
+		<property name="interceptorNames">
+			<list>
+				<value>aroundAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+ 	<bean id="aopLoginDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="loginDao" /> 
+		</property>
+		
+		<property name="proxyInterfaces">
+			<value>com.galaxy.base.daos.IDao</value>
+		</property>
+		
+		<property name="interceptorNames">
+			<list>
+				<value>aroundAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="aroundAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref local="aroundAdvice" />
+		</property>
+		<property name="pattern">
+			<value>.*</value>
+		</property>
+	</bean>
+	
+	<bean id="aroundAdvice" class="com.galaxy.base.aspects.LoggerAdvice" />
+-->
+</beans>

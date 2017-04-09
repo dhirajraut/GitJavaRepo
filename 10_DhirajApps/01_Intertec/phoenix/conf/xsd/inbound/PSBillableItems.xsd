@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/PSBillableItem" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/PSBillableItem" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishBillableItemRequest" type="BillableItemType">
+		<xs:annotation>
+			<xs:documentation>Publish BillableItem ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="BillableItemType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="BillableItemLine" type="BillableItemLineType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BillableItemLineType">
+		<xs:sequence>
+			<xs:element name="BusinessUnit" type="xs:string"/>
+			<xs:element name="TemporaryInvoiceNumber" type="xs:string"/>
+			<xs:element name="LineSequenceNumber" type="xs:integer"/>
+			<xs:element name="LineDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="JobNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="JobLineNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="InvoiceAmt" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="Quantity" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="UnitAmt" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="TotalLineAmt" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="BillingCurrencyCd" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillingLineDistribution" type="BillingLineDistributionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BillingLineDistributionType">
+		<xs:sequence>
+			<xs:element name="BusinessUnit" type="xs:string"/>
+			<xs:element name="InvoiceNumber" type="xs:string"/>
+			<xs:element name="LineSeqNumber" type="xs:integer"/>
+			<xs:element name="LineDistSeqNumber" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Revenue Sequence Number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="JobNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="Account" type="xs:string" minOccurs="0"/>
+			<xs:element name="WarehouseId" type="xs:string" minOccurs="0"/>
+			<xs:element name="DepartmentId" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessStream" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Product ChartField</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceOffering" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Expansion Chartfield 2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DistributionAmt" type="xs:decimal" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

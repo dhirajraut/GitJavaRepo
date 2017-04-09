@@ -1,0 +1,184 @@
+<gallery>
+	
+	<design id="Rainbow">
+		<name>Rainbow</name>
+		<author>Nahuel Foronda</author>
+		<website>http://www.asfusion.com</website>
+		<country>USA</country>
+		<cssfile>Rainbow.swf</cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>rainbow_thum.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license>Creative Commons</license>
+		<rating>3.6</rating>
+		<votes>587</votes>
+	</design>
+	
+	<design id="Aqua">
+		<name>Aqua</name>
+		<author>Nahuel Foronda</author>
+		<website>http://www.asfusion.com</website>
+		<country>USA</country>
+		<cssfile>Aqua.swf</cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>aqua_thum.png</thumbnail>
+		<thumbnaillarge>aqua.png</thumbnaillarge>
+		<license></license>
+		<rating></rating>
+		<votes>65</votes>
+	</design>
+	
+	<design id="naked">
+		<name>Naked</name>
+		<author>Nahuel Foronda</author>
+		<website>http://www.asfusion.com</website>
+		<country>USA</country>
+		<cssfile>Naked.swf</cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum1.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>5</rating>
+		<votes>185</votes>
+	</design>
+	
+	<design id="4">
+		<name>Amadeus</name>
+		<author>Lucas Garibaldi</author>
+		<website></website>
+		<country>Italy</country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum4.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>4.8</rating>
+		<votes>1</votes>
+	</design>
+	
+	<design id="5">
+		<name>Lotus</name>
+		<author>John Chi</author>
+		<website></website>
+		<country>Japan</country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum5.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating></rating>
+		<votes>65</votes>
+	</design>
+	
+	<design id="6">
+		<name>Yin Yan</name>
+		<author>Jose Maria</author>
+		<website></website>
+		<country>Argentina</country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum6.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>4.4</rating>
+		<votes>124</votes>
+	</design>
+	
+	<design id="7">
+		<name>Classical</name>
+		<author>Robert Smith</author>
+		<website></website>
+		<country>USA</country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum7.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>4.2</rating>
+		<votes>544</votes>
+	</design>
+	
+	<design id="8">
+		<name>The Yellow Submarine</name>
+		<author>Ringo</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum8.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>4.1</rating>
+		<votes>987</votes>
+	</design>
+	
+	<design id="9">
+		<name>Upstream</name>
+		<author>Kay Jones</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum9.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>3.3</rating>
+		<votes>12</votes>
+	</design>
+	
+	<design id="10">
+		<name>The canoe</name>
+		<author>Linda Luna</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum10.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>3.6</rating>
+		<votes>8</votes>
+	</design>
+	
+	<design id="11">
+		<name>All Green</name>
+		<author>Henry Longhorn</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum11.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>2.3</rating>
+		<votes>87</votes>
+	</design>
+	
+	<design id="12">
+		<name>At School</name>
+		<author>David Student</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum12.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>2.5</rating>
+		<votes>41</votes>
+	</design>
+	
+	<design id="13">
+		<name>The 8 Ball</name>
+		<author>Flash Gordon</author>
+		<website></website>
+		<country></country>
+		<cssfile></cssfile>
+		<sourcefile></sourcefile>
+		<thumbnail>thum13.png</thumbnail>
+		<thumbnaillarge>picture.png</thumbnaillarge>
+		<license></license>
+		<rating>2.3</rating>
+		<votes>5</votes>
+	</design>
+</gallery>

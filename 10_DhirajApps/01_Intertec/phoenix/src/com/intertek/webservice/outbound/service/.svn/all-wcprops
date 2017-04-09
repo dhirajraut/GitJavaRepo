@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/webservice/outbound/service
+END
+WebServiceThreadSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/webservice/outbound/service/WebServiceThreadSender.java
+END
+LoadTestOutboundWebService.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/webservice/outbound/service/LoadTestOutboundWebService.java
+END

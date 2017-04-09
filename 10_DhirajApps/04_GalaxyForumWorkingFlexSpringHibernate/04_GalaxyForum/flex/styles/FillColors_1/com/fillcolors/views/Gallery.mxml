@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:qs_controls="com.quietlyscheming.controls.*"
+	xmlns:asf_controls="com.asfusion.controls.*"
+	xmlns:mate="http://mate.asfusion.com/03"
+	xmlns:css="com.fillcolors.css.*"
+	mouseEnabled="false"
+	creationComplete="onComplete()"
+	verticalScrollPolicy="off" 
+	horizontalScrollPolicy="off"
+	height="100%" 
+	currentState="{GalleryState.THUMBNAIL_UNSELECTED}" 
+	>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.DynamicEvent;
+			import com.fillcolors.vos.Design;
+			import mx.collections.ArrayCollection;
+			import com.fillcolors.views.renderers.Thumbnail;
+			import com.fillcolors.events.*;
+			import com.fillcolors.views.states.GalleryState;
+			
+			[Bindable] public var designs:ArrayCollection;
+			[Bindable] public var curentSkin:Design;
+			
+			private var _selectedDesign:Design;
+			[Bindable] private var _targetsAvailable:Array;
+			
+			[Bindable]
+			public function set selectedDesign(value:Design):void
+			{
+				_selectedDesign = value;
+				grid.selectedItem = value;
+				tile.selectedItem = value;
+				rating.liveRollOver = true;
+			}
+			public function get selectedDesign():Design
+			{
+				return _selectedDesign;
+				
+			}
+			public function onComplete():void
+			{
+				_targetsAvailable = [grid, tile, bigImage, designInfo,
+									 labelName, textName, labelAuthor, 
+									 textAuthor, labelRating, rating, 
+									 downloadBtn, applyBtn];
+			}
+			
+		]]>
+	</mx:Script>
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::LISTENERS  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:Listener type="{GalleryEvent.STATE_CHANGE}" eventFire="currentState = GalleryEvent(event).state" />
+	<mate:Dispatcher id="selectDispatcher" 			generator="{GalleryEvent}" 	type="{GalleryEvent.DESIGN_SELECTED}" />
+	<mate:Dispatcher id="skinSwitchDispatcher"		generator="{DesignEvent}" 	type="{DesignEvent.SELECT}" />
+	<mate:Dispatcher id="ratingDispatcher"	generator="{RateEvent}" 	type="{RateEvent.APPLY}" />
+	<mate:Dispatcher id="downloadDispatcher"	generator="{DesignEvent}" 	type="{DesignEvent.DOWNLOAD}" />
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::GUI ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:TileList id="tile" width="100%" height="203" dataProvider="{designs}" showEffect="{fadeIn}" 
+		change="selectDispatcher.createAndDispatchEvent({selectedDesign:tile.selectedItem})"
+		itemRenderer="com.fillcolors.views.renderers.Thumbnail"  
+		rowHeight="{Number(tileRowHeight.value)}" 
+		columnWidth="{Number(tileColumnWidth.value)}"/>
+		 
+	<mx:DataGrid width="100%" id="grid" dataProvider="{designs}" showEffect="{fadeIn}" height="203"
+				change="selectDispatcher.createAndDispatchEvent({selectedDesign:grid.selectedItem})" >
+			<mx:columns>
+				<mx:DataGridColumn headerText="Author" dataField="author"/>
+				<mx:DataGridColumn headerText="Rating" dataField="rating"/>
+				<mx:DataGridColumn headerText="Name" dataField="name"/>
+			</mx:columns>
+	</mx:DataGrid>
+	
+	<qs_controls:SuperImage id="bigImage" styleName="bigImage" smoothing="true" y="248" width="390" height="200" 
+		visible="true" source="{selectedDesign.thumbnailLarge}" />
+	
+	<mx:Canvas y="346" x="415" id="designInfo" width="100%" visible="true" styleName="designInfo" mouseEnabled="false"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		
+		<mx:Label x="13" y="0" id="labelName" styleName="designInfoLabelName" text="Name:"/>
+		<mx:Text x="60" y="0"  id="textName" styleName="designInfoName" text="{selectedDesign.name}" selectable="false"/>
+		
+		<mx:Label x="13" y="25" id="labelAuthor" styleName="designInfoLabelAuthor" text="Author:"/>
+		<mx:Text x="60" y="25"  id="textAuthor" styleName="designInfoAuthor" text="{selectedDesign.author}" selectable="false"/>
+		
+		
+		<mx:Label x="13" y="50" id="labelRating" styleName="designInfoLabelRating" text="Rating:"/>
+		<asf_controls:Rating  x="60" y="50" id="rating"  itemCount="5" value="{selectedDesign.rating}" 
+			selectionChange="rating.liveRollOver = false; ratingDispatcher.createAndDispatchEvent({design:selectedDesign, rating: (event as RatingEvent).selectedValue})" />
+		<mx:Text x="154" y="50"  id="textRating" styleName="designInfoRating" text="{selectedDesign.rating}" selectable="false"/>
+		
+		<mx:Button x="10" y="79" id="downloadBtn" styleName="designInfoBtnDownload" label="Download"
+				enabled="{selectedDesign.sourceFile.length > 0}"
+				click="downloadDispatcher.createAndDispatchEvent({design:selectedDesign})"/>
+		<mx:Button x="105" y="79" id="applyBtn" styleName="designInfoBtnApply" label="Apply style" 
+				enabled="{selectedDesign != curentSkin}"
+				click="skinSwitchDispatcher.createAndDispatchEvent({design:selectedDesign})"/>
+	</mx:Canvas>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::CSS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<css:CSSProperty id="tileColumnWidth" defaultValue="120" selector="TileList" property="columnWidth"/>
+	<css:CSSProperty id="tileRowHeight"   defaultValue="100" selector="TileList" property="rowHeight"/>
+	
+	<css:CSSAnimateProperty id="animatePropertyA" targetsAvailable="{_targetsAvailable}" />
+	<css:CSSAnimateProperty id="animatePropertyB" targetsAvailable="{_targetsAvailable}" />
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::TRANSITION EFFECTS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:Fade id="fadeIn" duration="500" alphaFrom="0.0" alphaTo="1.0"/>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::STATES::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:states>
+		<mx:State name="{GalleryState.THUMBNAIL_UNSELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty name="styleName" value="thumbnailView"/>
+			<mx:SetProperty target="{grid}" name="visible" value="false"/>
+			<mx:SetProperty target="{bigImage}" name="visible" value="false"/>
+			<mx:SetProperty target="{designInfo}" name="visible" value="false"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="galleryThumbUnselectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="galleryThumbUnselectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.THUMBNAIL_SELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty name="styleName" value="thumbnailView"/>
+			<mx:SetProperty target="{grid}" name="visible" value="false"/>
+			<mx:SetProperty target="{bigImage}" name="visible" value="true"/>
+			<mx:SetProperty target="{designInfo}" name="visible" value="true"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="galleryThumbSelectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="galleryThumbSelectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.GRID_UNSELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty name="styleName" value="gridView"/>
+			<mx:SetProperty target="{grid}" name="visible" value="true"/>
+			<mx:SetProperty target="{tile}" name="visible" value="false"/>
+			<mx:SetProperty target="{bigImage}" name="visible" value="false"/>
+			<mx:SetProperty target="{designInfo}" name="visible" value="false"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="galleryGridUnselectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="galleryGridUnselectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.GRID_SELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty name="styleName" value="gridView"/>
+			<mx:SetProperty target="{grid}" name="visible" value="true"/>
+			<mx:SetProperty target="{tile}" name="visible" value="false"/>
+			<mx:SetProperty target="{bigImage}" name="visible" value="true"/>
+			<mx:SetProperty target="{designInfo}" name="visible" value="true"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="galleryGridSelectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="galleryGridSelectedB"/>
+		</mx:State>
+	</mx:states>
+		
+</mx:Canvas>

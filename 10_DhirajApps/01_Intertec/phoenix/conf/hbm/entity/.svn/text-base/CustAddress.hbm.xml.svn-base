@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="CustAddress" table="CUST_ADDRESSES">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CUST_ADDRESS_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CUST_ADDRESS_SEQ</param>
+      </generator>
+    </id>
+    <property name="effDate" type="date">
+      <column name="EFF_DATE" sql-type="date" />
+    </property>
+    <property name="effStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="EFF_STATUS" length="1" />
+    </property>
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=70) private</meta>
+      <column name="ADDRESS1" length="70" />
+    </property>
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta>
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta>
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=55) private</meta>
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="CITY" length="40" />
+    </property>
+    <property name="county" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="COUNTY" length="30" />
+    </property>
+    <property name="country" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="COUNTRY" length="3" />
+    </property>
+    <property name="state" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="STATE" length="15" />
+    </property>
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="POSTAL" length="12" />
+    </property>
+    <property name="phonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="PHONE_PREFIX" length="3" />
+    </property>
+    <property name="phoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta>
+      <column name="PHONE_NUMBER" length="24" />
+    </property>
+    <property name="phoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="PHONE_EXTENSION" length="6" />
+    </property>
+    <property name="fax" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="FAX" length="30" />
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="CUST_EMAIL" length="70" />
+    </property>
+    <property name="custCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="CUST_CODE" length="15" />
+    </property>
+    <property name="locationNumber" type="java.lang.Integer">
+      <column name="LOCATION_NUMBER" sql-type="NUMBER" />
+    </property>
+    <many-to-one name="custAddrSeq" class="CustAddrSeq" insert="false" update="false" lazy="false">
+      <column name="LOCATION_NUMBER" index="CUST_ADDRESSES_index_0" />
+      <column name="CUST_CODE" index="CUST_ADDRESSES_index_0" />
+    </many-to-one>
+    <property name="taxCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="TAX_CODE" length="8" />
+    </property>
+   
+    <property name="inCityLimit" type="yes_no">
+      <column name="IN_CITY_LIMIT" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

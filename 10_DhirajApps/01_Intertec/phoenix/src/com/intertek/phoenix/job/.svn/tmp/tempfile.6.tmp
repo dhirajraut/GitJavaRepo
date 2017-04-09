@@ -1,0 +1,3115 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ */
+package com.intertek.phoenix.job;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.intertek.entity.Bank;
+import com.intertek.entity.BankAccount;
+import com.intertek.entity.Branch;
+import com.intertek.entity.BranchCode;
+import com.intertek.entity.BranchLocation;
+import com.intertek.entity.CfgContract;
+import com.intertek.entity.Contact;
+import com.intertek.entity.Contract;
+import com.intertek.entity.ContractCustContact;
+import com.intertek.entity.ContractExpression;
+import com.intertek.entity.Control;
+import com.intertek.entity.ControlMap;
+import com.intertek.entity.CustAddress;
+import com.intertek.entity.Customer;
+import com.intertek.entity.Department;
+import com.intertek.entity.Expression;
+import com.intertek.entity.ExpressionGLCode;
+import com.intertek.entity.HighLevelService;
+import com.intertek.entity.PriceBook;
+import com.intertek.entity.ProductCode;
+import com.intertek.entity.ProductGroup;
+import com.intertek.entity.RB;
+import com.intertek.entity.ReferenceField;
+import com.intertek.entity.Service;
+import com.intertek.entity.ServiceId;
+import com.intertek.entity.ServiceLocation;
+import com.intertek.entity.ServiceType;
+import com.intertek.entity.Slate;
+import com.intertek.entity.Test;
+import com.intertek.entity.TestProduct;
+import com.intertek.entity.User;
+import com.intertek.entity.VesselType;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.BaseServiceImpl;
+import com.intertek.phoenix.PhoenixException;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.common.PhxUserService;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoException;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.dao.FilterOp;
+import com.intertek.phoenix.dao.GenericDao;
+import com.intertek.phoenix.dao.QueryInfo;
+import com.intertek.phoenix.dao.SortInfo;
+import com.intertek.phoenix.entity.BillingStatus;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.CEJobOrderLineItemUpdate;
+import com.intertek.phoenix.entity.ContractServiceLevel;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.DepositType;
+import com.intertek.phoenix.entity.Estimation;
+import com.intertek.phoenix.entity.Instruction;
+import com.intertek.phoenix.entity.InstructionType;
+import com.intertek.phoenix.entity.IntegrationHistory;
+import com.intertek.phoenix.entity.InvoiceStatus;
+import com.intertek.phoenix.entity.JobContractService;
+import com.intertek.phoenix.entity.JobContractServiceControl;
+import com.intertek.phoenix.entity.JobContractServiceExpression;
+import com.intertek.phoenix.entity.JobContractSlate;
+import com.intertek.phoenix.entity.JobContractTest;
+import com.intertek.phoenix.entity.JobOrderAttachment;
+import com.intertek.phoenix.entity.JobOrderLineItemAttachment;
+import com.intertek.phoenix.entity.JobOrderLineItemNote;
+import com.intertek.phoenix.entity.JobOrderNote;
+import com.intertek.phoenix.entity.JobService;
+import com.intertek.phoenix.entity.JobServiceControl;
+import com.intertek.phoenix.entity.JobServiceExpression;
+import com.intertek.phoenix.entity.JobServiceLevel;
+import com.intertek.phoenix.entity.JobSlate;
+import com.intertek.phoenix.entity.JobTest;
+import com.intertek.phoenix.entity.OperationalStatus;
+import com.intertek.phoenix.entity.OrderOrigin;
+import com.intertek.phoenix.entity.OrderStatus;
+import com.intertek.phoenix.entity.PaymentType;
+import com.intertek.phoenix.entity.Period;
+import com.intertek.phoenix.entity.Project;
+import com.intertek.phoenix.entity.PurchaseOrder;
+import com.intertek.phoenix.entity.Quote;
+import com.intertek.phoenix.entity.RevenueSegregation;
+import com.intertek.phoenix.entity.UOM;
+import com.intertek.phoenix.entity.value.ContractCustContactInfo;
+import com.intertek.phoenix.entity.value.SlateInfo;
+import com.intertek.phoenix.entity.value.TestInfo;
+import com.intertek.phoenix.esb.ESBService;
+import com.intertek.phoenix.job.ServiceLevel.ServiceLevelType;
+import com.intertek.phoenix.pricing.AccountInfo;
+import com.intertek.phoenix.pricing.PricingInfo;
+import com.intertek.phoenix.pricing.PricingSrvc;
+import com.intertek.phoenix.pricing.PricingSrvcException;
+import com.intertek.phoenix.search.SearchService;
+import com.intertek.phoenix.util.CommonUtil;
+import com.intertek.util.Constants;
+import com.intertek.util.DateUtil;
+import com.intertek.util.SecurityUtil;
+
+/**
+ * Implementing the JobOrdreService interface
+ * 
+ * @author richard.qin
+ * @author eric.nguyen
+ * @author lily.sun
+ */
+public class JobOrderServiceImpl extends BaseServiceImpl implements JobOrderService {
+    static private Logger log = Logger.getLogger(JobOrderServiceImpl.class);
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getRevenueSegregationForTest(com.intertek.entity.Test)
+     */
+    @Override
+    public List<RevenueSegregation> getRevenueSegregationForTest(ContractJobOrder contractJobOrder, ServiceLevel serviceLevel, JobContractTest jobContractTest)
+            throws JobSrvcException {
+        List<RevenueSegregation> result = new ArrayList<RevenueSegregation>();
+
+        Order jobOrder = contractJobOrder.getJobOrder();
+        String contractCode = contractJobOrder.getContract().getContractCode();
+        Date nominationDate = jobOrder.getNominationDate();
+        CfgContract contract = getCfgContractByContractId(contractCode, nominationDate);
+
+        // which key should be used to lookup expression for test?
+        // one suggestion is to use a single key for all tests, does it makes
+        // sense?
+        // if so, what should be the value of that key? TODO
+        List<ContractExpression> expressions = getServiceExpressions(contract, Constants.TEST, contractJobOrder.getZone(), nominationDate, contractJobOrder
+                .getLanguage());
+        for (ContractExpression exp : expressions) {
+            Expression expression = this.getExpressionByExpressionId(exp.getContractExpressionId().getExpressionId());
+
+            AccountInfo accountInfo = getAccountInfo(expression, jobOrder.getJobType(), contractJobOrder.getProductType(), jobOrder.getBranchName(),
+                                                     serviceLevel);
+            RevenueSegregation revSeg = new RevenueSegregation();
+            // revSeg.setDescription(exp.getVisibility()); // is this correct?
+            // TODO
+            revSeg.setDescription(exp.getContractExpressionId().getExpressionId());// TODO
+                                                                                    // Later
+                                                                                    // we
+                                                                                    // need
+                                                                                    // to
+                                                                                    // grab
+                                                                                    // the
+                                                                                    // description
+                                                                                    // from
+                                                                                    // RB
+                                                                                    // table
+            revSeg.setAccount(accountInfo.getGlCode());
+            revSeg.setDeptId(accountInfo.getDepartmentCode());
+            result.add(revSeg);
+        }
+        return result;
+    }
+
+    @Override
+    public List<TestProduct> getTestProducts() throws JobSrvcException {
+        try {
+            return DaoManager.getDao(TestProduct.class).findAll();
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load TestProduct", e);
+        }
+    }
+
+    @Override
+    public List<ServiceType> getServiceTypes(String jobType) throws JobSrvcException {
+        QueryInfo query = new QueryInfo(ServiceType.class).addFilter("serviceTypeId.jobType", jobType);
+        try {
+            return DaoManager.getDao(ServiceType.class).search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load ServiceTypes for jobType " + jobType, e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getServiceControls(com.intertek.entity.CfgContract,
+     *      java.lang.String, java.util.Date, java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Control> getServiceControls(CfgContract contract, String serviceName, Date nominationDate, String lang) throws JobSrvcException {
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        Object[] params = new Object[] { serviceName, contract.getCfgContractId(), priceBookId, dateStr, lang };
+
+        try {
+            return DaoManager.getDao(Control.class).searchByNamedQuery("getControlRBs_FN", params, null);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Controls.", e);
+        }
+    }
+
+    /**
+     * @param contract
+     * @param nominationDate
+     * @return
+     */
+    private String getPriceBookId(CfgContract contract, Date nominationDate) throws JobSrvcException {
+        String priceBookId = contract.getPriceBookId();
+        if (priceBookId.equalsIgnoreCase(Constants.CURRENT)) {
+            PriceBook pb = this.getPriceBook(contract.getPbSeries(), contract.getCurrencyCD(), nominationDate);
+            priceBookId = pb.getPriceBookId().getPriceBookId();
+        }
+        return priceBookId;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getExpressions(com.intertek.entity.CfgContract,
+     *      java.lang.String, java.lang.String, java.util.Date,
+     *      java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<ContractExpression> getServiceExpressions(CfgContract contract, String serviceName, String location, Date nominationDate, String lang)
+            throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        Object[] params = new Object[] { serviceName, contract.getCfgContractId(), priceBookId, location, dateStr, lang };
+
+        try {
+            return DaoManager.getDao(ContractExpression.class).searchByNamedQuery("getContractExpressions_FN", params, null);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Expressions.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getServices(com.intertek.entity.CfgContract,
+     *      java.lang.String)
+     */
+    @Override
+    public List<Service> getServices(CfgContract contract, ServiceLevel.ServiceLevelType serviceLevel) {
+        // TODO should I really support this?
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getServices(com.intertek.entity.CfgContract,
+     *      java.util.Date, java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Service> getServices(CfgContract contract, Date nominationDate, String languageCD) throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        Object[] params = new Object[] { contract.getCfgContractId(), priceBookId, dateStr, languageCD };
+
+        try {
+            return DaoManager.getDao(Service.class).searchByNamedQuery("getServices_FN", params, null);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Services.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getSlates(com.intertek.entity.CfgContract,
+     *      java.lang.String, java.lang.String, java.lang.String,
+     *      java.lang.String, java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<SlateInfo> getSlateInfos(CfgContract contract, String value, String searchType, String location, Date nominationDate, String languageCD)
+            throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        Object[] params = new Object[] { contract.getCfgContractId(), priceBookId, value, searchType, location, dateStr, languageCD };
+        try {
+            List<Object[]> results = DaoManager.getDao(Slate.class).searchByNamedQuery("getSlate_FN", params, null);
+
+            List<SlateInfo> list = new ArrayList<SlateInfo>();
+            for (Object[] objects : results) {
+                SlateInfo ti = new SlateInfo();
+                ti.setSlateId((String) objects[0]);
+                ti.setDescription((String) objects[1]);
+            }
+            return list;
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Tests.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Slate> getSlates(CfgContract contract, String value, String searchType, String location, Date nominationDate, String languageCD)
+            throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        Object[] params = new Object[] { contract.getCfgContractId(), priceBookId, value, searchType, location, dateStr, languageCD };
+        try {
+            // 1. run the stored proc
+            GenericDao<Slate> dao = DaoManager.getGenericDao(Slate.class);
+            List<Object[]> results = dao.searchByNamedQuery("getSlate_FN", params, null);
+
+            // 2. load entities
+            String ids = buildIdList(results);
+
+            QueryInfo query = new QueryInfo(Slate.class);
+            query.addFilter("slateId", ids, FilterOp.IN);
+            return dao.search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Tests.", e);
+        }
+    }
+
+    /**
+     * @param results
+     * @return
+     */
+    private String buildIdList(List<Object[]> results) {
+        StringBuilder sb = new StringBuilder();
+        for (int k = 0; k < results.size(); k++) {
+            sb.append(results.get(k)[0]);
+            if (k < results.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getTests(com.intertek.entity.CfgContract,
+     *      java.lang.String, java.lang.String, java.lang.String,
+     *      java.lang.String, java.lang.String, java.lang.String,
+     *      java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<TestInfo> getTestInfos(CfgContract contract, String productGroup, String contractSearchCD, String value, String searchType, String location,
+                                       Date nominationDate, String languageCD) throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        Object[] params = new Object[] { contract.getCfgContractId(), priceBookId, productGroup, contractSearchCD, value, searchType, location, dateStr,
+                                        languageCD };
+        try {
+            List<Object[]> results = DaoManager.getDao(Test.class).searchByNamedQuery("getTest_FN", params, null);
+
+            List<TestInfo> list = new ArrayList<TestInfo>();
+            for (Object[] objects : results) {
+                TestInfo ti = new TestInfo();
+                ti.setTestId((String) objects[0]);
+                ti.setDescription((String) objects[1]);
+            }
+            return list;
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Tests.", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Test> getTests(CfgContract contract, String productGroup, String contractSearchCD, String value, String searchType, String location,
+                               Date nominationDate, String languageCD) throws JobSrvcException {
+        String dateStr = DateUtil.formatDate(nominationDate, "yyyyMMdd");
+        String priceBookId = getPriceBookId(contract, nominationDate);
+        if (location == null)
+            location = "*";
+        if (languageCD == null)
+            languageCD = "ENG";
+        Object[] params = new Object[] { contract.getCfgContractId(), priceBookId, productGroup, contractSearchCD, value, searchType, location, dateStr,
+                                        languageCD };
+        try {
+            // 1. run the stored proc
+            GenericDao<Test> dao = DaoManager.getGenericDao(Test.class);
+            List<Object[]> results = dao.searchByNamedQuery("getTest_FN", params, null);
+
+            // 2. load entities
+            String ids = this.buildIdList(results);
+            ids = ids.trim();
+            ids = ids.replaceAll(" ", "");
+            String[] idArray = ids.split(",");
+
+            QueryInfo query = new QueryInfo(Test.class);
+            // query.setPagination(new Pagination(100, 20, 1, 1));
+            query.addFilter("testId", idArray, FilterOp.IN);
+            return dao.search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Tests.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getControlMaps(com.intertek.entity.CfgContract,
+     *      java.lang.String, java.lang.String)
+     * @see com.intertek.service.CalculatorServiceImpl
+     */
+    @Override
+    public List<ControlMap> getControlMaps(CfgContract contract, String serviceName, String expressionId) throws JobSrvcException {
+        QueryInfo query = new QueryInfo(ControlMap.class);
+        // "from ControlMap cm where (cm.controlMapId.contractId = ? or
+        // cm.controlMapId.contractId = ? )
+        // and cm.controlMapId.serviceName = ? and cm.controlMapId.expressionId
+        // = ?"
+        query.addOrQuery().addFilter("controlMapId.contractId", contract.getCfgContractId().getContractId()).addFilter("controlMapId.contractId",
+                                                                                                                       Constants.MASTER);
+        query.addFilter("controlMapId.serviceName", serviceName).addFilter("controlMapId.expressionId", expressionId);
+
+        try {
+            return DaoManager.getDao(ControlMap.class).search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load CfgContract.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getCfgContractByContractId(java.lang.String,
+     *      java.util.Date)
+     */
+    @Override
+    public CfgContract getCfgContractByContractId(String contractId, Date date) throws JobSrvcException {
+        QueryInfo query = new QueryInfo(CfgContract.class);
+        query.addFilter("cfgContractId.contractId", contractId).addFilter("cfgContractId.beginDate", "endDate", date, FilterOp.BETWEEN);
+
+        try {
+            return DaoManager.getDao(CfgContract.class).searchUnique(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load CfgContract.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getPriceBook(java.lang.String,
+     *      java.lang.String, java.util.Date)
+     */
+    @Override
+    public PriceBook getPriceBook(String pbSeries, String currencyCD, Date date) throws JobSrvcException {
+        QueryInfo query = new QueryInfo(PriceBook.class);
+        query.addFilter("priceBookId.pbSeries", pbSeries).addFilter("priceBookId.currencyCD", currencyCD).addFilter("priceBookId.beginDate", "endDate", date,
+                                                                                                                    FilterOp.BETWEEN);
+
+        try {
+            return DaoManager.getDao(PriceBook.class).searchUnique(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load PriceBook.", e);
+        }
+    }
+
+    /**
+     * TODO How can this work, because Expression has a composite key, but only
+     * one value is need for lookup here. What happened to BRANCH_TYPE?
+     */
+    @Override
+    public Expression getExpressionByExpressionId(String expressionId) throws JobSrvcException {
+        Dao<Expression> dao = DaoManager.getDao(Expression.class);
+        try {
+            QueryInfo query = new QueryInfo(Expression.class);
+            query.addFilter("expressionId.expressionId", expressionId);
+            return dao.searchUnique(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Expression by expressionId.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getBranchCodeByBranchCode(java.lang.String)
+     */
+    @Override
+    public BranchCode getBranchCodeByBranchCode(String branchCode) throws JobSrvcException {
+        Dao<BranchCode> dao = DaoManager.getDao(BranchCode.class);
+        if (branchCode != null) {
+            try {
+                BranchCode example = new BranchCode();
+                example.setBranchCode(branchCode);
+                List<BranchCode> result = dao.search(example);
+                if (result.size() > 0) {
+                    return result.get(0);
+                }
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to load BranchCode " + branchCode, e);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public AccountInfo getAccountInfo(Expression expression, String jobType, String jobCode, String branchCode, ServiceLevel serviceLevel)
+            throws JobSrvcException {
+
+        AccountInfo accountInfo = new AccountInfo();
+
+        String masterGroupId = null;
+        if (serviceLevel.getServiceLevelType() == ServiceLevelType.PRODUCT) {
+            // TODO how to work out this one??
+            // JobContractProd jobContractProd = (JobContractProd) serviceLevel;
+            // masterGroupId = jobContractProd.getProductGroupMaster();
+        }
+        if (masterGroupId == null) {
+            masterGroupId = "*";
+        }
+        // find the GL code
+        String expressionId = expression.getExpressionId().getExpressionId();
+        ExpressionGLCode eGLCode = getExpressionGLCode(expressionId, jobType);
+        if (eGLCode != null) {
+            accountInfo.setGlCode(eGLCode.getGLCode());
+            Department dept = getDepartmentByGlCode(eGLCode.getGLCode());
+            if (dept != null) {
+                accountInfo.setDepartmentCode(dept.getDepartmentCode());
+            }
+        }
+
+        // find the service type
+        String serviceType = expression.getExpressionId().getBranchType();
+        if (Constants.ADM.equals(expression.getExpressionId().getBranchType())) {
+            serviceType = expression.getExpenseBranchType();
+        }
+        accountInfo.setServiceType(serviceType);
+
+        // find the product group
+        String productGroup = getProductCode(0, eGLCode, jobCode, masterGroupId);
+        accountInfo.setProductGroup(productGroup);
+
+        // find the branch code
+        String bc = null;
+        BranchCode branchCodeObj = getBranchCodeByBranchCode(branchCode);
+        if (branchCodeObj != null) {
+            if (Constants.OPS.equals(expression.getExpenseBranchType())) {
+                bc = branchCodeObj.getOpsCode();
+            }
+            else {
+                bc = branchCodeObj.getLabCode();
+            }
+        }
+        accountInfo.setBranchCode(bc);
+
+        return accountInfo;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getDepartment(java.lang.String)
+     */
+    @Override
+    public Department getDepartmentByGlCode(String glCode) throws JobSrvcException {
+        Dao<Department> dao = DaoManager.getDao(Department.class);
+        try {
+            Department example = new Department();
+            example.setGLCode(glCode);
+            List<Department> result = dao.search(example);
+            if (result.size() > 0) {
+                return result.get(0);
+            }
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Department by GL code: " + glCode, e);
+        }
+        return null;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getExpressionGLCode(java.lang.String,
+     *      java.lang.String)
+     */
+    @Override
+    public ExpressionGLCode getExpressionGLCode(String id, String jobType) throws JobSrvcException {
+        Dao<ExpressionGLCode> dao = DaoManager.getDao(ExpressionGLCode.class);
+        try {
+            QueryInfo query = new QueryInfo(ExpressionGLCode.class);
+            query.addFilter("expressionGLCodeId.expressionId", id).addFilter("expressionGLCodeId.nominationType", jobType);
+            List<ExpressionGLCode> result = dao.search(query);
+            if (result.size() > 0) {
+                return result.get(0);
+            }
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load ExpressionGLCode by id and jobType " + id + ":" + jobType, e);
+        }
+        return null;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getProductGroup(double,
+     *      com.intertek.entity.ExpressionGLCode, java.lang.String,
+     *      java.lang.String)
+     */
+    @Override
+    public String getProductCode(double useGroupId, ExpressionGLCode code, String jobCode, String masterGroup) throws JobSrvcException {
+        // TODO what is the use of useGroupId?
+        if (code != null) {
+            Integer useProdFlag = code.getUseProdFlag();
+            if ((useProdFlag == 0)) {
+                Dao<ProductCode> dao = DaoManager.getDao(ProductCode.class);
+                QueryInfo query = new QueryInfo(ProductGroup.class);
+                query.addFilter("productCodeId.jobCode", jobCode);
+                query.addFilter("productCodeId.noProdCode", code.getNoProdCode());
+                List<ProductCode> result = null;
+                try {
+                    result = dao.search(query);
+                    if (result.size() > 0) {
+                        return result.get(0).getJobTypeNoProductCode();
+                    }
+                }
+                catch (DaoException e) {
+                    throw new JobSrvcException("Failed to load ProductCode for jobCode and noProdCode " + jobCode + ":" + code.getNoProdCode(), e);
+                }
+            }
+            else {
+                return masterGroup;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getHighLevelServices()
+     */
+    @Override
+    public List<HighLevelService> getHighLevelServices() throws JobSrvcException {
+        Dao<HighLevelService> dao = DaoManager.getDao(HighLevelService.class);
+        try {
+            return dao.findAll();
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load HighLevelService.", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getProductGroups(java.lang.String,
+     *      java.util.Date)
+     */
+    @Override
+    public List<ProductGroup> getProductGroups(String productGroupSetName, Date effectiveDate) throws JobSrvcException {
+        Dao<ProductGroup> dao = DaoManager.getDao(ProductGroup.class);
+        QueryInfo query = new QueryInfo(ProductGroup.class);
+        query.addFilter("productGroupId.productGroupSet", productGroupSetName)
+                .addFilter("productGroupId.beginDate", "endDate", effectiveDate, FilterOp.BETWEEN);
+        try {
+            return dao.search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load ProductGroup", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getVesselTypes(java.lang.String,
+     *      java.util.Date)
+     */
+    @Override
+    public List<VesselType> getVesselTypes(String vesselTypeSetName, Date effectiveDate) throws JobSrvcException {
+        Dao<VesselType> dao = DaoManager.getDao(VesselType.class);
+        QueryInfo query = new QueryInfo(VesselType.class);
+        query.addFilter("vesselTypeId.vesselSet", vesselTypeSetName).addFilter("vesselTypeId.beginDate", "endDate", effectiveDate, FilterOp.BETWEEN);
+        try {
+            return dao.search(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load ProductGroup", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobService(com.intertek.entity.CfgContract,
+     *      com.intertek.phoenix.job.ServiceLevel, com.intertek.entity.Service)
+     */
+    @Override
+    public JobService createJobService(JobServiceLevel serviceLevel, Service service) throws JobSrvcException {
+        JobService jobService = serviceLevel.createJobService(JobService.class, service);
+        try {
+            DaoManager.getDao(JobService.class).saveOrUpdate(jobService);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobService", e);
+        }
+        // the caller must set the rest of the details, including serviceType
+
+        return jobService;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobServiceControl(com.intertek.phoenix.entity.JobContractService,
+     *      com.intertek.entity.Control)
+     */
+    @Override
+    public JobServiceControl createJobServiceControl(JobService jobService, Control control) throws JobSrvcException {
+        JobServiceControl jobServiceControl = new JobServiceControl();
+        try {
+            DaoManager.getDao(JobServiceControl.class).saveOrUpdate(jobServiceControl);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobServiceControl", e);
+        }
+        // extra?
+
+        return jobServiceControl;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobSlate(com.intertek.entity.CfgContract,
+     *      com.intertek.phoenix.job.ServiceLevel, com.intertek.entity.Slate)
+     */
+    @Override
+    public JobSlate createJobSlate(JobServiceLevel serviceLevel, Slate slate) throws JobSrvcException {
+        JobSlate jobSlate = serviceLevel.createJobSlate(JobSlate.class, slate);
+        try {
+            DaoManager.getDao(JobSlate.class).saveOrUpdate(jobSlate);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobSlate", e);
+        }
+        // extra?
+
+        return jobSlate;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobTest(com.intertek.entity.CfgContract,
+     *      com.intertek.phoenix.job.ServiceLevel, com.intertek.entity.Test)
+     */
+    @Override
+    public JobTest createJobTest(JobServiceLevel serviceLevel, Test test) throws JobSrvcException {
+        JobTest jobTest = serviceLevel.createJobTest(JobTest.class, test);
+        try {
+            DaoManager.getDao(JobTest.class).saveOrUpdate(jobTest);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobTest", e);
+        }
+        // extra?
+
+        return jobTest;
+    }
+
+    
+    
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobService(com.intertek.phoenix.job.ServiceLevel,
+     *      com.intertek.phoenix.entity.JobContractService)
+     */
+    @Override
+    public void removeJobService(JobServiceLevel serviceLevel, JobService jobService) throws JobSrvcException {
+        // also need to remove all the jobContractService that this jobService
+        // is related to
+        // TODO, need to find related jobContractService instances at the
+        // matching
+        // service level for each jobContract.
+
+        // add remove all the controls and expressions
+        for (JobServiceControl control : jobService.getControls()) {
+            this.removeJobServiceControl(jobService, control);
+        }
+        for (JobServiceExpression exp : jobService.getServiceExpressions()) {
+            this.removeJobServiceExpression(jobService, exp);
+        }
+        serviceLevel.removeJobService(jobService);
+        try {
+            DaoManager.getDao(JobService.class).remove(jobService);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove JobService", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobServiceControl(com.intertek.phoenix.entity.JobContractService,
+     *      com.intertek.entity.Control)
+     */
+    @Override
+    public void removeJobServiceControl(JobService jobService, JobServiceControl control) throws JobSrvcException {
+        jobService.removeJobServiceControl(control);
+        try {
+            DaoManager.getDao(JobServiceControl.class).remove(control);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove JobServiceControl", e);
+        }
+    }
+
+    private void removeJobServiceExpression(JobService jobService, JobServiceExpression exp) throws JobSrvcException {
+        jobService.removeJobServiceExpression(exp);
+        try {
+            DaoManager.getDao(JobServiceExpression.class).remove(exp);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove JobServiceControl", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobSlate(com.intertek.phoenix.job.ServiceLevel,
+     *      com.intertek.entity.JobSlate)
+     */
+    @Override
+    public void removeJobSlate(JobServiceLevel serviceLevel, JobSlate jobSlate) throws JobSrvcException {
+        serviceLevel.removeJobSlate(jobSlate);
+        try {
+            DaoManager.getDao(JobSlate.class).remove(jobSlate);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove JobSlate", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobTest(com.intertek.phoenix.job.ServiceLevel,
+     *      com.intertek.entity.JobTest)
+     */
+    @Override
+    public void removeJobTest(JobServiceLevel serviceLevel, JobTest jobTest) throws JobSrvcException {
+        serviceLevel.removeJobTest(jobTest);
+        try {
+            DaoManager.getDao(JobTest.class).remove(jobTest);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove JobTest", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createServiceLevel(com.intertek.entity.CfgContract,
+     *      com.intertek.phoenix.job.ServiceLevel,
+     *      com.intertek.phoenix.job.ServiceLevel.ServiceLevelType)
+     */
+    @Override
+    // this method is sensitive to business divisions, as differnet divisions
+    // have different service structures. TODO find out more.
+    public JobServiceLevel createJobServiceLevel(JobServiceLevel parent, ServiceLevelType type, String serviceLevelName) throws JobSrvcException {
+        System.out.println("Parent  Id<<<<<<<"+parent.getId());
+        JobServiceLevel newLevel = parent.createChildServiceLevel(type, serviceLevelName);
+        newLevel.setParentServiceLevel(parent);
+        newLevel.setParentServiceLevelId(parent.getId());
+        
+        System.out.println("Parent Service Level Id"+newLevel.getParentServiceLevel());
+        try {
+            DaoManager.getDao(JobServiceLevel.class).saveOrUpdate(newLevel);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to create JobServiceLevel", e);
+        }
+
+        return newLevel;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeServiceLevel(com.intertek.phoenix.job.ServiceLevel,
+     *      com.intertek.phoenix.job.ServiceLevel)
+     */
+    @Override
+    public void removeJobServiceLevel(JobServiceLevel parent, JobServiceLevel toRemove) throws JobSrvcException {
+        parent.removeChildServiceLevel(toRemove);
+        try {
+            DaoManager.getDao(JobServiceLevel.class).remove(toRemove);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to remove the JobServiceLevel object", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createContractServiceLevel(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.job.ServiceLevel.ServiceLevelType,
+     *      java.lang.String)
+     */
+    @Override
+    public ContractServiceLevel createContractServiceLevel(ContractServiceLevel parent, ServiceLevelType type, String serviceLevelName) throws JobSrvcException {
+        ContractServiceLevel newLevel = parent.createChildServiceLevel(type, serviceLevelName);
+        try {
+            DaoManager.getDao(ContractServiceLevel.class).saveOrUpdate(newLevel);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to create ContractServiceLevel", e);
+        }
+
+        return newLevel;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractService(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.entity.Service)
+     */
+    @Override
+    public JobContractService createJobContractService(ContractServiceLevel serviceLevel, Service service) throws JobSrvcException {
+        JobContractService jobService = serviceLevel.createJobContractService(JobContractService.class, service);
+        try {
+            DaoManager.getDao(JobContractService.class).saveOrUpdate(jobService);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractService", e);
+        }
+        // the caller must set the rest of the details, including serviceType
+
+        return jobService;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractServiceControl(com.intertek.phoenix.entity.JobContractService,
+     *      com.intertek.entity.Control)
+     */
+    @Override
+    public JobContractServiceControl createJobContractServiceControl(JobContractService jobContractService, Control control) throws JobSrvcException {
+        JobContractServiceControl jobServiceControl = jobContractService.createJobContractServiceControl(control);
+        try {
+            DaoManager.getDao(JobContractServiceControl.class).saveOrUpdate(jobServiceControl);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractServiceControl", e);
+        }
+        // extra?
+
+        return jobServiceControl;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractSlate(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.entity.Slate)
+     */
+    @Override
+    public JobContractSlate createJobContractSlate(ContractServiceLevel serviceLevel, Slate slate) throws JobSrvcException {
+        JobContractSlate jobSlate = serviceLevel.createJobContractSlate(JobContractSlate.class, slate);
+        try {
+            DaoManager.getDao(JobContractSlate.class).saveOrUpdate(jobSlate);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractSlate", e);
+        }
+        // extra?
+
+        return jobSlate;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractTest(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.entity.Test)
+     */
+    @Override
+    public JobContractTest createJobContractTest(ContractServiceLevel serviceLevel, Test test) throws JobSrvcException {
+        JobContractTest jobTest = serviceLevel.createJobContractTest(JobContractTest.class, test);
+        try {
+            DaoManager.getDao(JobContractTest.class).saveOrUpdate(jobTest);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractTest", e);
+        }
+        // extra?
+
+        return jobTest;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeContractServiceLevel(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.ContractServiceLevel)
+     */
+    @Override
+    public void removeContractServiceLevel(ContractServiceLevel parent, ContractServiceLevel toRemove) throws JobSrvcException {
+        // need to remove all the task instances defined at this service level
+        for (JobContractTest test : toRemove.getJobContractTests()) {
+            this.removeJobContractTest(toRemove, test);
+        }
+        for (JobContractSlate slate : toRemove.getJobContractSlates()) {
+            this.removeJobContractSlate(toRemove, slate);
+        }
+        for (JobContractService service : toRemove.getJobContractServices()) {
+            this.removeJobContractService(toRemove, service);
+        }
+        if (parent.removeChildServiceLevel(toRemove)) {
+            try {
+                DaoManager.getDao(ContractServiceLevel.class).remove(toRemove);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove the ContractServiceLevel object", e);
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobContractService(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobContractService)
+     */
+    @Override
+    public void removeJobContractService(ContractServiceLevel serviceLevel, JobContractService service) throws JobSrvcException {
+        // need to remove all the controls, expresions added to the service
+        for (JobContractServiceControl control : service.getControls()) {
+            this.removeJobContractServiceControl(service, control);
+        }
+        for (JobContractServiceExpression exp : service.getJobContractServiceExpresions()) {
+            this.removeJobContractServiceExpression(service, exp);
+        }
+        if (serviceLevel.removeJobContractService(service)) {
+            try {
+                DaoManager.getDao(JobContractService.class).remove(service);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove JobContractService", e);
+            }
+        }
+    }
+
+    /**
+     * @param service
+     * @param exp
+     */
+    private void removeJobContractServiceExpression(JobContractService service, JobContractServiceExpression exp) throws JobSrvcException {
+        if (service.removeJobContractServiceExpression(exp)) {
+            try {
+                // need to remove the related joli
+                DaoManager.getDao(CEJobOrderLineItem.class).remove(exp.getJobOrderLineItem());
+                DaoManager.getDao(JobContractServiceExpression.class).remove(exp);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove JobContractServiceControl", e);
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobContractServiceControl(com.intertek.phoenix.entity.JobContractService,
+     *      com.intertek.phoenix.entity.JobContractServiceControl)
+     */
+    @Override
+    public void removeJobContractServiceControl(JobContractService jobContractService, JobContractServiceControl control) throws JobSrvcException {
+        if (jobContractService.removeJobContractServiceControl(control)) {
+            try {
+                DaoManager.getDao(JobContractServiceControl.class).remove(control);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove JobContractServiceControl", e);
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobContractSlate(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobContractSlate)
+     */
+    @Override
+    public void removeJobContractSlate(ContractServiceLevel serviceLevel, JobContractSlate slate) throws JobSrvcException {
+        if (serviceLevel.removeJobContractSlate(slate)) {
+            try {
+                // need to remove the related joli
+                DaoManager.getDao(CEJobOrderLineItem.class).remove(slate.getJobOrderLineItem());
+                DaoManager.getDao(JobContractSlate.class).remove(slate);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove JobContractSlate", e);
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeJobContractTest(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobContractTest)
+     */
+    @Override
+    public void removeJobContractTest(ContractServiceLevel serviceLevel, JobContractTest test) throws JobSrvcException {
+        if (serviceLevel.removeJobContractTest(test)) {
+            try {
+                // need to remove the related joli
+                DaoManager.getDao(CEJobOrderLineItem.class).remove(test.getJobOrderLineItem());
+                DaoManager.getDao(JobContractTest.class).remove(test);
+            }
+            catch (DaoException e) {
+                throw new JobSrvcException("Failed to remove JobContractTest", e);
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractService(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobService)
+     */
+    @Override
+    public JobContractService createJobContractService(ContractServiceLevel serviceLevel, JobService jobService) throws JobSrvcException {
+        CEJobContract jobContract = serviceLevel.getJobContract();
+        String contractCode = jobContract.getContract().getContractCode();
+        JobContractService jobContractService = serviceLevel.createJobContractService(JobContractService.class, contractCode, jobService.getServiceName(),
+                                                                                      jobService.getParentServiceId());
+        jobContractService.setJobService(jobService);
+        try {
+            DaoManager.getDao(JobContractService.class).saveOrUpdate(jobContractService);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractService", e);
+        }
+        // the caller must set the rest of the details, including serviceType
+
+        return jobContractService;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractServiceControl(com.intertek.phoenix.entity.JobContractService,
+     *      com.intertek.phoenix.entity.JobServiceControl)
+     */
+    @Override
+    public JobContractServiceControl createJobContractServiceControl(JobContractService jobContractService, JobServiceControl control) throws JobSrvcException {
+        JobContractServiceControl jcsc = jobContractService.createJobContractServiceControl(control.getControl());
+        jcsc.setJobServiceControl(control);
+        try {
+            DaoManager.getDao(JobContractServiceControl.class).saveOrUpdate(jcsc);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractServiceControl", e);
+        }
+
+        return jcsc;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractSlate(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobSlate)
+     */
+    @Override
+    public JobContractSlate createJobContractSlate(ContractServiceLevel serviceLevel, JobSlate jobSlate) throws JobSrvcException {
+        JobContractSlate jobContractSlate = serviceLevel.createJobContractSlate(JobContractSlate.class, jobSlate.getSlate());
+        jobContractSlate.setJobSlate(jobSlate);
+        try {
+            DaoManager.getDao(JobContractSlate.class).saveOrUpdate(jobContractSlate);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractSlate", e);
+        }
+
+        return jobContractSlate;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#createJobContractTest(com.intertek.phoenix.entity.ContractServiceLevel,
+     *      com.intertek.phoenix.entity.JobTest)
+     */
+    @Override
+    public JobContractTest createJobContractTest(ContractServiceLevel serviceLevel, JobTest jobTest) throws JobSrvcException {
+        JobContractTest jobContractTest = serviceLevel.createJobContractTest(JobContractTest.class, jobTest.getTest());
+        jobContractTest.setJobTest(jobTest);
+        jobContractTest.setContractRefNo(serviceLevel.getJobContract().getContractCode());
+
+        try {
+            DaoManager.getDao(JobContractTest.class).saveOrUpdate(jobContractTest);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to save new JobContractTest", e);
+        }
+
+        return jobContractTest;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getService(java.lang.String,
+     *      java.lang.String, java.lang.String, java.util.Date)
+     */
+    @Override
+    public Service getService(String contractId, String serviceName, String parentServiceId, Date date) throws JobSrvcException {
+        QueryInfo query = new QueryInfo(Service.class);
+        query.addFilter("serviceId.contractId", contractId).addFilter("serviceId.serviceName", serviceName).addFilter("serviceId.parentServiceId",
+                                                                                                                      parentServiceId)
+                .addFilter("serviceId.beginDate", "endDate", date, FilterOp.BETWEEN);
+        log.debug(query);
+        try {
+            return DaoManager.getDao(Service.class).searchUnique(query);
+        }
+        catch (DaoException e) {
+            throw new JobSrvcException("Failed to load Service", e);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#getService(com.intertek.entity.ServiceId)
+     */
+    @Override
+    public Service getService(ServiceId id) throws JobSrvcException {
+        return getService(id.getContractId(), id.getServiceName(), id.getParentServiceId(), id.getBeginDate());
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#updateJobInstructions(com.intertek.entity.CEJobOrder)
+     */
+    @Override
+    public void updateJobInstructions(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        for (Instruction ins : jobOrder.getInstructions()) {
+            try {
+                DaoManager.getDao(Instruction.class).saveOrUpdate(ins);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Exception in saving ce job order and related info " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#updateCEJobTest(com.intertek.entity.CEJobOrder)
+     */
+    @Override
+    public void updateCEJobTest(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        for (JobServiceLevel serviceLevel : jobOrder.getRootServiceLevel().getChildServiceLevels()) {
+            for (JobTest jobTest : serviceLevel.getJobTests()) {
+                if (jobTest != null) {
+                    setPurchaseOrder(jobTest);
+                    setBranch(jobTest);
+                    updateManagerAndCreditOverBy(jobTest);
+                    setServiceLocation(jobTest);
+                    // setServiceOffering(ceTest);
+                    updateEstimations(jobTest);
+                    try {
+                        DaoManager.getDao(JobTest.class).saveOrUpdate(jobTest);
+                    }
+                    catch (DaoException e) {
+                        throw new InvalidJobOrderOperationException("Exception in saving ce job order and related info " + e.getMessage());
+                    }
+                }
+            }
+            try {
+                DaoManager.getDao(JobServiceLevel.class).saveOrUpdate(serviceLevel);
+            }
+            catch (DaoException e1) {
+                throw new InvalidJobOrderOperationException("Exception in saving ce job order and related info " + e1.getMessage());
+            }
+            
+        }
+    }
+
+    private void setPurchaseOrder(JobTest jobTest) throws InvalidJobOrderOperationException {
+        if (jobTest.getPoNumber() != null && jobTest.getPoNumber().trim().length() > 0) {
+            try {
+                Dao<PurchaseOrder> purchaseOrderDao = DaoManager.getDao(PurchaseOrder.class);
+                jobTest.setPurchaseOrder(purchaseOrderDao.find(jobTest.getPoNumber()));
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Can't find Purchase Order Number :  " + jobTest.getPoNumber());
+            }
+        }
+    }
+
+    private void setBranch(JobTest jobTest) throws InvalidJobOrderOperationException {
+        if (jobTest.getBranchName() != null && jobTest.getBranchName().trim().length() > 0) {
+            try {
+                Dao<Branch> branchDao = DaoManager.getDao(Branch.class);
+                jobTest.setBranch(branchDao.find(jobTest.getBranchName()));
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Can't find Branch Name :  " + jobTest.getBranchName());
+            }
+        }
+    }
+
+    private void updateManagerAndCreditOverBy(JobTest jobTest) throws InvalidJobOrderOperationException {
+        String taskManagerId = jobTest.getTaskManagerId();
+        if (taskManagerId != null && !"".equalsIgnoreCase(taskManagerId)) {
+            User taskManager;
+            try {
+                taskManager = DaoManager.getDao(User.class).find(taskManagerId);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find task manager for id :" + taskManagerId + " " + e.getMessage());
+            }
+            jobTest.setTaskManager(taskManager);
+        }
+        String creditById = jobTest.getCreditOverrideById();
+        if (creditById != null && !"".equalsIgnoreCase(creditById)) {
+            User creditOverBy;
+            try {
+                creditOverBy = DaoManager.getDao(User.class).find(creditById);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find task manager for id :" + creditById + " " + e.getMessage());
+            }
+            jobTest.setTaskManager(creditOverBy);
+        }
+    }
+
+    private void setServiceLocation(JobTest jobTest) throws InvalidJobOrderOperationException {
+        String serviceLocationcode = jobTest.getServiceLocationCode();
+        if (serviceLocationcode != null && !"".equals(serviceLocationcode)) {
+            ServiceLocation serviceLocation;
+            try {
+                serviceLocation = (ServiceLocation) DaoManager.getDao(ServiceLocation.class).find(serviceLocationcode);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find service location for code :" + serviceLocationcode + " " + e.getMessage());
+            }
+            jobTest.setServiceLocation(serviceLocation);
+        }
+    }
+
+    private void updateEstimations(JobTest jobTest) throws InvalidJobOrderOperationException {
+        if (jobTest.getEstimations() != null && jobTest.getEstimations().size() > 0) {
+            Set<Estimation> estList = jobTest.getEstimations();
+            for (Estimation est : estList) {
+                try {
+                    // Note, this should not be needed, enum should be able to work with String
+//                    UserType userType = est.getUserType();
+//                    if (userType != null && !"".equals(userType.name())) {
+//                        for (UserType ut : UserType.values()) {
+//                            if (ut.value() == Integer.parseInt(userTypeId)) {
+//                                est.setUserType(ut);
+//                            }
+//                        }
+//                    }
+                    est.setJobTest(jobTest);
+                    DaoManager.getDao(Estimation.class).saveOrUpdate(est);
+                }
+                catch (DaoException e) {
+                    throw new InvalidJobOrderOperationException("Error while saving Estimation" + e.getMessage());
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#updateDepositInvoice(com.intertek.entity.CEJobOrder)
+     */
+    public void updateDepositInvoice(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        for (DepositInvoice di : jobOrder.getDepositInvoices()) {
+            try {
+                DaoManager.getDao(DepositInvoice.class).saveOrUpdate(di);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Error during Deposit Invoice update " + e.getMessage());
+            }
+        }
+        JobOrderService service = (JobOrderService) ServiceLocator.getInstance().getBean("jobOrderService");
+        service.updateJobOrder(jobOrder);
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobSrvc#removeDepositInvoice(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.entity.DepositInvoice)
+     */
+    public void removeDepositInvoice(CEJobOrder jobOrder, DepositInvoice depositInvoice) throws InvalidJobOrderOperationException {
+        if (jobOrder != null && depositInvoice != null) {
+            jobOrder.removeDepositInvoice(depositInvoice);
+            try {
+                // depositInvoice.setJobOrder(null);
+                DaoManager.getDao(DepositInvoice.class).remove(depositInvoice);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Cannot remove Deposit from the jobOrder: " + jobOrder.getJobNumber());
+            }
+        }
+        else {
+            throw new InvalidJobOrderOperationException("Cannot remove Deposit from the jobOrder: " + jobOrder.getJobNumber());
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addJobOrderLineItems(com.intertek.phoenix.entity.CEJobOrder,
+     *      java.util.List)
+     */
+    public CEJobContract addJobOrderLineItems(CEJobContract jobContract, CEJobOrderLineItem... lineItems) throws InvalidJobOrderOperationException {
+        if (jobContract != null) {
+            // check if the job order's status allows new line items to be added
+            if (!canAddJobOrderLineItem(jobContract)) {
+                throw new InvalidJobOrderOperationException("Invalid jobContract status, cannot add new line items to JobContract.");
+            }
+            // make sure that all the new line items are valid before adding
+            // them to the job order
+            for (CEJobOrderLineItem lineItem : lineItems) {
+                if (!validateCEJobOrderLineItem(lineItem)) {
+                    throw new InvalidJobOrderOperationException("Invalid line item found.");
+                }
+            }
+            // delegate to jobContract to handle adding joli, which will take
+            // care of
+            // ownership
+            jobContract.addLineItems(lineItems);
+        }
+        else {
+            throw new InvalidJobOrderOperationException("JobOrder must not be null.");
+        }
+
+        // return the same job contract
+        return jobContract;
+    }
+
+    /**
+     * @param lineItem
+     * @return
+     */
+    private boolean validateCEJobOrderLineItem(CEJobOrderLineItem lineItem) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    /**
+     * @param jobOrder
+     * @return
+     */
+    private boolean canAddJobOrderLineItem(CEJobContract jobContract) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#createJobOrder(com.intertek.phoenix.entity.Quote)
+     */
+    @Override
+    public CEJobOrder createJobOrder(Quote quote) throws JobOrderCreationException {
+        CEJobOrder jo = new CEJobOrder();
+
+        // populate job order with information from quote
+        jo.setQuote(quote);
+        jo.setQuoteNumber(quote.getQuoteNumber());
+        // TODO for each quote line, create a corresponding CEJobTest and add it
+        // to the Set<CEJobTest>
+
+        // each JobOrder must contain a root level service level, where
+        // test/service
+        // instances can be added
+        JobServiceLevel rootServiceLevel = new JobServiceLevel();
+        rootServiceLevel.setServiceLevelName("JobOrder");
+        rootServiceLevel.setServiceLevelType(ServiceLevelType.JOB);
+        // check
+        // this
+        jo.setRootServiceLevel(rootServiceLevel);
+
+        try {
+            DaoManager.getDao(CEJobOrder.class).saveOrUpdate(jo);
+        }
+        catch (Exception e) {
+            throw new JobOrderCreationException(e);
+        }
+        return jo;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#getJobOrderIntegrationHistory(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public List<IntegrationHistory> getJobOrderIntegrationHistory(CEJobOrder jobOrder, Period period) {
+        // TODO
+        // design Integration classes and use JobIntegration.class
+
+        // need to check user privilege before continue
+
+        // load history for jo
+        Dao<IntegrationHistory> dao = DaoManager.getDao(IntegrationHistory.class);
+        // use query by example
+        IntegrationHistory example = new IntegrationHistory();
+        // TODO Eric - example.setJobOrderId(jobOrder.getId());
+        List<IntegrationHistory> result = null;
+        try {
+            result = dao.search(example);
+        }
+        catch (DaoException e) {
+            // TODO log the error
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addAttachment(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Attachment)
+     */
+
+    public void addAttachment(CEJobContract jobContract, JobOrderAttachment attachment, String path, MultipartFile file)
+            throws InvalidJobOrderOperationException {
+        if (attachment != null && attachment.getJobContract() != null) {
+            throw new InvalidJobOrderOperationException("addAttachment - cannot add attachment which is already attached to a job contract");
+        }
+        // jobOrder.addAttachment(attachment);
+        try {
+            String dateFolder = DateUtil.formatDate(new Date(), "yyyyMMdd");
+            File f = new File(path.concat(dateFolder));
+            if (!f.exists()) {
+                f.mkdir();
+            }
+            attachment.setFilename(dateFolder.concat("/").concat(String.valueOf(attachment.getId()).concat("_").concat(attachment.getFilename())));
+            File xferFile = new File(path + attachment.getFilename());
+            file.transferTo(xferFile);
+            jobContract.addAttachment(attachment);
+            DaoManager.getDao(JobOrderAttachment.class).saveOrUpdate(attachment);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addAttachement - cannot add attachments ");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addAttachment(com.intertek.phoenix.entity.CEJobOrderLineItem,
+     *      com.intertek.phoenix.entity.Attachment)
+     */
+    @Override
+    public void addAttachment(CEJobOrderLineItem lineItem, JobOrderLineItemAttachment attachment) throws InvalidJobOrderOperationException {
+        if (attachment != null && attachment.getJobOrderLineItem() != null) {
+            throw new InvalidJobOrderOperationException("addAttachment - cannot add attachment which is already attached to a line item");
+        }
+        lineItem.addAttachment(attachment);
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addDepositInvoice(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.DepositInvoice)
+     */
+    @Override
+    public void addDepositInvoice(CEJobOrder jobOrder, DepositInvoice depositInvoice) throws InvalidJobOrderOperationException {
+        if (jobOrder == null) {
+            throw new InvalidJobOrderOperationException("addDepositInvoice - cannot add deposite invoice to null job order");
+        }
+        if (depositInvoice == null) {
+            throw new InvalidJobOrderOperationException("addDepositInvoice - cannot add null deposite invoice to job order");
+        }
+        jobOrder.addDepositInvoice(depositInvoice);
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addNotes(com.intertek.phoenix.entity.CEJobOrderLineItem,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void addNotes(CEJobOrderLineItem lineItem, JobOrderLineItemNote... notes) throws InvalidJobOrderOperationException {
+        if (lineItem == null) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot add notes to null line item");
+        }
+        if (notes == null) {
+            return;
+        }
+
+        Set<JobOrderLineItemNote> myNotes = lineItem.getNotes();
+        // if(myNotes==null){
+        // myNotes=new HashSet<JobOrderLineItemNote>();
+        // lineItem.setNotes(myNotes);
+        // }
+        for (int i = 0; i < notes.length; i++) {
+            myNotes.add(notes[i]);
+        }
+        try {
+            DaoManager.getDao(JobOrderLineItemNote.class).saveOrUpdate(new ArrayList<JobOrderLineItemNote>(myNotes));
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot add notes ");
+        }
+
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addNotes(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void addNotes(CEJobOrder jobOrder, JobOrderNote... notes) throws InvalidJobOrderOperationException {
+        if (jobOrder == null) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot add notes to null job order");
+        }
+        if (notes == null) {
+            return;
+        }
+
+        // Set<JobOrderNote> myNotes = jobOrder.getNotes();
+        // if(myNotes==null){
+        // myNotes=new HashSet<JobOrderNote>();
+        // jobOrder.setNotes(myNotes);
+        // }
+        for (int i = 0; i < notes.length; i++) {
+            // myNotes.add(notes[i]);
+        }
+        try {
+            // DaoManager.getDao(JobOrderNote.class).saveOrUpdate(new
+            // ArrayList<JobOrderNote>(myNotes));
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot add notes ");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addNotes(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void addNotes(CEJobContract jobContract, JobOrderNote... notes) throws InvalidJobOrderOperationException {
+        if (jobContract == null) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot add notes to null job contract");
+        }
+        if (notes == null) {
+            return;
+        }
+
+        Set<JobOrderNote> myNotes = jobContract.getNotes();
+        if (myNotes == null) {
+            myNotes = new HashSet<JobOrderNote>();
+            jobContract.setNotes(myNotes);
+        }
+        for (int i = 0; i < notes.length; i++) {
+            myNotes.add(notes[i]);
+            try {
+                DaoManager.getDao(JobOrderNote.class).saveOrUpdate(notes[i]);
+            }
+            catch (Exception e) {
+                throw new InvalidJobOrderOperationException("addNotes - cannot add notes ");
+            }
+        }
+
+    }
+
+    // /**
+    // * @see
+    // com.intertek.phoenix.job.JobOrderService#addSplitJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrderLineItem,
+    // * com.intertek.phoenix.entity.CEJobOrderLineItem[])
+    // */
+    // @Override
+    // public void addSplitJobOrderLineItem(CEJobOrderLineItem lineItem,
+    // SplitLineItem... newSplitLineItems) throws
+    // InvalidJobOrderOperationException {
+    // // check the lineItem to see if it is splittable
+    // if (!canSplitJobOrderLineItem(lineItem)) {
+    // throw new InvalidJobOrderOperationException("CEJobOrderLineItem cannot be
+    // splitted.");
+    // }
+    //
+    // // associate the splitted line items
+    // for (int i = 0; i < newSplitLineItems.length; i++) {
+    // SplitLineItem spitItem = newSplitLineItems[i];
+    // if (lineItem.addSplit(spitItem)) {
+    // spitItem.setCEJobOrderLineItemId(lineItem.getId());
+    // spitItem.setCEJobOrderLineItem(lineItem);
+    // }
+    // else {
+    // throw new InvalidJobOrderOperationException("Split line item " +
+    // spitItem.getId() + " cannot be added successfully.");
+    // }
+    // }
+    // }
+    //
+    // @Override
+    // public void removeSplitJobOrderLineItem(CEJobOrderLineItem
+    // ceJobOrderLineItem, SplitLineItem... splitLineItem) throws
+    // InvalidJobOrderOperationException {
+    // boolean canRemove = false;
+    // for (int i = 0; i < splitLineItem.length; i++) {
+    // // TODO is there any bus rules about removing splits?
+    // canRemove = ceJobOrderLineItem.removeSplit(splitLineItem[i]);
+    // if (!canRemove) {
+    // throw new InvalidJobOrderOperationException("Split line item " +
+    // splitLineItem[i].getId() + " cannot be removed successfully");
+    // }
+    // }
+    // try {
+    // DaoManager.getDao(SplitLineItem.class).remove(splitLineItem);
+    // }
+    // catch (DaoException e) {
+    // throw new InvalidJobOrderOperationException("Split line item can nnot be
+    // removed successfully" + e.getMessage());
+    // }
+    // }
+    //
+    // /**
+    // * @see
+    // com.intertek.phoenix.job.JobOrderService#canSplitJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrderLineItem)
+    // */
+    // @Override
+    // public boolean canSplitJobOrderLineItem(CEJobOrderLineItem lineItem)
+    // throws InvalidJobOrderOperationException {
+    // CEJobContract jobContract = lineItem.getJobContract();
+    // CEJobOrder jo = jobContract.getJobOrder();
+    // switch (jo.getProjectType()) {
+    // case TYPE_1:
+    // return false;
+    // case TYPE_2:
+    // return true;
+    // case TYPE_3:
+    // if (jo.getStatus() == OrderStatus.NEW) {
+    // // only valid if the job order is just created
+    // return true;
+    // }
+    // return false;
+    // default:
+    // throw new InvalidJobOrderOperationException("canSplitJobOrderLineItem -
+    // unkown project type");
+    // }
+    // }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#collectJobOrderUpdates()
+     */
+    @Override
+    public Set<CEJobOrderLineItemUpdate> collectJobOrderUpdates() throws InvalidJobOrderOperationException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean saveJobOrder(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        if (jobOrder.getJobNumber() == null) {
+            Branch branch = jobOrder.getBranch();
+            if (branch != null) {
+                jobOrder.setJobNumber(getJobNumberByBranch(branch));
+            }
+            else {
+                jobOrder.setJobNumber(CommonUtil.generateIdCode());
+            }
+        }
+        // TODO setting the root's jobNumber here again is ugly,
+        // need to revist the right sequence.
+        jobOrder.getRootServiceLevel().setJobOrder(jobOrder);
+        try {
+            DaoManager.getDao(CEJobOrder.class).saveOrUpdate(jobOrder);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("Failed to save JobOrder.", e);
+        }
+
+        return true;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#createJobOrder()
+     */
+    @Override
+    public CEJobOrder createJobOrder() throws JobOrderCreationException {
+        CEJobOrder jo = new CEJobOrder();
+
+        // Use ServiceManger to obtain a reference to the required service,
+        // if we decided to use ServiceLocatior or Dependency Injection,
+        // then there is only one place we need to modify.
+        // Plus, the current ServiceManager implementation does not depend
+        // on SpringFramework, so the unit testing is more straightforward.
+        // PhxUserService phxUserService = (PhxUserService)
+        // ServiceLocator.getInstance().getBean("phxUserService");
+        PhxUserService phxUserService = ServiceManager.getUserService();
+
+        User user = SecurityUtil.getUser();
+        // TODO set all the default values
+        if (user != null) {
+            String loginName = user.getLoginName();
+            try {
+                user = phxUserService.getUserByNameWithOrgHierarchy(loginName);
+            }
+            catch (DaoException e) {
+                throw new JobOrderCreationException(e);
+            }
+            jo.setBuName(user.getBuName());
+            jo.setBranchName(user.getBranchName());
+            jo.setBranch(user.getBranch());
+            jo.setBu(user.getBusinessUnit());
+            // jo.setSalesPerson(user);
+            jo.setJobNumber(getJobNumberByBranch(user.getBranch()));
+        }
+        else {
+            // this should only happen in test case
+            jo.setJobNumber(CommonUtil.generateIdCode());
+        }
+
+        jo.setStatus(OrderStatus.OPEN);
+        jo.setJobType(Constants.CE_JOBTYPE);
+        // each JobOrder must contain a root level service level, where
+        // test/service
+        // instances can be added
+        JobServiceLevel rootServiceLevel = new JobServiceLevel();
+        rootServiceLevel.setServiceLevelName("JobOrder");
+        rootServiceLevel.setServiceLevelType(ServiceLevelType.JOB);// TODO
+        // check
+        // this
+        rootServiceLevel.setJobOrder(jo);
+        try {
+            DaoManager.getDao(JobServiceLevel.class).saveOrUpdate(rootServiceLevel);
+        }
+        catch (DaoException e) {
+            throw new JobOrderCreationException(e);
+        }
+        jo.setRootServiceLevel(rootServiceLevel);
+
+        // RQ: I do not like the fact that this jobOrder is not saved here,
+        // because the JobNumber is already allocated to the jobOrder.
+        // There is a real chance that the jobOrder will not be saved at all,
+        // which will cause a gap in the JobNumber.
+        // The solution is either we save the jobOrder here, or make sure the
+        // jobOrder does not the JobNumber allocated, and a new JobNumber is
+        // allocated when it is saved the first time.
+
+        try {
+            DaoManager.getDao(CEJobOrder.class).saveOrUpdate(jo);
+        }
+        catch (Exception e) {
+            throw new JobOrderCreationException(e);
+        }
+        return jo;
+    }
+
+    // returning a NextJobNumber
+    protected synchronized String getJobNumberByBranch(Branch branch) {
+        double seqNumber = branch.getSeqNumber();
+
+        if (seqNumber == 0)
+            seqNumber = 1;
+        else
+            seqNumber = seqNumber + 1;
+
+        Double jobSeqNum = new Double(seqNumber);
+        String seqNumStr = Integer.toString(jobSeqNum.intValue());
+        String updatedSeqNumber = seqNumStr;
+
+        for (int i = 0; i < (7 - seqNumStr.length()); i++) {
+            updatedSeqNumber = "0" + updatedSeqNumber;
+        }
+
+        branch.setSeqNumber(seqNumber);
+        try {
+            DaoManager.getDao(Branch.class).saveOrUpdate(branch);
+        }
+        catch (DaoException e) {
+            System.out.println("exception while updating branch in getJobNumberByBranch() :" + e.toString());
+        }
+        return branch.getName() + "-" + updatedSeqNumber;
+    }
+
+    /**
+     * @throws DaoException
+     * @see com.intertek.phoenix.job.JobOrderService#createProject(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public Project createProject(CEJobOrder jobOrder) throws DaoException {
+        ESBService esbService = (ESBService) ServiceLocator.getInstance().getBean("esbService");
+        return esbService.createProject(jobOrder);
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeAttachments(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Attachment[])
+     */
+    @Override
+    public void removeAttachments(CEJobOrder jobOrder, JobOrderAttachment... attachments) throws InvalidJobOrderOperationException {
+
+        CEJobContract jobContract = jobOrder.getJobContract();
+        if (jobContract == null || attachments == null) {
+            return;
+        }
+
+        Set<JobOrderAttachment> atts = jobContract.getAttachments();
+        // check for existence before doing the removals
+        for (int i = 0; atts != null && i < attachments.length; i++) {
+            if (!atts.contains(attachments[i])) {
+                throw new InvalidJobOrderOperationException("removeAttachments - cannot remove attachment - attachemnt does not exist in given joborder");
+            }
+        }
+        for (JobOrderAttachment ja : attachments) {
+            try {
+                DaoManager.getDao(JobOrderAttachment.class).remove(ja);
+            }
+            catch (Exception e) {
+                throw new InvalidJobOrderOperationException("removeAttachments - cannot remove attachment ");
+            }
+            jobContract.removeAttachment(ja);
+        }
+        /*
+         * removed = jobContract.removeAttachment(attachment[i]); if
+         * (removed.size() != attachments.length) { throw new
+         * InvalidJobOrderOperationException("removeAttachments - one or more
+         * attachement failed to remove from joborder"); }
+         */
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeAttachments(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Attachment[])
+     */
+    @Override
+    public void removeAttachments(CEJobOrderLineItem jobOrderLineItem, JobOrderLineItemAttachment... attachments) throws InvalidJobOrderOperationException {
+        if (jobOrderLineItem == null || attachments == null) {
+            return;
+        }
+
+        Set<JobOrderLineItemAttachment> atts = jobOrderLineItem.getAttachments();
+        // check for existence before doing the removals
+        for (int i = 0; atts != null && i < attachments.length; i++) {
+            if (!atts.contains(attachments[i])) {
+                throw new InvalidJobOrderOperationException("removeAttachments - cannot remove attachment - attachemnt does not exist in given joborder");
+            }
+        }
+        for (JobOrderLineItemAttachment ja : attachments) {
+            jobOrderLineItem.removeAttachments(ja);
+        }
+        try {
+            DaoManager.getDao(JobOrderLineItemAttachment.class).remove(attachments);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("removeAttachments - cannot remove attachment ");
+        }
+        // Set<JobOrderAttachment> removed =
+        // jobOrderLineItem.r(attachment)(atts);
+        /*
+         * if (atts.size() != attachments.length) { throw new
+         * InvalidJobOrderOperationException("removeAttachments - one or more
+         * attachement failed to remove from joborder"); }
+         */
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeJobOrder(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public void removeJobOrder(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.CEJobOrderLineItem[])
+     */
+    @Override
+    public void removeJobOrderLineItem(CEJobContract jobContract, CEJobOrderLineItem... jolis) throws InvalidJobOrderOperationException {
+        if (jobContract == null || jolis == null) {
+            return;
+        }
+
+        // TODO: Eric - Validate all the given joli to make sure they are
+        // removable from the given jo. If one of the jolis has an associated
+        // jobContractTest or jobContractSlate or JobContractExpression, then
+        // throw an exception
+        for (CEJobOrderLineItem joli : jolis) {
+            if (joli.isRelatedToTask()) {
+                throw new InvalidJobOrderOperationException("Cannot remove JobOrderLineItems that are created with JobContractTest");
+            }
+        }
+        Set<CEJobOrderLineItem> removed = jobContract.removeCEJobOrderLineItem(jolis);
+        if (removed.size() != jolis.length) {
+            throw new InvalidJobOrderOperationException("removeJobOrderLineItem - could not remove one or more joli from the given job order");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeNotes(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void removeNotes(CEJobOrder jobOrder, JobOrderNote... notes) throws InvalidJobOrderOperationException {
+        if (jobOrder == null || notes == null) {
+            return;
+        }
+
+        // Set<JobOrderNote> removed = jobOrder.removeNotes(notes);
+        // if (removed.size() != notes.length) {
+        // throw new
+        // InvalidJobOrderOperationException("removeNotes - could not remove one
+        // or more notes from the given job order");
+        // }
+        try {
+            DaoManager.getDao(JobOrderNote.class).remove(notes);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot delete notes ");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeNotes(com.intertek.phoenix.entity.CEJobContract,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void removeNotes(CEJobContract jobContract, JobOrderNote... notes) throws InvalidJobOrderOperationException {
+        if (jobContract == null || notes == null) {
+            return;
+        }
+
+        Set<JobOrderNote> removed = jobContract.removeNotes(notes);
+        if (removed.size() != notes.length) {
+            throw new InvalidJobOrderOperationException("removeNotes - could not remove one or more notes from the given job order");
+        }
+        try {
+            DaoManager.getDao(JobOrderNote.class).remove(notes);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot delete notes ");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeNotes(com.intertek.phoenix.entity.CEJobOrderLineItem,
+     *      com.intertek.phoenix.entity.Note[])
+     */
+    @Override
+    public void removeNotes(CEJobOrderLineItem jobOrderLineItem, JobOrderLineItemNote... notes) throws InvalidJobOrderOperationException {
+        if (jobOrderLineItem == null || notes == null) {
+            return;
+        }
+        try {
+            DaoManager.getDao(JobOrderLineItemNote.class).remove(notes);
+        }
+        catch (Exception e) {
+            throw new InvalidJobOrderOperationException("addNotes - cannot delete notes ");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#updateJobOrder(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public CEJobOrder updateJobOrder(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        // TODO this must be revisited afte the demo
+        // TODO higher priority
+        updateServiceLocation(jobOrder);
+        updateBranch(jobOrder);
+        updateManagerAndSalesPerson(jobOrder);
+        // First time when save the JobOrder
+        if (jobOrder.getJobNumber() == null) {
+            jobOrder.setJobNumber(getJobNumberByBranch(jobOrder.getBranch()));
+        }
+        try {
+            DaoManager.getDao(CEJobOrder.class).saveOrUpdate(jobOrder);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Exception in saving ce job order and related info " + e.getMessage());
+        }
+        return jobOrder;
+    }
+
+    private void updateManagerAndSalesPerson(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        String salesPersonName = jobOrder.getSalesPersonName();
+        if (salesPersonName != null && !"".equalsIgnoreCase(salesPersonName)) {
+            User person;
+            try {
+                person = DaoManager.getDao(User.class).find(salesPersonName);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find sales person for id :" + salesPersonName + " " + e.getMessage());
+            }
+            jobOrder.setSalesPerson(person);
+        }
+        String secondarySalesPerson = jobOrder.getSecondarySalesPersonName();
+        if (secondarySalesPerson != null && !"".equalsIgnoreCase(secondarySalesPerson)) {
+            User person;
+            try {
+                person = DaoManager.getDao(User.class).find(secondarySalesPerson);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find secondary sales person for id :" + secondarySalesPerson + " " + e.getMessage());
+            }
+            jobOrder.setSecondarySalesPerson(person);
+        }
+        String projectManager = jobOrder.getProjectManagerName();
+        if (projectManager != null && !"".equalsIgnoreCase(projectManager)) {
+            User person;
+            try {
+                person = DaoManager.getDao(User.class).find(projectManager);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find project manager for id :" + projectManager + " " + e.getMessage());
+            }
+            jobOrder.setProjectManager(person);
+        }
+    }
+
+    private void updateCurrencyInfo(CEJobContract jobContract, Date asOfDate) throws PhoenixException {
+        String ccode = jobContract.getContractCode();
+        String pricebookId = getPriceBookId(jobContract, asOfDate, ccode);
+
+        if (jobContract.getZoneDescription() != null && !"".equals(jobContract.getZoneDescription())) {
+            return;
+        }
+        QueryInfo branchSearch = new QueryInfo(BranchLocation.class).addFilter("branchLocationId.branchCode", jobContract.getJobOrder().getBranchName())
+                .addFilter("branchLocationId.beginDate", asOfDate, FilterOp.LESS_OR_EQUAL).addFilter("endDate", asOfDate, FilterOp.GREATER_OR_EQUAL);
+        if (pricebookId != null && !"".equals(pricebookId.trim())) {
+            branchSearch.addFilter("branchLocationId.contractId", new String[] { pricebookId, jobContract.getContractCode() }, FilterOp.IN);
+        }
+        else {
+            branchSearch.addFilter("branchLocationId.contractId", jobContract.getContractCode());
+        }
+        BranchLocation branchLocation = DaoManager.getDao(BranchLocation.class).searchUnique(branchSearch);
+        String zonedes = "";
+        if (branchLocation != null) {
+            zonedes = branchLocation.getBranchLocationId().getLocation();
+        }
+        if (zonedes != null && !"".equals(zonedes.trim())) {
+            jobContract.setZoneDescription(zonedes);
+        }
+        else {
+            jobContract.setZoneDescription("NONE");
+        }
+
+    }
+
+    private void updateReferenceFieldInfo(CEJobContract jobContract, Date asOfDate) throws InvalidJobOrderOperationException {
+
+        Dao<ReferenceField> dao = DaoManager.getDao(ReferenceField.class);
+        QueryInfo query = new QueryInfo(ReferenceField.class);
+        query.addFilter("referenceFieldId.contractId", jobContract.getContractCode());
+        List<ReferenceField> referenceFields = new ArrayList<ReferenceField>();
+        try {
+            referenceFields = dao.search(query);
+            if (referenceFields.size() == 0) {
+                String pricebookId = getPriceBookId(jobContract, asOfDate, jobContract.getContractCode());
+                query.addFilter("referenceFieldId.contractId", pricebookId);
+                referenceFields = dao.search(query);
+            }
+            for (ReferenceField ref : referenceFields) {
+                if (ref.getSortOrderNum() == 1 && ref.getSortOrderNum() != null) {
+                    jobContract.setInvoiceLabel1(ref.getReferenceFieldId().getReferenceFieldId());
+                }
+
+                if (ref.getSortOrderNum() == 2 && ref.getSortOrderNum() != null) {
+                    jobContract.setInvoiceLabel2(ref.getReferenceFieldId().getReferenceFieldId());
+                }
+
+                if (ref.getSortOrderNum() == 3 && ref.getSortOrderNum() != null) {
+                    jobContract.setInvoiceLabel3(ref.getReferenceFieldId().getReferenceFieldId());
+                }
+
+                if (ref.getSortOrderNum() == 4 && ref.getSortOrderNum() != null) {
+                    jobContract.setInvoiceLabel4(ref.getReferenceFieldId().getReferenceFieldId());
+                }
+
+                if (ref.getSortOrderNum() == 5 && ref.getSortOrderNum() != null) {
+                    jobContract.setInvoiceLabel5(ref.getReferenceFieldId().getReferenceFieldId());
+                }
+            }
+        }
+        catch (PhoenixException e) {
+            throw new InvalidJobOrderOperationException("Error in finding referencefields ", e);
+        }
+    }
+
+    private String getPriceBookId(CEJobContract jobContract, Date asOfDate, String ccode) throws PhoenixException {
+        QueryInfo cfgContractQuery = new QueryInfo(CfgContract.class).addFilter("cfgContractId.contractId", ccode).addFilter("cfgContractId.beginDate",
+                                                                                                                             asOfDate, FilterOp.LESS_OR_EQUAL)
+                .addFilter("endDate", asOfDate, FilterOp.GREATER_OR_EQUAL);
+        CfgContract cfgContract = DaoManager.getDao(CfgContract.class).searchUnique(cfgContractQuery);
+        String pricebookId = "";
+        if (cfgContract != null) {
+            String currencyCD = cfgContract.getCurrencyCD();
+            jobContract.setContractCurrency(currencyCD);
+            // TODO check if the transactionCurrency can be this one
+            jobContract.setTransactionCurrency(currencyCD);
+            if (!cfgContract.getPriceBookId().equalsIgnoreCase("CURRENT")) {
+                pricebookId = cfgContract.getPriceBookId();
+            }
+            else {
+                PriceBook priceBook = null;
+                QueryInfo query = new QueryInfo(PriceBook.class).addFilter("priceBookId.currencyCD", currencyCD).addFilter("priceBookId.pbSeries",
+                                                                                                                           cfgContract.getPbSeries())
+                        .addFilter("priceBookId.beginDate", asOfDate, FilterOp.LESS_OR_EQUAL).addFilter("endDate", asOfDate, FilterOp.GREATER_OR_EQUAL);
+                priceBook = DaoManager.getDao(PriceBook.class).searchUnique(query);
+                if (priceBook != null) {
+                    pricebookId = priceBook.getPriceBookId().getPriceBookId();
+                }
+            }
+            jobContract.getContract().setWorkingPB(pricebookId);
+        }
+        return pricebookId;
+    }
+
+    private void updateBranch(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        String branchName = jobOrder.getBranchName();
+        if (branchName != null && !"".equals(branchName)) {
+            Branch branch;
+            try {
+                branch = DaoManager.getDao(Branch.class).find(branchName);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find branch for name :" + branchName + " " + e.getMessage());
+            }
+            jobOrder.setBranch(branch);
+        }
+    }
+
+    private void updateServiceLocation(CEJobOrder jobOrder) throws InvalidJobOrderOperationException {
+        String serviceLocationcode = jobOrder.getServiceLocationCode();
+        if (serviceLocationcode != null && !"".equals(serviceLocationcode)) {
+            ServiceLocation serviceLocation;
+            try {
+                serviceLocation = (ServiceLocation) DaoManager.getDao(ServiceLocation.class).find(serviceLocationcode);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Coudn't find service location for code :" + serviceLocationcode + " " + e.getMessage());
+            }
+            jobOrder.setServiceLocation(serviceLocation);
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#validateJobOrder(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public boolean validateJobOrder(CEJobOrder jobOrder) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#getBillableJobOrderLineItems(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public List<CEJobOrderLineItem> getBillableJobOrderLineItems(CEJobContract jobContract) throws InvalidJobOrderOperationException {
+        return jobContract.getBillableJobOrderLineItems();
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#updateJobOrderLineItems(com.intertek.phoenix.entity.CEJobOrder,
+     *      java.util.List)
+     */
+    @Override
+    public CEJobContract updateJobOrderLineItems(CEJobContract jobContract, List<CEJobOrderLineItem> modifiedJolis) throws InvalidJobOrderOperationException {
+        if (jobContract == null) {
+            return null;
+        }
+
+        if (modifiedJolis == null) {
+            return jobContract;
+        }
+
+        Set<CEJobOrderLineItem> jolis = jobContract.getJobOrderLineItems();
+        // Making sure all modifiedJolies exist in the given jobOrder
+        for (CEJobOrderLineItem joli : modifiedJolis) {
+            if (!jolis.contains(joli)) {
+                throw new InvalidJobOrderOperationException("updateJobOrderLineItems - cannot update non existing job order line item");
+            }
+        }
+
+        // TODO: validate the modified Jolis -- make sure the modified jolis are
+        // valid
+
+        // do the update
+        for (CEJobOrderLineItem joli : modifiedJolis) {
+            jobContract.addLineItem(joli);
+        }
+
+        return jobContract;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#collectJobOrderUpdates(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Period)
+     */
+    @Override
+    public Set<CEJobOrderLineItemUpdate> collectJobOrderUpdates(CEJobContract jobContract, Period period) throws InvalidJobOrderOperationException {
+        Set<CEJobOrderLineItemUpdate> result = new HashSet<CEJobOrderLineItemUpdate>();
+        for (CEJobOrderLineItem joli : jobContract.getJobOrderLineItems()) {
+            collectJobOrderLineItemUpdates(result, joli, period);
+        }
+        return result;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#collectJobOrderUpdates(com.intertek.phoenix.entity.CEJobOrderLineItem,
+     *      com.intertek.phoenix.entity.Period)
+     */
+    @Override
+    public Set<CEJobOrderLineItemUpdate> collectJobOrderLineItemUpdates(CEJobOrderLineItem joli, Period period) throws InvalidJobOrderOperationException {
+        Set<CEJobOrderLineItemUpdate> result = new HashSet<CEJobOrderLineItemUpdate>();
+        collectJobOrderLineItemUpdates(result, joli, period);
+        return result;
+    }
+
+    private void collectJobOrderLineItemUpdates(Set<CEJobOrderLineItemUpdate> result, CEJobOrderLineItem joli, Period period)
+            throws InvalidJobOrderOperationException {
+        Dao<CEJobOrderLineItemUpdate> dao = DaoManager.getDao(CEJobOrderLineItemUpdate.class);
+
+        QueryInfo query = new QueryInfo(CEJobOrderLineItemUpdate.class);
+        query.addFilter("orderLineItemId", joli.getId());
+        if (period.getFrom() != null && period.getFrom().after(Period.EPOCH)) {
+            query.addFilter("effectiveTime", period.getFrom(), FilterOp.GREATER_OR_EQUAL);
+        }
+        if (period.getTo() != null && period.getTo().after(Period.EPOCH)) {
+            query.addFilter("effectiveTime", period.getTo(), FilterOp.LESS_OR_EQUAL);
+        }
+        try {
+            List<CEJobOrderLineItemUpdate> list = dao.search(query);
+            result.addAll(list);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed to retrieve line itme information.");
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#getBillableJobOrderLineItems(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Period)
+     */
+
+    @Override
+    public Map<CEJobOrderLineItem, Double> getBillableJobOrderLineItems(CEJobContract jobContract, Period period) throws InvalidJobOrderOperationException {
+        Map<CEJobOrderLineItem, Double> result = new HashMap<CEJobOrderLineItem, Double>();
+        for (CEJobOrderLineItem joli : jobContract.getJobOrderLineItems()) {
+            Set<CEJobOrderLineItemUpdate> updates = collectJobOrderLineItemUpdates(joli, period);
+            double billable = 0;
+            double billed = 0;
+            double received = 0;
+            for (CEJobOrderLineItemUpdate update : updates) {
+                switch (update.getType()) {
+                    case AMOUNT_CHANGED:
+                        billable += update.getAmount();
+                        break;
+                    case PAYMENT_RECEIVED:
+                        received += update.getAmount();
+                        break;
+                    case BILLED:
+                        billed += update.getAmount();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (billable > billed) {
+                result.put(joli, billable - billed);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @throws InvalidJobOrderOperationException
+     * @see com.intertek.phoenix.job.JobOrderService#addCustomer(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+
+    @Override
+    public void addCustomer(CEJobOrder jobOrder, ContractCustContactInfo info) throws InvalidJobOrderOperationException {
+        CEJobContract jobContract = new CEJobContract();
+        jobContract.setLanguage("ENG");
+        // make sure that the root service level is created
+        ContractServiceLevel rootServiceLevel = new ContractServiceLevel();
+        rootServiceLevel.setServiceLevelName("JobContract");
+        rootServiceLevel.setServiceLevelType(ServiceLevelType.LOT);
+        try {
+            DaoManager.getDao(ContractServiceLevel.class).saveOrUpdate(rootServiceLevel);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed to save RootServiceLevel for " + jobOrder.getJobNumber(), e);
+        }
+        jobContract.setRootServiceLevel(rootServiceLevel);
+
+        populateContractCustCustomer(jobContract, info);
+        jobOrder.addJobContract(jobContract);
+        updateCustomer(jobOrder, jobContract);
+    }
+
+    @Override
+    public void updateCustomer(CEJobOrder jobOrder, CEJobContract jobContract) throws InvalidJobOrderOperationException {
+        jobContract.setJobOrderNumber(jobOrder.getJobNumber());
+        if (jobContract.getLanguage() == null || "".equals(jobContract.getLanguage().trim())) {
+            jobContract.setLanguage("ENG");
+        }
+        if (jobContract.getZoneId() == null || "NONE".equals(jobContract.getZoneDescription())) {
+            jobContract.setZoneId("*");
+        }
+        updateContactInfo(jobContract);
+        Date asOfDate = new Date();
+        if (jobOrder.getPromiseCompletionDate() != null) {
+            asOfDate = jobOrder.getPromiseCompletionDate();
+        }
+        try {
+            updateCurrencyInfo(jobContract, asOfDate);
+        }
+        catch (PhoenixException e) {
+            throw new InvalidJobOrderOperationException("Error in looking up price book etc ", e);
+        }
+        updateBankInfo(jobContract);
+        updateReferenceFieldInfo(jobContract, asOfDate);
+        // make it managed
+        try {
+            DaoManager.getDao(CEJobContract.class).saveOrUpdate(jobContract);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed to add customer to JobOrder: " + jobOrder.getJobNumber(), e);
+        }
+    }
+
+    private void updateBankInfo(CEJobContract jobContract) throws InvalidJobOrderOperationException {
+        String remitToCode = jobContract.getRemitToCode();
+        if (remitToCode != null && !"".equals(remitToCode)) {
+            Bank bank;
+            try {
+                bank = DaoManager.getDao(Bank.class).find(remitToCode);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Can't find bank for bankCode : " + remitToCode + " " + e.getMessage());
+            }
+            jobContract.setRemitTo(bank);
+
+            String remitToBankAccountNum = jobContract.getRemitToBankAccountNum();
+            if (remitToBankAccountNum != null && !"".equals(remitToBankAccountNum)) {
+                SearchService searchService = ServiceManager.getSearchService();
+                try {
+                    List<?> bankAccounts = searchService.getBankAccount(null, null, jobContract.getJobOrder().getBuName(),
+                                                                        jobContract.getTransactionCurrency(), remitToCode, remitToBankAccountNum);
+                    if (bankAccounts.size() > 0) {
+                        BankAccount account = (BankAccount) bankAccounts.get(0);
+                        jobContract.setRemitToBankAccount(account);
+                    }
+                }
+                catch (PhoenixException e) {
+                    throw new InvalidJobOrderOperationException("Can't find bank account for bankCode : " + remitToCode + " and account  "
+                                                                + remitToBankAccountNum + " " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#removeCustomer(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+    @Override
+    public void removeCustomer(CEJobOrder jobOrder, CEJobContract jobContract) throws InvalidJobOrderOperationException {
+        if (jobOrder.getOrigin() == OrderOrigin.PHOENIX
+        // must not originate from ECS
+            && jobContract.getLineItems().size() == 0) {
+            try {
+                jobContract.setJobOrder(null);
+                DaoManager.getDao(CEJobContract.class).remove(jobContract);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Cannot remove customer from the jobOrder: " + jobOrder.getJobNumber());
+            }
+        }
+        else {
+            throw new InvalidJobOrderOperationException("Cannot remove customer from the jobOrder: " + jobOrder.getJobNumber());
+        }
+    }
+
+    // /**
+    // * @see
+    // com.intertek.phoenix.jobOrder.JobOrderService#getCeRevenueSegregationExpression()
+    // */
+    // @Override
+    // public RevenueSegregation[]
+    // getRevenueSegregationExpression(CEJobOrderLineItem lineItem) {
+    // // for the time being, just hard code it
+    // // TODO
+    // RevenueSegregation[] rsList = null;
+    // OrderLineItemType lineItemType = lineItem.getOrderLineItemType();
+    // if (lineItemType.equals(OrderLineItemType.CEJobOrderLineItem)) {
+    // rsList = new RevenueSegregation[4];
+    //
+    // RevenueSegregation rs1 = new RevenueSegregation();
+    // rs1.setDescription("Pass through Travel Charges");
+    //
+    // RevenueSegregation rs2 = new RevenueSegregation();
+    // rs2.setDescription("Pass through freight Charges");
+    //
+    // RevenueSegregation rs3 = new RevenueSegregation();
+    // rs3.setDescription("Pass through materials/samples");
+    //
+    // RevenueSegregation rs4 = new RevenueSegregation();
+    // rs4.setDescription("Pass through sub-contracting");
+    //
+    // rsList[0] = rs1;
+    // rsList[1] = rs2;
+    // rsList[2] = rs3;
+    // rsList[3] = rs4;
+    // }
+    //
+    // if (lineItemType.equals(OrderLineItemType.ExpenseLineItem)) {
+    // rsList = new RevenueSegregation[1];
+    //
+    // RevenueSegregation rs1 = new RevenueSegregation();
+    // rs1.setDescription("Pass through Travel Charges");
+    //
+    // rsList[0] = rs1;
+    // }
+    //
+    // return rsList;
+    // }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#getBillableJobOrderLineItems(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.dao.SortInfo)
+     */
+    @Override
+    public List<CEJobOrderLineItem> getBillableJobOrderLineItems(CEJobContract jobContract, SortInfo s) throws InvalidJobOrderOperationException {
+        List<CEJobOrderLineItem> list = getBillableJobOrderLineItems(jobContract);
+        final SortInfo sort = s;
+        // sort it
+        Collections.sort(list, new Comparator<CEJobOrderLineItem>() {
+            public int compare(CEJobOrderLineItem one, CEJobOrderLineItem two) {
+                Object value1 = CommonUtil.getValue(one, sort.getFieldName());
+                Object value2 = CommonUtil.getValue(two, sort.getFieldName());
+                return CommonUtil.compare(value1, value2);
+            }
+        });
+        return list;
+    }
+
+    @Override
+    public void updateRevenueSegregations(CEJobOrderLineItem lineItem, Set<RevenueSegregation> rsSet) {
+        // TODO: This is temporary implementation. Should be replaced
+        for (RevenueSegregation rs : rsSet) {
+            if (rs.getAmount() > 0) {
+                lineItem.addRevenueSegregation(rs);
+            }
+        }
+    }
+
+    private void updateContactInfo(CEJobContract jobContract) throws InvalidJobOrderOperationException {
+        long contactId = 0;
+        String custCode = "";
+        long addressId = 0;
+        Dao<Contact> contactDao = DaoManager.getDao(Contact.class);
+        Dao<Customer> customerDao = DaoManager.getDao(Customer.class);
+        Dao<CustAddress> custDao = DaoManager.getDao(CustAddress.class);
+        try {
+            contactId = jobContract.getBillingContactId();
+            if (contactId != 0) {
+                jobContract.setBillingContact(contactDao.find(contactId));
+            }
+            custCode = jobContract.getBillingCustCode();
+            if (custCode != null && !"".equals(custCode)) {
+                jobContract.setBillingCustomer(customerDao.find(custCode));
+            }
+            addressId = jobContract.getBillingAddressId();
+            if (addressId != 0) {
+                jobContract.setBillingAddress(custDao.find(addressId));
+            }
+            contactId = jobContract.getReportReceivingContactId();
+            if (contactId != 0) {
+                jobContract.setReportReceivingContact(contactDao.find(contactId));
+            }
+            custCode = jobContract.getReportReceivingCustCode();
+            if (custCode != null && !"".equals(custCode)) {
+                jobContract.setReportReceivingCustomer(customerDao.find(custCode));
+            }
+            addressId = jobContract.getReportReceivingAddressId();
+            if (addressId != 0) {
+                jobContract.setReportReceivingAddress(custDao.find(addressId));
+            }
+            contactId = jobContract.getSupplierContactId();
+            if (contactId != 0) {
+                jobContract.setSupplierContact(contactDao.find(contactId));
+            }
+            custCode = jobContract.getSupplierCustCode();
+            if (custCode != null && !"".equals(custCode)) {
+                jobContract.setSupplierCustomer(customerDao.find(custCode));
+            }
+            addressId = jobContract.getSupplierAddressId();
+            if (addressId != 0) {
+                jobContract.setSupplierAddress(custDao.find(addressId));
+            }
+            contactId = jobContract.getManufacturerContactId();
+            if (contactId != 0) {
+                jobContract.setManufacturerContact(contactDao.find(contactId));
+            }
+            custCode = jobContract.getManfCustCode();
+            if (custCode != null && !"".equals(custCode)) {
+                jobContract.setManufacturerCustomer(customerDao.find(custCode));
+            }
+            addressId = jobContract.getManfAddressId();
+            if (addressId != 0) {
+                jobContract.setManufacturerAddress(custDao.find(addressId));
+            }
+        }
+        catch (Exception e) {
+
+        }
+    }
+
+    // TODO should we also set the billing, shipping details?
+    private void populateContractCustCustomer(CEJobContract jobContract, ContractCustContactInfo inputInfo) throws InvalidJobOrderOperationException {
+        Customer customer = null;
+        Contact contact = null;
+        Contract contract = null;
+        CustAddress address = null;
+        String custCode = inputInfo.getCustCode();
+        if (custCode != null) {
+            try {
+                customer = DaoManager.getDao(Customer.class).find(custCode);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Couldn't find customer with code " + custCode + " " + e.getMessage());
+            }
+            if (customer != null) {
+                jobContract.setCustomerCode(custCode);
+                jobContract.setCustomer(customer);
+            }
+        }
+        long cId = inputInfo.getContactId();
+        try {
+            if (cId != 0) {
+                Dao<Contact> contactDao = DaoManager.getDao(Contact.class);
+                contact = contactDao.find(cId);
+            }
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Couldn't find contact with id " + cId + " " + e.getMessage());
+        }
+        if (contact != null) {
+            jobContract.setContactId(cId);
+            jobContract.setContact(contact);
+        }
+        String contractCode = inputInfo.getContractCode();
+        if (contractCode != null) {
+            try {
+                contract = DaoManager.getDao(Contract.class).find(contractCode);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Couldn't find contract with code " + contractCode + " " + e.getMessage());
+            }
+            if (contract != null) {
+                jobContract.setContractCode(contractCode);
+                jobContract.setContract(contract);
+            }
+        }
+        try {
+            SearchService searchService = ServiceManager.getSearchService();
+            address = searchService.searchAddress(custCode, cId);
+            if (address != null) {
+                jobContract.setContactAddress(address);
+            }
+        }
+        catch (PhoenixException e) {
+            throw new InvalidJobOrderOperationException(e.getMessage());
+        }
+    }
+
+    // this method is commented
+    /**
+     * create a new CEJobOrderLine item instance line items.
+     * 
+     * @param jobContract
+     * @return CEJobOrderLineItem
+     */
+    /*
+     * @Override public CEJobOrderLineItem createNewLineItemObject(CEJobContract
+     * jobContract) { CEJobOrderLineItem ceJobOrderLineItem = new
+     * CEJobOrderLineItem();
+     * ceJobOrderLineItem.setJobOrderContractId(jobContract.getId());
+     * setJobOrderLineItemNumber(jobContract, ceJobOrderLineItem);
+     * ceJobOrderLineItem.setUom(UOM.EACH); return ceJobOrderLineItem; }
+     */
+
+    /**
+     * create the new CEJobOrderLine item instance line items by passin the job
+     * tests
+     * 
+     * @param jobTest
+     * @return
+     */
+    public CEJobOrderLineItem createNewLineItemObject(JobContractTest jobContractTest) {
+        CEJobOrderLineItem ceJobOrderLineItem = new CEJobOrderLineItem();
+
+        // TODO: Added to get invoice page working for the demo. Should be
+        // replaced with correct implementation
+        ceJobOrderLineItem.setBillingStatus(BillingStatus.OPEN);
+        ceJobOrderLineItem.setUom(UOM.EACH);
+
+        if (jobContractTest != null) {
+            String rbKey = jobContractTest.getTest().getRbKey();
+            QueryInfo queryInfo = new QueryInfo(RB.class);
+            queryInfo.addFilter("rbId.rbKey", rbKey);
+            // TODO check if contract and start date, end date is needed or not
+            // to
+            // retrieve RB value
+            // .addFilter("rbId.contractId",
+            // serviceLevel.getJobContract().getContractCode());
+            String rbValue = "";
+            try {
+                List<RB> result = DaoManager.getDao(RB.class).search(queryInfo);
+                if (result.size() > 0) {
+                    RB rb = result.get(0);
+                    rbValue = rb.getRbValue();
+                }
+            }
+            catch (PhoenixException e1) {
+            }
+            if (!"".equals(rbValue)) {
+                ceJobOrderLineItem.setDescription(rbValue);
+            }
+            else {
+                ceJobOrderLineItem.setDescription(jobContractTest.getLineDescription());
+            }
+            ceJobOrderLineItem.setQuantity(jobContractTest.getQuantity());
+            ceJobOrderLineItem.setRelatedToTask(true);
+            jobContractTest.setJobOrderLineItem(ceJobOrderLineItem);
+
+            setJobOrderLineItemNumber(jobContractTest.getContractServiceLevel().getJobContract(), ceJobOrderLineItem);
+        }
+        return ceJobOrderLineItem;
+    }
+
+    
+    
+    /**
+     * create the new CEJobOrderLine item instance line items by passin the expression
+     * 
+     * @param expression
+     * @return
+     */
+    public CEJobOrderLineItem createNewLineItemObject(JobContractServiceExpression expression) throws InvalidJobOrderOperationException {
+        CEJobOrderLineItem ceJobOrderLineItem = new CEJobOrderLineItem();
+        JobContractService jocoService = expression.getJobContractService();
+        // TODO: Added to get invoice page working for the demo. Should be
+        // replaced with correct implementation
+        ceJobOrderLineItem.setBillingStatus(BillingStatus.OPEN);
+        ceJobOrderLineItem.setUom(UOM.EACH);
+        // TODO: confirm this
+        if (expression != null) {
+            ceJobOrderLineItem.setDescription("");
+            ceJobOrderLineItem.setRelatedToTask(true);
+            expression.setJobOrderLineItem(ceJobOrderLineItem);
+            setJobOrderLineItemNumber(jocoService.getContractServiceLevel().getJobContract(), ceJobOrderLineItem);
+        }
+
+        try {
+            DaoManager.getDao(JobContractServiceExpression.class).saveOrUpdate(expression);
+            DaoManager.getDao(CEJobOrderLineItem.class).saveOrUpdate(ceJobOrderLineItem);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed creating new JOLI for JobContractService");
+        }
+
+        return ceJobOrderLineItem;
+    }
+
+    /* up to this need to check */
+
+    /**
+     * Name : calculate and set the maximum of CEJobOrderLineItem number Date
+     * :May 25, 2009 purpose :convert the results to entity object and save the
+     * entity
+     * 
+     * @param CEJobOrder
+     * @param CEJobOrderLineItem
+     * @return
+     */
+    private void setJobOrderLineItemNumber(CEJobContract jobContract, CEJobOrderLineItem ceJobOrderLineItem) {
+        long maxNo = 0;
+        for (CEJobOrderLineItem lineItem : jobContract.getJobOrderLineItems()) {
+            if (lineItem.getLineNumber() > maxNo) {
+                maxNo = lineItem.getLineNumber();
+            }
+        }
+        ceJobOrderLineItem.setLineNumber(maxNo + 1);
+    }
+
+    /**
+     * create a new DepositInvoice
+     * 
+     * @param ceJobOrder
+     *            CEJobOrRder
+     * @return DepositInvoice
+     */
+    @Override
+    public DepositInvoice createDepositInvoice(CEJobOrder ceJobOrder) {
+        DepositInvoice dpInvoice = new DepositInvoice();
+        dpInvoice.setJobNumber(ceJobOrder.getJobNumber());
+        dpInvoice.setDepositType(DepositType.WIRE);
+        dpInvoice.setPaymentType(PaymentType.CASH);
+        dpInvoice.setStatus(InvoiceStatus.NEW);
+        dpInvoice.setInvoiceNumber(CommonUtil.generateIdCode());
+        try {
+            DaoManager.getDao(DepositInvoice.class).saveOrUpdate(dpInvoice);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dpInvoice;
+    }
+
+    /**
+     * set the default instructions object
+     * 
+     * @param ceJobOrder
+     *            CEJobOrRder
+     * @return DepositInvoice
+     */
+    @Override
+    public void setDefaultInstructions(CEJobOrder ceJobOrder) {
+        try{
+        List<Instruction> instList = new ArrayList<Instruction>();
+        ceJobOrder.setOperationalStatus(OperationalStatus.HOLD);
+        if (ceJobOrder.getInstructions() == null || ceJobOrder.getInstructions().size() == 0) {
+            Instruction tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.SAMPLE);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.LAB);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.SHIPPING);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.REPORTING);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.BILLING);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.OTHER);
+            instList.add(tmpIns);
+
+            tmpIns = new Instruction();
+            tmpIns.setInstructionType(InstructionType.OPERATION);
+            instList.add(tmpIns);
+
+            for (Instruction ins : instList) {
+                ins.setJobOrder(ceJobOrder);
+                ins.setJobNumber(ceJobOrder.getJobOrderName());
+                try {
+                    DaoManager.getDao(Instruction.class).saveOrUpdate(ins);
+                    ceJobOrder.addInstruction(ins);
+                    updateJobOrder(ceJobOrder);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            tmpIns.setJobOrder(ceJobOrder);
+        }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // /**
+    // * set the default split line item object
+    // *
+    // * @param ceJobOrderLineItem
+    // * CEJobOrderLineItem
+    // * @return SplitLineItem
+    // */
+    // @Override
+    // public SplitLineItem createSplitLineItem(CEJobOrderLineItem
+    // ceJobOrderLineItem) {
+    // SplitLineItem splitLineItem = ceJobOrderLineItem.split();
+    // /*
+    // * long maxNo = 0; if (ceJobOrderLineItem.getSplits() != null &&
+    // * ceJobOrderLineItem.getSplits().size() > 0) { for (SplitLineItem
+    // * lineItem : ceJobOrderLineItem.getSplits()) { if
+    // * (lineItem.getLineNumber() > maxNo) { maxNo =
+    // * lineItem.getLineNumber(); } } } splitLineItem.setLineNumber(maxNo +
+    // * 1);
+    // */
+    // return splitLineItem;
+    // }
+    //
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#updateJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.entity.JobTest)
+     */
+    @Override
+    public CEJobOrderLineItem updateJobOrderLineItem(ContractJobOrder contractJobOrder, ServiceLevel serviceLevel, JobContractTest jobTest)
+            throws PricingSrvcException, JobSrvcException, InvalidJobOrderOperationException {
+        CEJobOrderLineItem joli = jobTest.getJobOrderLineItem();
+        if (joli == null) {
+            // TODO create JOLI at the contract level
+            joli = this.createNewLineItemObject(jobTest);
+            jobTest.setJobOrderLineItem(joli);
+            try {
+                DaoManager.getDao(JobContractTest.class).saveOrUpdate(jobTest);
+                DaoManager.getDao(CEJobOrderLineItem.class).saveOrUpdate(joli);
+            }
+            catch (DaoException e) {
+                throw new InvalidJobOrderOperationException("Failed creating new JOLI for JobContractTest");
+            }
+        }
+        if (jobTest.getJobTest() == null || jobTest.getJobTest().getQuotedAmount() == 0) {
+            PricingSrvc pricingSrvc = ServiceManager.getPricingSrvc();
+            PricingInfo priceInfo = pricingSrvc.calculateTestPrice(contractJobOrder, serviceLevel, jobTest);
+            if (priceInfo != null) {
+                setPricingInfo(joli, priceInfo);
+            }
+        }
+        return joli;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#updateJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.entity.JobSlate)
+     */
+    @Override
+    public CEJobOrderLineItem updateJobOrderLineItem(ContractJobOrder contractJobOrder, ServiceLevel level, JobContractSlate jobSlate)
+            throws PricingSrvcException, JobSrvcException {
+        CEJobOrderLineItem joli = jobSlate.getJobOrderLineItem();
+        if (joli == null) {
+            // TODO create JOLI at the contract level
+            // joli = this.createNewLineItemObject(jobOrder);
+            jobSlate.setJobOrderLineItem(joli);
+        }
+        PricingSrvc pricingSrvc = ServiceManager.getPricingSrvc();
+        PricingInfo priceInfo = pricingSrvc.calculateSlatePrice(contractJobOrder, level, jobSlate);
+        if (priceInfo != null) {
+            setPricingInfo(joli, priceInfo);
+        }
+        return joli;
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#updateJobOrderLineItem(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.JobContractServiceExpression)
+     */
+    @Override
+    public Collection<CEJobOrderLineItem> updateJobOrderLineItem(ContractJobOrder contractJobOrder, ServiceLevel level, JobContractService jobService)
+            throws PricingSrvcException, JobSrvcException, InvalidJobOrderOperationException {
+        List<CEJobOrderLineItem> jolis = new ArrayList<CEJobOrderLineItem>();
+        PricingSrvc pricingSrvc = ServiceManager.getPricingSrvc();
+        Map<JobContractServiceExpression, PricingInfo> pricingInfos = new HashMap<JobContractServiceExpression, PricingInfo>();
+        for (JobContractServiceExpression expression : jobService.getJobContractServiceExpresions()) {
+            PricingInfo pricingInfo = pricingSrvc.calculateServicePrice(contractJobOrder, level, jobService, expression);
+            if (pricingInfo != null) {
+                pricingInfos.put(expression, pricingInfo);
+            }
+        }
+
+        if (jobService.isRollup() == true) {
+            JobContractServiceExpression mainExpression = jobService.getMainServiceItem();
+            CEJobOrderLineItem joli = mainExpression.getJobOrderLineItem();
+            if (joli == null) {
+                joli = new CEJobOrderLineItem(); // TODO
+                mainExpression.setJobOrderLineItem(joli);
+            }
+            this.setPricingInfo(joli, sumPricingInfo(pricingInfos));
+            // this will be the only joli for rollup services
+            jolis.add(joli);
+
+            // do revenue segregation
+            for (JobContractServiceExpression expression : pricingInfos.keySet()) {
+                // TODO verify
+                String lineDesc = expression.getExpressionId();
+                RevenueSegregation revSeg = joli.getRevenueSegregation(lineDesc);
+                if (revSeg == null) {
+                    revSeg = new RevenueSegregation();
+                    revSeg.setDescription(lineDesc);
+                    joli.addRevenueSegregation(revSeg);
+                }
+                // update revseg with the GLCode in pricing info
+                setPricingInfo(revSeg, pricingInfos.get(expression));
+            }
+        }
+        else { // normal service does not have rollup feature
+            
+            for (JobContractServiceExpression expression : pricingInfos.keySet()) {
+                CEJobOrderLineItem joli = expression.getJobOrderLineItem();
+                if (joli == null) {
+                    joli = createNewLineItemObject(expression);
+                }
+                PricingInfo pricingInfo = pricingInfos.get(expression);
+                setPricingInfo(joli, pricingInfo);
+                jolis.add(joli);
+            }
+        }
+        return jolis;
+    }
+
+    /**
+     * @param revSeg
+     * @param priceInfo
+     */
+    private void setPricingInfo(RevenueSegregation revSeg, PricingInfo priceInfo) {
+        revSeg.setAccount(priceInfo.getAccountInfo().getGlCode());
+        revSeg.setAmount(priceInfo.getTotalPrice());
+        revSeg.setDeptId(priceInfo.getAccountInfo().getDepartmentCode());
+    }
+
+    /**
+     * @param joli
+     * @param values
+     */
+    private PricingInfo sumPricingInfo(Map<JobContractServiceExpression, PricingInfo> pricingInfos) {
+        PricingInfo sum = new PricingInfo();
+        double netPrice = 0;
+        AccountInfo accountInfo = null;
+        for (JobContractServiceExpression exp : pricingInfos.keySet()) {
+            PricingInfo pi = pricingInfos.get(exp);
+            netPrice += pi.getTotalPrice();
+            if (exp.isMainExpression()) {
+                accountInfo = pi.getAccountInfo();
+            }
+        }
+        sum.setTotalPrice(netPrice);
+        sum.setAccountInfo(accountInfo);
+
+        return sum;
+    }
+
+    /**
+     * @param joli
+     * @param priceInfo
+     */
+    private void setPricingInfo(CEJobOrderLineItem joli, PricingInfo priceInfo) {
+        // set pricing information here
+        joli.setUnitPrice(priceInfo.getUnitPrice());
+        joli.setNetPrice(priceInfo.getTotalPrice());
+        joli.setQuantity(priceInfo.getInputInfo().getDoubleQuantity());
+        joli.setDiscountPct(priceInfo.getDiscountPct());
+
+        joli.setPrimaryBranchCd(priceInfo.getAccountInfo().getBranchCode());
+        joli.setProductGroup(priceInfo.getAccountInfo().getProductGroup());
+        joli.setDeptid(priceInfo.getAccountInfo().getDepartmentCode());
+        joli.setAccount(priceInfo.getAccountInfo().getGlCode());
+        // joli.setBusStreamCode();
+
+        // set tax stuff here
+
+        // currency and base price
+        joli.setRateMult(priceInfo.getRateMult());
+        joli.setRateDiv(priceInfo.getRateDiv());
+        joli.setBaseUnitPrice(priceInfo.getBaseUnitPrice());
+        joli.setBaseNetPrice(priceInfo.getBaseNetPrice());
+
+        joli.setEditable(priceInfo.isEditable());
+    }
+
+    /**
+     * @see com.intertek.phoenix.job.JobOrderService#addJobContract(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.entity.ContractCustContact)
+     */
+    @Override
+    public CEJobContract addJobContract(CEJobOrder jobOrder, ContractCustContact contractCustContact) throws InvalidJobOrderOperationException {
+
+        CEJobContract newJobContract = new CEJobContract();
+        newJobContract.setLanguage("ENG");
+        // TODO populate this new jobContract with info in contractCustContact
+        newJobContract.setContract(contractCustContact.getContractCust().getContract());
+        newJobContract.setBillingCustomer(contractCustContact.getContractCust().getCustomer());
+        newJobContract.setBillingContact(contractCustContact.getContact());
+        newJobContract.setContact(contractCustContact.getContact());
+        newJobContract.setCustomer(contractCustContact.getContractCust().getCustomer());
+        newJobContract.setReportReceivingContact(contractCustContact.getContact());
+        newJobContract.setReportReceivingCustomer(contractCustContact.getContractCust().getCustomer());
+        newJobContract.setSupplierContact(contractCustContact.getContact());
+        newJobContract.setSupplierCustomer(contractCustContact.getContractCust().getCustomer());
+        // make sure that the root service level is created
+        ContractServiceLevel rootServiceLevel = new ContractServiceLevel();
+        rootServiceLevel.setServiceLevelName("JobContract");
+        rootServiceLevel.setServiceLevelType(ServiceLevelType.PRODUCT);// TODO
+        // check
+        // this
+
+        newJobContract.setRootServiceLevel(rootServiceLevel);
+
+        // make newJobContract known to this
+        jobOrder.addJobContract(newJobContract);
+
+        // make sure it is saved, but this is redundant for hibernate, as it
+        // does it automatically
+        try {
+            DaoManager.getDao(CEJobContract.class).saveOrUpdate(newJobContract);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed adding a new JobContract to JobOrder: " + jobOrder.getJobNumber());
+        }
+
+        return newJobContract;
+    }
+
+    /**
+     * @see com.intertek.phoenix.jobOrder.JobOrderService#updateCustomerNote(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.jobContract,com.intertek.phoenix.entity.joborderNote,)
+     */
+    @Override
+    public void updateContractNote(CEJobOrder jobOrder, CEJobContract jobContract, JobOrderNote note) throws InvalidJobOrderOperationException {
+        try {
+            DaoManager.getDao(JobOrderNote.class).saveOrUpdate(note);
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed updating Notes to JobContract & JobOrder: " + jobOrder.getJobNumber());
+        }
+        this.updateCustomer(jobOrder, jobContract);
+        this.updateJobOrder(jobOrder);
+    }
+
+    /**
+     * @see com.intertek.phoenix.jobOrder.JobOrderService#getJobContract(String
+     *      JobNumber,String JobContract ID)
+     * 
+     */
+    public CEJobContract getJobContract(String JobNumber, String jobContractId) throws InvalidJobOrderOperationException {
+        CEJobContract ceJobContract = null;
+
+        Dao<CEJobOrder> jobOrderDao = DaoManager.getDao(CEJobOrder.class);
+        try {
+            CEJobOrder jobOrder = jobOrderDao.find(JobNumber);
+            ceJobContract = jobOrder.getJobContract();
+            if (ceJobContract != null) {
+                if (ceJobContract.getNotes() == null || ceJobContract.getNotes().size() <= 0) {
+
+                    Dao<JobOrderNote> dao = DaoManager.getDao(JobOrderNote.class);
+                    QueryInfo query = new QueryInfo(JobOrderNote.class);
+                    query.addFilter("jobContractId", ceJobContract.getId());
+                    List<JobOrderNote> noteList = new ArrayList<JobOrderNote>();
+                    noteList = dao.search(query);
+                    Set<JobOrderNote> set = new HashSet<JobOrderNote>();
+                    if (noteList != null && noteList.size() > 0) {
+                        for (JobOrderNote note : noteList) {
+                            set.add(note);
+                        }
+                        ceJobContract.setNotes(set);
+                    }
+                }
+            }
+        }
+        catch (DaoException e) {
+            throw new InvalidJobOrderOperationException("Failed get  JobContract  " + jobContractId);
+        }
+        return ceJobContract;
+    }
+    
+    
+
+}

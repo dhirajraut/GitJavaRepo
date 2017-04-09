@@ -1,0 +1,421 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.intertek.entity.Test;
+import com.intertek.exception.ServiceException;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.common.Form;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobTest;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.Instruction;
+import com.intertek.phoenix.entity.JobServiceLevel;
+import com.intertek.phoenix.entity.JobTest;
+import com.intertek.phoenix.entity.Project;
+import com.intertek.phoenix.entity.ProjectType;
+import com.intertek.phoenix.job.JobSrvc;
+import com.intertek.phoenix.job.JobSrvcException;
+import com.intertek.phoenix.job.ServiceLevel.ServiceLevelType;
+import com.intertek.phoenix.jobOrder.JobOrderService;
+import com.intertek.phoenix.util.CommonUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JobOperationalInstrCEFormController.
+ * 
+ * @author eric.nguyen/patni
+ */
+public class JobOperationalInstrCEFormController extends SimpleFormController {
+
+    /** The log. */
+    private static Log log = LogFactory.getLog(JobOperationalInstrCEFormController.class);
+
+    /**
+     * Instantiates a new job operational instr ce form controller.
+     */
+    public JobOperationalInstrCEFormController() {
+        super();
+        setCommandClass(CEJobOrderForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax
+     *      .servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    /**
+     * On submit.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param command
+     *            the command
+     * @param errors
+     *            the errors
+     * 
+     * @return the model and view
+     * 
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("unchecked")
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        System.out.println("inside on Submit in JobOperationalInstrCEFormController");
+        log.debug("inside on Submit in JobOperationalInstrCEFormController");
+        CEJobOrderForm ceJobOrderForm = (CEJobOrderForm) command;
+        int prodIndex = ceJobOrderForm.getProdIndex();
+        int testIndex = ceJobOrderForm.getTestIndex();
+        String addOrDeleteTestLine = request.getParameter("addOrDeleteTestLines");
+        String addOrDeleteDepositLine = request.getParameter("addOrDeleteDepositLines");
+        String addOrDeleteSplitLine = request.getParameter("addOrDeleteSplitLines");
+        String scrollflag = request.getParameter("scrollFlag");
+        JobOrderService jobOrderService = (JobOrderService) ServiceLocator.getInstance().getBean("jobOrderService");
+        if (scrollflag != null && !scrollflag.trim().equals("")) {
+            ceJobOrderForm.setScrollFlag(scrollflag);
+        }
+        CEJobOrder ceJobOrder = ceJobOrderForm.getCeJobOrder();
+        JobSrvc jobSrvc = ServiceManager.getJobService();
+
+        // Test test = null; // TODO: need to get the test from somewhere
+        // JobTest jobTest =
+        // jobSrvc.createJobTest(ceJobOrder.getRootServiceLevel(), test);
+
+        // CETest test = new CETest();
+        // test.setTestId("Test1");
+        // test.setTestDescription("Measuring Test");
+        // test.setPrice(120);
+        // for (CEJobContractForm jcForm : jobContracts) {
+        // jobContractForm = jcForm;
+        // jobContract = jcForm.getJobContract();
+        // break;
+        // }
+
+        if ((addOrDeleteTestLine != null) && ("addProduct".equals(addOrDeleteTestLine) || "deleteProduct".equals(addOrDeleteTestLine))) {
+            if ("addProduct".equals(addOrDeleteTestLine)) {
+                JobServiceLevel product = jobSrvc.createJobServiceLevel(ceJobOrder.getRootServiceLevel(), ServiceLevelType.PRODUCT, "");
+                ceJobOrderForm.addServiceForm(product);
+            }
+            else if ("deleteProduct".equals(addOrDeleteTestLine)) {
+
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                JobServiceLevel serviceLevel = sf.getProduct();
+                jobSrvc.removeJobServiceLevel(ceJobOrder.getRootServiceLevel(), serviceLevel);
+                ceJobOrderForm.removeServiceLevelForm(sf);
+            }
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteTestLine != null) && ("addTest".equals(addOrDeleteTestLine) || "deleteTest".equals(addOrDeleteTestLine))) {
+            JobSrvc ceService = ServiceManager.getCEJobService();
+            ServiceLevelForm serviceForm = ceJobOrderForm.getServiceLevelForm(prodIndex);
+            if ("addTest".equals(addOrDeleteTestLine)) {
+                // System.out.println("inside add Test");
+                // JobServiceLevel product =
+                // jobSrvc.createJobServiceLevel(ceJobOrder.getRootServiceLevel(),
+                // ServiceLevelType.PRODUCT , "");
+                // ceJobOrderForm.addServiceForm(product);
+                // String idList[] = ceJobOrderForm.getTestIdList();
+
+                // idList = new String[1];
+                // idList[0] = "200";
+                // if (idList != null) {
+                // // Dao<Test> testDao = DaoManager.getDao(Test.class);
+                // for (String id : idList) {
+                // // Test newTest = testDao.find(id);
+                // Test newTest = new Test();
+                // newTest.setTestId(id);
+                //
+                // JobTest jobTest =
+                // ceService.createJobTest(serviceForm.getProduct(), newTest);
+                // System.out.println("Size of Test in Service Level" +
+                // serviceForm.getProduct().getJobTests().size());
+                // }
+                // }
+                CETestSearchForm addTestForm = (CETestSearchForm) request.getSession()
+                        .getAttribute("com.intertek.phoenix.web.controller.job.AddTestController.FORM.command");
+                if(addTestForm ==null){
+                    addTestForm = (CETestSearchForm)request.getSession().getAttribute("CETestSearchForm");
+                }
+                List<Test> selectedTests = addTestForm.getSelectedTests();
+                for (Test test1 : selectedTests) {
+                    ceService.createJobTest(serviceForm.getProduct(), test1);
+                }
+            }
+            else if ("deleteTest".equals(addOrDeleteTestLine)) {
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                CEJobTest jobTest = sf.getCeJobTest()[testIndex];
+
+                for (JobTest jt : sf.getProduct().getJobTests()) {
+                    if (jt.getId() == jobTest.getId()) {
+                        jobSrvc.removeJobTest(sf.getProduct(), jt);
+                        break;
+                    }
+                }
+                // jobSrvc.removeJobTest(sf.getProduct(), jobTest);
+            }
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            jobOrderService.updateJobOrder(ceJobOrder);
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteTestLine != null) && "saveother".equals(addOrDeleteTestLine)) {
+            String key = prodIndex + "," + testIndex;
+            HttpSession session = request.getSession();
+            HashMap<String, CEJobTest> testMap = (HashMap<String, CEJobTest>) session.getAttribute("TestAttribute");
+            ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+            if (testMap != null && testMap.get(key) != null) {
+                CEJobTest sessionTest = testMap.get(key);
+                CEJobTest ceJobTest = sf.getCeJobTest()[testIndex];
+                CommonUtil.copyCEJobTest(sessionTest, ceJobTest);
+                // Map to PurchaseOrder
+
+                // TODO: "many fields not belong to CEJobOrderLineItem, instead,
+                // they belong to CEJobTest". Change it accordingly
+
+            }
+
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteDepositLine != null) && ("adddep".equals(addOrDeleteDepositLine) || "deldep".equals(addOrDeleteDepositLine))) {
+
+            if ("adddep".equals(addOrDeleteDepositLine)) {
+                DepositInvoice dpInvoice = jobOrderService.createDepositInvoice(ceJobOrderForm.getCeJobOrder());
+                jobOrderService.addDepositInvoice(ceJobOrderForm.getCeJobOrder(), dpInvoice);
+            }
+            else {
+                int depInd = ceJobOrderForm.getDepIndex();
+                Object[] obj = ceJobOrderForm.getCeJobOrder().getDepositInvoices().toArray();
+                if (obj.length > depInd) {
+                    jobOrderService.removeDepositInvoice(ceJobOrderForm.getCeJobOrder(), (DepositInvoice) obj[depInd]);
+                }
+                jobOrderService.updateJobOrder(ceJobOrder);
+            }
+            ceJobOrderForm.setAddOrDeleteDepositLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteSplitLine != null) && ("addspl".equals(addOrDeleteSplitLine) || "delspl".equals(addOrDeleteSplitLine))) {
+            /*
+             * 
+             * if ("addspl".equals(addOrDeleteSplitLine)) { CEJobOrderLineItem
+             * ceJobOrderLineItem[] = jobContractForm.getCejobOrderLineItems();
+             * SplitLineItem splitLineItem =
+             * jobOrderService.createSplitLineItem(ceJobOrderLineItem[splIndex]);
+             * jobOrderService.addSplitJobOrderLineItem(ceJobOrderLineItem[splIndex],
+             * splitLineItem); } else { Object[] obj =
+             * jobContract.getJobOrderLineItems().toArray(); CEJobOrderLineItem
+             * cline = (CEJobOrderLineItem) obj[testIndex]; SplitLineItem[]
+             * splits = cline.getSplitLineItem();
+             * jobOrderService.removeSplitJobOrderLineItem(cline,
+             * splits[splIndex]); }
+             * ceJobOrderForm.setAddOrDeleteSplitLines("none"); return
+             * showForm(request, response, errors);
+             */
+        }
+        if ((addOrDeleteTestLine != null) && ("save".equals(addOrDeleteTestLine) || "saveandnext".equals(addOrDeleteTestLine))) {
+            JobOrderService service = ServiceManager.getJobOrderService();
+            //JobSrvc jobsrvc = ServiceManager.getJobService();
+            
+            for(Instruction ins : ceJobOrderForm.getCeJobOrder().getInstructions()){
+                        service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+                        DaoManager.getDao(Instruction.class).saveOrUpdate(ins);
+            }
+            //service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+            
+            for(CEJobTest ceTest:ceJobOrderForm.getServiceLevelForm(0).getCeJobTest()){
+                if(ceTest !=null){
+                    service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+                    DaoManager.getDao(CEJobTest.class).saveOrUpdate(ceTest);
+                }
+            }
+            
+            
+            for(DepositInvoice di: ceJobOrderForm.getDepositOrderLineItems())
+            {                
+                service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+                DaoManager.getDao(DepositInvoice.class).saveOrUpdate(di);
+            }
+            if(ceJobOrderForm.getDepositOrderLineItems().length >0)
+            {
+                service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+            }
+            
+            /*
+            DaoManager.getDao(DepositInvoice.class).saveOrUpdate(ceJobOrderForm.getDepositOrderLineItems());
+            */
+            
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            if ("save".equals(addOrDeleteTestLine)) {
+                return showForm(request, response, errors);
+<<<<<<< .mine
+            }
+            else {
+                if(ceJobOrderForm.getProducts().get(0).getCeJobTest()!=null){
+                CEJobOrder jo = ceJobOrderForm.getJobOrder();
+                for (CEJobTest jt : ceJobOrderForm.getProducts().get(0).getCeJobTest()) {
+                    for (CEJobContract contract : jo.getContractJobOrder()) {
+                        // TODO: to check whether the contract test is already
+                        // created..
+                       // jobsrvc.createJobContractTest(contract.getRootServiceLevel(), jt.getTest());
+=======
+            }else
+            {
+               /* CEJobOrder jo=ceJobOrderForm.getJobOrder();
+                for(CEJobTest jt : ceJobOrderForm.getProducts().get(0).getCeJobTest())
+                {
+                    for(CEJobContract contract : jo.getContractJobOrder() ){
+                        //TODO: to check whether the contract test is already created..   
+                        service.updateJobOrder(ceJobOrderForm.getCeJobOrder());
+                        JobContractTest ct=jobsrvc.createJobContractTest(contract.getRootServiceLevel(), jt.getTest());
+                        System.out.println("JobContractTest Value :::"+ct.getId());
+                       
+>>>>>>> .r6008
+                    }
+                }
+                */
+            }
+        }
+        return new ModelAndView(new RedirectView("ce_job_select_charges.htm?jobNumber=" + ceJobOrderForm.getJobNumber()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#suppressValidation(javax.servlet.http.HttpServletRequest,
+     *      java.lang.Object)
+     */
+    @SuppressWarnings("deprecation")
+    protected boolean suppressValidation(HttpServletRequest request, Object command) {
+        String refreshing = request.getParameter("refreshing");
+
+        if ((refreshing != null) && "true".equals(refreshing)) {
+            return true;
+        }
+        String addOrDeleteTestLine = request.getParameter("addOrDeleteTestLines");
+        if ((addOrDeleteTestLine != null) && "add".equals(addOrDeleteTestLine)) {
+            return true;
+        }
+        String addOrDeleteDepositLine = request.getParameter("addOrDeleteDepositLines");
+        if ((addOrDeleteDepositLine != null) && ("adddep".equals(addOrDeleteDepositLine))) {
+            return true;
+        }
+        String addOrDeleteSplitLine = request.getParameter("addOrDeleteSplitLines");
+        if ((addOrDeleteSplitLine != null) && ("addspl".equals(addOrDeleteSplitLine))) {
+            return true;
+        }
+        boolean result = super.suppressValidation(request);
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Form.getCurrentUserFormat());
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, null, new CustomDateEditor(dateFormat, true));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        System.out.println("inside the form backing");
+        Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+
+        String jobNumber = request.getParameter("jobNumber");
+        CEJobOrder jo = null;
+
+        if (jobNumber != null && !"".equals(jobNumber)) {
+            try {
+                jo = jobDao.find(jobNumber);
+                System.out.println("after fetching joborder");
+                if (jo != null && jo.getRootServiceLevel() == null) {
+                    System.out.println("Root Service is not Available.............");
+                    //long id = CommonUtil.generateId();
+                    JobServiceLevel jobServiceLevel = new JobServiceLevel();
+                    jobServiceLevel.setServiceLevelName("root");
+                    jobServiceLevel.setServiceLevelType(ServiceLevelType.LOT);
+                    jobServiceLevel.setJobOrderNumber(jo.getJobNumber());
+                    // jobServiceLevel.setJobOrder(jo);
+                    // jobServiceLevel.setId(id);
+                    // jobServiceLevel.setParentServiceLevelId(id);
+                    jo.setRootServiceLevel(jobServiceLevel);
+                    try {
+                        // DaoManager.getCurrentSession().beginTransaction();
+                        DaoManager.getDao(JobServiceLevel.class).saveOrUpdate(jobServiceLevel);
+                        // DaoManager.getDao(JobServiceLevel.class).flush();
+                        System.out.println("root Service Level ID" + jobServiceLevel.getId());
+                        jo.setRootServiceLevel(jobServiceLevel);
+                        jo.setRootServiceLevelId(jobServiceLevel.getId());
+                        DaoManager.getDao(CEJobOrder.class).saveOrUpdate(jo);
+                    }
+                    catch (Exception e) {
+                        throw new JobSrvcException("Failed to create JobServiceLevel", e);
+                    }
+
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Exception in job order");
+                e.printStackTrace();
+                /*
+                 * jo = new CEJobOrder(); jo.setJobNumber("US120-0");
+                 * JobServiceLevel jobServiceLevel = new JobServiceLevel();
+                 * jobServiceLevel.setServiceLevelName("job");
+                 * jobServiceLevel.setServiceLevelType(ServiceLevelType.JOB);
+                 * jo.setRootServiceLevel(jobServiceLevel);
+                 */
+                throw new ServiceException("record.not.exist.error", new Object[] { jobNumber }, new Throwable(e.getCause().getMessage() + e.getMessage()));
+            }
+        }
+        // TODO: to be implement the project assignment
+        JobOrderService jobOrderService = (JobOrderService) ServiceLocator.getInstance().getBean("jobOrderService");
+        jobOrderService.setDefaultInstructions(jo);
+
+        // TODO: project to be set in to the JObOrder
+        Project proj = new Project();
+        proj.setType(ProjectType.TYPE_2);
+        proj.setProjectNumber(CommonUtil.generateIdCode());
+        DaoManager.getDao(Project.class).saveOrUpdate(proj);
+        jo.setProject(proj);
+        CEJobOrderForm myForm = new CEJobOrderForm(jo);
+        myForm.addServiceForm(jo.getRootServiceLevel());
+        return myForm;
+    }
+
+}

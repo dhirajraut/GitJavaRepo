@@ -1,0 +1,7 @@
+MAX_TRY=1
+NUM_OF_SLEEP=300
+SLEEP_AMOUNT=1000
+
+MAIL_FROM=NOREPLY@intertek.com
+MAIL_TO=lester.perng@intertek.com,global.app.support@intertek.com,eric.nguyen@intertek.com,sheida.sadrai@intertek.com,richard.qin@intertek.com,heather.tietz@intertek.com
+MAIL_SUBJECT=Jasper Report ERROR

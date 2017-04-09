@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Expression" table="PS_ITSC_EXPRESSION">
+    <composite-id name="expressionId" class="ExpressionId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="branchType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="BRANCH_TYPE" length="3" />
+      </key-property>
+    </composite-id>
+    <property name="expenseBranchType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="EXP_BRANCH_TYPE" length="9" />
+    </property>
+  </class>
+</hibernate-mapping>
+

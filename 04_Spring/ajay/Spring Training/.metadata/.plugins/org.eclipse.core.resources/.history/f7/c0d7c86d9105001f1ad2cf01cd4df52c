@@ -1,0 +1,5 @@
+package beanpack;
+
+public class Saving extends Account {
+
+}

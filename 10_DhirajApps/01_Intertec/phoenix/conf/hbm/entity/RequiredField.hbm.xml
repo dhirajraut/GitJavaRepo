@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="RequiredField" table="REQUIRED_FIELDS">
+    <composite-id name="requiredFieldId" class="RequiredFieldId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="className" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CLASS_NAME" length="45" />
+      </key-property>
+      <key-property name="fieldName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=60) private</meta>
+        <column name="FIELD_NAME" length="60" />
+      </key-property>
+    </composite-id>
+
+    <property name="multiInst" type="java.lang.Boolean">
+      <column name="MULTI_INST" />
+    </property>
+    <property name="mask" type="java.lang.Boolean">
+      <column name="MASK" />
+    </property>
+    <property name="insp" type="java.lang.Boolean">
+      <column name="INSP" />
+    </property>
+    <property name="mar" type="java.lang.Boolean">
+      <column name="MAR" />
+    </property>
+    <property name="fst" type="java.lang.Boolean">
+      <column name="FST" />
+    </property>
+    <property name="out" type="java.lang.Boolean">
+      <column name="OUT" />
+    </property>
+
+    <property name="remark" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="REMARK" length="762" />
+    </property>
+    
+  </class>
+</hibernate-mapping>
+

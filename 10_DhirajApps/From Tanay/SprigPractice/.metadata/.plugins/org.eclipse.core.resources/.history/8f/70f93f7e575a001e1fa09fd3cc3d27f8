@@ -1,0 +1,35 @@
+package com;
+
+public class StudentData {
+
+	String fName;
+	String lName;
+	String add;
+	int age;
+	
+	public String getAdd() {
+		return add;
+	}
+	public void setAdd(String add) {
+		this.add = add;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getFName() {
+		return fName;
+	}
+	public void setFName(String name) {
+		fName = name;
+	}
+	public String getLName() {
+		return lName;
+	}
+	public void setLName(String name) {
+		lName = name;
+	}
+	
+}

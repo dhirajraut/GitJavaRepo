@@ -1,0 +1,8 @@
+package dao;
+
+import model.StudentList;
+
+public interface DetailDataDao {
+	StudentList showDetail(int id);
+
+}

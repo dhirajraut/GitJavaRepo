@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Sequence" table="PHX_SEQUENCE">
+    <id name="seqName" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta>
+      <column name="SEQ_NAME" length="50" />
+    </id>
+    <property name="value" type="long">
+      <column name="VALUE" sql-type="NUMBER(20,0)" default="0"/>
+    </property>
+    <property name="incrementBy" type="long">
+      <column name="INCREMENT_BY" sql-type="NUMBER(20,0)" default="1"/>
+    </property>    
+    <property name="lastUpdatedDate" type="timestamp">
+      <column name="LAST_UPDATED_DATE" sql-type="date" default="sysdate"/>
+    </property>
+  </class>
+</hibernate-mapping>

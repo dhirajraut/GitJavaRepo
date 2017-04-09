@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+	>
+<mx:Script>
+	<![CDATA[
+		import mx.controls.Alert;
+		function callService():void {
+			requester.cancel();
+			var params:Object = new Object();
+			params.param1 = 'val1';
+			requester.send(params);
+		}
+		function resultHandler():void {
+			Alert.show("Hi");
+			Alert.show(requester.lastResult.name);
+			
+		}
+	]]>
+</mx:Script>
+
+<mx:HTTPService id="requester" url="spring/home.htm" result="resultHandler();" />
+    <mx:Label text="Hi" />
+    <mx:Button click="callService();" label="Click" />
+</mx:Application>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="LogConfigDetail" table="LOG_CONFIG_DETAILS">
+    
+	<composite-id name="logConfigDetailId" class="LogConfigDetailId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="confListId" type="long">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+        <column name="CONF_LIST_ID" length="128" />
+      </key-property>
+      <key-property name="tabName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+		<column name="TAB_NAME" length="128" />
+      </key-property>
+      <key-property name="colHeader" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+		<column name="COL_HEADER" length="128" />
+      </key-property>
+	</composite-id>
+	<many-to-one name="logConfigList" class="LogConfigList" column="CONF_LIST_ID" insert="false" update="false" index="LOG_CONFIG_DETAILS_index_0" />
+
+	<property name="dbColName" type="string">
+      <column name="DB_COL_NAME" length="128" />
+    </property>
+	<property name="colName" type="string">
+      <column name="COL_NAME" length="128" />
+    </property>
+	<property name="displayStatus" type="java.lang.Boolean">
+      <column name="DISPLAY_STATUS" />
+    </property>
+	<property name="displayOrder" type="java.lang.Integer">
+      <column name="DISPLAY_ORDER" sql-type="NUMBER"/>
+    </property>
+	<property name="sortOrder" type="java.lang.Integer">
+      <column name="SORT_ORDER" sql-type="NUMBER"/>
+    </property>
+	<property name="freezeOrder" type="java.lang.Integer">
+      <column name="FREEZE_ORDER" sql-type="NUMBER"/>
+    </property>
+  </class>
+</hibernate-mapping>
+

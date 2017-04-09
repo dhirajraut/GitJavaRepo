@@ -1,0 +1,284 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ */
+package com.intertek.phoenix.entity;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+/**
+ * The base class for all kinds of Job Order Line Items.
+ * <p>This class is introduced to support different
+ * flavors of job order line item, includeing JobOrderLineItem, 
+ * ExpenseLineItem and SplitLineItems.
+ * <p>However, this organization may change if the entity relationship
+ * changes following the new requirements.
+ * 
+ * @author richard.qin
+ */
+@Entity
+@Inheritance
+abstract public class OrderLineItem {
+    public enum OrderLineItemType{
+        CEJobOrderLineItem, ExpenseLineItem, SplitLineItem;
+    }
+    
+    @Id
+    private long id;
+    private long lineNumber;
+    private String description;
+    private boolean isNew;
+    private boolean isCanceled;
+
+    private OrderOrigin origin;
+    private String purchaseOrderNumber;
+    private PurchaseOrder purchaseOrder;
+    
+    private double billedTime;
+    private double billedAmount;
+    private double accruedTime;
+    private double accruedAmount;
+    private double committedTime;
+    private double committedAmount; // funded amount
+
+    private String jobOrderNumber;
+    @ManyToOne
+    @JoinColumn (name="JOB_ORDER_NUMBER")
+    private CEJobOrder jobOrder;
+    
+    //TODO default to OPEN ok or not?
+    private BillingStatus billingStatus = BillingStatus.OPEN;
+    private String comment;
+    
+    private Set<DepositInvoice> appliedDepositInvoices;
+
+    protected OrderLineItem(){
+        
+    }
+    
+    public boolean isSplitable(){
+        return false;
+    }
+    
+    /**
+     * A billable Job Order Line Item has a OPEN status, and its accrued amount
+     * is greater than the billed amount. 
+     * <p>A split line item is not billable.
+     * @return true if the line item is not a split, is OPEN and has accrued
+     * amount.
+     */
+    public boolean isBillable(){
+        if(this.getBillingStatus() == BillingStatus.OPEN
+                && this.accruedAmount > this.billedAmount){
+            return true;
+            // TODO type 1 and type 2 accrued amount is always zero.
+        }
+        else{
+            return false;
+        }
+    }
+
+    /**
+     * Adjust the total bill amount after this line item is invoiced
+     */
+    public void adjustBilledAmount() {
+        if(isBillable()){
+            this.billedAmount = this.accruedAmount;
+            this.billedTime = this.accruedTime;
+            this.billingStatus = BillingStatus.INVOICED;
+        }
+    }
+
+    public OrderLineItemType getOrderLineItemType(){
+        Class<?> type = this.getClass();
+        if(type.isInstance(CEJobOrderLineItem.class)){
+            return OrderLineItemType.CEJobOrderLineItem;
+        }
+        else if(type.isInstance(ExpenseLineItem.class)){
+            return OrderLineItemType.ExpenseLineItem;
+        }
+        else if(type.isInstance(SplitLineItem.class)){
+            return OrderLineItemType.SplitLineItem;
+        }
+        else{
+            return null;
+        }
+    }
+    
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(long lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
+    public boolean isCanceled() {
+        return isCanceled;
+    }
+
+    public void setCanceled(boolean isCanceled) {
+        this.isCanceled = isCanceled;
+    }
+
+    public OrderOrigin getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(OrderOrigin origin) {
+        this.origin = origin;
+    }
+
+    public String getPurchaseOrderNumber() {
+        return purchaseOrderNumber;
+    }
+
+    public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        if(purchaseOrder != null){
+            this.purchaseOrderNumber = purchaseOrder.getPoNumber();
+        }
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public double getBilledTime() {
+        return billedTime;
+    }
+
+    public void setBilledTime(double billedTime) {
+        this.billedTime = billedTime;
+    }
+
+    public double getBilledAmount() {
+        return billedAmount;
+    }
+
+    public void setBilledAmount(double billedAmount) {
+        this.billedAmount = billedAmount;
+    }
+
+    public double getAccruedTime() {
+        return accruedTime;
+    }
+
+    public void setAccruedTime(double accruedTime) {
+        this.accruedTime = accruedTime;
+    }
+
+    public double getAccruedAmount() {
+        return accruedAmount;
+    }
+
+    public void setAccruedAmount(double accruedAmount) {
+        this.accruedAmount = accruedAmount;
+    }
+
+    public double getCommittedTime() {
+        return committedTime;
+    }
+
+    public void setCommittedTime(double committedTime) {
+        this.committedTime = committedTime;
+    }
+
+    public double getCommittedAmount() {
+        return committedAmount;
+    }
+
+    public void setCommittedAmount(double committedAmount) {
+        this.committedAmount = committedAmount;
+    }
+
+    public String getJobOrderNumber() {
+        return jobOrderNumber;
+    }
+
+    public void setJobOrderNumber(String jobOrderNumber) {
+        this.jobOrderNumber = jobOrderNumber;
+    }
+
+    public CEJobOrder getJobOrder() {
+        return jobOrder;
+    }
+
+    public void setJobOrder(CEJobOrder jobOrder) {
+        if(jobOrder != null){
+            this.jobOrderNumber = jobOrder.getJobNumber();
+        }
+        this.jobOrder = jobOrder;
+    }
+
+    public BillingStatus getBillingStatus() {
+        return billingStatus;
+    }
+
+    public void setBillingStatus(BillingStatus billingStatus) {
+        this.billingStatus = billingStatus;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Set<DepositInvoice> getAppliedDepositInvoices() {
+        if(appliedDepositInvoices == null){
+            appliedDepositInvoices = new HashSet<DepositInvoice>();
+        }
+        return appliedDepositInvoices;
+    }
+
+    public boolean addAppliedDepositInvoices(DepositInvoice appliedDepositInvoice) {
+        
+        return getAppliedDepositInvoices().add(appliedDepositInvoice);
+    }
+
+    public boolean removeAppliedDepositInvoices(DepositInvoice appliedDepositInvoice) {
+        return getAppliedDepositInvoices().remove(appliedDepositInvoice);
+    }
+
+    
+}

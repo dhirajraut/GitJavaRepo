@@ -1,0 +1,920 @@
+required=This field is required and cannot be empty
+password.not.long.enough=password should be at least 6 characters and not more than 128 characters long
+password.not.match=Passwords do not match
+
+signup_error=There is error in signup: {0}
+signup_complete_error=There is error in signup complete: {0}
+login.error=Login Error: {0}
+login.error.account.not.activated=The account not activated yet.
+
+save_login_info_error=Error saving login info: {0}
+expire_session_error=Session expired. Please login again.
+user_info_page_error=Error saving user info: {0}
+
+review_new_page_error=Error in creating new review: {0}
+
+non_negative=value can not be negative.
+
+add_provider_error=Error in adding new provider: {0}
+provider_correction_error=Error in adding new provider correction: {0}
+
+not.blank=Required
+not.null=Required
+not.a.number=Not a Number
+not.a.positive.number=Not a Positive Number
+
+max.length=Max Length exceeds {1}
+max.size=Max Size exceeds {1}
+length=Length not between {1} and {2}
+in.past=Date in the past
+email=Invalid Email
+typeMismatch.user.employee.id=Please enter Integer value
+typeMismatch.user.supervisor.id=Please enter Integer value
+
+typeMismatch.cfgContract.cfgDiscountPercent=Please enter Integer value for DiscountPercent
+typeMismatch.cfgContract.annualEscalator=Please enter Integer value for annualEscalator
+typeMismatch.cfgContract.inspectionDiscountPercent=Please enter Integer value for inspectionDiscountPercent
+typeMismatch.cfgContract.testDiscount=Please enter Integer value for testDiscount
+typeMismatch.cfgContract.slateDiscount=Please enter Integer value for slateDiscount
+typeMismatch.cfgContract.opsDiscountPercent=Please enter Integer value for opsDiscountPercent
+typeMismatch.cfgContract.labDiscountPercent=Please enter Integer value for labDiscountPercent
+
+
+typeMismatch.jobOrder.turnaroundDays=Enter valid days
+
+typeMismatch=Type Mismatch
+
+generic.errorpage.header=There is an error in serving your request. Please report the following error to SystemAdmin:
+generic.error=General Error Found: {0}
+
+create.job.order.error=Job Order Creation Error: {0}
+edit.job.order.error=Job Order Save Error: {0}
+search.job.order.error=Job Order Search Error: {0}
+
+batch.reprint.error=Batch Reprint Error: {0}
+
+create.consl.inv.error=Consolidated Invoice Creation Error: {0}
+edit.consl.inv.error=Consolidated Invoice Save Error: {0}
+search.consl.inv.error=Consolidated Invoice Search Error: {0}
+
+create.contact.error=Contact Create Error: {0}
+edit.contact.error=Contact Edit Error: {0}
+search.contact.error=Search Contact Error: {0}
+
+create.customer.error=Customer Create Error: {0}
+edit.customer.error=Customer Edit Error: {0}
+save.customer.error=Customer Edit Error: {0}
+search.customer.error=Search Customer Error: {0}
+save.Servicelocation.error=Save Servicelocation Error : {0}
+
+create.contract.error=addJobContract Create Error\:{0}
+edit.contract.error=Contract Edit Error: {0}
+search.contract.error=Search Contract Error: {0}
+upload.attach.contract.error=Contract Upload File Error: {0}
+edit.contract.zone.error=Contract Edit Zone Error
+edit.contract.product.group.error=Contract Edit Product Group Error.
+
+create.shippingAgent.error=ShipAgent Create Error: {0}
+edit.shipAgent.error=ShipAgent Edit Error: {0}
+search.shipAgent.error=Search ShipAgent Error: {0}
+
+create.towingCompany.error=TowingCompany Create Error: {0}
+edit.towingCompany.error=TowingCompany Edit Error: {0}
+search.towingCompany.error=Search TowingCompany Error: {0}
+
+create.business.unit.error=Business Unit Create Error: {0}
+edit.business.unit.error=Business Unit Edit Error: {0}
+search.business.unit.error=Search Business Unit Error: {0}
+
+
+create.branch.error=Branch Create Error: {0}
+save.branch.error=Branch Save Error: {0}
+edit.branch.error=Branch Edit Error: {0}
+search.branch.error=Search Branch Error: {0}
+
+create.service.location.error=Service Location Create Error: {0}
+edit.service.location.error=Service Location Edit Error: {0}
+search.service.location.error=Search Service Location Error: {0}
+
+create.user.error=User Create Error: {0}
+edit.user.error=User Edit Error: {0}
+search.user.error=Search User Error: {0}
+change.user.error=Change User Error: {0}
+search.logo.error=Search Logo Error:{0}
+
+create.role.error=Role Create Error: {0}
+edit.role.error=Role Edit Error: {0}
+search.role.error=Search Role Error: {0}
+
+create.tax.error= Tax Create Error\:{0} 
+create.permissionlist.error=Permission List  Create Error:{0}
+create.vatrate.error=TaxRate Create Error:{0}
+create.country.error=Country Update Error:{0}
+create.addnote.error=AddNote Create Error:{0}
+search.job.record.error=Search Job Record Error: {0}
+create.conutry.error=Create Country Error: {0}
+create.serviceLocation.error=Create ServiceLocation Error: {0}
+
+search.test.error = Search Test Error: {0}
+create.test.error = Create Test Error: {0}
+
+search.slate.error = Search Slate Error: {0}
+search.job.error = Search Job Error: {0}
+
+edit.job.select.charge.error.save = Save Test/Slate/Service Result Error: {0}
+
+edit.job.select.charge.error.delete = Delete Index Error: {0}
+
+edit.job.invoice.preview.error.save = Save Prebill Error: {0}
+
+AUTO_NUMBER_RETURN_NULL = NO AutoNumber Generated for: {0}, {1}, {2}
+
+create.jobtype.error=Create JobType Error: {0}
+edit.jobtype.error=Edit JobType Error: {0}
+
+branch.alloc.error=Branch Allocation Error: {0}
+branch.alloc.service.mismatch.error=Service Type & Branch Type do not match:Service Type - {0}, {1} - {2}
+select_change_page_need_job_finish_date=Job finish date is mandatory for select charge page.
+You_must_enter_a_Zone_Description_to_continue=You must enter a Zone Description to continue.
+Customer_credit_has_not_been_approved=Customer's credit has not been approved.
+No_valid_contract_for_the_Job_Finish_Date=No valid contract(s) for the Job Finish Date of this Job Order.
+The_branch_code_selected_is_not_enabled_for_Select_Charges=The branch code selected is not enabled for Select Charges;
+
+create.event.error=Create Operation Error: {0}
+search.operation.error =Search.Operation.Error {0}
+create.operation.error=Create Operation Error: {0}
+search.event.error=Search.Event.Error {0}
+
+credit.reason.error=Credit Reason Error: {0}
+create.taxarticle.error=TaxArticle Create Error:{0}
+search.taxarticle.error=TaxArticle Search Error\:{0} 
+search.serviceLocation.error=Search ServiceLocation Error: {0}
+search.addressseq.error=Search AddressSeq Error:{0}
+search.timezone.error=Search Timezone Error:{0}
+search.jobcode.error=Search Jobcode Error:{0}
+search.permissionlist.error=Search Permissionlist Error:{0}
+search.collector.error=Search Collector Error:{0}
+search.creditanalyst.error=Search Creditanalyst Error:{0}
+search.businessunit.error=Search Businessunit Error:{0}
+search.country.error=Search Country Error:{0}
+search.bank.error=Search Bank Error:{0}
+save.business.unit.error=Save Business Unit Error:{0}
+
+edit.job.navigation.warning=Navigation Warning:{0}
+
+Quotes=Quotes
+Projects=Projects
+Jobs=Jobs
+Customers=Customers
+Contracts=Contracts
+Reports=Reports
+Set-up=Set-up
+
+Quotes_Create=Create
+Quotes_Search=Search
+
+Quotes_Create_OCA_Inspection=OCA & MN Inspection & Testing
+Quotes_Create_OCA_Analytical_Services=OCA, AS & MN FST
+Quotes_Create_OCA_Outsourcing=OCA, AS & MN OutSourcing
+Quotes_Create_OCA_Marine=OCA Marine & Calibrations
+Quotes_Create_Consumer_Goods=Consumer Goods
+Quotes_Create_Commercial_and_Electrical=Commercial and Electrical
+Quotes_Create_Government_Services=Government Services
+
+
+Projects_Create=Create
+Projects_Search=Search
+
+
+Jobs_Create=Create
+Jobs_Search=Search
+Jobs_Log=Log
+Jobs_System=System
+Jobs_Consolidated_Inv=Consolidated Inv.
+Jobs_Operations=Operations
+Jobs_Events=Events
+Jobs_DepositInvoice_Update=Update Deposit Inv.
+common_job_search=Common Search
+Jobs_Create_Analytical_Services = Analytical Services
+
+Jobs_Create_OCA_Inspection=OCA & MN Inspection & Testing
+Jobs_Create_OCA_Analytical_Services=OCA, AS & MN FST
+Jobs_Create_OCA_Outsourcing=OCA, AS & MN OutSourcing
+Jobs_Create_OCA_Marine=OCA Marine & Calibrations
+Jobs_Create_Consumer_Goods=Consumer Goods
+Jobs_Create_Commercial_and_Electrical=Commercial and Electrical
+Jobs_Create_Government_Services=Government Services
+
+Jobs_System_Shipping_Agents=Shipping Agents
+Jobs_System_Towing_Companies=Towing Companies
+Jobs_System_Service_Locations=Service Locations
+
+Jobs_System_Shipping_Agents_Create=Create
+Jobs_System_Shipping_Agents_Edit=Edit
+
+Jobs_Operations_Inspection=Inspection
+Jobs_Operations_Analytical_Services=Analytical Services
+Jobs_Operations_Outsourcing=Outsourcing
+Jobs_Operations_Marine=Marine
+
+
+Customers_Quick_Create=Quick Create
+Customers_Customers=Customers
+Customers_Contact=Contact
+
+
+Set-up_User=User
+Set-up_Permission_Lists=Permission Lists
+Set-up_Roles=Roles
+Set-up_Drop_Down_Values=Drop Down Values
+Set-up_Countries=Countries
+Set-up_Business_Unit=Business Unit
+Set-up_Branch=Branch
+Set-up_VAT_Rates=VAT Rates
+Set-up_SalesTax_Rates=SalesTax Rates
+Set-up_Tax_Articles=Tax Articles
+Set-up_Tax_Labels=Tax Labels
+Set-up_SAM_LIMS=SAM / LIMS
+Set-up_business_stream=Business Stream
+
+Create_PO=Create
+Search_PO=Search 
+
+JobService=Job Service
+StandAloneService=StandAlone Service
+VesselService=Vessel Service
+LiquidService=Liquid Service
+DryService=Dry Service
+LabService=Lab Service
+VMMService=VMM Service
+LabJobService=LabJob Service
+RSTService=RST Service
+PharmaService=Pharma Service
+CalibrationService=Calibration Service
+MTDService=MTD Service
+OutSourcingService=OutSourcing Service
+
+Submit\ and\ Return=Submit and Return
+Submit=Submit
+Return=Return
+Reset=Reset
+
+INVOICE_GENERATION_PRE_REQUISITE_NOT_MEET=Invoice generation prerequisite does not meet: {0}
+INVALID_ACCOUNT_CODE=Invalid account code when generating invoice: {0}
+INVALID_DEPARTMENT_ID=Invalid department id when generating invoice: {0}
+INVALID_PRODUCT_GROUP=Invalid product group when generating invoice: {0}
+INVOICE_GENERATION_ERROR = Invoice generation error. Please contact your administrator and report this error: {0}
+INVOICE_GENERATION_ERROR_NO_INVOICE_FOR_CREDIT=Invoice generation error: No invoice for Credit.
+
+tests_added=The following tests have been added to the job successfully:
+slates_added=The following slates have been added to the job successfully:
+
+Select\ a\ service=Select a service
+CANNOT_CALCULATE_INSPECTION_PRICE=Can not calculate inspection price for the lot.
+
+
+required_fields_missing_for_sending_to_sam_or_lims=Required Fields Missing for Sending to SAM or LIMS: {0}
+errors_in_sending_to_sam_or_lims=Error in Sending to SAM or LIMS: {0}
+labbranchid_field_missing_for_sending_to_lims=Please Select LIMS Branch Id for this job before Sending to LIMS: {0}
+invalid.date=Invalid Date
+invalid=Invalid
+
+Yes=Yes
+No=No
+SubmitForApproval=Submit for Approval
+branch.alloc.servicetype.error=In order to perform a branch allocation for multiple invoice items, all of the selected items must have matching service types
+cusomer.contact.combo.error=Customer Contact Combination does not exist
+invalid.bank.error=The Remit To and Remit To Account combination for this Invoice are no longer valid. Please select a new Remit To and Remit To Account.
+
+BaseProductGroupSet=Base Product Group Set
+BeginDate=Begin Date
+EndDate=End Date
+GroupId=Group Id
+DefaultDescription=Default Description
+CustomDescription=Custom Description
+PB=PB
+Split=Split
+
+BaseVesselTypeSet=Base Vessel Type Set
+VesselType=Vessel Type
+
+Delete=Delete
+
+Zones=Zones
+ZoneId=Zone Id
+Custom=Custom
+Pricebook=Pricebook
+
+ZoneAdjustments=Zone Adjustments
+AddlDiscount=Addl Discount
+ZoneDiscount=Zone Discount
+LabFactor=Lab Factor
+OPSFactor=OPS Factor
+LabDiscount=Lab Discount
+OPSDiscount=OPS Discount
+InspDiscount=Insp Discount
+TestDiscount=Test Discount
+conl.inv.generate.error=Please attach some invoices before generating consolidated invoice
+conl.inv.attention.error=Please select Attention To and save before generating consolidated invoice
+upload.attach.error=File name exists :{0}
+file.description.error=Please enter description for file :{0}
+invalid.contact.error=Invalid Contact Id :{0}
+invalid.customer.error=Invalid Customer Code :{0}
+#originator.email.error=orginator email does not have @ symbol :{0}
+#signatory.email.error=signatory email does not have @ symbol :{0}
+
+originator.email.error=invalid originator email :{0}
+signatory.email.error=invalid signatory email :{0}
+
+enter.contractcode.error=Please enter contact code
+customer.relation.error=Relationship cannot be removed unless another customer is associated to this contact
+contact.customer.association.error=Contact cannot be added unless a customer is associated to this contact
+customer.location.error=Location does not exist for selected customer :{0}
+invalid.location.error=Please enter valid value for location number 
+primary.bill.address.error=Only one primary bill to address is allowed
+primary.sold.address.error=Only one primary sold to address is allowed
+customer.businessunit.validation.error=BusinessUnit and  Customer Code can not be same, Please enter the Customer Code :{0}
+customer.businessunit.required.error=BusinessUnit is required for the customer :{0}
+invalid.contractcode.error=Invalid Contract Code :{0}
+country.vatregistration.error=Only one home country can be selected for Vat registration
+country.vatregistration.required.error=Please select at least one home country for Vat registration
+customer.vatregistration.country.required.error=Customer Vat Registration Country cannot be blank for row :{0}
+address.city.state.required.error=Address1,City,and state are required for the country :{0}
+address.required.error=Address1 is required for the country :{0}
+city.required.error=City is required for the country :{0}
+state.required.error=State is required for the country :{0}
+country.required.error=Country is required {0}
+address1.address2.city.required.error=Address1,Address2,and City are required for the country :{0}
+address1.city.required.error=Address1,City are required for the country :{0}
+address2.required.error=Address2 is required for the country :{0}
+address.city.required.error=Address1 and City are required for the country :{0}
+invalid.location.number.error=Invalid Location Number :{0}
+primarybill.primarysold.address.required.error=Atleast one Primary Bill To and one Primary Sold to address is required to save the customer
+contact.firstname.error=Please enter contact first name
+contact.lastname.error=Please enter contact last name
+#contact.workemail.error=contact work email does not have @ symbol: {0}
+#contact.personalemail.error=contact personal email does not have @ symbol: {0}
+contact.workemail.error=invalid work email : {0}
+contact.personalemail.error=invalid personal email : {0}
+contact.not.exist.error=Contact does not exist :{0}
+SlateDiscount=Slate Discount
+Branches=Branches
+BusinessUnit=Business Unit
+BranchCode=Branch Code
+Description=Description
+Ports=Ports
+PortCode=Port Code
+
+duplicate=duplicate
+
+
+NO_PRICE_WILL_BE_CALCULATED_DUE_TO_INVALIDATE_VESSEL_TYPE=No Price will be calculated due to invalid vessel type
+NO_PRICE_WILL_BE_CALCULATED_DUE_TO_INVALIDATE_PRODUCT_GROUP=No Price will be calculated due to invalid product group
+
+record.not.exist.error=no job records exists for this job number :{0}
+branch.not.exist.error=Branch can not be found :{0}
+select.customer.operational.proceed.error=Please select at least one customer before proceeding to operational instructions page
+select.eta.date.error=Please Select ETA Date
+select.nomination.date.error=Please Select Nomination Date
+invalid.timezone.error=Please enter a valid nomination time zone
+invalid.eta.timezone.error=Please enter a valid eta time zone
+billing.contact.contract.error=Please select a billing contact for contract
+
+users.org.heirarchy.error=Error Occured while geting users by name with organization hierarchy :{0}
+roles.list.error= Role does not exist
+branches.list.error=Error Occured while getting the branches
+businessunit.list.error=Error occured while getting the business units
+user.exists.error=User with the same name exists :{0}
+user.branch.error=User with no branch :{0}
+supervisor.not.exists.error=No Supervisor exists :{0}
+user.jobcode.error=User with no Job Code :{0}
+branch.not.exists.error=Branch does not exist :{0}
+bu.not.exists.error=No BusinessUnit exists :{0}
+jobcode.not.exists.error=No Job Code Exist :{0}
+timezone.not.exists.error=No Such Time Zone Exists :{0}
+user.not.exists.error=User not exists for :{0}
+dropdown.not.exist.error=Dropdown not exists :{0}
+country.exists.error=Country with the same code exists :{0}
+country.not.exists.error=Country not exist for code :{0}
+country.error=Country does not exist :{0}
+country.bu.error=Country can not be null for BusUnitVatLoc :{0}
+taxrate.not.exist.error=Could not find tax rate for code :{0}
+branch.exists.error=Branch exists for name :{0}
+bu.branch.error=No business unit for branch :{0}
+country.branch.error=Country Code can not be null for Branch :{0}
+invalid.user.error=Invalid user name or password
+users.permission.error=Invalid permission 
+operation.not.exist.error=Operation does not exist :{0}
+jobtype.not.exist.error=Jobtype does not exist :{0}
+invalid.Operation.error=Invalid operation :{0}
+permission.exists.error=Permission exists :{0}
+state.countrycode.not.exists.error=State not exist for code :{0}
+stateId.not.exists.error=No stateId for adding state.
+organization.not.exist.error=Organization not exists :{0}
+organization.exists.error=Organization existed for name :{0}
+associate.branch.not.exist.error=Associate branch does not exist :{0}
+state.country.match.error=State's country code not match :{0}
+invalid.opsbranch.error=Invalid ops branch name :{0}
+invalid.labbranch.error=Invalid lab branch name :{0}
+default.bu.not.exist.error=Default business unit does not exist
+
+create.towingCompany.name.error=The Towing Company existed for name: {0}
+state.error=State does not exist for this country: {0}
+create.towingcompany.countrycode.error=Country Code can not be null for TowingCompany:{0}
+create.shippingagent.countrycode.error=Country Code can not be null for Shipping Agent:{0}
+
+towingcompany.error=Towing Company does not exist: {0}
+shippingAgent.error=Shipping Agent does not exist: {0}
+serviceLocation.error=ServiceLocation does not exist: {0}
+serviceLocation.port.error=Service Location does not associated with port/location {0}
+
+create.shippingAgent.name.error=The ShippingAgent existed for name: {0}
+servicelocation.country.error=Country can not be null for Servicelocation: {0}
+branch.error=Branch Id does not exist: {0}
+
+servicelocation.branch.error=Service Location already exist with this branch: {0}
+servicelocation.name.error=Service Location not exist with this name: {0}
+bankcode.search.error=Bank code does not exist: {0}
+bankaccount.search.error=Bank account does not exist: {0}
+
+bank.search.error = Error occured while getting the banks details
+customer.error=Customer does not exist : {0}
+jobContractinvoice.error=JobContract Invoice does not exist : {0}
+customer.addressseq.error=custAddrSeq does not exist: {0}
+priceBook.error=ActivePriceBook does not exist: {0}
+pricebook.series.name.error=PriceBook Series Name does not exist: {0}
+pricebook.series.currency.error=PriceBookSeries does not exist for this currency
+creditanalyst.error=Creditanalyst  does not exist: {0}
+collector.error=Collector does not exist: {0}
+businessUnit.error=BusinessUnit does not  exist: {0}
+parent.customer.error=Parent customer does not  exist: {0}
+account.owner.error=Account Owner does not exist: {0}
+contact.error=contact does not exist for id: {0}
+customer.exist.error=Customer exists for name: {0}
+contact.exist.error=Contact exists for name: {0}
+contract.masterlist.date.error=No MasterList Date for Contract: {0}
+contract.status.date.error=No Status Date for Contract: {0}
+contract.expiration.date.error=No Expiration Date for Contract: {0}
+originator.user.error=Originator  not exist for: {0}
+signatory.user.error=signatory  not exist for: {0}
+contractcust.sort.error=Contractcust Sort Error
+contactcust.sort.error=Contactcust Sort Error
+delete.contactcust.associations=Contactcust Associations not found to delete
+load.customer.error=Error while Loading Customer Data 
+custaddress.details.error=Custaddress details does not exist
+load.contract.error=Error while Loading Contract Data 
+select.contractcust.error= Error while getting ContractCust Data 
+select.contractcustcontact.error= Error while getting ContractCustContact Data 
+cust.vat.reg.not.exist.error=VatRegistrationId does not exist for the customer
+contractcustcontact.not.exists.error=error occured while getting the Contract,contact and customer association
+jobnumber.error=JobNumber can not be null
+jobnumber.not.exists.error=JobNumber does not exists :{0}
+billing.contactid.not.exists.error=No Billing ContactId exists :{0}
+select.bankaccount.key.error=Please select bankAccountKey for contract :{0}
+select.remitto.error=Please select remitto for contract :{0}
+select.remit.accountkey.error=Please select remitto and bankAccountKey for contract :{0}
+curstrefnum.error=Please enter custRefNum  for contract :{0}
+origin.error=Please select origin for contract :{0}
+origin.custrefnum.error=Please enter origin  and custRefNum for contract :{0}
+monthlyjob.not.exist.error=Monthly Job does not exist :{0}
+job.branch.null.error=Branch name can not be null for job creation :{0}
+operation.job.null.error=Operation can not be null for job creation
+bu.job.null.error=bu name can not be null for job creation
+bu.job.match.error=Business unit name not match when inserting job :{0}
+select.servicelocation.port.error=Please Select Servicelocation for port/location :{0}
+select.port.servicelocation.error=Please Select port/location for ServiceLocation :{0}
+service.branch.not.exist.error=Service Location does not exist for this Branch :{0}
+bunit.exist.error=Business Unit exists for name :{0}
+received.user.not.exist.error=Received By User does not exist :{0}
+delete.jobcontractnotes.error=JobContractNotes not found to delete
+search.job.contract.error=JobContract does not exist for this Id:{0}
+job.mail.schedulers.error=Schedulers does not exist for JobContracts:{0}
+job.mail.jobcontracts.error=JobContracts does not exist to get Schedulers :{0}
+
+create.user.invalid.rol.error=User Create Error: Role does not exist :{0}
+invalid.role.error=Role does not exist :{0}
+invalid.assoc.branch.error=Invalid Assoc Branch 
+default.vat.location.error=Only one Default Vat Location is allowed
+default.vat.location.required=One Default Vat Location is required
+select.state.error=Please select State for Country :{0}
+control.not.exist.error=control does not exist :{0}
+permission.not.exist.error=Permission does not exist :{0}
+branch.delete.error=Branch can not be deleted :{0}
+taxRate.delete.error=taxRate can not be deleted  :{0}
+taxArticle.delete.error=taxarticle  can not be deleted :{0}
+invalid.taxArticle.error=Invalid tax Article :{0}
+state.not.exist.error=statecode does not exist :{0}
+vatcode.not.exist.error=vatcode does not exist :{0}
+serviceLocation.email.error=servicelocation email does not have @ symbol :{0}
+shippingAgent.email.error=shiiping agent email does not have @ symbol :{0}
+shippingAgent.name.error=shipping agent name cannot be null :{0}
+shippingAgent.telephone.error=shipping agent telephonenumber cannot be null :{0}
+shippingAgent.state.error=shipping agent statecode cannot be null :{0}
+shippingAgene.country.error=shipping agent countrycode cannot be null :{0}
+towingCompany.email.error=towing company email does not have @ symbol :{0}
+towingCompany.name.error=towing company name cannot be null :{0}
+towingCompany.telephone.error=towing company telephonenumber cannot be null :{0}
+towingCompany.state.error=towing company statecode cannot be null :{0}
+towingCompany.country.error=towing company countrycode cannot be null  :{0}
+
+search.project.error=Search Project Error:{0}
+invalid.operation.error=Invalid Operation :{0}
+invalid.jobType.error=Invalid job Type :{0}
+invalid.event.error=Invalid Event :{0}
+businessUnit.not.exist.error=BU does not exist :{0}
+customer.not.exist.error=Customer does not exist :{0}
+save.conl.inv.error=Please save before generating consolidated invoice
+conl.inv.customer.save.error=Please select Customer before saving consolidated invoice
+conl.inv.bankAccount.save.error=Please select Bank Account before saving consolidated invoice
+conl.inv.remit.save.error=Please select Remit to before saving consolidated invoice
+
+address.contact.association.error=Address and Contact were not Associated :{0}
+customer.contact.required.error=customer and contact are must for contract
+test.id.error=Test Id cannot be null
+test.description.error=Test description cannot be null
+branch.percentage.allocation.error=Upto 3 decimal places only are allowed for percentage allocation :{0}
+branch.percentage.overallocation.error=Sum of allocation percentages cannot be more than 100 %"
+invalid.branch.error=Branch can not be null \: {0}
+duplicate.branch.error=Duplicate branches are not allowed for allocation: {0}
+ordered.quantity.number.error=Ordered quantity must be a number
+unsaved.changes.save.error=Unsaved changes if any will be lost.Please save the changes
+retain.period.samples.error=Please enter Retain Period for Samples under Instructions/Laboratory Events section
+invalid.retain.period.samples.error=Please enter a valid numeric Retain Period for Samples
+
+jobcode.exist.error=No Job Code Exist : {0}
+time.zone.error=No Such Time Zone Exists : {0}
+supervisor.exist.error=No Supervisor exists : {0}
+
+
+bu.not.exist.error=Business Unit does not exist for name: {0}
+bu.exist.error=Business Unit exists for name: {0}
+country.business.unit.error=Country can not be null for BusinessUnit :{0}
+link.not.exists = Link not exists\:
+role.not.exists = Role not exists\:
+user.not.exists = User not exists\:
+service.location.not.exit.error = Service Location does not exist for this Branch\:
+same.jobcode.exist.error = JobCode  with the same job code exists\: 
+Service.Location.does.not.exist.error = Service Location does not exist for this Branch\: 
+select.either.from.to.date.or.job.fields = Select either From/To Date fields or From/To Job Id fields\:
+select.number.of.jobs = Select Number Of Jobs \:
+
+jobs.Log.configurecolumns.details.error = Error Occured while fetching Column Configure List Details
+jobs.Log.configurecolumns.list.error = Error Occured while geting Column Configure List Details
+jobs.Log.configList.details.empty = ConfigList is EMPTY 
+jobs.Log.configurecolumns.list1.error = Error Occured while fetching Column Configure List Details.
+service.location.email.error=servicelocation email does not have @ symbol: {0}
+service.location.state.error=Please select State for Country: {0}
+select.operation.error=Please select an operation for the job
+
+config.name.error=ConfigList Name Already Exist's : {0}
+config.name.require.error=ConfigList Name is Required : {0}
+search.from.jobid.error=Invalid FromJob Id Please Select Branch Associated FromJobId : {0}
+search.to.jobid.error=Invalid ToJob Id Please Select Branch Associated ToJobId : {0}
+bu.custcode.same.error=BusinessUnit and  Customer Code can not be same, Please enter the Customer Code : {0}
+bu.require.customer.error=BusinessUnit is required for the customer : {0}
+name.require.customer.error=Name is required for the customer : {0}
+customer.address.error=Address1,City,and state are required for the country: {0}
+invalid.fromJob.id.select.branch.associated.fromJobIderror = Invalid FromJob Id Please Select Branch Associated FromJobId \: 
+invalid.fromJob.id.select.valid.branch.associated.fromJobIderror = Invalid FromJob Id Please Select Valid Branch Associated FromJobId \: 
+invalid.tojob.id.please.select.branch.associated.tojobid = Invalid ToJob Id Please Select Branch Associated ToJobId \: 
+invalid.tojob.id.please.select.valid.branch.associated.tojobid = Invalid ToJob Id Please Select Valid Branch Associated ToJobId :
+please.select.approval.manager.for.the.credit.note = Please select a approval manager for the credit note
+please.enter.credit.reason.note = Please enter credit reason note
+it.is.not.invoiced.yet = It is not invoiced yet
+invoice.has.not.been.genererated.for.this.contract = Invoice has not been genererated for this contract
+select.eta.date = Please Select ETA Date :
+credit.can.not.be.processed = Credit can not be processed. It is not invoiced yet
+branch.can.not.be.found = Branch can not be found
+enter.origin.custRefNum.contract = Please enter origin  and custRefNum for contract:
+select.origin.for.contract = Please select origin for contract:
+enter.custRefNum.contract = Please enter custRefNum  for contract:
+select.remitto.bankAccountKey.contract = Please select remitto   and bankAccountKey for contract:
+select.remitto.for.contract = Please select remitto for contract:
+select.bankaccountkey.for.contract = Please select bankAccountKey for contract:
+select.nomination.date = Please Select Nomination Date :
+configlist.name.already.exist = ConfigList Name Already Exist's \: 
+configlist.name.is.required = ConfigList Name is Required :
+
+search.string.is.not.available = Search string is not available
+enter.the.old.user.name = Please enter the old user name
+
+enter.the.new.user.name = Please enter the new user name
+
+TestId=Test Id
+PriceBookTestMods=Price Book Test Mods
+PriceBookTestPrices=Price Book Test Prices
+ModifiedTestPrices=Modified Test Prices
+CustomerSpecificTests=Customer Specific Tests
+ModifyPBTests=Modify PB Tests
+ModifyTestPrices=Modify Test Prices
+CopyPbTestPrice=Copy Pb Test Price
+Zone=Zone
+MinQty=Min Qty
+MaxQty=Max Qty
+UnitPrice=Unit Price
+ContractRef=Contract Ref
+Edit=Edit
+
+test_exists=Test exists: {0}
+
+
+file_name_exists = File name exists
+
+contract_test_exists=Contract test exists: {0}, {1}, {2}
+
+CreateContractTest=Create Contract Test
+duplicate_form_submission = Duplicate form submission
+
+SlateId=Slate Id
+PriceBookSlateMods=Price Book Slate Mods
+PriceBookSlatePrices=Price Book Slate Prices
+ModifiedSlatePrices=Modified Slate Prices
+CustomerSpecificSlates=Customer Specific Slates
+ModifyPBSlates=Modify PB Slates
+ModifySlatePrices=Modify Slate Prices
+CopyPbSlatePrice=Copy Pb Slate Price
+
+slate_exists=Slate exists: {0}
+contract_slate_exists=Contract slate exists: {0}, {1}, {2}
+
+CreateContractSlate=Create Contract Slate
+
+JOB_ORDER_HAS_BEEN_SENT_TO_SAM_SUCESSFULLY=Job Order has been sent to SAM successfully.
+JOB_ORDER_HAS_BEEN_SENT_TO_SAM_FAIL=Fail to send Job Order to SAM.
+JOB_ORDER_HAS_BEEN_SENT_TO_LIMS_SUCESSFULLY=Job Order has been sent to LIMS successfully.
+JOB_ORDER_HAS_BEEN_SENT_TO_LIMS_FAIL=Fail to send Job Order to LIMS.
+Following_tests_added_to_sample=Following Tests have been added to the sample:
+Following_manual_tests_added_to_sample=Following Manual Tests have been added to the sample:
+Following_slates_added_to_sample=Following Slates have been added to the sample:
+INVOICE_GENERATION_ERROR_BRANCH_CANNOT_BE_BLANK=Invoice Generation Error: Primary Branch cannot be blank for a line item
+INVOICE_GENERATION_ERROR_PRODUCT_GROUP_CANNOT_BE_BLANK=Invoice Generation Error: Product Group cannot be blank for a line item
+INVOICE_GENERATION_ERROR_DEPT_ID_CANNOT_BE_BLANK=Invoice Generation Error: Dept Id cannot be blank for a line item
+INVOICE_GENERATION_ERROR_ACCT_CODE_CANNOT_BE_BLANK=Invoice Generation Error: Account Code cannot be blank for a line item
+
+WEBSERVICE_CONTROL_SWITCH_UPDATED_SUCCESSFULLY=Updated Successfully
+WEBSERVICE_CONTROL_SWITCH_UPDATED_FAIL=Update Fail
+
+ReferenceField = Reference Field
+ReferenceFields=Reference Fields
+
+job.branch.error=Selected branch type is Admin. Please select other type branch
+
+contact.workphone.error=invalid work phone : {0}
+contact.personalphone.error=invalid personal phone : {0}
+contact.cellphone.error=invalid cell phone : {0}
+contact.fax.error=invalid fax : {0}
+Invalid.splitPct.error=invalid splitPct :{0}
+invalid.taxlabel.error=Invalid tax label :{0}
+taxLabel.delete.error=tax label  can not be deleted :{0}
+customer.address.delete.error=Customer address cannot be deleted as this address location is associated to a contact 
+primary.bill.status.error=Effective status should be active for the primary bill to address
+primary.sold.status.error=Effective Status should be active for the primary sold to address
+monthlyjob.jobNumber.not.exist.error=You can't proceed to the select charges page as the monthly jobNumber is not same as the jobNumber
+job.status.close.invoice.not.exist.error= Job can not be closed unless generate invoices for all contracts
+vatcode.line.items.error=All vatcode line items should belong to same province
+busstream.required.error=All invoice line items should have business stream
+
+Jobs_Post_Invoice_Xml=PostInvoiceXml
+invoice.convert.consol.regular.error = Invoice is attached to a consolidated Header. Please detach it from:{0}
+invalid.rebill.credit.error=You can't proceed as it is trying to create duplicate credit
+invalid.rebill.error=You can't proceed as the invoice is already rebilled.
+invalid.credit.error=You can't proceed as the invoice is already credited.
+Monthly-Job-Log=MonthlyJobLog
+
+customer.contact.consolinv.error= Customer contact can not be deleted since it is associated with consolInvoice
+invoice.has.been.genererated.for.this.contract=Invoice has been generated for this contract.
+
+FSTL=FST Lot Level
+INDR=Inspection Lot Level Dry
+INLQ=Inspection Lot Level Liquid
+INSJ=Inspection Job Level
+INSV=Inspection Vessel Level
+IRT=Lot Level IRT
+MTD=MTD Services
+OTLB=Outsourcing Lot Level Lab
+OUTJ=Outsourcing Job Level
+OUTL=Outsourcing Lot Level
+SA=Stand-Alone Services
+CAL=Calibration Stand-Alone
+FSLB=FST Lot Level Lab
+FSTJ=FST Job Level
+
+Hide\ Level=Hide Level
+buStream.delete.error= BuStream  can not be deleted :{0}
+invalid.bu.error = BusinessUnit can not be null : {0}
+invalid.buStream.error = Business Stream Code  can not be null : {0}
+
+# START : #119240 : 07/07/09 : Fix for new business stream saved without branch name associated for that BU
+invalid.branchCode.error= Branch cannot be null
+# END : #119240 : 07/07/09 : Fix for new business stream saved without branch name associated for that BU
+
+edit.contract.service.error=Contract Edit Service Error
+
+SelectServices=Select Services
+Service=Service
+IncludeMasterListServices=Include Master List Services
+Service\ List=Service List
+Selected\ Services=Selected Services
+customer.hq.contact.error=Customer with location type of Headquarters can not have any contacts : {0}
+
+edit.contract.service.switch.to.pricebook.message=Warning: Switching to PriceBook will delete all the contract specific rates for the level and version when saving.
+
+test.ot.yes.change.error=Please select at least one of the test to OT = YES or change the Priority to Standard
+test.ot.no.change.error=Please change the Priority to Overtime or Rush
+sample.priority.change.otorrush.error=Please select all tests with OT = NO or change the Priority to Overtime or Rush
+sample.data.validate.error= Please verify for all selected samples: If Priority is selected as OT or RUSH, at least one of the test should have OT = YES or change the priority to STANDARD. If Priority is selected as STANDARD, all the tests should have OT = NO or change the priority to OT or RUSH.
+
+UOM=UOM
+edit.contract.update.uom_note.error=There are errors in saving uom notes.
+edit.contract.inspection.rate.error=There are errors in saving contract inspection rates.
+
+CAN_NOT_BE_EARLIER_THAN_EALIEST_CONTRACT_BEGIN_DATE=Begin Date entered cannot be earlier than the earliest contract version's begin date.
+
+createdBy=Created By
+createdTime=Created Time
+updatedBy=Updated By
+updatedTime=Updated Time
+Zone\ Description\ List=Zone Description List
+destination.error=Please select valid Destination {0}
+contract.customer.search.error=No results match with the filter criteria.
+
+ETADate.error=ETA date should not be less than today's date.
+# Added lims.error for Issue No: 117812
+lims.error=Invalid LIMS Branch Id Please select correct Branch Id. {0}
+# Added for Revision Notes max length validation for Issue No: 75052
+revisionNotes.maxLength.validate.error = Revision Note exceeds {0} characters.
+contract.note.save.error=Contract note save error {0}
+job.not.found.error=job- {0} does not exist
+
+ecs.order.number.non.exist=ECS Order number {0} does not exist
+sales.person.not.exist.error=The Sales person {0} does not exist
+secondary.sales.person.not.exist.error=The Secondary Sales Person {0} does not exist
+project.manager.not.exist.error=The Project Manager {0} does not exist
+
+po.date.range.invalid=Begin Date can not be greater than End Date.
+
+warehouseSearchTitle=Warehouse Search
+
+search.string.not.exist.error=The search value does not have any records {0}
+
+accrued.amount.greater.error=Billable amount or accrued amount should be greater than 0\!
+ce.invoice.preview.apply.netprice.error=Amount should not exceed the net price of master line item.
+ce.invoice.preview.apply.availableamt.error=Amount to Apply should not exceed the balance.
+ce.invoice.preview.apply.no.selection.error=Please select at least one deposit invoice to be applied
+search.depositInv.brcru=Search Deposit Invoice
+ce.invoice.preview.no.deposit.invoice.error=Deposit invoice is not yet generated for the selected deposit.
+ce.invoice.preview.no.deposit.paid.error=Selected deposit should be paid.
+ce.invoice.preview.deposit.invoice.generation.error=Error occurred in deposit invoice generation. {0}
+
+startDate.invalid= Start Date is invalid
+endDate.invalid= End Date is invalid
+taskReadyDate.invalid=TaskReady Date is invalid
+jobtest.split.error=This JobTest cannot be split
+product.servicelevel.nonEmpty=Non empty product can not be deleted
+ce.invoice.preview.apply.no.amount.error=Please enter deposit amount to be applied
+product.description.null= Product{0} field is required and cannot be empty
+product.productgroup.null= Product Group field of Product{0} is required and cannot be empty
+product.productname.invalid= Product Name field of Product{0} is required and cannot be empty
+product.description.invalid=Product{0} field is invalid
+product.productgroup.invalid=Product Group field of Product{0} is invalid
+
+deposit.refnumber.null= Deposit Reference Number is required and cannot be empty
+
+Jobs_Log_CE=CE
+Jobs_Log_OCNA=OCNA
+invalid.customer.id =Invalid Customer \# {0}
+invoiceType.null = Please enter Invoice Type
+invoiceLanguage.null = Please enter Invoice Language
+custRefNum.null = Please enter Customer Reference Number
+transCurrency.null = Please enter Transaction Currency
+proType.null = Please enter Product Type
+billingContactId.null = Please enter Billing Contact ID
+billingAddress.null = Please enter Billing Address
+remitTo.null = Please enter value for Remit To
+remitToAcc.null =Please enter value for Remit to Account
+invalid.salesRep=Please enter valid Sales representative
+invalid.sec.salesRep = Please enter valid Secondary Sales representative
+invalid.warehouse =Please enter valid Operating Unit Name
+report.recieving.contact= Please enter value of Report Receiving Contact
+supplier.contact.null = Please enter Supplier contact
+maufacturer.id.null = Please enter Manufacturer Contact 
+Source.Origin.null =Please enter value of Origin
+custRefNum.invalid =Please enter valid Customer Reference Number
+invoice.type.invalid=Please enter valid Invoice Type
+invoice.lang.invalid=Please enter valid Invoice language
+Cust.Ready.Date.Invalid = Customer Ready Date is invalid
+Promise.Date.Invalid =  Promise Completion Date is invalid
+Actual.Ready.Date.Invalid =  Actual ready date is invalid
+invalid.project.manager =   Project manager name is invalid
+invalid.supplier.contact = Please enter valid Supplier Contact
+invalid.manufacturer.id = Please enter valid manufacturer id
+invalid.remitTo.code = Please enter valid Bank Code for remit to field
+invalid.operation = Please enter valid Operation
+invalid.trans.curr = Please enter valid transaction currency
+invalid.prod.type = Please enter valid Product Type
+invalid.billing.contact = Please enter valid billing contact
+invalid.billing.address = Please enter valid billing address
+Service.location.null = Please enter Service Location value
+invalid.service.location = Please enter valid service location
+parent.job.invalid =Please enter valid Parent Job Id
+quote.date.invalid = Please enter valid Quote issued date
+invalid.Remit.acc.number = Please enter valid Remit To Account number
+buname.invalid= BU name does not exist
+PO.invalid= PO Number does not exist
+taskManager.invalid= TaskManager Name does not exist
+creditOverBy.invalid= Credit Override By does not exist
+
+select=Select
+batch=Batch \#
+invalid.begindate= Begin Date is invalid
+invalid.endDate=End Date is invalid
+invalid.expCompleteDate= Exp.Complete Date is invalid
+invalid.promiseCompletionDate=Promise Completion Date is invalid
+serviceOffering.required=Service Offering is required
+billingStatus.required=Billing Status is required
+jobTest.forcastedRevenue.invalid= Forecasted amount can not be more than quoted amount of Job Test {0} 
+
+invalid.taxVatDate=please enter valid Tax/Vat Date of L.No.{0}
+invalid.Ref.Field1=Please enter valid reference field1
+invalid.Ref.Field2=Please enter valid reference field2
+invalid.Ref.Field3=Please enter valid reference field3
+invalid.Ref.Field4=Please enter valid reference field4
+invalid.Ref.Field5=Please enter valid reference field5
+invalid.Invoice.Description=Please enter valid Invoice Description 
+note.summary.null = Please enter Note Summary
+note.detail.null = Please enter Note Details
+invalid.perm.salesRep = User does not have Sales Representative privilege
+invalid.perm.sec.salesRep = User does not have Secondary Sales Representative privilege   
+invalid.fillEntryForm=please fill Entry Form first
+
+typeMismatch.products.joliForms.sortNumber = only numbers allowed
+typeMismatch.batchForms.joliForms.sortNumber = only numbers allowed
+typeMismatch.products.joliForms.splitItems.sortNumber = only numbers allowed 
+jobTest.linedesc.null= Test Description of Job Test{0}  can not be empty
+jobTest.linedesc.invalid=Test Description of Job Test{0}  is invalid
+jobTest.quotedAmount.null= Quoted Amount of Job Test{0}  is should not be empty or zero
+jobTest.quotedAmount.invalid=Quoted Amount of Job Test{0}  is should be integer
+jobTest.uom.null=UOM of of Job Test{0}  is should not be empty
+jobTest.uom.invalid=UOM of Job Test{0}  is invalid
+jobTest.forcastedRevenue.null=Forecast Revenue of Job Test{0} should not be empty or zero
+deposit.refnumber.invalid=Deposit Reference Number is invalid
+typeMismatch.amountToApply=please enter valid amount
+typeMismatch.maxAmount=please enter valid Max Amnt
+typeMismatch.estimation.estimatedHour=enter valid hours
+typeMismatch.ceInvLineItemForms.taxPct=enter valid Tax %
+typeMismatch.fundedAmount=enter valid Amount
+typeMismatch.ceInvLineItemForms.taxAmt=enter valid Tax Amt
+typeMismatch.ceInvLineItemForms.vatPct=enter valid VAT %
+typeMismatch.ceInvLineItemForms.vatAmt=enter valid VAT Amt
+typeMismatch.ceInvLineItemForms.netPrice=enter valid Net Price
+typeMismatch.depositInvoiceForms.depositAmount=enter valid Deposit Amount
+jobTest.forcastedRevenue.numeric=enter valid Forecast Revenue of Job Test{0}
+invalid.vatCode=invalid VAT Code
+
+
+duplicate.line.number = Please enter unique line numbers
+duplicate.deposit.invoice.sort.number = Please enter unique sort numbers for deposit invoices
+no.line.selected.for.invoicing =Please select at least one job order line item or one deposit invoice line item for invoicing
+required.field.others = Please enter mandatory fields for link other of line number {0}
+problem.add.product=Error while adding product
+problem.delete.product=Error while deleting product
+problem.add.test=Error while adding test
+problem.sort.joli=Error while sorting line items
+problem.sort.deposits=Error while sorting deposit invoices
+problem.save.sc.page=Error while saving this page
+problem.general.page=Error while processing your request {0}
+problem.delete.joli=Error while deleting line item 
+
+invalid.invoice.operation = Error while processing the invoice request {0}
+problem.preview.invoice = Error while generating preview invoice {0}
+problem.generate.invoice = Error while generating invoice {0}
+
+rs.total.amount.greater.unbilledamount = Total amount can not be greater than un-billed amount of the line item
+
+po.blank = Please select PO number before entering Customer PO Amount
+po.customerPOAmount.invalid = PO Amount should not exceed Max amount : {0}
+problem.delete.DepositInvoice = Error while deleting deposit invoice
+problem.add.DepositInvoice = Error while adding deposit invoice
+problem.save.JI = Error while saving this page
+problem.save.JobTest = Error while saving job test(s) page
+problem.delete.SplitTest = Error while deleting split test
+problem.add.SplitTest = Error while adding split test
+
+problem.delete.JobTest = Error while deleting job test
+problem.add.JobTest = Error while adding job test
+problem.delete.Product = Error while deleting product
+problem.add.Product = Error while adding product
+<<<<<<< .mine
+problem.Manage.JobOrder =Error while managing job orderf=======
+problem.Manage.JobOrder =Error while managing job order
+
+problem.save.attachment = Error while saving attachment
+problem.save.attachment = Error while saving attachment
+problem.delete.attachment = Error while deleting attachment
+problem.upload.attachment = Error while uploading attachment
+problem.save.note = Error while saving note
+problem.delete.note = Error while deleting note
+problem.select.note = Error while selecting note
+problem.add.Estimation = Error while adding estimation
+problem.delete.Estimation =  Error while deleting estimation
+>>>>>>> .r6974

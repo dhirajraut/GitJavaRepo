@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractNote" table="JOB_CONTRACT_NOTES">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CONTRACT_NOTES_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CONTRACT_NOTES_SEQ</param>
+      </generator>
+    </id>
+    <property name="note" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="JOB_CONTRACT_NOTE" length="1024" />
+    </property>
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="JOB_NUMBER" length="128" not-null="true" />
+    </property>
+    <property name="contractCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="JOB_CONTRACT_CODE" length="15" not-null="true" />
+    </property>
+    <property name="noteSummary" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="JOB_CONTRACT_NOTE_SUMMARY" length="128" />
+    </property>
+    <property name="noteType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="JOB_CONTRACT_NOTE_TYPE" length="15" />
+    </property>
+    <property name="noteVisibility" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="JOB_CONTRACT_NOTE_VISIBILITY" length="15" />
+    </property>
+    <property name="noteOrigin" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="JOB_CONTRACT_NOTE_ORIGIN" length="15" />
+    </property>
+    <property name="relatedLine" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="JOB_CONTRACT_NOTE_RELATED_LINE" length="15" />
+    </property>
+	<property name="noteCategory" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="NOTE_CATEGORY" length="10" />
+    </property>
+    <property name="dateTimeAdded" type="timestamp">
+      <column name="DATETIME_ADDED" sql-type="timestamp" />
+    </property>
+    <property name="addedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ADDED_BY_USER_NAME" length="128" />
+    </property>
+    <property name="jobContractId" type="long">
+      <column name="JOB_CONTRACT_ID" sql-type="NUMBER" />
+    </property>
+    <many-to-one name="addedBy" column="ADDED_BY_USER_NAME" class="User" insert="false" update="false" index="JOB_CONTRACT_NOTES_index_0" />
+    <many-to-one name="jobOrder" column="JOB_NUMBER" class="JobOrder" insert="false" update="false" index="JOB_CONTRACT_NOTES_index_1" />
+    <many-to-one name="contract" column="JOB_CONTRACT_CODE" class="Contract" insert="false" update="false" index="JOB_CONTRACT_NOTES_index_2" />
+    <many-to-one name="jobContract" column="JOB_CONTRACT_ID" class="JobContract" insert="false" update="false" index="JOB_CONTRACT_NOTES_index_3" />
+  </class>
+</hibernate-mapping>
+

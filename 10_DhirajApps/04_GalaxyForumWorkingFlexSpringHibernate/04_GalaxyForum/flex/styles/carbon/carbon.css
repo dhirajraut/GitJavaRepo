@@ -1,0 +1,871 @@
+/*
+This work is licensed under the Creative Commons Attribution 3.0 United States License. 
+To view a copy of this licence, visit http://creativecommons.org/licenses/by/3.0/us/ or 
+send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California 94105, USA.
+
+You must attribute this work to <a href="http://www.virb.com/mrrodgers" >Joshua Rodgers</a>.  Any items marked as 'AsFusion' in the CSS file should be attributed to <a href="http://www.asfusion.com" >Nahuel Foronda</a> (with link).
+
+README:
+
+This style uses programatic skins. To compile, you need to add CSSPlus.swc to your library path	
+
+
+/* -------------------- HONORABLE MENTIONS and ATTRIBUTIONS (if thats a word) -------------------
+	AsFusion Rainbow Skin - http://www.asfusion.com & http://www.fillcolors.com					-
+			 - Created by Nahuel Foronda and company											-
+			 	- Re-Used BoxModel Class from com.asfusion.skins.BoxModel
+			 	- CSSPlus.swc
+			 	- Mate3.swc						-
+			 	- thumOverlay.png																-
+			 																					-
+	Kyle Hayes - http://kylehayes.info															-
+			 - Created carbon background, used as the main background in a repeat fashion		-
+-------------------------------------------------------------------------------------------------
+
+	USE THE BELOW STYLE AT YOUR OWN LEISURE, RISK, ETC...
+
+	I, nor any of the honorable mentions can be held responsible 
+	for anything pertaining to this CSS, classes and the images refereced herein.
+
+	With that said, have fun!
+
+*/
+/****************************************************************************************************************
+                                             MX COMPONENTS                                                      *
+*****************************************************************************************************************
+*/
+Application{
+ 
+	backgroundColor:#000000;
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	backgroundRepeat:repeat;
+	background-image:Embed(source='images/carbon.png');
+	color: #ffffff;	
+	fontSharpness:21;
+	fontThickness:-120;
+	themeColor:#880000;
+	
+}
+Accordion {
+   borderStyle: solid;
+   borderThickness: 0;
+   headerHeight: 27;
+   backgroundAlpha: 1;
+   fillAlphas: 1, 1, 0.75, 0.65;
+   fillColors: #000000, #333333, #990000, #880000;
+   selectedFillColors: #222222, #000000;
+   themeColor: #990000;
+   backgroundColor: #222222;
+   borderColor: #333333;
+   textRollOverColor: #ffffff;
+   textSelectedColor: #990000;
+   dropShadowEnabled: false;
+   headerStyleName: "accordionHeader";
+}
+.accordionHeader {
+   color: #ffffff;
+   fontFamily: "Amano";
+   fontSize: 18;
+   fontWeight: bold;
+}
+ToggleButtonBar{} /* no style really for the button bar 'yet' */
+Label{
+	fontWeight:bold;	
+}
+Text{
+	fontWeight:normal;	
+}
+ComboBox{
+	upSkin:Embed(source='images/dropDown.png', scaleGridLeft=12, scaleGridRight=25, scaleGridTop=16,scaleGridBottom=17);
+	downSkin:Embed(source='images/dropDown_over.png', scaleGridLeft=12, scaleGridRight=25, scaleGridTop=16,scaleGridBottom=17);
+	overSkin:Embed(source='images/dropDown_over.png', scaleGridLeft=12, scaleGridRight=25, scaleGridTop=16,scaleGridBottom=17);
+	color:#cccccc;
+	fontFamily:Verdana;
+	fontStyle:normal;
+	fontWeight:normal;
+	fontSize:10;
+	openDuration: 600;
+    closeDuration: 600;
+	backgroundAlpha: 0.70;
+	alternatingItemColors: #000000, #000000;
+    dropDownStyleName: "myComboBoxDropDowns";
+}
+
+.myComboBoxDropDowns {
+   borderColor: #880000;
+   color: #cccccc;
+   shadowDirection: right;
+   dropShadowColor: #880000;
+}
+
+TextInput{
+	borderSkin:Embed(source='images/textInput.png', scaleGridLeft=12, scaleGridRight=115, scaleGridTop=12,scaleGridBottom=13);
+	cornerRadius:5;
+	focusAlpha:0.3;
+	textIndent:5;
+	fontSize:12;
+	fontFamily:Verdana;
+	fontStyle:normal;
+	fontWeight:normal;
+	color: #cccccc;
+	themeColor:#880000;
+}
+Button{
+	upSkin:Embed(source='images/button.png', scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	downSkin:Embed(source='images/button_down.png', scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	overSkin:Embed(source='images/button_over.png', scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	selectedUpSkin:Embed(source='images/button.png', scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	selectedOverSkin:Embed(source='images/button_over.png', scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	disabledSkin:Embed(source='images/button_disabled.png',  scaleGridLeft=12, scaleGridRight=13, scaleGridTop=13,scaleGridBottom=14);
+	color:#e1e1e1;
+	disabledColor: #666666;
+	textRollOverColor:#ffffff;
+	textSelectedColor:#e1e1e1;
+}
+
+ScrollBar{
+   cornerRadius: 16;
+   highlightAlphas: 0, 1;
+   fillAlphas: 1, 0.54, 1, 0.47;
+   fillColors: #000000, #333333, #880000, #990000;
+   trackColors: #333333, #000000;
+   themeColor: #880000;
+   borderColor: #333333;
+}
+ViewStack{} 
+Box{} 
+Alert{} 
+Panel {
+   borderColor:#000000;
+   borderAlpha:1;
+   borderThicknessLeft:0;
+   borderThicknessTop:0;
+   borderThicknessBottom:0;
+   borderThicknessRight:0;
+   headerHeight:55;    
+   /*paddingTop:20;
+   paddingLeft:0;
+   paddingRight:0;
+   paddingBottom:5; */
+   cornerRadius:8;
+   borderStyle:solid;
+   filters:dropShadow;	
+   titleStyleName: "panelTitle";
+   borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+   backgroundRepeat:no-repeat;
+   background-image:Embed(source='images/panel_bg.png');
+}
+.panelTitle{
+	fontFamily: "Alexis";
+	fontSize: 30;
+	fontWeight: bold;
+	fontStyle: italic;
+	color: #ffffff;
+}
+
+/****************************************************************************************************************
+                                           CUSTOM COMPONENTS                                                    *
+*****************************************************************************************************************
+*/
+SuperImage{}
+Extra{}
+
+/****************************************************************************************************************
+                                             VIEWS                                                              *
+*****************************************************************************************************************
+*/
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- MainUI     --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+MainUI{
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	backgroundRepeat:repeat-x;
+	background-image:Embed(source='images/header.png');
+} 
+
+.mainUIExtra{
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	width: 300px;
+	height: 210px;
+	backgroundRepeat:no-repeat;
+	background-image:Embed(source='images/side_header.png');
+} 
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Content    --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Content{
+	top:89;
+}
+.wrapper{
+	horizontalCenter:0;
+	top:50;
+	width:750;
+	height:600;
+}
+.mainWindow{
+   borderThicknessLeft: 0;
+   borderThicknessTop: 1;
+   borderThicknessRight: 0;
+}
+.contentExtra{}
+/* ..................................Content CSS Animate Properties..............................................*/
+.contentThumbUnselectedA{}
+.contentThumbUnselectedB{}
+.contentThumbSelectedA{}
+.contentThumbSelectedB{}
+.contentGridUnselectedA{}
+.contentGridUnselectedB{}
+.contentGridSelectedA{}
+.contentGridSelectedB{}
+.contentParticipateA{}
+.contentParticipateB{}
+.contentAboutA{}
+.contentAboutB{}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Header  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+
+Header{
+	fontFamily: "Alexis";
+}
+
+.mainTitle{
+	left:200;
+	top:15;
+    fontSize: 60;
+    fontWeight: bold;
+    fontStyle: italic;
+}
+.tagLine{
+	fontFamily: "Alexis";
+	fontSize: 24;
+	left:490;
+	top:50;
+	fontWeight: bold;
+	fontStyle: italic
+}
+.navigation{
+	fontFamily: "Alexis";
+	top:80;
+	fontSize:18;
+	fontWeight:normal;
+	fontStyle: italic;
+	layout:"horizontal";
+	horizontalGap:-15;
+	right:10;
+	fontThickness:0;
+}
+.galleryLink{
+	upSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	overSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	downSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);	
+	textRollOverColor:#ffffff;
+	textSelectedColor:#860000;
+	paddingRight:15;
+	paddingBottom:-5;
+	color:#DD1100;
+}
+.participateLink{
+	upSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	overSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	downSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	textRollOverColor:#ffffff;
+	textSelectedColor:#860000;
+	paddingRight:15;
+	paddingBottom:-5;
+	color:#DD1100;
+}
+.aboutLink{
+	upSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	overSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	downSkin:Embed(source='images/blank.png', scaleGridLeft=1, scaleGridRight=2, scaleGridTop=25,scaleGridBottom=26);
+	textRollOverColor:#ffffff;
+	textSelectedColor:#860000;
+	paddingRight:15;
+	paddingBottom:-5;
+	color:#DD1100;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Gallery    --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Gallery{
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	background-image:Embed(source='images/panelPattern_blk.png');
+	backgroundRepeat:repeat-x;
+	backgroundImageTop:520;
+	/*top: 50; */
+}
+TileList{
+	backgroundColor: #171717;
+	themeColor: #880000;
+	borderStyle:none;
+	left:5;
+	right:5;
+	verticalScrollBarStyleName:scroll;
+	top:0;
+	bottom:290;
+	columnWidth:142;
+	rowHeight:122;
+	rollOverColor:#222222;
+	selectionColor:#880000;
+}
+DataGrid{
+	borderThickness:0;
+	top:0;
+	bottom:290;
+	left:5;
+	right:5;
+	themeColor: #880000;
+    alternatingItemColors: #333333,#171717;
+    headerColors: #333333, #171717;
+    horizontalGridLines: false;
+    verticalGridLineColor: #666666;
+    color: #cccccc;
+	headerStyleName:headerGrid;
+}
+.headerGrid{
+	color:#cccccc;
+	fontWeight:bold;
+	
+}
+.bigImage{
+	top:300;
+	left:10;
+	backgroundColor: #000000;
+	dropShadowEnabled: true;
+	dropShadowColor: #000000;
+	shadowDistance: 5;
+	borderStyle: solid; 
+	borderColor: #333333;
+	shadowDirection:"right";
+}
+.designInfo{
+	right:10;
+	bottom:20;	
+	left:390;
+	top:325;
+}
+.designInfoLabelName, .designInfoLabelAuthor, .designInfoLabelRating{
+	color:#ffffff;
+	left: 20;
+	paddingTop:0;
+	fontSize:18;
+	fontWeight:bold;
+	fontStyle: italic;
+	fontFamily: "Alexis";
+}
+.designInfoName, .designInfoAuthor{
+	color:#ffffff;
+	fontSize:18;
+	left:100;
+	fontFamily: "Alexis";
+	fontWeight: bold;
+	fontStyle: italic;
+}
+.designInfoRating{
+	color:#ffffff;
+	top: 47;
+	left:240;
+	fontSize:14;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+.designInfoBtnApply{
+	right:100;
+}
+.designInfoBtnDownload{
+	right:200;
+}
+Rating {
+	left: 100;
+}
+
+/* ..................................Gallery CSS Animate Properties..............................................*/
+.galleryThumbUnselectedA{}
+.galleryThumbUnselectedB{}
+.galleryThumbSelectedA{}
+.galleryThumbSelectedB{}
+.galleryGridUnselectedA{}
+.galleryGridUnselectedB{}
+.galleryGridSelectedA{}
+.galleryGridSelectedB{}
+
+/* Renderers     -----------------------------------------------------------------------------------------------*/
+Thumbnail{
+	width: 100;
+	height: 100;
+}
+.thumbnailImage{
+	top: 10;
+	left: 10;
+	backgroundColor: #222222;
+	dropShadowEnabled: true;
+	dropShadowColor: #B2B2B2;
+	borderStyle: solid; 
+	borderColor: #333333;
+	shadowDirection:"right";
+	
+}
+.imageOverlay{
+	background-image:Embed(source='images/thumOverlay.png');
+}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Overlay  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Overlay{}
+.viewButtonBar{
+	right:10;
+	buttonWidth:16;
+	fontSize:1;
+	horizontalGap: 5;
+	textIndent:32;
+	lastButtonStyleName:gridButton;
+	firstButtonStyleName:thumbnailsButton;
+	buttonHeight:16;
+	top:14;
+}
+.gridButton{
+	upSkin:Embed(source='images/icon_grid.png');
+	overSkin:Embed(source='images/icon_grid_over.png');
+	downSkin:Embed(source='images/icon_grid_over.png');
+	selectedUpSkin:Embed(source='images/icon_grid.png');
+	selectedOverSkin:Embed(source='images/icon_grid_over.png');
+}
+.thumbnailsButton{
+	upSkin:Embed(source='images/icon_tile.png');
+	overSkin:Embed(source='images/icon_tile_over.png');
+	downSkin:Embed(source='images/icon_tile_over.png');
+	selectedUpSkin:Embed(source='images/icon_tile.png');
+	selectedOverSkin:Embed(source='images/icon_tile_over.png');
+}
+
+.filterAndSort{
+	fontFamily: "Amano";
+	fontStyle: italic;
+	top:300;
+	bottom:240;
+	right:0;
+	left:0;
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	background-image:Embed(source='images/filterSort_bg2.png');
+	backgroundRepeat:repeat-x;
+}
+
+.filterLabel{
+	top:5;
+	fontSize:18;
+}
+.filterInput{
+	top:8;
+	left:70;
+	fontFamily:Verdana;
+	fontSize:12;
+	right: 350;
+}
+.filterInputGrid{
+	left:70;
+	right: 20;
+}
+.sortLabel{
+	top:5;
+	fontSize:18;
+	right:235;
+}
+.sortComboBox{
+	top:6;
+	left: 525;
+	right:20;
+	fontFamily:Verdana;
+	fontSize:12;
+	paddingTop:2;
+	paddingBottom:0;
+}
+
+
+/* ..................................Overlay CSS Animate Properties..............................................*/
+.overlayThumbnailsA{
+	target:filterAndSort;
+	isStyle:true;
+	property:"right";
+	toValue:0;
+	duration:5;
+}
+.overlayGridA{
+	target:filterAndSort;
+	isStyle:true;
+	property:"right";
+	toValue:0;
+	duration:5;
+}
+
+.overlayThumbnailsB{
+	target:filterInput;
+	property:"right";
+	toValue:350;
+	duration:5;
+	isStyle:true;
+}
+.overlayGridB{
+	target:filterInput;
+	property:"right";
+	toValue:20;
+	duration:5;
+	isStyle:true;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- About  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+About{
+	paddingTop:8;
+	paddingLeft:8;
+	paddingBottom:8;
+	paddingRight:8;
+	borderSkin:ClassReference( 'com.asfusion.skins.BoxModel' );
+	background-image:Embed(source='images/panelPattern_red.png');
+	backgroundRepeat:repeat-x;
+	backgroundImageTop:12;
+	backgroundImageLeft:200;
+	backgroundImageRight:0;
+}
+
+/* ..................................TabNavigator page 'This design'..............................................*/
+TabNavigator {
+   tabHeight: 30;
+   cornerRadius: 0;
+   horizontalGap: 0;
+   horizontalAlign: left;
+   paddingLeft: 0;
+   backgroundColor: #222222;
+   borderStyle: solid;
+   borderColor: #333333;
+   color: #ffffff;
+   tabStyleName: "myTabs";
+   firstTabStyleName: "myTabs";
+   lastTabStyleName: "myTabs";
+   selectedTabTextStyleName: "mySelectedTabs";
+}
+
+.myTabs {
+   fillAlphas: 1, 1;
+   fillColors: #333333, #222222;
+   backgroundColor: #222222;
+   color: #999999;
+   textRollOverColor: #999999;
+   borderColor: #333333;
+   themeColor: #333333;
+   fontFamily: "Amano";
+   fontWeight: bold;
+   fontSize: 18;
+}
+
+.mySelectedTabs {
+   color: #990000;
+   textRollOverColor: #e1e1e1;
+   fontWeight: bold;
+}
+
+.thisDesignPage{
+	paddingLeft: 10;
+	paddingRight: 10;
+}
+.thisDesignNameLabel, .thisDesignRatingLabel, .thisDesignAuthorLabel, .thisDesignCountryLabel{
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontWeight:bold;
+	fontStyle: italic;
+	fontFamily: "Verdana";
+}
+.thisDesignNameText, .thisDesignRatingText, .thisDesignAuthorText, .thisDesignRatingText, .thisDesignCountryText{
+	left: 100;
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontStyle: italic;
+	fontFamily: "Verdana";
+}
+
+.thisDesignDescriptionText{
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontWeight:normal;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+
+/* ..................................TabNavigator page 'Fill Colors'..............................................*/
+.fillColorsPage{
+	paddingLeft: 10;
+	paddingRight: 10;
+}
+
+.fillColorsText {
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Participate    ----------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Participate{
+	paddingTop:8;
+	paddingLeft:8;
+	paddingBottom:8;
+	paddingRight:8;
+}
+
+.participateIntro{
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+
+/* ..................................Accordion page 'Your Information'..............................................*/
+.yourInformation{
+	paddingLeft: 15;
+	paddingRight: 15;
+}
+
+.yourInfoEmailLabel{
+	top:55;
+}
+.yourInfoEmailInput{
+	top:70;
+}
+.yourInfoWebsiteLabel {
+	top:100;
+}
+.yourInfoWebsiteInput {
+	top:115
+}
+
+.yourInfoCountryLabel{
+	top:145;
+}
+.yourInfoCountryInput{
+	top:160;
+	left: 40;
+}
+.yourInfoNameLabel, .yourInfoWebsiteLabel, .yourInfoCountryLabel, .yourInfoEmailLabel {
+	left:40;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+	fontWeight: bold;
+	fontSize: 10;
+	color:#ffffff;
+}
+.yourInfoNameInput, .yourInfoWebsiteInput, .yourInfoEmailInput {
+	left:40;
+	right:100;
+	fontFamily:Verdana;
+	fontSize:12;
+}
+
+/* ..................................Accordion page 'About Your Design'..............................................*/
+.aboutDesign{
+	paddingLeft: 15;
+	paddingRight: 15;
+}
+
+.aboutDesignTitleLabel, .aboutDesignDescriptionLabel{
+	left:20;
+	fontFamily: "Verdana";
+	letterSpacing: 1;
+	fontStyle: italic;
+	fontWeight: bold;
+	fontSize: 10;
+	color:#ffffff;
+}
+.aboutDesignTitleInput{
+	left:20;
+	fontFamily:Verdana;
+	fontSize:12;
+}
+
+RichTextEditor{
+	left: 20;
+	right: 20;
+	borderStyle:"none";
+	headerHeight: 0;
+	borderThicknessLeft:0;
+	borderThicknessRight:0;
+	backgroundColor: #222222;
+	borderSkin: Embed(source='images/blank.png');
+	bottom:30;
+	top:85;
+	color:#222222;
+	textAreaStyleName: "myTextAreaStyle";	
+}
+.myTextAreaStyle {
+	backgroundColor: #333333;
+	borderColor: #666666;
+	cornerRadius:5;
+	focusAlpha:0.3;
+	textIndent:5;
+	fontSize:12;
+	fontFamily:Verdana;
+	fontStyle:normal;
+	fontWeight:normal;
+	color: #e1e1e1;
+	themeColor:#880000;	
+}	
+
+.aboutDesignDescriptionInfo{
+	bottom:10;
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:12;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+
+/* ..................................Accordion page 'Your Design Files'..............................................*/
+.yourDesignFiles{
+	paddingLeft: 15;
+	paddingRight: 15;
+}
+
+.designFilesSwfText, .designFilesSourceText, .designFilesThumbnailsText{
+	color:#e1e1e1;
+	paddingTop:0;
+	fontSize:10;
+	fontFamily: "Verdana";
+	fontStyle: italic;
+}
+.designFilesSwfLabel,  .designFilesSourceLabel, .designFilesThumLargeLabel, .designFilesThumSmallLabel{
+	fontFamily: "Verdana";
+	letterSpacing: 1;
+	fontStyle: italic;
+	fontWeight: bold;
+	fontSize: 10;
+	color:#ffffff;
+}
+.designFilesSwfInfoLabel, .designFilesSourceInfoLabel, .designFilesThumLargeInfoLabel, .designFilesThumSmallInfoLabel{
+	color: #990000;	
+}
+.designFilesSwfButton, .designFilesSourceButton, .designFilesThumLargeButton, .designFilesThumSmallButton{}
+.designFilesFirstRule, .designFilesSecondRule{
+	strokeColor: #666666;
+	shadowColor: #222222;
+}
+
+/* ..................................Accordion page 'The Fine Print'..............................................*/
+.theFinePrint{
+	paddingLeft: 15;
+	paddingRight: 15;
+}
+CheckBox{} /* no style using default theme*/
+.finePrintText{
+	fontFamily: "Verdana";
+	letterSpacing: 1;
+	fontStyle: italic;
+	fontSize: 10;
+	color:#ffffff;
+}
+.finePrintButton{} /*using main button style */
+.finePrintUploadProgress{
+   borderColor: #333333;
+   barColor: #990000;
+   trackColors: #222222, #222222;
+   color: #ffffff;
+   paddingLeft: 0;
+   trackHeight: 17;
+	
+}
+.finePrintSubmitProgress{
+	trackHeight: 17;
+	borderColor: #333333;
+}
+
+/****************************************************************************************************************
+                                             FILTERS                                                            *
+*****************************************************************************************************************
+*/
+.dropShadow{
+	filterClass:ClassReference('com.asfusion.skins.filters.CSSDropShadowFilter');
+	distance:5;
+	blurX:32;
+	blurY:32;
+	quality:3;
+	alpha:0.6;
+	color: #850000;
+}
+
+/****************************************************************************************************************
+                                             FONTS                                                              *
+*****************************************************************************************************************
+*/
+/* If you want to add your own fonts, uncomment the folowing lines and embed your ttf or swf font as described in the Flex docs */
+@font-face {
+   src:url("fonts/alexis.swf");
+   fontFamily: "Alexis";
+}
+
+@font-face {
+   src:url("fonts/alexis.swf");
+   fontFamily: "Alexis";
+   fontWeight:bold;
+}
+
+@font-face {
+   src:url("fonts/alexis.swf");
+   fontFamily: "Alexis";
+   fontWeight:bold;
+   fontStyle:italic   
+}
+
+@font-face {
+   src:url("fonts/amano.swf");
+   fontFamily: "Amano";
+}
+
+@font-face {
+   src:url("fonts/amano.swf");
+   fontFamily: "Amano";
+   fontWeight:bold;
+}
+
+@font-face {
+   src:url("fonts/amano.swf");
+   fontFamily: "Amano";
+   fontWeight:bold;
+   fontStyle:italic;
+}
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.swf"); /* Embed from file */
+}
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.swf"); /* Embed from file */
+   	fontStyle:italic;
+}
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.swf"); /* Embed from file */
+   	fontStyle:bold;
+}
+
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.swf"); /* Embed from file */
+    fontWeight:bold;
+    fontStyle:italic;
+}

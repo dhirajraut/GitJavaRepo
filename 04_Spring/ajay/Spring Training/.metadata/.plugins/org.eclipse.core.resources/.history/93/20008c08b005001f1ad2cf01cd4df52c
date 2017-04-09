@@ -1,0 +1,5 @@
+package aoppack;
+
+public class AroundAdvice {
+
+}

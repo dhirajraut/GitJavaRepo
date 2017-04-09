@@ -1,0 +1,11 @@
+package com.assignment;
+
+import java.util.HashSet;
+
+public class Department {
+
+	private int deptId;
+	private String deptName;
+	private String location;
+	private HashSet emps;
+}

@@ -1,0 +1,32 @@
+# db properties
+
+#db.url=jdbc:oracle:thin:@172.19.90.73:1521:PHXSTG1
+<<<<<<< .mine
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+db.url=jdbc:oracle:thin:@pc-p46896:1521:PHXDEV
+=======
+db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:PHXDEV
+>>>>>>> .r5972
+#db.url=jdbc:oracle:thin:@cbwusahousrv24-vip:1521:PHXTRN
+
+#PHONIX 9
+#db.url=jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS = (PROTOCOL = TCP)(HOST =172.19.90.74)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.74)(PORT = 1521))(LOAD_BALANCE = yes))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = PHX9)(FAILOVER_MODE =(TYPE = SELECT)(METHOD = BASIC)(RETRIES = 180)(DELAY = 5))))
+
+#STG
+#db.url=jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.73)(PORT = 1521)) (ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.74)(PORT = 1521)) (LOAD_BALANCE = yes)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = PHXSTG) (FAILOVER_MODE= (TYPE = SELECT) (METHOD = BASIC) (RETRIES = 180) (DELAY = 5))))
+
+#db.url=jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.71)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.72)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 172.19.90.75)(PORT = 1521))(LOAD_BALANCE = yes))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = PHXPRD)))
+
+<<<<<<< .mine
+db.user=phoenixdev
+db.password=phoenixdev
+
+
+#db.user=PHOENIX1
+#db.password=PHOENIX1
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+=======
+db.user=PHOENIX1
+db.password=PHOENIX1
+>>>>>>> .r5972

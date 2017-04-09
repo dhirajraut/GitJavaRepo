@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="SlatePrice" table="PS_ITSC_SLTE_PRICE">
+    <composite-id name="slatePriceId" class="SlatePriceId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="slateType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="ITS_SLATE_TYPE" length="3" />
+      </key-property>
+      <key-property name="slateId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="SLATE_ID" length="45" />
+      </key-property>
+      <key-property name="location" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="CFG_LOCATION" length="105" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+      <key-property name="minQty" type="java.lang.Integer">
+        <column name="CFG_MIN_QTY" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="maxQty" type="java.lang.Integer">
+        <column name="CFG_MAX_QTY" sql-type="NUMBER" />
+      </key-property>
+    </composite-id>
+    <property name="seqNum" type="java.lang.Integer">
+      <column name="SEQNUM" sql-type="NUMBER" />
+    </property>
+    <property name="currencyCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="CURRENCY_CD" length="9" />
+    </property>
+    <property name="unitPrice" type="java.lang.Double">
+      <column name="CFG_UNIT_PRICE" sql-type="NUMBER(16, 6)" />
+    </property>
+    <property name="contractRef" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="CONTRACT_REF" length="45" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    <many-to-one name="slate" column="SLATE_ID" class="Slate" insert="false" update="false" index="PS_ITSC_SLTE_PRICE_index_0" />
+  </class>
+</hibernate-mapping>
+

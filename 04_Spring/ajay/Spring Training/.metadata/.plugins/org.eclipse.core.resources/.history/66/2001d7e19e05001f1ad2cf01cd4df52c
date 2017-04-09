@@ -1,0 +1,6 @@
+package beanpack;
+
+public class Current extends Account {
+	private double minBal;
+	
+}

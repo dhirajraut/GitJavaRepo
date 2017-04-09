@@ -1,0 +1,7 @@
+package beanpack;
+
+public class Account {
+
+	private int acctId;
+	
+}

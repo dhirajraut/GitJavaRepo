@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Event" table="EVENTS">
+    <id name="eventCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta>
+      <column name="EVENT_CODE" length="10" />
+    </id>
+    <property name="eventName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="EVENT_NAME" length="30" />
+    </property>
+    <property name="eventInstruction" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=200) private</meta>
+      <column name="EVENT_INSTRUCTION" length="200" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

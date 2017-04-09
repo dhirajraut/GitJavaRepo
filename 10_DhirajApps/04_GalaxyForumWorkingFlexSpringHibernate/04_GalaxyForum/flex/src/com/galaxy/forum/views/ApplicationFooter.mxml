@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+
+	<!-- Application Footer. -->
+	<mx:ApplicationControlBar width="100%" styleName="padded" horizontalAlign="right">
+		<mx:Label text="All Copyrights Reserved."/>
+	</mx:ApplicationControlBar> 
+</mx:VBox>

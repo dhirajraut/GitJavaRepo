@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<project name="intertek" default="main" basedir=".">
+
+  <property file="build.properties" />
+
+  <property name="build.dir" value="./build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="build.metainf.dir" value="${build.dir}/META-INF"/>
+  <property name="dist.dir" value="./dist"/>
+  <property name="src.dir" value="${project.home}/src"/>
+  <property name="build.war.dir" value="${build.dir}/war"/>
+  <property name="lib.dir" value="${project.home}/lib" />
+  <property name="web.root.dir" value="${project.home}/web" />
+  <property name="config.dir" value="${project.home}/conf" />
+  <property name="data.dir" value="${project.home}/data" />
+
+  <property name="src.test.dir" value="${project.home}/test/src"/>
+  
+  <path id="base.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+      <include name="**/*.zip" />
+    </fileset>
+    <fileset dir="${application.server.home}/common/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${build.classes.dir}" />
+
+    <path location="${project.home}/hibernate-ant/hibernate-tools.jar" />
+    <path location="${project.home}/hibernate-ant/freemarker.jar" />
+  </path>
+
+  <target name="prepare">
+    <echo>building prepare...</echo>
+  </target>
+  
+  <target name="compile" depends="prepare">  
+    <javac
+      destdir="${build.classes.dir}"
+      debug="${debug}"
+      deprecation="off"
+      optimize="${optimize}"
+      classpathref="base.path">
+      <src path="${src.test.dir}"/>
+    </javac>
+
+  </target>
+  
+	<target name="junit" depends="compile" description="Run JUnit Tests">
+		<junit printsummary="on"
+					 fork="true"
+					 haltonfailure="false"
+					 failureproperty="tests.failed"
+					 showoutput="true">
+      <!-- jvmarg value="-XX:MaxPermSize=512M -Xms256m -Xmx512m"/ -->
+			<classpath refid="base.path"/>
+			<formatter type="brief" usefile="false"/>
+
+			<batchtest>
+				<fileset dir="${build.classes.dir}">
+					<include name="**/JTest*.*"/>
+				</fileset>
+			</batchtest>
+
+		</junit>
+
+		<fail if="tests.failed">        tests.failed=${tests.failed}        
+		***********************************************************
+		***********************************************************
+		****  One or more tests failed!  Check the output ...  ****
+		***********************************************************
+		***********************************************************
+		</fail>
+	</target>
+    
+</project>
+

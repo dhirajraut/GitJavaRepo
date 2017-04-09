@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping package="com.galaxy.forummodule.domain">
+	<subclass name="ForumUser" extends="com.galaxy.loginmodule.domain.User">
+		<property name="joinDate" type="date">
+			<column name="JOIN_DATE" sql-type="date" />
+		</property>
+		<property name="noOfPosts" type="int">
+			<column name="NO_OF_POSTS" />
+		</property>
+<!-- 		<one name="role" type="com.galaxy.forummodule.domain.IUserRole">
+			<column name="USER_ROLE" />
+		</property> -->
+	</subclass>
+</hibernate-mapping>

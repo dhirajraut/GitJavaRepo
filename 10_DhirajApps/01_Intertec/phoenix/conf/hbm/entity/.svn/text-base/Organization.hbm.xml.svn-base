@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Organization" table="ORGANIZATIONS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="ORG_NAME" length="128" />
+    </id>
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <set name="businessUnits" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="ORG_NAME" />
+      <one-to-many class="BusinessUnit" />
+    </set>
+  </class>
+</hibernate-mapping>
+

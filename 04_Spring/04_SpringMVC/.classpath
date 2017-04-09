@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/51_Workspace/08_Eclipse/01_Java/00_Repository/spring-framework-3.0.0.M1-with-docs/spring-framework-3.0.0.M1/dist/org.springframework.core-3.0.0.M1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/51_Workspace/08_Eclipse/01_Java/00_Repository/spring-framework-3.0.0.M1-with-docs/spring-framework-3.0.0.M1/dist/org.springframework.web.servlet-3.0.0.M1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/51_Workspace/08_Eclipse/01_Java/00_Repository/servlet.jar"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>

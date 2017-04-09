@@ -1,0 +1,170 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import com.intertek.phoenix.common.Form;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.web.controller.invoice.CEJobOrderLineItemForm;
+import com.intertek.phoenix.web.controller.invoice.DepositInvoiceForm;
+import com.intertek.phoenix.web.controller.invoice.ExpenseLineItemForm;
+
+/**
+ * Form to represent 'Select Charges' page
+ * 
+ * @author rautsmit
+ * 
+ */
+public class CESelectChargeForm extends Form {
+
+    private CEJobContract jobContract;
+    private CEJobOrderLineItemForm[] joliForms;
+    private ExpenseLineItemForm[] expenseLineItemForms;
+    private DepositInvoiceForm[] depositInvoiceForms;
+    private String refreshing;
+    private String rowindex;
+    private double extendedPriceTotal;
+
+    public CESelectChargeForm() {
+    }
+    
+    public CESelectChargeForm(CEJobContract jo) {
+        updateForm(jo);
+    }
+
+    /**
+     * Rebuilds form data with passed JobOrder
+     * 
+     * @param jobContract
+     */
+    public void updateForm(CEJobContract jobContract) {
+        this.jobContract = jobContract;
+
+        Set<CEJobOrderLineItem> jolis = jobContract.getJobOrderLineItems();
+        joliForms = new CEJobOrderLineItemForm[jolis.size()];
+        int joliCounter = 0;
+        for (CEJobOrderLineItem joli : jolis) {
+            CEJobOrderLineItemForm joliForm = new CEJobOrderLineItemForm(joli);
+            joliForms[joliCounter++] = joliForm;
+        }
+
+        // TODO: we dont need expense line item functionality
+        /*
+         * Set<ExpenseLineItem> elis = jobContract.getExpenseLineItems();
+         * expenseLineItemForms = new ExpenseLineItemForm[elis.size()]; int
+         * eliCounter = 0; for (ExpenseLineItem eli : elis) {
+         * ExpenseLineItemForm eliForm = new ExpenseLineItemForm(eli);
+         * expenseLineItemForms[eliCounter++] = eliForm; }
+         */
+        Set<DepositInvoice> depInvoices = jobContract.getJobOrder().getDepositInvoices();
+        depositInvoiceForms = new DepositInvoiceForm[depInvoices.size()];
+        int depCounter = 0;
+        for (DepositInvoice depInv : depInvoices) {
+            DepositInvoiceForm depInvForm = new DepositInvoiceForm(depInv);
+            depositInvoiceForms[depCounter++] = depInvForm;
+        }
+
+    }
+
+    // public CEJobOrder getJobOrder() {
+    // return jobContract;
+    // }
+    //
+    // public void setJobOrder(CEJobOrder jobOrder) {
+    // this.jobContract = jobOrder;
+    // }
+
+    public String getTransactionCurrency() {
+        return jobContract.getTransactionCurrency();
+    }
+
+    public CEJobContract getJobContract() {
+        return jobContract;
+    }
+
+    public void setJobContract(CEJobContract jobContract) {
+        this.jobContract = jobContract;
+    }
+
+    public String getJobNumber() {
+        return jobContract.getJobOrder().getJobNumber();
+    }
+
+    public String getJobStatus() {
+        return jobContract.getJobOrder().getStatus().getDescription();
+    }
+
+    public CEJobOrderLineItemForm[] getJoliForms() {
+        return joliForms;
+    }
+
+    public void setJoliForms(CEJobOrderLineItemForm[] joliForms) {
+        this.joliForms = joliForms;
+    }
+
+    public ExpenseLineItemForm[] getExpenseLineItemForms() {
+        return expenseLineItemForms;
+    }
+
+    public void setExpenseLineItemForms(ExpenseLineItemForm[] expenseLineItemForms) {
+        this.expenseLineItemForms = expenseLineItemForms;
+    }
+
+    public DepositInvoiceForm[] getDepositInvoiceForms() {
+        return depositInvoiceForms;
+    }
+
+    public void setDepositInvoiceForms(DepositInvoiceForm[] depInvForms) {
+        this.depositInvoiceForms = depInvForms;
+    }
+
+    // extended price total
+    public double getExtendedPriceTotal() {
+        extendedPriceTotal = 0.0;
+
+        for (CEJobOrderLineItemForm joliForms : this.joliForms) {
+            extendedPriceTotal = extendedPriceTotal + joliForms.getExtendedPrice();
+        }
+
+        return extendedPriceTotal;
+    }
+
+    public String getRefreshing() {
+        return refreshing;
+    }
+
+    public void setRefreshing(String refreshing) {
+        this.refreshing = refreshing;
+    }
+
+    public String getRowindex() {
+        return rowindex;
+    }
+
+    public void setRowindex(String rowindex) {
+        this.rowindex = rowindex;
+    }
+
+    /**
+     * Removes given ExpenseLineItemForm from the array of forms
+     * 
+     * @param splitForm:
+     *            form to be removed
+     */
+    public void removeExpenseLineItemForm(ExpenseLineItemForm expLiForm) {
+        List<ExpenseLineItemForm> expLiFormList = new ArrayList<ExpenseLineItemForm>();
+        Collections.addAll(expLiFormList, expenseLineItemForms);
+        expLiFormList.remove(expLiForm);
+        expenseLineItemForms = expLiFormList.toArray(new ExpenseLineItemForm[expLiFormList.size()]);
+    }
+
+}

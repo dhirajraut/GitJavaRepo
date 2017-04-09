@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN/EN" 
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/home">loginController</prop>
+ 				<prop key="/sessionReceiver">sessionReceiverController</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="loginController"
+		class="com.galaxy.login.controllers.LoginController">
+		<property name="service" ref="loginService" />
+	</bean>
+	
+	<bean id="loginService" class="com.galaxy.login.impls.LoginServiceImpl" >
+		<property name="delegator" ref="loginDelegator" />
+	</bean>
+	<bean id="loginDelegator" class="com.galaxy.login.delegators.LoginDelegator" />
+
+	<bean id="sessionReceiverController"
+		class="com.galaxy.login.controllers.SessionReceiverController">
+	</bean>
+</beans>

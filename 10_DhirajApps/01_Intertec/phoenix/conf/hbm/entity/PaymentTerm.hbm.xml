@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="PaymentTerm" table="PAYMENT_TERMS">
+    <id name="paymentTermsCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="PYMNT_TERMS_CODE" length="5" />
+    </id>
+    <property name="paymentTermsDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta>
+      <column name="PYMNT_TERMS_DESC" length="50" not-null="true" unique="true" />
+    </property>
+    <property name="paymentTermsShortDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta>
+      <column name="PYMNT_TERMS_SHORT_DESC" length="10" not-null="true" unique="true" />
+    </property>
+  </class>
+</hibernate-mapping>
+

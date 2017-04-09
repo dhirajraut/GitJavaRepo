@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/pricing
+END
+Pricer.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6429/branches/phx2.1/src/com/intertek/phoenix/pricing/Pricer.java
+END
+AccountInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/pricing/AccountInfo.java
+END
+PricingSrvc.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/pricing/PricingSrvc.java
+END
+PricingSrvcImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/pricing/PricingSrvcImpl.java
+END
+PricingParameter.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6431/branches/phx2.1/src/com/intertek/phoenix/pricing/PricingParameter.java
+END

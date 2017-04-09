@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/WEB-INF/views/phoenix/search
+END
+common_job_search.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/7225/branches/phx2.1/web/WEB-INF/views/phoenix/search/common_job_search.jsp
+END
+parentcontract.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6787/branches/phx2.1/web/WEB-INF/views/phoenix/search/parentcontract.jsp
+END
+bankaccount.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6888/branches/phx2.1/web/WEB-INF/views/phoenix/search/bankaccount.jsp
+END
+service_location.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/7188/branches/phx2.1/web/WEB-INF/views/phoenix/search/service_location.jsp
+END
+location.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/WEB-INF/views/phoenix/search/location.jsp
+END
+bank.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6633/branches/phx2.1/web/WEB-INF/views/phoenix/search/bank.jsp
+END
+master.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6884/branches/phx2.1/web/WEB-INF/views/phoenix/search/master.jsp
+END
+businessunit.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/7041/branches/phx2.1/web/WEB-INF/views/phoenix/search/businessunit.jsp
+END
+contact_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/WEB-INF/views/phoenix/search/contact_popup.jsp
+END
+employee.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6986/branches/phx2.1/web/WEB-INF/views/phoenix/search/employee.jsp
+END
+customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/WEB-INF/views/phoenix/search/customer.jsp
+END
+warehouse.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6842/branches/phx2.1/web/WEB-INF/views/phoenix/search/warehouse.jsp
+END

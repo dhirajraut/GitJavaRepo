@@ -1,0 +1,678 @@
+/**  
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ * @Date : 4/22/2009
+ * @Author : The Phoenix Team
+ */
+
+package com.intertek.phoenix.entity;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.intertek.entity.BusinessUnit;
+import com.intertek.entity.User;
+import com.intertek.phoenix.jobOrder.InvalidJobOrderOperationException;
+import com.intertek.phoenix.jobOrder.JobOrderAttachment;
+import com.intertek.phoenix.jobOrder.JobOrderNote;
+
+
+/**
+ * 
+ * @author richard.qin
+ */
+@SuppressWarnings("unused")
+@Entity
+public class CEJobOrder {
+    @Id
+    private String jobNumber;
+    private String jobType="CE"; // ??
+    
+    private String projectNumber;
+    @OneToOne
+    @JoinColumn(name="PROJECT_NUMBER")
+    private Project project;
+    
+    private String quoteNumber;
+    @OneToOne
+    @JoinColumn(name="QUOTE_NUMBER")
+    private Quote quote;
+    
+    private String buName;
+    @ManyToOne
+    @JoinColumn(name="BU_NAME")
+    private BusinessUnit bu;
+    
+    private String warehouseName;
+    @ManyToOne
+    @JoinColumn(name="WAREHOUSE_NAME")
+    private Warehouse warehouse;
+    
+    private String businessStreamCode;
+    @ManyToOne
+    @JoinColumn(name="BUSINESS_STREAM_CODE")
+    private BusinessStream businessStream;
+    
+    private String serviceLocationCode;
+    @ManyToOne
+    @JoinColumn(name="SERVICE_LOCATION_CODE")
+    private CEServiceLocation serviceLocation;
+    
+    private String salesPersonName;
+    @ManyToOne
+    @JoinColumn(name="SALES_PERSON_NAME")
+    private User salesPerson;
+    private String secondarySalesPersonName;
+    @ManyToOne
+    @JoinColumn(name="SECONDARY_SALES_PERSON_NAME")
+    private User secondarySalesPerson;
+    private String projectManagerName;
+    @ManyToOne
+    @JoinColumn(name="PROJECT_MANAGER_NAME")
+    private User projectManager;
+    
+    private Timestamp promiseCompletionDate;
+    private Timestamp customerReadyDate;
+    private Timestamp actualReadyDate;
+    private long turnaroundDays;
+    
+    private boolean followUp;
+    private String modelNumber;
+    private String description;
+    
+    private OrderOrigin origin;
+    
+    private OperationalStatus operationalStatus;
+    private OrderStatus status; // ??
+    private BillingStatus billingStatus; // ??
+    
+    // customer related fields have been moved to JobOrderCustomer
+    @OneToOne
+    @JoinColumn(name="JOB_NUMBER")
+    private JobOrderCustomerDetail customerDetail;
+
+    @OneToMany (mappedBy = "jobOrder")
+    private Set<OrderLineItem> lineItems;
+
+    @OneToMany (mappedBy = "jobOrder")
+    private Set<JobOrderAttachment> attachments;
+    
+    @OneToMany (mappedBy = "jobOrder")
+    private Set<JobOrderNote> notes;
+    
+    @OneToMany (mappedBy = "jobOrder")
+    private Set<DepositInvoice> depositInvoices;
+
+    @OneToMany (mappedBy = "jobOrder")
+    private Set<Instruction> instructions;
+    
+   
+    public CEJobOrder(){
+        
+    }
+    
+    public void addNotes(JobOrderNote... notes){
+        for(int i=0; i<notes.length; i++){
+            this.addNote(notes[i]);
+        }
+    }
+    
+    /*
+     * remove the given attachments from this jo
+     * return : a Set of actually attachments removed or empty Set for checking purposes
+     */
+    public Set<JobOrderAttachment> removeAttachments(JobOrderAttachment... attachments){
+        Set<JobOrderAttachment> removed=new HashSet<JobOrderAttachment>();
+        Set<JobOrderAttachment> atts = this.getAttachments();
+        for(int i = 0; atts != null && i < attachments.length; i++){
+            if(atts.remove(attachments[i])){
+                removed.add(attachments[i]);
+                // TODO: Eric-physically remove the file from file system
+            }
+        }
+        return removed;
+    }
+    
+    public Set<OrderLineItem> removeOrderLineItem(OrderLineItem... lineItems){
+        Set<OrderLineItem> removed = new HashSet<OrderLineItem>();
+        if(lineItems == null){
+            return removed;
+        }
+        
+        if(lineItems != null){
+            Set<OrderLineItem> lis = this.getLineItems();
+            // removing line items
+            for(OrderLineItem li: lineItems){
+                if(lis.remove(li)){
+                    li.setJobOrder(null);
+                    removed.add(li);
+                }
+            }
+        }
+        return removed;
+    }
+    
+    /*
+     * remove the gien jolis from this jo
+     * return : a Set of actualy jolis removed or empty Set
+     */
+    public Set<CEJobOrderLineItem> removeJobOrderLineItem(CEJobOrderLineItem... jolis){
+        Set<OrderLineItem> removedLineItems = removeOrderLineItem(jolis);
+        Set<CEJobOrderLineItem> removed = new HashSet<CEJobOrderLineItem>();
+        for(OrderLineItem lineItem: removedLineItems){
+            removed.add((CEJobOrderLineItem)lineItem);
+        }
+        return removed;
+//
+//        Set<CEJobOrderLineItem> myJolis = this.getJobOrderLineItems();
+//        // removing jolis
+//        for(int i = 0; myJolis != null && i < jolis.length; i++){
+//            if(myJolis.remove(jolis[i])){
+//                jolis[i].setJobOrder(null);
+//                removed.add(jolis[i]);
+//            }
+//        }
+//        return removed;
+    }
+    
+    public Set<ExpenseLineItem> removeExpenseLineItem(ExpenseLineItem... lineItems){
+        Set<OrderLineItem> removedLineItems = removeOrderLineItem(lineItems);
+        Set<ExpenseLineItem> removed = new HashSet<ExpenseLineItem>();
+        for(OrderLineItem lineItem: removedLineItems){
+            removed.add((ExpenseLineItem)lineItem);
+        }
+        return removed;
+    }
+    
+    public Set<JobOrderNote> removeNotes(JobOrderNote... notes){
+        Set<JobOrderNote> removed=new HashSet<JobOrderNote>();
+        if(notes == null){
+            return removed;
+        }
+
+        Set<JobOrderNote> myNotes = this.getNotes();
+        // removing all the notes
+        for(int i = 0; myNotes != null && i < notes.length; i++){
+            if(myNotes.remove(notes[i])){
+                removed.add(notes[i]);
+                notes[i].setJobOrder(null);
+            }
+        }
+        return removed;
+    }
+    
+    /**
+     * Add a list of new line items to the job order. If the line items is already
+     * associated with some othe job order, some undesirable side effects may happen.
+     * 
+     * There is a danger here, if this.lineItems is not populated at this point, but
+     * later hibernate populates it, the new items not yet saved to the database will 
+     * not be part of the list and become "invisible"! Therefore, the caller is responsible
+     * for making sure that the lineItem list is populated before calling this method.
+     * This "out-of-synch" problem can be common to many other entity objects.
+     * 
+     * @param lineItems
+     */
+    public void addLineItems(List<CEJobOrderLineItem> lineItems){
+        // when lazy loading is enabled, the next line will have the joli list populated
+        Set<CEJobOrderLineItem> list = this.getJobOrderLineItems();
+        for(CEJobOrderLineItem joli: lineItems){
+            joli.setJobOrder(this);
+            list.add(joli);
+        }
+    }
+    
+    public void addLineItems(CEJobOrderLineItem... lineItems){
+        // when lazy loading is enabled, the next line will have the joli list populated
+        Set<CEJobOrderLineItem> list = this.getJobOrderLineItems();
+        for(CEJobOrderLineItem joli: lineItems){
+            joli.setJobOrder(this);
+            list.add(joli);
+        }
+    }
+    
+    /**
+     * Retrieve a list of job order items that are currently billable
+     * 
+     */
+    public List<CEJobOrderLineItem> getBillableJobOrderLineItems() {
+        List<CEJobOrderLineItem> billableItems = new ArrayList<CEJobOrderLineItem>();
+        for(CEJobOrderLineItem joli: this.getJobOrderLineItems()){
+            if(joli.isBillable()){
+                billableItems.add(joli);
+            }
+        }
+        return billableItems;
+    }
+
+    /**
+     * For type 3 project, update the job order with billable line item
+     * information from PeoppleSoft
+     */
+    public void syncFromPS(List<CEJobOrderLineItem> lineItems) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * For type 2 project, send billable line item information of the job order
+     * to PeoppleSoft
+     */
+    public void syncToPS() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Complete this job order
+     */
+    public void close() {
+        this.status = OrderStatus.CANCELED;
+    }
+
+    public String getJobNumber() {
+        return jobNumber;
+    }
+
+    public void setJobNumber(String jobNumber) {
+        this.jobNumber = jobNumber;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getProjectNumber() {
+        return projectNumber;
+    }
+
+    public void setProjectNumber(String projectNumber) {
+        this.projectNumber = projectNumber;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.projectNumber = project.getProjectNumber();
+        this.project = project;
+    }
+
+    public String getQuoteNumber() {
+        return quoteNumber;
+    }
+
+    public void setQuoteNumber(String quoteNumber) {
+        this.quoteNumber = quoteNumber;
+    }
+
+    public Quote getQuote() {
+        return quote;
+    }
+
+    public void setQuote(Quote quote) {
+        this.quoteNumber = quote.getQuoteNumber();
+        this.quote = quote;
+    }
+
+    public String getBuName() {
+        return buName;
+    }
+
+    public void setBuName(String buName) {
+        this.buName = buName;
+    }
+
+    public BusinessUnit getBu() {
+        return bu;
+    }
+
+    public void setBu(BusinessUnit bu) {
+        this.buName = bu.getName();
+        this.bu = bu;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouseName = warehouse.getName();
+        this.warehouse = warehouse;
+    }
+
+    public String getBusinessStreamCode() {
+        return businessStreamCode;
+    }
+
+    public void setBusinessStreamCode(String businessStreamCode) {
+        this.businessStreamCode = businessStreamCode;
+    }
+
+    public BusinessStream getBusinessStream() {
+        return businessStream;
+    }
+
+    public void setBusinessStream(BusinessStream businessStream) {
+        this.businessStreamCode = businessStream.getCode();
+        this.businessStream = businessStream;
+    }
+
+    public String getServiceLocationCode() {
+        return serviceLocationCode;
+    }
+
+    public void setServiceLocationCode(String serviceLocationCode) {
+        this.serviceLocationCode = serviceLocationCode;
+    }
+
+    public CEServiceLocation getServiceLocation() {
+        return serviceLocation;
+    }
+
+    public void setServiceLocation(CEServiceLocation serviceLocation) {
+        this.serviceLocation = serviceLocation;
+        if(serviceLocation!=null){
+            this.serviceLocationCode = serviceLocation.getServiceLocationCode();
+        }
+        else{
+            this.serviceLocationCode=null;
+        }
+    }
+
+    public String getSalesPersonName() {
+        return salesPersonName;
+    }
+
+    public void setSalesPersonName(String salesPersonName) {
+        this.salesPersonName = salesPersonName;
+    }
+
+    public User getSalesPerson() {
+        return salesPerson;
+    }
+
+    public void setSalesPerson(User salesPerson) {
+        this.salesPersonName = salesPerson.getLoginName();
+        this.salesPerson = salesPerson;
+    }
+
+    public String getSecondarySalesPersonName() {
+        return secondarySalesPersonName;
+    }
+
+    public void setSecondarySalesPersonName(String secondarySalesPersonName) {
+        this.secondarySalesPersonName = secondarySalesPersonName;
+    }
+
+    public User getSecondarySalesPerson() {
+        return secondarySalesPerson;
+    }
+
+    public void setSecondarySalesPerson(User secondarySalesPerson) {
+        this.secondarySalesPersonName = secondarySalesPerson.getLoginName();
+        this.secondarySalesPerson = secondarySalesPerson;
+    }
+
+    public String getProjectManagerName() {
+        return projectManagerName;
+    }
+
+    public void setProjectManagerName(String projectManagerName) {
+        this.projectManagerName = projectManagerName;
+    }
+
+    public User getProjectManager() {
+        return projectManager;
+    }
+
+    public void setProjectManager(User projectManager) {
+        this.projectManagerName = projectManager.getLoginName();
+        this.projectManager = projectManager;
+    }
+
+    public Timestamp getPromiseCompletionDate() {
+        return promiseCompletionDate;
+    }
+
+    public void setPromiseCompletionDate(Timestamp promiseCompletionDate) {
+        this.promiseCompletionDate = promiseCompletionDate;
+    }
+
+    public Timestamp getCustomerReadyDate() {
+        return customerReadyDate;
+    }
+
+    public void setCustomerReadyDate(Timestamp customerReadyDate) {
+        this.customerReadyDate = customerReadyDate;
+    }
+
+    public Timestamp getActualReadyDate() {
+        return actualReadyDate;
+    }
+
+    public void setActualReadyDate(Timestamp actualReadyDate) {
+        this.actualReadyDate = actualReadyDate;
+    }
+
+    public long getTurnaroundDays() {
+        return turnaroundDays;
+    }
+
+    public void setTurnaroundDays(long turnaroundDays) {
+        this.turnaroundDays = turnaroundDays;
+    }
+
+    public boolean isFollowUp() {
+        return followUp;
+    }
+
+    public void setFollowUp(boolean followUp) {
+        this.followUp = followUp;
+    }
+
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public Set<OrderLineItem> getLineItems() {
+        if(lineItems == null){
+            lineItems = new HashSet<OrderLineItem>();
+        }
+        return lineItems;
+    }
+
+    public Set<CEJobOrderLineItem> getJobOrderLineItems() {
+        Set<CEJobOrderLineItem> result = new HashSet<CEJobOrderLineItem>();
+        // TODO to fill the reulst set
+        return result;
+    }
+
+    public Set<ExpenseLineItem> getExpenseLineItems() {
+        Set<ExpenseLineItem> result = new HashSet<ExpenseLineItem>();
+        // TODO to fill the reulst set
+        return result;
+    }
+
+    public boolean addLineItem(CEJobOrderLineItem lineItem) {
+        lineItem.setJobOrder(this);
+        return getLineItems().add(lineItem);
+    }
+
+    public boolean removeLineItem(CEJobOrderLineItem lineItem) {
+        return getLineItems().remove(lineItem);
+    }
+
+    public Set<JobOrderAttachment> getAttachments() {
+        if(attachments == null){
+            attachments = new HashSet<JobOrderAttachment>();
+        }
+        return attachments;
+    }
+
+    public boolean addAttachment(JobOrderAttachment attachment) {
+        attachment.setJobOrder(this);
+        return getAttachments().add(attachment);
+    }
+
+    public boolean removeAttachment(JobOrderAttachment attachment) {
+        return getAttachments().remove(attachment);
+    }
+
+    public JobOrderCustomerDetail getCustomerDetail() {
+        return customerDetail;
+    }
+
+    public void setCustomerDetail(JobOrderCustomerDetail customerDetail) {
+        if(customerDetail != null){
+            customerDetail.setJobOrderNumber(this.jobNumber);
+        }
+        this.customerDetail = customerDetail;
+    }
+
+    public OrderOrigin getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(OrderOrigin origin) {
+        this.origin = origin;
+    }
+
+    public Set<DepositInvoice> getDepositInvoices() {
+        if(depositInvoices == null){
+            depositInvoices = new HashSet<DepositInvoice>();
+        }
+        return depositInvoices;
+    }
+
+    public boolean addDepositInvoice(DepositInvoice depositInvoice) {
+        depositInvoice.setJobOrder(this);
+        return getDepositInvoices().add(depositInvoice);
+    }
+
+    public boolean removeDepositInvoice(DepositInvoice depositInvoice) {
+        return getDepositInvoices().remove(depositInvoice);
+    }
+
+	public Set<JobOrderNote> getNotes(){
+	    if(notes == null){
+	        notes = new HashSet<JobOrderNote>();
+	    }
+		return notes;
+	}
+
+    public boolean addNote(JobOrderNote note){
+        note.setJobOrder(this);
+        return getNotes().add(note);
+    }
+
+    public boolean removeNote(JobOrderNote note){
+        return getNotes().remove(note);
+    }
+
+    public OperationalStatus getOperationalStatus() {
+        return operationalStatus;
+    }
+
+    public void setOperationalStatus(OperationalStatus operationalStatus) {
+        this.operationalStatus = operationalStatus;
+    }
+
+    public Instruction getInstruction(InstructionType type){
+        //Note: if multiple instruction of the same type in the set then the first one found is returned.
+        Set<Instruction> ins=getInstructions();
+        for(Instruction i:ins){
+            if(i.getInstructionType()==type){
+                return i;
+            }
+        }
+        return null;
+    }
+    
+    public Set<Instruction> getInstructions() {
+        if (instructions == null){
+            instructions = new HashSet<Instruction>();
+        }
+        return instructions;
+    }
+    
+    public boolean addInstruction(Instruction instruction){
+        instruction.setJobOrder(this);
+        return getInstructions().add(instruction);
+    }
+
+    public boolean removeInstructions(Instruction instruction){
+        return getInstructions().remove(instruction);
+    }
+
+    /**
+     * @return
+     */
+    public ProjectType getProjectType() {
+        return getProject().getType();
+    }
+
+    public BillingStatus getBillingStatus() {
+        return billingStatus;
+    }
+
+    public void setBillingStatus(BillingStatus billingStatus) {
+        this.billingStatus = billingStatus;
+    }
+    
+    public String getBaseCurrency(){
+        // TODO
+        return "USD";
+    }
+    
+    public String getBillingCurrency(){
+        // TODO
+        return "USD";
+    }
+}

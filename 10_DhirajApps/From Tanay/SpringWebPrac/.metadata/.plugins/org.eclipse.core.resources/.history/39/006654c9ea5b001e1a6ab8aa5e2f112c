@@ -1,0 +1,12 @@
+package dao;
+
+import model.Login;
+
+public class LoginDaoImpl implements LoginDao {
+
+	public boolean checkLogin(Login l) {
+	
+		return false;
+	}
+
+}

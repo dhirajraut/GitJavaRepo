@@ -1,0 +1,176 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.invoice;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.intertek.entity.User;
+import com.intertek.exception.ServiceException;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.PhoenixException;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.InvoiceStatus;
+import com.intertek.phoenix.invoice.InvoiceService;
+import com.intertek.phoenix.entity.CEInvoice;
+import com.intertek.util.SecurityUtil;
+import com.intertek.web.controller.BaseSimpleFormController;
+import com.intertek.phoenix.entity.CreditInvoice;
+import com.intertek.phoenix.search.SearchService;
+import com.intertek.phoenix.web.controller.invoice.CEInvoiceForm;
+import com.intertek.service.UserService;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The class JobViewCEInvoiceFormController is used to load all the invoices and
+ * create the credit invoice.
+ * 
+ * @version 1.0 May 22, 2009
+ * @author Patni
+ */
+public class JobViewCEInvoiceFormController extends BaseSimpleFormController {
+
+    /**
+     * Instantiates a new JobViewCEInvoiceFormController.
+     */
+    public JobViewCEInvoiceFormController() {
+        super();
+        setCommandClass(CEViewInvoiceForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+
+        CEViewInvoiceForm ceViewInvoiceForm = (CEViewInvoiceForm) command;
+        InvoiceService invoiceService = (InvoiceService) ServiceLocator.getInstance().getBean("ceInvoiceService");
+        UserService userService = (UserService) ServiceLocator.getInstance().getBean("userService");
+
+        String creditFlag = request.getParameter("creditFlag");
+        int rowNum = ceViewInvoiceForm.getIndex();
+        if (creditFlag != null && "credit".equals(creditFlag)) {
+            List<CEInvoiceForm> invoiceFormList = ceViewInvoiceForm.getCeInvoiceFormList();
+            if (rowNum != -1) {
+                CEInvoiceForm ceInvoiceForm = (CEInvoiceForm) invoiceFormList.get(rowNum);
+                CEInvoice ceInvoice = ceInvoiceForm.getCeInvoice();
+                CreditInvoice crInvoice = new CreditInvoice();
+                ceInvoice.setStatus(InvoiceStatus.PAID);
+                User user = userService.getUserByName(SecurityUtil.getUser().getLoginName());
+                crInvoice = invoiceService.creditInvoice(user, ceInvoice, ceViewInvoiceForm.getCreditReasonNote());
+                ceInvoiceForm.setCrInvoice(crInvoice);
+            }
+            ceViewInvoiceForm.setCreditFlag("none");
+        }
+        return showForm(request, response, errors);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#suppressValidation(javax.servlet.http.HttpServletRequest)
+     */
+
+    protected boolean suppressValidation(HttpServletRequest request, Object command) {
+        String refreshing = request.getParameter("refreshing");
+        if ((refreshing != null) && "true".equals(refreshing)) {
+            return true;
+        }
+        return super.suppressValidation(request, command);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, null, new CustomDateEditor(dateFormat, true));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+
+        CEViewInvoiceForm ceViewInvoiceForm = new CEViewInvoiceForm();
+        
+        String jobNumber = request.getParameter("jobNumber");
+        if (jobNumber == null) {
+            throw new ServiceException("jobnumber.not.exists.error", new Object[] { jobNumber }, null);
+        }
+        else {
+            CEInvoice ceInvoice = new CEInvoice();
+            Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+            CEJobOrder jo = jobDao.find(jobNumber);
+            ceInvoice.setJobOrder(jo);
+            ceViewInvoiceForm.setCeInvoice(ceInvoice);
+            fetchCeViewInvoiceForm(jobNumber, ceViewInvoiceForm);
+        }
+        return ceViewInvoiceForm;
+    }
+
+    /**
+     * Name :fetchCeViewInvoiceForm Purpose :to fetch the list of invoices for
+     * the given jobNumber by the search service method.
+     * 
+     * @param jobNumber
+     *            the job number
+     * @param ceViewInvoiceForm
+     *            the ce view invoice form
+     */
+
+    @SuppressWarnings("unchecked")
+    private void fetchCeViewInvoiceForm(String jobNumber, CEViewInvoiceForm ceViewInvoiceForm) {
+
+        SearchService searchService = (SearchService) ServiceLocator.getInstance().getBean("searchService");
+        Map<String, String> sMap = new HashMap<String, String>();
+        sMap.put("orderNumber", jobNumber);
+
+        try {
+            List<CEInvoiceForm> invForms = ceViewInvoiceForm.getCeInvoiceFormList();
+            if (invForms == null) {
+                invForms = new ArrayList<CEInvoiceForm>();
+            }
+
+            List<CEInvoice> ceInvoiceList = (List<CEInvoice>) searchService.search(CEInvoice.class, sMap);
+            for (CEInvoice ceInv : ceInvoiceList) {
+                CEInvoiceForm invForm = new CEInvoiceForm(ceInv);
+                invForms.add(invForm);
+            }
+            ceViewInvoiceForm.setCeInvoiceFormList(invForms);
+        }
+        catch (PhoenixException e) {
+            // TODO Proper implementation of the exception handling once the
+            // exception handling approach is finalized
+            e.printStackTrace();
+        }
+
+    }
+}

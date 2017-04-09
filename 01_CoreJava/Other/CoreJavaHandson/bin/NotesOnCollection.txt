@@ -1,0 +1,94 @@
+Collection:
+	Definition : 	It is a group of objects.
+			Given in package java.util
+			They have standardizes the way in which group of ojbects are handled.
+			In Early versions Vector, Properties, Stack etc are given.
+
+	Advantages of Collection over earlier facilities avaiable...
+		* The earlier classes were handled differently.  There is no uniformity in
+			handling them.  The Collection classes are all uniform providing similar
+			methods and functionaries.
+		* The earlier classes were not designed for easily extensibility and adaptability.
+		* They give high efficiency and high performance.
+		* They give high degree of interoperability.
+		* Easily convertible from one form into another.
+		* The Iterators and ListIterators give a simple and standard way of accessing
+			elements of collection.  The Comparator provides specific ordering
+			of elements of Collection.
+		* The collections are equipped with Maps(Stored Key-value pairs.).
+		* Collection provides wide list of Interfaces and Abstract Classes.
+
+Collection Interface
+	It is a foundation upon which collection framework is built.
+   * List Interface : It extends collection interface and declares behaviour of a collection that stores
+	a sequence of elements.  Elements are identified by zero based index.
+	A list may contain Duplicate Elements.
+   * Set Interface : It extends collection interface and declares behaviour of a set without
+	 duplicates .
+	* SortedSet Interface : It extends set and declare a behaviour which represents elements
+		specific order.
+
+Collection Classes
+	Some of the collection classes provide full implementation while some provides abstract
+		for skeletal implementations that are used as starting points for creating
+		concrete collections.
+	Standard collection classes are...
+		* Collection Interface 	Provides common functionality among collections.
+		* AbstractCollection	Implements Collection Interfaces.
+		* AbstractList		Extends AbstractCollection and implements List interface.
+		* AbstractSequentialList Extends AbstractList and provides Sequential access
+						rather than random access.
+		* LinkedList	Implements AbstractSequentialList.
+		* ArrayList		Implements Dynamic Array extends AbstractList.
+		* Set			An interface extends collection.  Allows non-duplicate values.
+		* AbstractSet	Extends AbstractCollection and implements Set interface.
+		* HashSet		Extends AbstractSet.
+		* TreeSet		Extends AbstractSet Implements Set interface.
+
+	Concrete Collection Classes.
+   * The ArrayList Class : It extends AbstractList and implements List interface.  It supports
+	dynamic arrays
+	It allows Iterator and ListIterator both.
+	Methods of ArrayList 
+ 	* Adding new element in an ArrayList
+ 	* 		* At last, at given index
+	 * 		* List of comlete collection at last or at given index
+	 * Removing ArrayList elements
+ 	* 		* Clearing all elements from the list.
+	 * 		* Removing element from the given index.
+	 * 		* Removing given element whereever be in the list.
+	 * 		* Removeing all elements from given index to given index.
+	 * Getting value of specific element
+	 * 		* Getting value of an element at given index.
+	 * 		* Getting all elements into string form.
+	 * Setting value of specific element
+	 * 		* Setting given object at given index.
+	 * Searching element
+	 * 		* Ensuring presence of a given element.
+	 * 		* Finding first occurance of the given element.
+	 * 		* Finding last occurance of the given element.
+	 * 		* Ensuring whether list has any element.
+	 * 		* Counting number of elements.
+	 * Other
+	 * 		* Setting maximum capacity.
+	 * 		* Creating clone.
+	 * 		* Treaming to size.
+	 * 		* Converting to Array.
+   * The LinkedList Class : It extends AbstractSequentialList and implements List interface.
+	* It allows Iterator and ListIterator both.
+	Methods of LinkedList
+	* Adding new element at first, last or given index position.
+	* Adding new collection at given index position or at last.
+	* 
+
+***** Waiting for completion.
+
+   * The HashSet Class : It extends AbstractClass and Implements Set interface. It creates a
+	collection that uses Hash Table for storage.  Hash table stores data using Hashing
+	Mechanisom which relate 1-1 the hash key and bucket.  The data key is converted to
+	hash key using hashing function.
+	The advantage if Hashing is it gives constant efficiency for basic operations like add,
+	remove, contains irrespective of size of data.
+	* Hash set does not guarantee the order of its elements.  For having specific order, Hash
+		tree sets can be used.
+	* Does allow only iterator and not ListIterator.

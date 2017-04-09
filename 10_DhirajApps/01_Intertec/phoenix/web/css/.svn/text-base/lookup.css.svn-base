@@ -1,0 +1,137 @@
+/* <style> */
+
+div.sample_popup {
+z-index: 200;
+visibility: hidden; 
+display: none;
+}
+
+div.sample_popup div.menu_form_header
+{
+  border: 1px solid black;
+  border-bottom: 1px;
+  cursor: default;
+  width: 400px;
+  height:      20px;
+  line-height: 19px;
+  vertical-align: middle;
+  background:url(../images/intablehdrblubg.gif);
+  text-decoration: none;
+  font-family:Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 11px;
+  color: #000;
+  z-index: 200;
+}
+
+div.sample_popup div.menu_form_body
+{
+  	border: 1px solid black;
+ 	width: 400px;
+	height:400px;
+	background-color:#F4F7FB;
+	overflow:auto;
+	vertical-align:top;
+	padding-top:5px;
+	z-index: 200;
+	
+	
+  /*background: url('form.png') no-repeat left bottom;*/
+}
+
+div.sample_popup img.menu_form_exit
+{
+  float: right;
+  margin: 4px 5px 0px 0px;
+  cursor: pointer;
+}
+
+/*div.sample_popup table
+{
+  border-collapse: collapse;
+  width: 100%;
+}
+
+div.sample_popup th
+{
+  width: 1%;
+  padding: 0px 5px 1px 0px;
+
+  text-align: left;
+
+  font-family: "Times New Roman", Serif;
+  font-weight: 900;
+  font-size: 13px;
+  color: #004060;
+}
+
+div.sample_popup td
+{
+  width: 99%;
+  padding: 0px 0px 1px 0px;
+}
+
+div.sample_popup form
+{
+  margin: 0px;
+  padding: 8px 10px 10px 10px;
+}
+
+div.sample_popup input.field
+{
+  border: 1px solid #808080;
+  width: 95%;
+  font-family: Arial, Sans-Serif;
+  font-size: 12px;
+}
+
+div.sample_popup input.btn
+{
+  margin-top: 2px;
+  border: 1px solid #808080;
+  background-color: #DDFFDD;
+  font-family: Verdana, Sans-Serif;
+  font-size: 11px;
+}
+*/
+
+.LookupTable {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#000000;
+	border:#86A3DB 1px solid;
+	background-color:#FFFFFF;
+	
+	}
+	
+	.LookupTable TD {
+	border-left:#d9e0ef solid 1px;
+	border-top: #d9e0ef solid 1px; 
+	padding: 5px;
+	font-size:11px;
+	font-weight:bold;
+	color:#333333;
+	padding-left:10px;
+	background-color:white;
+	}
+	
+	.LookupTable TH {
+	font-family:Arial, Helvetica, sans-serif; 
+	font-size:11px; 
+	font-weight:bold; 
+	color:#333333; 
+	background-image:url(../images/intablehdrgreybg.gif); 
+	padding-left:10px; 
+	padding-right:10px; 
+	height:27px; 
+	text-align:left; 
+	
+	}
+
+	.LookupTable .whitebg {
+	background-color:#FFFFFF;
+	}
+
+	.LookupTable .bluebg {
+	background-color:#e7eeff; 
+	}

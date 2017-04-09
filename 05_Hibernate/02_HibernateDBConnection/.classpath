@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/hibernate3.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/slf4j-api-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/javassist-3.4.GA.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/Hibernate/hibernate-distribution-3.3.1.GA/lib/required/slf4j-log4j12-1.5.0(Added).jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Dhiraj Backup/Developer/repository/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

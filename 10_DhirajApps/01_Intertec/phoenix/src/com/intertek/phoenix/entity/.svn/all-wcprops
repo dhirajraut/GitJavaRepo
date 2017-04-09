@@ -1,0 +1,419 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity
+END
+JobTestNote.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6332/branches/phx2.1/src/com/intertek/phoenix/entity/JobTestNote.java
+END
+QuoteLine.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/QuoteLine.java
+END
+CEJobOrderLineItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity/CEJobOrderLineItem.java
+END
+PurchaseOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/PurchaseOrder.java
+END
+NoteType.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/NoteType.java
+END
+BusinessStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/BusinessStream.java
+END
+ProjectType.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6475/branches/phx2.1/src/com/intertek/phoenix/entity/ProjectType.java
+END
+SourceOrigin.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6251/branches/phx2.1/src/com/intertek/phoenix/entity/SourceOrigin.java
+END
+CEJobOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6985/branches/phx2.1/src/com/intertek/phoenix/entity/CEJobOrder.java
+END
+ServiceOffering.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/entity/ServiceOffering.java
+END
+PaymentStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/PaymentStatus.java
+END
+BillingLineDistribution.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/BillingLineDistribution.java
+END
+CEInvoiceLineItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/CEInvoiceLineItem.java
+END
+BillingEventItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/BillingEventItem.java
+END
+JobSlate.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobSlate.java
+END
+CEInvoice.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/7013/branches/phx2.1/src/com/intertek/phoenix/entity/CEInvoice.java
+END
+JobContractTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity/JobContractTest.java
+END
+DepositInvoiceAmount.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/DepositInvoiceAmount.java
+END
+DepositType.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/DepositType.java
+END
+JobContractServiceExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobContractServiceExpression.java
+END
+JobTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity/JobTest.java
+END
+JobOrderAttachment.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6267/branches/phx2.1/src/com/intertek/phoenix/entity/JobOrderAttachment.java
+END
+OperationalStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6921/branches/phx2.1/src/com/intertek/phoenix/entity/OperationalStatus.java
+END
+Instruction.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Instruction.java
+END
+BillingEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/BillingEvent.java
+END
+JobTestAttachment.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6357/branches/phx2.1/src/com/intertek/phoenix/entity/JobTestAttachment.java
+END
+JobServiceLevel.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity/JobServiceLevel.java
+END
+DepositInvoice.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/7009/branches/phx2.1/src/com/intertek/phoenix/entity/DepositInvoice.java
+END
+BillingStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6921/branches/phx2.1/src/com/intertek/phoenix/entity/BillingStatus.java
+END
+Permission.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6993/branches/phx2.1/src/com/intertek/phoenix/entity/Permission.java
+END
+JobContractServiceControl.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobContractServiceControl.java
+END
+JobService.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobService.java
+END
+JobServiceControl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobServiceControl.java
+END
+InvoiceFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/InvoiceFile.java
+END
+UOM.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/UOM.java
+END
+SampleTracking.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/7008/branches/phx2.1/src/com/intertek/phoenix/entity/SampleTracking.java
+END
+JobOrderType.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/entity/JobOrderType.java
+END
+PaymentType.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/PaymentType.java
+END
+OrderStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/OrderStatus.java
+END
+CEJobContract.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/7015/branches/phx2.1/src/com/intertek/phoenix/entity/CEJobContract.java
+END
+ServiceOfferingTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/ServiceOfferingTest.java
+END
+ContractServiceLevel.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/entity/ContractServiceLevel.java
+END
+Visibility.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6921/branches/phx2.1/src/com/intertek/phoenix/entity/Visibility.java
+END
+Attachment.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Attachment.java
+END
+TestJobOrderLineItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6567/branches/phx2.1/src/com/intertek/phoenix/entity/TestJobOrderLineItem.java
+END
+InvoiceType.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6793/branches/phx2.1/src/com/intertek/phoenix/entity/InvoiceType.java
+END
+InvoiceStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6251/branches/phx2.1/src/com/intertek/phoenix/entity/InvoiceStatus.java
+END
+RevenueSegregation.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6900/branches/phx2.1/src/com/intertek/phoenix/entity/RevenueSegregation.java
+END
+JobContractSlate.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobContractSlate.java
+END
+ConsolidatedInvoiceId.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6999/branches/phx2.1/src/com/intertek/phoenix/entity/ConsolidatedInvoiceId.java
+END
+Note.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Note.java
+END
+IntegrationHistory.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6251/branches/phx2.1/src/com/intertek/phoenix/entity/IntegrationHistory.java
+END
+JobOrderLineItemAttachment.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6267/branches/phx2.1/src/com/intertek/phoenix/entity/JobOrderLineItemAttachment.java
+END
+Project.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6609/branches/phx2.1/src/com/intertek/phoenix/entity/Project.java
+END
+InvoiceGenerationType.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/InvoiceGenerationType.java
+END
+JobServiceExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobServiceExpression.java
+END
+Estimation.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Estimation.java
+END
+Employee.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6985/branches/phx2.1/src/com/intertek/phoenix/entity/Employee.java
+END
+UserType.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6252/branches/phx2.1/src/com/intertek/phoenix/entity/UserType.java
+END
+Product.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Product.java
+END
+ProjectActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6267/branches/phx2.1/src/com/intertek/phoenix/entity/ProjectActivity.java
+END
+OrderOrigin.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6495/branches/phx2.1/src/com/intertek/phoenix/entity/OrderOrigin.java
+END
+JobOrderLineItemNote.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6267/branches/phx2.1/src/com/intertek/phoenix/entity/JobOrderLineItemNote.java
+END
+ConsolidatedInvoice.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6999/branches/phx2.1/src/com/intertek/phoenix/entity/ConsolidatedInvoice.java
+END
+CreditInvoice.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/7009/branches/phx2.1/src/com/intertek/phoenix/entity/CreditInvoice.java
+END
+JobContractService.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/JobContractService.java
+END
+JobOrderNote.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6267/branches/phx2.1/src/com/intertek/phoenix/entity/JobOrderNote.java
+END
+Quote.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/Quote.java
+END
+ProductGroupProduct.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6824/branches/phx2.1/src/com/intertek/phoenix/entity/ProductGroupProduct.java
+END

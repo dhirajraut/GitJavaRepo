@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+
+    <mx:Script>
+        <![CDATA[
+        	import com.galaxy.forum.events.Dispatcher;
+        	import com.galaxy.forum.events.LoginEvent;
+        	import com.galaxy.forum.utils.Constants;
+        	import com.galaxy.forum.events.ForumEvent;
+        	import mx.rpc.events.ResultEvent;
+        	import mx.rpc.http.mxml.HTTPService;
+            import mx.controls.Alert;
+            import mx.effects.easing.Bounce;
+
+            
+    		public function submitForm(e:Event):void {
+    		    
+    		    if (this.currentState == "mainLogin" && 
+    		            (txtId.text == "" || txtPassword.text == "")) {
+    		        mx.controls.Alert.show ("Please enter valid username and password.");
+    		    }
+    		    else if (this.currentState == "forgotPassword" && (txtId.text == "")) {
+    		        mx.controls.Alert.show ("Please enter valid email id.");
+    		    }
+    		    else {
+    		    	var params:Object = new Object();
+    		    	params.userId = txtId.text;
+    		    	params.password = txtPassword.text;
+    		    	loginService.send(params);
+    		    }
+    		}
+    		
+    		public function showForgotPassword(e:Event):void {
+    		    if (this.currentState == "mainLogin") {
+    		        this.currentState = "forgotPassword";
+    		    }
+    		    else {
+    		        this.currentState = "mainLogin";
+    		    }
+    		}
+    		
+    		public function handleResult():void {
+//    			Alert.show(loginService.lastResult.result);
+    			if (loginService.lastResult.result == false) {
+    				Dispatcher.dispatcher.dispatchEvent(new LoginEvent(
+    						LoginEvent.LOGIN_FAILURE, null));
+    			}
+    			else {
+    				Dispatcher.dispatcher.dispatchEvent(new LoginEvent(
+    						LoginEvent.LOGIN_SUCCESS, null));
+    			}
+    		}
+
+        ]]>
+    </mx:Script>
+    
+    <mx:Zoom id="shrink" duration="100" zoomHeightTo="0.9" zoomWidthTo="0.9" />
+    <mx:Zoom id="revert" duration="50" zoomHeightTo="1" zoomWidthTo="1" />
+        <mx:transitions>
+        <!--
+            The "*" indicates that the transition should be applied
+            to any changes in the view state. You can set either 
+            property to "" to refer to the base view state. 
+        -->
+       <mx:Transition fromState="*" toState="*">
+            <!-- Parallel effects execute in unison --> 
+            <mx:Parallel targets="{[loginId, password]}">
+                <mx:Resize duration="500" easingFunction="Bounce.easeOut"/>
+                <!-- 
+                    Sequence effects execute in turn. The effects
+                    in this sequence will only affect the confirm FormItem.
+                -->
+<!--                <mx:Sequence target="{submitFormButton}">
+
+                    <mx:Blur duration="200" blurYFrom="1.0" blurYTo="20.0" />            
+                    <mx:Blur duration="200" blurYFrom="20.0" blurYTo="1" />            
+                </mx:Sequence>-->
+            </mx:Parallel>
+        </mx:Transition>
+    </mx:transitions>
+
+    <mx:states>
+        <mx:State name="mainLogin">
+            <mx:SetProperty target="{titleWindow}" name="title" value="Login"/>
+            <mx:SetProperty target="{message}" name="visible" value="false"/>
+            <mx:SetProperty target="{loginId}" name="label" value="User Id :"/>
+            <mx:SetProperty target="{txtId}" name="text" value=""/>
+            <mx:SetProperty target="{password}" name="label" value="Password :"/>
+            <mx:SetProperty target="{txtPassword}" name="text" value=""/>
+            <mx:SetProperty target="{password}" name="visible" value="true"/>
+            <mx:SetProperty target="{forgotCancel}" name="label" value="Forgot Password"/>
+            <mx:SetProperty target="{submissionType}" name="text" value="mainLogin"/>
+        </mx:State>
+        <mx:State name="forgotPassword">
+            <mx:SetProperty target="{titleWindow}" name="title" value="Forgot Password"/>
+            <mx:SetProperty target="{message}" name="visible" value="true"/>
+            <mx:SetProperty target="{loginId}" name="label" value="EMail Id :"/>
+            <mx:SetProperty target="{txtId}" name="text" value=""/>
+            <mx:SetProperty target="{password}" name="visible" value="false"/>
+            <mx:SetProperty target="{txtPassword}" name="text" value=""/>
+            <mx:SetProperty target="{forgotCancel}" name="label" value="Cancel"/>
+            <mx:SetProperty target="{submissionType}" name="text" value="forgotPassword"/>
+        </mx:State>
+    </mx:states>   
+
+	<mx:HTTPService id="loginService" result="handleResult()" url="spring/home" />
+
+    <mx:TitleWindow id="titleWindow" title="Login" width="100%" height="100%"
+    styleName="widgetPanel" showCloseButton="false" verticalCenter="0">
+
+         <mx:Form creationComplete="this.currentState='mainLogin'" paddingTop="50">
+            <mx:FormItem id="loginId" required="true">
+    			<mx:TextInput id="txtId" />
+    		</mx:FormItem>
+    		<mx:FormItem id="password" label="Password : " required="true" hideEffect="">
+    			<mx:TextInput id="txtPassword" displayAsPassword="true" />
+    		</mx:FormItem>
+    		
+    		<mx:Label id="message" text="Your password will be sent to your email id shortly."/>
+
+    		<mx:HBox horizontalAlign="center" width="100%">
+        			<mx:Button id="submitFormButton" label="Submit" click="submitForm(event)"
+        					width="100%" 
+        					/>
+        			<mx:Button id="forgotCancel" click="showForgotPassword(event)" 
+        					width="100%"
+        					/>
+    		</mx:HBox>
+    		<mx:Label id="submissionType" visible="false" />
+        </mx:Form>
+
+    </mx:TitleWindow>
+</mx:VBox>

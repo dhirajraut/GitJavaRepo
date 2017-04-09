@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/webservices
+END
+BaseJDomPayloadEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/webservices/BaseJDomPayloadEndpoint.java
+END
+DCAppJobOrderEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6361/branches/phx2.1/src/com/intertek/phoenix/webservices/DCAppJobOrderEndpoint.java
+END
+EmployeeEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/webservices/EmployeeEndpoint.java
+END
+DCAppBillableItemsEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/phoenix/!svn/ver/6537/branches/phx2.1/src/com/intertek/phoenix/webservices/DCAppBillableItemsEndpoint.java
+END
+PeopleSoftBillableItemsProjectEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/phoenix/!svn/ver/6567/branches/phx2.1/src/com/intertek/phoenix/webservices/PeopleSoftBillableItemsProjectEndpoint.java
+END
+ECSJobOrderEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6361/branches/phx2.1/src/com/intertek/phoenix/webservices/ECSJobOrderEndpoint.java
+END
+ValidateCustomerProjectEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/phoenix/!svn/ver/6521/branches/phx2.1/src/com/intertek/phoenix/webservices/ValidateCustomerProjectEndpoint.java
+END
+UpdateCreditHoldEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/phoenix/!svn/ver/6409/branches/phx2.1/src/com/intertek/phoenix/webservices/UpdateCreditHoldEndpoint.java
+END
+UpdateMarketRatesEndpoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6210/branches/phx2.1/src/com/intertek/phoenix/webservices/UpdateMarketRatesEndpoint.java
+END

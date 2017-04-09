@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/js/ce
+END
+ce_invoice_preview.js
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/7232/branches/phx2.1/web/js/ce/ce_invoice_preview.js
+END
+genericlookup.js
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/phoenix/!svn/ver/7143/branches/phx2.1/web/js/ce/genericlookup.js
+END
+ce_job_services_popup.js
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/6204/branches/phx2.1/web/js/ce/ce_job_services_popup.js
+END
+ce_edit_deposit_amount_popup.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6891/branches/phx2.1/web/js/ce/ce_edit_deposit_amount_popup.js
+END
+ce_services.js
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/js/ce/ce_services.js
+END
+ce_add_test_popup.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/6878/branches/phx2.1/web/js/ce/ce_add_test_popup.js
+END
+ce_edit_price_popup.js
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/6891/branches/phx2.1/web/js/ce/ce_edit_price_popup.js
+END
+ce_select_charges.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/7170/branches/phx2.1/web/js/ce/ce_select_charges.js
+END
+ce_jobInstruction.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/7138/branches/phx2.1/web/js/ce/ce_jobInstruction.js
+END
+ce_jobentry.js
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/phoenix/!svn/ver/7317/branches/phx2.1/web/js/ce/ce_jobentry.js
+END
+ce_joblog.js
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/phoenix/!svn/ver/6850/branches/phx2.1/web/js/ce/ce_joblog.js
+END

@@ -1,0 +1,7 @@
+<beans xmlns="http://xfire.codehaus.org/config/1.0">
+  <service>
+    <name>InvoiceService</name>
+    <namespace>http://xfire.codehaus.org/InvoiceService</namespace>
+    <serviceClass>com.intertek.webService.InvoiceService</serviceClass>
+  </service>
+</beans>

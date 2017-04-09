@@ -1,0 +1,154 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ */
+package com.intertek.phoenix.esb;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.jdom.Document;
+import org.jdom.output.XMLOutputter;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+
+import com.intertek.exception.ServiceException;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.Project;
+import com.intertek.tool.oxm.OxmManager;
+import com.intertek.tool.transformer.DataTransformer;
+import com.intertek.webservice.outbound.spring.SpringWebServiceSender;
+
+/**
+ * ESB Related services
+ * 
+ * @author Eric.Nguyen
+ */
+public class ESBSender {
+	protected DataTransformer dataTransformer;
+	protected String url;
+	protected String soapAction;
+	
+	public ESBSender(){
+		
+	}
+	
+	public DataTransformer getDataTransformer(){
+		return dataTransformer;
+	}
+
+	public void setDataTransformer(DataTransformer dataTransformer){
+		this.dataTransformer = dataTransformer;
+	}
+
+	public String getUrl(){
+		return url;
+	}
+
+	public void setUrl(String url){
+		this.url = url;
+	}
+
+	public String getSoapAction(){
+		return soapAction;
+	}
+
+	public void setSoapAction(String soapAction){
+		this.soapAction = soapAction;
+	}
+	
+	/*
+	 * given the children classes to have the chance to manipulate the xml
+	 * result before return to the view.
+	 */
+	protected String finalizeResult(String xmlResult){
+		return xmlResult;
+	}
+
+	/*
+	 * perform the sending and return the result
+	 */
+	public Object send(Object obj){
+		if(obj == null){
+			return null;
+		}
+
+		try{
+			String content = null;
+			if(obj instanceof String){
+				content = (String) obj;
+			}
+			else{
+				Document doc = convertToDoc(obj);
+				content = convertToXml(doc);
+			}
+			StreamSource source = new StreamSource(new StringReader(content));
+			StringWriter resultSW = new StringWriter();
+			StreamResult result = new StreamResult(resultSW);
+			getWebserviceSender().sendSourceAndReceiveToResult(source, result);
+			return convertToObject(resultSW.toString());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(), e);
+		}
+	}
+
+	/*
+	 * convert the given object to xml Document using OxmManager
+	 */
+	public Document convertToDoc(Object obj){
+		OxmManager oxmManager = (OxmManager) ServiceLocator.getInstance().getBean("oxmManager");
+		Document doc = oxmManager.marshal(obj);
+		return doc;
+	}
+	
+	/*
+	 * convert xml back to java object
+	 */
+	private Object convertToObject(String xml){
+	    System.out.println(xml);
+	    OxmManager oxmManager = (OxmManager) ServiceLocator.getInstance().getBean("oxmManager");
+	    Reader reader = new StringReader(xml);
+	    return oxmManager.unmarshal(reader);
+	}
+
+	/*
+	 * convert from xml document to xml String
+	 */
+	public String convertToXml(Document doc) throws IOException{
+		Document myDoc=doc;
+		
+		DataTransformer dataTransformer=getDataTransformer();		
+		if(dataTransformer != null){
+			myDoc = dataTransformer.transform(myDoc);
+		}
+		
+		StringWriter sw = new StringWriter();
+		XMLOutputter xmlOut = new XMLOutputter();
+		xmlOut.output(myDoc, sw);
+		String content = sw.toString();
+		return content;
+	}
+
+	/*
+	 * create a webserviceSender to perform the sending
+	 */
+	public SpringWebServiceSender getWebserviceSender(){
+		SpringWebServiceSender swss = new SpringWebServiceSender();
+		swss.setUrl(getUrl());
+		swss.setSoapAction(getSoapAction());
+		return swss;
+	}
+}

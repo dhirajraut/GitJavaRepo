@@ -1,0 +1,32 @@
+package com;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.FileSystemResource;
+
+
+
+public class StudentMain {
+	private String fName;
+	private String lName;
+	private String add;
+	public void setAdd(String add) {
+		this.add = add;
+	}
+	public void setFName(String name) {
+		fName = name;
+	}
+	public void setLName(String name) {
+		lName = name;
+	}
+	public static void displayData(StudentData sd)
+	{
+		System.out.println("Name:-" + sd.getFName()+" "+sd.getLName() );
+		System.out.println("Address:- " + sd.getAdd());
+	}
+	public static void main(String[] args) {
+		BeanFactory factory = new XmlBeanFactory(new FileSystemResource("C:\\Tanay\\SprigPractice\\DependencyInjection\\com\\studentapp.xml"));
+		Student stu = (Student) factory.getBean("student");
+		displayData(stu.getStudentData());
+	}
+}

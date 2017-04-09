@@ -1,0 +1,293 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain
+END
+ServiceRates.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ServiceRates.java
+END
+BankSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BankSearch.java
+END
+ContractSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ContractSearch.java
+END
+UserSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/UserSearch.java
+END
+BaseEditContractTestSlate.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BaseEditContractTestSlate.java
+END
+AddCustomer.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddCustomer.java
+END
+AddRole.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddRole.java
+END
+SlatePriceExt.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/SlatePriceExt.java
+END
+BaseEditContract.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BaseEditContract.java
+END
+CancelledJobsSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/CancelledJobsSearch.java
+END
+AddJobOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddJobOrder.java
+END
+ServiceLocationSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ServiceLocationSearch.java
+END
+ContactSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ContactSearch.java
+END
+QuickCreateCustomer.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/QuickCreateCustomer.java
+END
+EditServiceRate.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditServiceRate.java
+END
+EditContractTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditContractTest.java
+END
+SelectServices.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/SelectServices.java
+END
+BranchSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BranchSearch.java
+END
+EditUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditUser.java
+END
+RoleSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/RoleSearch.java
+END
+CustomerSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/CustomerSearch.java
+END
+CountrySearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/CountrySearch.java
+END
+JobCodeSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/JobCodeSearch.java
+END
+ProjectSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ProjectSearch.java
+END
+AddPermissionList.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddPermissionList.java
+END
+SelectZones.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/SelectZones.java
+END
+TemplateSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/TemplateSearch.java
+END
+AddPrebill.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddPrebill.java
+END
+AddBusinessUnit.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddBusinessUnit.java
+END
+AddContact.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddContact.java
+END
+PermissionListSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/PermissionListSearch.java
+END
+EditContractSlate.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditContractSlate.java
+END
+AddCountry.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddCountry.java
+END
+BankAccountSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BankAccountSearch.java
+END
+EditProductGroupSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditProductGroupSet.java
+END
+TimeZoneSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/TimeZoneSearch.java
+END
+EditZone.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditZone.java
+END
+AddJobContract.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddJobContract.java
+END
+BusinessUnitSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/BusinessUnitSearch.java
+END
+TestPriceExt.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/TestPriceExt.java
+END
+TowingCompanySearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/TowingCompanySearch.java
+END
+EditVesselTypeSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditVesselTypeSet.java
+END
+SelectBranches.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/SelectBranches.java
+END
+ShippingAgentSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/ShippingAgentSearch.java
+END
+AddContract.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddContract.java
+END
+AddTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/AddTest.java
+END
+VatRateSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/VatRateSearch.java
+END
+EditInspectionRate.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/domain/EditInspectionRate.java
+END

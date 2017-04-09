@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Link" table="LINKS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="LINK_NAME" length="256" />
+    </id>
+    <property name="url" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta>
+      <column name="URL" length="512" not-null="true" />
+    </property>
+    <property name="seqNumber" type="int">
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />
+    </property>
+    <property name="description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta>
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <set name="permissions" table="LINK_PERMISSION_MAP" cascade="save-update" lazy="true">
+      <key column="LINK_NAME" />
+      <many-to-many class="Permission" column="PERM_NAME" />
+    </set>
+  </class>
+</hibernate-mapping>
+

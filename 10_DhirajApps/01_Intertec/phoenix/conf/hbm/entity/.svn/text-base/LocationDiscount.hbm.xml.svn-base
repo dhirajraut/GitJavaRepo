@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="LocationDiscount" table="PS_ITSC_LOC_DSCNT">
+    <composite-id name="locationDiscountId" class="LocationDiscountId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="location" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="CFG_LOCATION" length="105" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="cfgDiscountPercent" type="java.lang.Double">
+      <column name="CFG_DISCOUNT_PCT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="zoneDiscountPercent" type="java.lang.Double">
+      <column name="ITS_ZONE_DSCNT_PCT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="labFactor" type="java.lang.Double">
+      <column name="ITS_LAB_FACTOR" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="opsFactor" type="java.lang.Double">
+      <column name="ITS_OPS_FACTOR" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="labDiscountPercent" type="java.lang.Double">
+      <column name="ITS_LAB_DSCNT_PCT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="opsDiscountPercent" type="java.lang.Double">
+      <column name="ITS_OPS_DSCNT_PCT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="inspectionDiscountPercent" type="java.lang.Double">
+      <column name="ITS_INSP_DSCNT_PCT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="testDiscountPercent" type="java.lang.Double">
+      <column name="ITS_TEST_DSCNT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="slateDiscountPercent" type="java.lang.Double">
+      <column name="ITS_SLATE_DSCNT" sql-type="NUMBER(5, 2)" />
+    </property>
+    <property name="currencyCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="CURRENCY_CD" length="9" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>
+

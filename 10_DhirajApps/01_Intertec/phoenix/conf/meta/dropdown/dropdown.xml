@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE dropdowns PUBLIC "meta/dropdown/dropdown.dtd" "http://www.intertek.com/meta/dropdown/dropdown.dtd">
+<dropdowns>
+
+ <dropdown id="businessUnit" class="com.intertek.meta.dropdown.impl.BusinessUnitDropDown">
+  </dropdown>
+
+  <dropdown id="branch" class="com.intertek.meta.dropdown.impl.BranchDropDown">
+  </dropdown>
+
+   <dropdown id="bustreamBranch" class="com.intertek.meta.dropdown.impl.BuStreamBranchDropDown">
+  </dropdown>
+
+   <dropdown id="currency" class="com.intertek.meta.dropdown.impl.CurrencyDropDown">
+  </dropdown>
+
+   <dropdown id="country" class="com.intertek.meta.dropdown.impl.CountryDropDown">
+  </dropdown>
+
+   <dropdown id="state" class="com.intertek.meta.dropdown.impl.StateDropDown">
+  </dropdown>
+
+
+  <dropdown id="vesselType" class="com.intertek.meta.dropdown.impl.VesselTypeDropDown">
+  </dropdown>
+
+  <dropdown id="productGroup" class="com.intertek.meta.dropdown.impl.ProductGroupDropDown">
+  </dropdown>
+
+  <dropdown id="testProductGroup" class="com.intertek.meta.dropdown.impl.TestProductGroupDropDown">
+  </dropdown>
+  <dropdown id="portCode" class="com.intertek.meta.dropdown.impl.PortCodeDropDown">
+  </dropdown>
+
+   <dropdown id="zoneId" class="com.intertek.meta.dropdown.impl.ZoneIdDropDown">
+  </dropdown>
+
+<dropdown id="currencyTrans" class="com.intertek.meta.dropdown.impl.CurrencyTransDropDown">
+  </dropdown>
+
+<dropdown id="paymentTerms" class="com.intertek.meta.dropdown.impl.PaymentTermsDropDown">
+  </dropdown>
+
+<dropdown id="taxCodes" class="com.intertek.meta.dropdown.impl.TaxCodesDropDown">
+  </dropdown>
+
+<dropdown id="taxPct" class="com.intertek.meta.dropdown.impl.TaxPctDropDown">
+  </dropdown>
+
+  <dropdown id="taxArticles" class="com.intertek.meta.dropdown.impl.TaxArticlesDropDown">
+  </dropdown>
+
+  <dropdown id="vatRegIds" class="com.intertek.meta.dropdown.impl.VatRegIdDropDown">
+  </dropdown>
+
+
+<dropdown id="scheduler" class="com.intertek.meta.dropdown.impl.SchedulerDropDown">
+  </dropdown>
+
+  <dropdown id="jobOperations" class="com.intertek.meta.dropdown.impl.OperationsDropDown">
+</dropdown>
+
+ <dropdown id="numberCategorys" class="com.intertek.meta.dropdown.impl.NumberCategoryDropDown">
+</dropdown>
+<dropdown id="events" class="com.intertek.meta.dropdown.impl.EventDropDown">
+</dropdown>
+<dropdown id="users" class="com.intertek.meta.dropdown.impl.UserDropDown">
+</dropdown>
+
+<dropdown id="staticDropdown" class="com.intertek.meta.dropdown.impl.StaticDropDown">
+</dropdown>
+  <dropdown id="agentName" class="com.intertek.meta.dropdown.impl.ShipAgentDropDown">
+  </dropdown>
+<dropdown id="productType" class="com.intertek.meta.dropdown.impl.ProductTypeDropDown">
+</dropdown>
+<dropdown id="contract" class="com.intertek.meta.dropdown.impl.ContractDropDown">
+</dropdown>
+
+<dropdown id="hideandSort" class="com.intertek.meta.dropdown.impl.HideandSortDropDown">
+</dropdown>
+
+
+<dropdown id="firstFreezeDropDown" class="com.intertek.meta.dropdown.impl.FirstFreezeDropDown">
+</dropdown>
+
+<dropdown id="secondFreezeDropDown" class="com.intertek.meta.dropdown.impl.SecondFreezeDropDown">
+</dropdown>
+
+<dropdown id="thirdFreezeDropDown" class="com.intertek.meta.dropdown.impl.ThirdFreezeDropDown">
+</dropdown>
+
+<dropdown id="fourthFreezeDropDown" class="com.intertek.meta.dropdown.impl.FourthFreezeDropDown">
+</dropdown>
+
+<dropdown id="hideDropDown" class="com.intertek.meta.dropdown.impl.HideDropDown">
+</dropdown>
+
+<dropdown id="sortDropDown" class="com.intertek.meta.dropdown.impl.SortDropDown">
+</dropdown>
+
+<dropdown id="priceBookSeriesDropDown" class="com.intertek.meta.dropdown.impl.PriceBookSeriesDropDown">
+</dropdown>
+
+<dropdown id="priceBookIdDropDown" class="com.intertek.meta.dropdown.impl.PriceBookIdDropDown">
+</dropdown>
+
+<dropdown id="workingPriceBookIdDropdown" class="com.intertek.meta.dropdown.impl.WorkingPriceBookIdDropDown">
+</dropdown>
+
+<dropdown id="productGroupSetDropdown" class="com.intertek.meta.dropdown.impl.ProductGroupSetDropDown">
+</dropdown>
+
+<dropdown id="productGroupSetNamesDropDown" class="com.intertek.meta.dropdown.impl.ProductGroupSetNamesDropDown">
+</dropdown>
+
+<dropdown id="vesselTypeSetDropdown" class="com.intertek.meta.dropdown.impl.VesselTypeSetDropDown">
+</dropdown>
+
+<dropdown id="vesselTypeSetNamesDropdown" class="com.intertek.meta.dropdown.impl.VesselTypeSetNamesDropDown">
+</dropdown>
+
+  <dropdown id="zoneListDropDown" class="com.intertek.meta.dropdown.impl.ZoneListDropDown">
+  </dropdown>
+
+  <dropdown id="pricebookZoneIdDropDown" class="com.intertek.meta.dropdown.impl.PriceBookZoneIdDropDown">
+  </dropdown>
+  
+  <dropdown id="busStream" class="com.intertek.meta.dropdown.impl.BusStreamDropDown">
+  </dropdown>
+
+  <dropdown id="vatProvince" class="com.intertek.meta.dropdown.impl.VATProvinceDropDown">
+  </dropdown>
+
+  <dropdown id="vesselTypeByContractIdDropdown" class="com.intertek.meta.dropdown.impl.VesselTypeByContractIdDropDown">
+  </dropdown>
+
+  <dropdown id="productGroupByContractIdDropdown" class="com.intertek.meta.dropdown.impl.ProductGroupByContractIdDropDown">
+  </dropdown>
+  
+  <dropdown id="jobContractAttachType" class="com.intertek.meta.dropdown.impl.JobContractAttachTypeDropDown">
+  </dropdown>
+
+  <dropdown id="uomTableDropDown" class="com.intertek.meta.dropdown.impl.UomTableDropDown">
+  </dropdown>
+  <dropdown id="customer" class="com.intertek.meta.dropdown.impl.CustomerDropDown">
+  </dropdown>
+    
+  <dropdown id="invoiceStatus" class="com.intertek.meta.dropdown.impl.InvoiceStatusDropDown">
+  </dropdown>
+
+  <dropdown id="paymentType" class="com.intertek.meta.dropdown.impl.PaymentTypeDropDown">
+  </dropdown>
+
+  <dropdown id="phxProductGroup" class="com.intertek.meta.dropdown.impl.PhxProductGroupDropDown">
+  </dropdown>
+  
+</dropdowns>

@@ -1,0 +1,22 @@
+package com;
+
+public class Student {
+	int studentId;
+	StudentData studentData;
+	
+	public StudentData getStudentData() {
+		return studentData;
+	}
+	public void setStudentData(StudentData studentData) {
+		this.studentData = studentData;
+	}
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+	
+
+
+}

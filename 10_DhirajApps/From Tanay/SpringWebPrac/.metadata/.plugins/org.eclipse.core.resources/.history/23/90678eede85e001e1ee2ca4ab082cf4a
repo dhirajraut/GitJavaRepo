@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"  "http://www.springframework.org/dtd/spring-beans.dtd"> 
+
+<beans>
+
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="ListController.htm">listController</prop>
+				<prop key="detailData.htm">detailDataController</prop>
+			</props>
+		</property>
+	</bean>
+	
+	 
+	<bean id="methodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>action</value>
+		</property>
+	</bean>
+
+<bean name="/Logincontroller.htm" class="controller.LoginController">
+	<property name="formView" value="login" />
+	<property name="successView" value="welcome" />
+	<property name="commandClass"><value>model.Login</value></property>
+	<property name = "login" ref = "login"></property>
+	<property name = "loginService" ref = "loginService"></property>
+</bean>
+
+<bean name="loginService" class="service.LoginServiceImpl">
+<property name = "loginDao" ref = "loginDao"></property>
+</bean>
+
+<bean name="loginDao" class="dao.LoginDaoImpl"></bean>
+
+<bean name="login" class="model.Login"></bean>
+
+
+
+
+
+<bean id="listController" class="controller.ListController">
+	<property name="methodNameResolver">
+		<ref bean="methodNameResolver" /></property>
+	<property name = "listService" ref = "listService"></property>
+</bean>
+
+<bean name="listService" class="service.ListServiceImpl">
+	<property name = "listDao" ref = "listDao"></property>
+</bean>
+
+<bean name="listDao" class="dao.ListDaoImpl">
+	<property name = "studentList" ref = "studentList"></property>
+</bean>
+
+<bean name="studentList" class="model.StudentList"></bean>
+
+
+
+
+<bean id="detailDataController" class="controller.DetailDataController">
+	<property name="methodNameResolver">
+<ref bean="methodNameResolver" /></property>
+	<property name = "detailDataService" ref = "detailDataService"></property>
+	<property name= "studentList" ref = "studentList"></property>
+</bean>
+
+<bean name="detailDataService" class="service.DetailDataServiceImpl">
+	<property name = "detailDataDao" ref = "detailDataDao"></property>
+</bean>
+
+<bean name="detailDataDao" class="dao.DetailDataDaoImpl">
+</bean>
+
+
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+ <property name="viewClass">
+ 	<value>org.springframework.web.servlet.view.JstlView</value>
+ </property>
+	<property name="prefix">
+		<value>/WEB-INF/Jsp/</value>
+	</property>
+	<property name="suffix">
+		<value>.jsp</value>
+	</property>
+</bean>
+
+
+
+
+</beans>

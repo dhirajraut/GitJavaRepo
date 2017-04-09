@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Currency" table="CURRENCY">
+    <id name="currencyCd" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="CURRENCY_CD" length="3" />
+    </id>
+    <property name="currencyDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CURRENCY_DESCR" length="30" />
+    </property>
+    <property name="decimalDigits" type="java.lang.Integer">
+      <meta attribute="scope-field">private</meta>
+      <column name="DECIMAL_DIGITS" sql-type="NUMBER" default="2" />
+    </property>
+  </class>
+</hibernate-mapping>
+

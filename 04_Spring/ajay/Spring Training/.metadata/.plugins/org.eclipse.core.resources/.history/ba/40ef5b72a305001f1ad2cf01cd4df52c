@@ -1,0 +1,9 @@
+package com.assignment;
+
+public abstract class Employee {
+
+	private int empId;
+	private String empName;
+	private double salary;
+	
+}

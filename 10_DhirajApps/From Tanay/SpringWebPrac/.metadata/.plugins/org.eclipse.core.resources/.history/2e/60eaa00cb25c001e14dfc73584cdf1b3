@@ -1,0 +1,43 @@
+package dao;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import model.StudentList;
+public class ListDaoImpl implements ListDao {
+
+	StudentList studentList;
+	
+	
+	public ArrayList showList() {
+		java.sql.Connection con;
+		String dbname="test";
+	boolean flag= false;
+	try {
+			
+		System.out.println("I am In Dao");
+		String dbUrl="jdbc:mysql://localhost/";
+		Class.forName("com.mysql.jdbc.Driver");
+		con = DriverManager.getConnection(dbUrl + dbname,"","");
+		StringBuffer str = new StringBuffer();
+		str.append("Select Name,Id from tb_student_data ");
+		java.sql.PreparedStatement pstmt = con.prepareStatement(str.toString());
+		
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList arr=new ArrayList();
+		
+		while(rs.next())
+		{
+			studentList.setName(rs.getString(1));
+			studentList.getId((rs.getInt(2));
+		
+		}
+			arr.
+		}
+		return null;
+	}
+	public void setStudentList(StudentList studentList) {
+		this.studentList = studentList;
+	}
+
+}

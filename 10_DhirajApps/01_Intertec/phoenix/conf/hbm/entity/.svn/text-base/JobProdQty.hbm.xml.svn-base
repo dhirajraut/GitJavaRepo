@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobProdQty" table="JOB_PROD_QTY">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_PROD_QTY_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_PROD_QTY_SEQ</param>
+      </generator>
+    </id>
+    <property name="group" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="PRODUCT_GROUP" length="40" not-null="true" />
+    </property>
+    <property name="option" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="PRODUCT_OPTION" length="4" />
+    </property>
+    <property name="plusMinus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="PLUS_MINUS" length="4" />
+    </property>
+    <property name="plusMinusPct" type="int">
+      <column name="PLUS_MINUS_PCT" sql-type="NUMBER" />
+    </property>
+    <property name="productQty" type="double">
+      <column name="PRODUCT_QTY" sql-type="NUMBER(15, 3)" />
+    </property>
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta>
+      <column name="UOM" length="4" not-null="true" />
+    </property>
+    <property name="drafts" type="string">
+     <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="JOB_PROD_QTY_DRAFTS" length="64" />
+    </property>
+    <property name="tanks" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="JOB_PROD_QTY_TANKS" length="256" />
+    </property>
+    <property name="prodSeqNum" type="java.lang.Integer">
+      <column name="ITS_PROD_SEQ_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="linkedVslRow" type="java.lang.Integer">
+      <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+    </property>
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="JOB_NUMBER" length="128" />
+    </property>
+    <many-to-one name="jobProd" class="JobProd" insert="false" update="false">
+      <column name="ITS_PROD_SEQ_NUM" index="JOB_PROD_QTY_index_0" />
+      <column name="JOB_NUMBER" index="JOB_PROD_QTY_index_0" />
+      <column name="ITS_LINKED_VSL_ROW" index="JOB_PROD_QTY_index_0" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>
+

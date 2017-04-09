@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Contract" table="CONTRACTS">
+    <id name="contractCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="CONTRACT_CODE" length="15" />
+    </id>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="STATUS" length="4" />
+    </property>
+    <property name="description" type="string">
+      <meta attribute="scope-field">@NotBlank  @Length(min=0, max=512) private</meta>
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <property name="workingUOM" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="WORKING_UOM" length="32" />
+    </property>
+    <property name="workingPB" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="WORKING_PB" length="32" />
+    </property>
+    <property name="masterListDate" type="date">
+      <column name="MASTER_LIST_DATE" sql-type="date" />
+    </property>
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="INVOICE_TYPE" length="32" />
+    </property>
+    <property name="statusDate" type="date">
+      <column name="STATUS_DATE" sql-type="date" />
+    </property>
+    <property name="expireDate" type="date">
+      <column name="EXPIRE_DATE" sql-type="date" />
+    </property>
+    <property name="signatoryUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="SIGNATORY_USER_NAME" length="128" />
+    </property>
+    <many-to-one name="signatory" column="SIGNATORY_USER_NAME" class="User" insert="false" update="false" index="CONTRACTS_index_0" />
+    <property name="originatorUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ORIGINATOR_USER_NAME" length="128" />
+    </property>
+    <many-to-one name="originator" column="ORIGINATOR_USER_NAME" class="User" insert="false" update="false" index="CONTRACTS_index_1" />
+    <property name="paymentTermsCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="PAYMENT_TERMS_CD" length="32" />
+    </property>
+
+    <property name="createdTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="creByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATED_BY" length="128" />
+    </property>
+    <property name="updatedTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="modByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="UPDATED_BY" length="128" />
+    </property>
+
+    <set name="contractAttaches" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CONTRACT_CODE" />
+      <one-to-many class="ContractAttach" />
+    </set>
+    <set name="cfgContracts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CFG_CONTRACT_ID" />
+      <one-to-many class="CfgContract" />
+      <filter name="asOfDateCurrencyFilter" condition=":asOfDate between BEGIN_DATE and END_DATE"/>
+    </set>
+  </class>
+  <filter-def name="asOfDateCurrencyFilter">
+    <filter-param name="asOfDate" type="date"/>
+  </filter-def>        
+</hibernate-mapping>
+

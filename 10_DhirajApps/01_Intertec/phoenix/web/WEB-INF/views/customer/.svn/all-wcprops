@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/phoenix/!svn/ver/7237/branches/phx2.1/web/WEB-INF/views/customer
+END
+create_customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/7237/branches/phx2.1/web/WEB-INF/views/customer/create_customer.jsp
+END
+search_customer_id_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/search_customer_id_popup.jsp
+END
+search_customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/search_customer.jsp
+END
+view_customer_notes_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/view_customer_notes_popup.jsp
+END
+edit_customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/7237/branches/phx2.1/web/WEB-INF/views/customer/edit_customer.jsp
+END
+create_new_contact.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/create_new_contact.jsp
+END
+view_contact_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/view_contact_popup.jsp
+END
+create_contact.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/create_contact.jsp
+END
+search_companyname_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/search_companyname_popup.jsp
+END
+edit_contact.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/edit_contact.jsp
+END
+quickcreate_customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/7237/branches/phx2.1/web/WEB-INF/views/customer/quickcreate_customer.jsp
+END
+search_contact_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/customer/search_contact_popup.jsp
+END

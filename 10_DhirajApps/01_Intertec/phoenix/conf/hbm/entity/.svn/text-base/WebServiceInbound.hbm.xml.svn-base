@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="WebServiceInbound" table="WEB_SERVICE_INBOUND">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">WEB_SERVICE_INBOUND_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="content" type="text">
+      <column name="CONTENT" length="1048576" />
+    </property>
+
+    <property name="type" type="string" index="WEB_SERVICE_INB_INDEX_2">
+      <meta attribute="scope-field">@Length(min=0, max=16) private</meta>
+      <column name="TYPE" length="16" />
+    </property>
+
+    <property name="receivedTime" type="timestamp" index="WEB_SERVICE_INB_INDEX_3">
+      <column name="RECEIVED_TIME" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>
+

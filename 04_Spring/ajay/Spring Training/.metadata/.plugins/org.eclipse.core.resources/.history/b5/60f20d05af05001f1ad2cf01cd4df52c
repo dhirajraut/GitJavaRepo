@@ -1,0 +1,17 @@
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import beanpack.AccountPojo;
+
+
+public class TestAOP {
+public static void main(String[] args) {
+	
+	ApplicationContext context=new ClassPathXmlApplicationContext("BankService.xml");
+	AccountPojo acct=(AccountPojo) context.getBean("accObjFrom");
+	AccountPojo acct2=(AccountPojo) context.getBean("accObjTo");
+	System.out.println(acct.getAcctId());
+	System.out.println(acct2.getBalance());
+	
+}
+}

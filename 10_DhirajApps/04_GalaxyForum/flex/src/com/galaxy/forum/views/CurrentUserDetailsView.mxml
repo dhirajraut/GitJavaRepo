@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import com.galaxy.forum.events.LoginEvent;
+			import com.galaxy.forum.events.Dispatcher;
+			import mx.controls.Alert;
+			
+			[Bindable]
+			private var userName:String = "";
+			
+			public function showForm():void {
+//				Alert.show ("In Show Form");
+				if (userName == "") {
+					sessionReceiverService.send();
+				}
+			}
+			
+			public function handleResult():void {
+				userName = sessionReceiverService.lastResult.result.ForumUser.firstName;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="sessionReceiverService" url="spring/sessionReceiver"
+					result="handleResult()" />
+    <mx:HBox height="100%" width="100%" horizontalAlign="right">
+		<mx:Label id="welcomeMessage" text="Welcome {userName}. "/>
+    </mx:HBox>
+</mx:HBox>

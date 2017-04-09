@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory name="securityagent">
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <!--      <property name="connection.url">jdbc:oracle:thin:@xshen8.dnsalias.net:1521:samtmp</property> -->
+        <!--  <property name="connection.url">jdbc:oracle:thin:@172.19.90.32:1521/dev</property> -->
+        <property name="connection.url">jdbc:oracle:thin:@pc-p46896:1521/PHXDEV</property>
+        <property name="connection.username">phoenixdev</property>
+        <property name="connection.password">phoenixdev</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+        <!--  <property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>  -->
+        <property name="dialect">org.hibernate.dialect.OracleDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">none</property>
+    
+    	<mapping class="com.intertek.phoenix.entity.BillingLineDistribution"/>
+    
+	    <mapping class="com.intertek.phoenix.entity.JobTestAttachment"/>
+	    <mapping class="com.intertek.phoenix.entity.JobTestNote"/>
+        <mapping class="com.intertek.phoenix.entity.CEInvoiceLineItem"/>
+        <mapping class="com.intertek.phoenix.entity.DepositInvoiceAmount"/>
+        <mapping class="com.intertek.phoenix.entity.DepositInvoice"/>
+        <mapping class="com.intertek.phoenix.entity.Invoice"/>
+        <mapping class="com.intertek.phoenix.entity.CEInvoice"/>
+        <mapping class="com.intertek.phoenix.entity.CreditInvoice"/>
+        <mapping class="com.intertek.phoenix.entity.Note"/>
+        <mapping class="com.intertek.phoenix.entity.JobOrderLineItemNote"/>
+        <mapping class="com.intertek.phoenix.entity.JobOrderNote"/>
+        <mapping class="com.intertek.phoenix.entity.Attachment"/>
+        <mapping class="com.intertek.phoenix.entity.JobOrderAttachment"/>
+        <mapping class="com.intertek.phoenix.entity.JobOrderLineItemAttachment"/>
+        <mapping class="com.intertek.phoenix.entity.Instruction"/>
+        <mapping class="com.intertek.phoenix.entity.PurchaseOrder"/>
+        <mapping class="com.intertek.phoenix.entity.CEJobOrder"/>
+        <mapping class="com.intertek.phoenix.entity.CEJobContract"/>
+        <mapping class="com.intertek.phoenix.entity.CEJobOrderLineItem"/>
+        <mapping class="com.intertek.phoenix.entity.Project"/>
+        <mapping class="com.intertek.phoenix.entity.ProjectActivity"/>
+        <mapping class="com.intertek.phoenix.entity.Quote"/>
+        <mapping class="com.intertek.phoenix.entity.QuoteLine"/>
+        <mapping class="com.intertek.phoenix.entity.InvoiceFile"/>
+        <mapping class="com.intertek.phoenix.entity.RevenueSegregation"/>
+        <mapping class="com.intertek.phoenix.entity.ServiceOffering"/>
+        <mapping class="com.intertek.phoenix.entity.Estimation"/>
+        <mapping class="com.intertek.phoenix.entity.BusinessStream"/>
+        <mapping class="com.intertek.phoenix.entity.CEJobOrderLineItemUpdate"/>
+        <mapping class="com.intertek.phoenix.entity.CEJobContract"/>
+        <mapping class="com.intertek.phoenix.entity.BillingEvent"/>
+        <mapping class="com.intertek.phoenix.entity.JobServiceLevel"/>
+        <mapping class="com.intertek.phoenix.entity.ContractServiceLevel"/>
+        <mapping class="com.intertek.phoenix.entity.JobTest"/>
+        <mapping class="com.intertek.phoenix.entity.JobContractTest"/>
+        <mapping class="com.intertek.phoenix.entity.JobSlate"/>
+        <mapping class="com.intertek.phoenix.entity.JobContractSlate"/>
+        <mapping class="com.intertek.phoenix.entity.JobService"/>
+        <mapping class="com.intertek.phoenix.entity.JobContractService"/>
+        <mapping class="com.intertek.phoenix.entity.JobServiceControl"/>
+        <mapping class="com.intertek.phoenix.entity.JobContractServiceControl"/>
+        <mapping class="com.intertek.phoenix.entity.JobServiceExpression"/>
+        <mapping class="com.intertek.phoenix.entity.JobContractServiceExpression"/>
+        <mapping class="com.intertek.phoenix.entity.ServiceOfferingTest"/>
+        <mapping class="com.intertek.phoenix.entity.JobTestAttachment"/>
+        <mapping class="com.intertek.phoenix.entity.JobTestNote"/>
+        
+        <mapping resource="hbm/entity/WebserviceInbound.hbm.xml"/>
+		<mapping resource="hbm/entity/ApplicationLevelLock.hbm.xml"/>
+		<mapping resource="hbm/entity/AssocBranch.hbm.xml"/>
+		<mapping resource="hbm/entity/AutoNumber.hbm.xml"/>
+		<mapping resource="hbm/entity/Bank.hbm.xml"/>
+		<mapping resource="hbm/entity/BankAccount.hbm.xml"/>
+		<mapping resource="hbm/entity/BankAccountCurr.hbm.xml"/>
+		<mapping resource="hbm/entity/BankAccountLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/BankDefault.hbm.xml"/>
+		<mapping resource="hbm/entity/BankLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/BatchReprint.hbm.xml"/>
+		<mapping resource="hbm/entity/Branch.hbm.xml"/>
+		<mapping resource="hbm/entity/BranchCode.hbm.xml"/>
+		<mapping resource="hbm/entity/BranchInt.hbm.xml"/>
+		<mapping resource="hbm/entity/BranchLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/BranchLocation.hbm.xml"/>
+		<mapping resource="hbm/entity/BusinessUnit.hbm.xml"/>
+		<mapping resource="hbm/entity/BusinessUnitLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/BusStream.hbm.xml"/>
+		<mapping resource="hbm/entity/BusUnitVatLoc.hbm.xml"/>
+		<mapping resource="hbm/entity/CfgContract.hbm.xml"/>
+		<mapping resource="hbm/entity/CfgJobCode.hbm.xml"/>
+		<mapping resource="hbm/entity/Collector.hbm.xml"/>
+		<mapping resource="hbm/entity/ConsolidatedInvoice.hbm.xml"/>
+		<mapping resource="hbm/entity/ConsolInvoiceFiles.hbm.xml"/>
+		<mapping resource="hbm/entity/Contact.hbm.xml"/>
+		<mapping resource="hbm/entity/ContactCust.hbm.xml"/>
+		<mapping resource="hbm/entity/Contract.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractAttach.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractCust.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractCustContact.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractExpression.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractNote.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractSlate.hbm.xml"/>
+		<mapping resource="hbm/entity/ContractTest.hbm.xml"/>
+		<mapping resource="hbm/entity/Control.hbm.xml"/>
+		<mapping resource="hbm/entity/ControlMap.hbm.xml"/>
+		<mapping resource="hbm/entity/ControlSwitch.hbm.xml"/>
+		<mapping resource="hbm/entity/Country.hbm.xml"/>
+		<mapping resource="hbm/entity/CountryLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/CountryTermUrl.hbm.xml"/>
+		<mapping resource="hbm/entity/CountryVAT.hbm.xml"/>
+		<mapping resource="hbm/entity/CreditAnalyst.hbm.xml"/>
+		<mapping resource="hbm/entity/Currency.hbm.xml"/>
+		<mapping resource="hbm/entity/CurrencyRate.hbm.xml"/>
+		<mapping resource="hbm/entity/CustAcctTeam.hbm.xml"/>
+		<mapping resource="hbm/entity/CustAddress.hbm.xml"/>
+		<mapping resource="hbm/entity/CustAddressLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/CustAddrSeq.hbm.xml"/>
+		<mapping resource="hbm/entity/Customer.hbm.xml"/>
+		<mapping resource="hbm/entity/CustomerLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/CustVatRegistration.hbm.xml"/>
+		<mapping resource="hbm/entity/Department.hbm.xml"/>
+		<mapping resource="hbm/entity/DropDowns.hbm.xml"/>
+		<mapping resource="hbm/entity/Employee.hbm.xml"/>
+		<mapping resource="hbm/entity/Event.hbm.xml"/>
+		<mapping resource="hbm/entity/Expression.hbm.xml"/>
+		<mapping resource="hbm/entity/ExpressionGLCode.hbm.xml"/>
+		<mapping resource="hbm/entity/GLAccount.hbm.xml"/>
+		<mapping resource="hbm/entity/GLDepartment.hbm.xml"/>
+		<mapping resource="hbm/entity/GLProductGroup.hbm.xml"/>
+		<mapping resource="hbm/entity/HighLevelService.hbm.xml"/>
+		<mapping resource="hbm/entity/InspectionContractExpression.hbm.xml"/>
+		<mapping resource="hbm/entity/InspectionControl.hbm.xml"/>
+		<mapping resource="hbm/entity/InspectionEventTbl.hbm.xml"/>
+		<mapping resource="hbm/entity/InspectionRate.hbm.xml"/>
+		<mapping resource="hbm/entity/InspectionVersion.hbm.xml"/>
+		<mapping resource="hbm/entity/InvoiceFiles.hbm.xml"/>
+		<mapping resource="hbm/entity/InvoiceFileType.hbm.xml"/>
+		<mapping resource="hbm/entity/InvoiceLine.hbm.xml"/>
+		<mapping resource="hbm/entity/InvoiceLineSplit.hbm.xml"/>
+		<mapping resource="hbm/entity/JobAttach.hbm.xml"/>
+		<mapping resource="hbm/entity/JobCode.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContract.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractAttach.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractAttachType.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractInspectionResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractInvoice.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractManualTest.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractNote.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProd.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProductControl.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProductInspectionResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProductService.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProductServiceControl.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractProductServiceResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractService.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractServiceControl.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractServiceResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractSlate.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractTest.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVessel.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVesselControl.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVesselInspectionResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVesselService.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVesselServiceControl.hbm.xml"/>
+		<mapping resource="hbm/entity/JobContractVesselServiceResult.hbm.xml"/>
+		<mapping resource="hbm/entity/JobEvent.hbm.xml"/>
+		<mapping resource="hbm/entity/JobInspectionEvent.hbm.xml"/>
+		<mapping resource="hbm/entity/JobLog.hbm.xml"/>
+		<mapping resource="hbm/entity/JobManualTest.hbm.xml"/>
+		<mapping resource="hbm/entity/JobNote.hbm.xml"/>
+		<mapping resource="hbm/entity/JobOrder.hbm.xml"/>
+		<mapping resource="hbm/entity/JobProd.hbm.xml"/>
+		<mapping resource="hbm/entity/JobProdQty.hbm.xml"/>
+		<mapping resource="hbm/entity/JobProdSample.hbm.xml"/>
+		<mapping resource="hbm/entity/JobSampleMethod.hbm.xml"/>
+		<mapping resource="hbm/entity/JobSearchCriteria.hbm.xml"/>
+		<mapping resource="hbm/entity/JobSlate.hbm.xml"/>
+		<mapping resource="hbm/entity/JobTest.hbm.xml"/>
+		<mapping resource="hbm/entity/JobType.hbm.xml"/>
+		<mapping resource="hbm/entity/JobVessel.hbm.xml"/>
+		<mapping resource="hbm/entity/LabCapability.hbm.xml"/>
+		<mapping resource="hbm/entity/Link.hbm.xml"/>
+		<mapping resource="hbm/entity/LocationDiscount.hbm.xml"/>
+		<mapping resource="hbm/entity/LogConfigDetail.hbm.xml"/>
+		<mapping resource="hbm/entity/LogConfigList.hbm.xml"/>
+		<mapping resource="hbm/entity/Logo.hbm.xml"/>
+		<mapping resource="hbm/entity/Menu.hbm.xml"/>
+		<mapping resource="hbm/entity/NamedSql.hbm.xml"/>
+		<mapping resource="hbm/entity/Notes.hbm.xml"/>
+		<mapping resource="hbm/entity/OpenPeriod.hbm.xml"/>
+		<mapping resource="hbm/entity/Operation.hbm.xml"/>
+		<mapping resource="hbm/entity/Organization.hbm.xml"/>
+		<mapping resource="hbm/entity/PaymentTerm.hbm.xml"/>
+		<mapping resource="hbm/entity/Permission.hbm.xml"/>
+		<mapping resource="hbm/entity/PortLocation.hbm.xml"/>
+		<mapping resource="hbm/entity/Prebill.hbm.xml"/>
+		<mapping resource="hbm/entity/PrebillHistory.hbm.xml"/>
+		<mapping resource="hbm/entity/PrebillSplit.hbm.xml"/>
+		<mapping resource="hbm/entity/PriceBook.hbm.xml"/>
+		<mapping resource="hbm/entity/PriceBookSlateMod.hbm.xml"/>
+		<mapping resource="hbm/entity/PriceBookTestMod.hbm.xml"/>
+		<mapping resource="hbm/entity/PricingModel.hbm.xml"/>
+		<mapping resource="hbm/entity/ProductCode.hbm.xml"/>
+		<mapping resource="hbm/entity/ProductGroup.hbm.xml"/>
+		<mapping resource="hbm/entity/ProductGroupSet.hbm.xml"/>
+		<mapping resource="hbm/entity/Project.hbm.xml"/>
+		<mapping resource="hbm/entity/RateMap.hbm.xml"/>
+		<mapping resource="hbm/entity/RB.hbm.xml"/>
+		<mapping resource="hbm/entity/RBLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/ReferenceField.hbm.xml"/>
+		<mapping resource="hbm/entity/RequiredField.hbm.xml"/>
+		<mapping resource="hbm/entity/Role.hbm.xml"/>
+		<mapping resource="hbm/entity/Service.hbm.xml"/>
+		<mapping resource="hbm/entity/ServiceLocation.hbm.xml"/>
+		<mapping resource="hbm/entity/ServiceRate.hbm.xml"/>
+		<mapping resource="hbm/entity/ServiceType.hbm.xml"/>
+		<mapping resource="hbm/entity/ServiceVersion.hbm.xml"/>
+		<mapping resource="hbm/entity/ShippingAgent.hbm.xml"/>
+		<mapping resource="hbm/entity/Slate.hbm.xml"/>
+		<mapping resource="hbm/entity/SlatePrice.hbm.xml"/>
+		<mapping resource="hbm/entity/SlatePriceBook.hbm.xml"/>
+		<mapping resource="hbm/entity/SlateTest.hbm.xml"/>
+		<mapping resource="hbm/entity/Solution.hbm.xml"/>
+		<mapping resource="hbm/entity/State.hbm.xml"/>
+		<mapping resource="hbm/entity/StateLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/TaxArticle.hbm.xml"/>
+		<mapping resource="hbm/entity/TaxCode.hbm.xml"/>
+		<mapping resource="hbm/entity/TaxCodeTaxRate.hbm.xml"/>
+		<mapping resource="hbm/entity/TaxLabel.hbm.xml"/>
+		<mapping resource="hbm/entity/TaxRate.hbm.xml"/>
+		<mapping resource="hbm/entity/Test.hbm.xml"/>
+		<mapping resource="hbm/entity/TestDescription.hbm.xml"/>
+		<mapping resource="hbm/entity/TestLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/TestPrice.hbm.xml"/>
+		<mapping resource="hbm/entity/TestPriceBook.hbm.xml"/>
+		<mapping resource="hbm/entity/TestProduct.hbm.xml"/>
+		<mapping resource="hbm/entity/TestProductGroup.hbm.xml"/>
+		<mapping resource="hbm/entity/TimeZone.hbm.xml"/>
+		<mapping resource="hbm/entity/TowingCompany.hbm.xml"/>
+		<mapping resource="hbm/entity/UomTable.hbm.xml"/>
+		<mapping resource="hbm/entity/User.hbm.xml"/>
+		<mapping resource="hbm/entity/UserLanguage.hbm.xml"/>
+		<mapping resource="hbm/entity/UserSettings.hbm.xml"/>
+		<mapping resource="hbm/entity/VesselType.hbm.xml"/>
+		<mapping resource="hbm/entity/VesselTypeSet.hbm.xml"/>
+		<mapping resource="hbm/entity/WebServiceEntity.hbm.xml"/>
+		<mapping resource="hbm/entity/WebServiceEntityInbound.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>
+

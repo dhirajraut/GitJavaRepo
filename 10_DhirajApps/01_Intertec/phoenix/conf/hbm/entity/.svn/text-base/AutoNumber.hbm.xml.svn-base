@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="AutoNumber" table="AUTO_NUM_TBL">
+    <composite-id name="autoNumberId" class="AutoNumberId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="businessUnit" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+        <column name="BUS_UNIT" length="5" />
+      </key-property>
+      <key-property name="numberCategory" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta>
+        <column name="NUM_CAT" length="6" />
+      </key-property>
+      <key-property name="numberType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta>
+        <column name="NUM_TYPE" length="4" />
+      </key-property>
+    </composite-id>
+    <version name="versionNum" column="VERSION_NUM" type="int"/>
+    <property name="beginSequence" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="BEG_SEQ" length="3" not-null="true" />
+    </property>
+    <property name="maxLength" type="int">
+      <column name="MAX_LENGTH" sql-type="NUMBER" />
+    </property>
+    <property name="lastAutoNumber" type="long">
+      <column name="LAST_AUTO_NBR" sql-type="NUMBER" />
+    </property>
+    <property name="lastUpdatedDate" type="timestamp">
+      <column name="LAST_UPDATED_DATE" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>

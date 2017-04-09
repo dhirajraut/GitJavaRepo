@@ -1,0 +1,27 @@
+# db properties
+
+#db.url=jdbc:oracle:thin:@172.19.90.73:1521:PHXSTG1
+<<<<<<< .mine
+=======
+db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:PHXDEV
+#db.url=jdbc:oracle:thin:@cbwusahousrv24-vip:1521:PHXTRN
+>>>>>>> .r6758
+
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+#db.url=jdbc\:oracle\:thin\:@172.19.90.32\:1521\:DEV
+db.url=jdbc:oracle:thin:@pc-p46896:1521:PHXDEV
+
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:PHXDEV
+
+#db.user=PHOENIX1
+#db.password=PHOENIX1
+
+<<<<<<< .mine
+db.user=phoenixdev
+db.password=phoenixdev=======
+#db.user=phoenix
+#db.password=phoenix
+db.user=PHOENIX1
+db.password=PHOENIX1>>>>>>> .r6758

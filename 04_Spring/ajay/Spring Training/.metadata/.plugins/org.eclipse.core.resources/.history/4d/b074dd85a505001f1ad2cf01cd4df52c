@@ -1,0 +1,6 @@
+package com.assignment;
+
+public class Clerk extends Employee{
+
+	private double overtime;
+}

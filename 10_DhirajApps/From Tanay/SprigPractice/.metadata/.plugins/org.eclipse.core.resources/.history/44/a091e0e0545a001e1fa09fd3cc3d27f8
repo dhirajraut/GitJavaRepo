@@ -1,0 +1,10 @@
+package com;
+
+public class StudentData {
+
+	String fName;
+	String lName;
+	String add;
+	int age;
+	
+}

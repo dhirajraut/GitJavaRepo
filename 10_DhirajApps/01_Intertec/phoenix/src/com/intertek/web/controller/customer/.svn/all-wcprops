@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer
+END
+EditCustomerFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/EditCustomerFormController.java
+END
+SearchCustomerFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/SearchCustomerFormController.java
+END
+CreateNewContactPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/CreateNewContactPopupController.java
+END
+CustomerController.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/CustomerController.java
+END
+CreateContactFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/CreateContactFormController.java
+END
+SearchContactPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/SearchContactPopupController.java
+END
+EditContactFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/EditContactFormController.java
+END
+QuickCreateCustomerFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/QuickCreateCustomerFormController.java
+END
+CreateCustomerFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/CreateCustomerFormController.java
+END
+ViewCustomerNotesPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/customer/ViewCustomerNotesPopupController.java
+END

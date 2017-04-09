@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:views="com.galaxy.forum.views.*"
+	width="100%" height="100%">
+
+	<mx:ViewStack id="currentViewStack" width="100%" height="100%" 
+					creationPolicy="all" selectedIndex="0">
+					
+		<views:LoginView />
+		<views:HomePageView />
+	</mx:ViewStack>
+</mx:VBox>

@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractInvoice" table="JOB_CONTRACT_INVOICE">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CONTRACT_INVOICE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CONTRACT_INVOICE_SEQ</param>
+      </generator>
+    </id>
+    <property name="invoice" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=22) private</meta>
+      <column name="INVOICE" length="22" not-null="true"  index="JOB_CONTRACT_INVOICE_index_6"/>
+    </property>
+    <property name="invoiceFileName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=80) private</meta>
+      <column name="INVOICE_FILE_NAME" length="80" index="JOB_CONTRACT_INVOICE_index_7"/>
+    </property>
+    <property name="runcntlid" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta>
+      <column name="RUNCNTLID" length="30" not-null="true" />
+    </property>
+    <property name="creditInd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="CREDIT_IND" length="1" index="JOB_CONTRACT_INVOICE_index_8"/>
+    </property>
+    <property name="creditReasonNote" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="CREDIT_REASON_NOTE" length="254" />
+    </property>
+    <property name="creditReasonUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREDIT_REASON_USER_NAME" length="128" />
+    </property>
+    <property name="creationUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATION_USER_NAME" length="128" />
+    </property>
+    <property name="invoiceToAdjust" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=22) private</meta>
+      <column name="INVOICE_TO_ADJUST" length="22" />
+    </property>
+    <property name="invoiceDate" type="timestamp">
+      <column name="INVOICE_DATE" sql-type="date" index="JOB_CONTRACT_INVOICE_index_9" />
+    </property>
+    <property name="accountingDate" type="date">
+      <column name="ACCOUNTING_DATE" sql-type="date" />
+    </property>
+    <property name="generatedDateTime" type="timestamp">
+      <column name="GENERATED_DATE_TIME" sql-type="timestamp" index="JOB_CONTRACT_INVOICE_index_10" />
+    </property>
+    <property name="billType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BILL_TYPE" length="3" />
+    </property>
+    <property name="billStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BILL_STATUS" length="3" index="JOB_CONTRACT_INVOICE_index_12" />
+    </property>
+    <property name="consolInvoiceNo" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=22) private</meta>
+      <column name="CONSOL_INVOICE" length="22" />
+    </property>
+    <property name="sentToFinFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="SENT_TO_FIN_FLAG" length="8" index="JOB_CONTRACT_INVOICE_index_11"/>
+    </property>
+     <property name="aribaFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="ARIBA_FLAG" length="8" index="JOB_CONTRACTS_INVOICE_index_3"/>
+    </property>
+    <many-to-one name="creditReasonUser" column="CREDIT_REASON_USER_NAME" class="User" insert="false" update="false" index="JOB_CONTRACT_INVOICE_index_0" />
+    <many-to-one name="jobContract" column="JOB_CONTRACT_ID" class="JobContract" index="JOB_CONTRACT_INVOICE_index_1" />
+    <set name="invoiceLines" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="JOB_CONTRACT_INVOICE_ID" />
+      <one-to-many class="InvoiceLine" />
+    </set>
+
+    <property name="pdfGeneratedFlag" type="yes_no">
+      <column name="PDF_GENERATED_FLAG" length="1" />
+    </property>
+
+    <!-- from JobOrder -->
+    <property name="jobFinishDate" type="date">
+      <column name="JOB_FINISH_DATE" sql-type="date" />
+    </property>
+    <property name="nominationDate" type="timestamp">
+      <column name="NOMINATION_DT" sql-type="date" />
+    </property>
+    <property name="vesselNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+      <column name="VESSEL_NAMES" length="4000" />
+    </property>
+    <property name="productNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+      <column name="PRODUCT_NAMES" length="4000" />
+    </property>
+    <property name="jobDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="JOB_DESCRIPTION" length="1024" />
+    </property>
+    <property name="serviceLocationCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="SERVICE_LOCATION_CODE" length="15" />
+    </property>
+    <property name="shipToCustId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="SHIP_TO_CUST_CODE" length="15" />
+    </property>
+    <property name="shipToAddrNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="SHIP_TO_ADDR_NUM" length="3" />
+    </property>
+    <property name="receivedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="RECEIVED_BY" length="128" />
+    </property>
+    <property name="operation" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="OPERATION" length="10" />
+    </property>
+    
+    <!-- from JobContract -->
+    <property name="pymntTermsCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="PYMNT_TERMS_CD" length="5" />
+    </property>
+    <property name="billingContactName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="BILLING_CONTACT_NAME" length="50" />
+    </property>
+    <property name="invoiceLabel1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_LABEL1" length="64" />
+    </property>
+    <property name="invoiceValue1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_VALUE1" length="64" />
+    </property>
+    <property name="invoiceLabel2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_LABEL2" length="64" />
+    </property>
+    <property name="invoiceValue2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_VALUE2" length="64" />
+    </property>
+    <property name="invoiceLabel3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_LABEL3" length="64" />
+    </property>
+    <property name="invoiceValue3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_VALUE3" length="64" />
+    </property>
+    <property name="invoiceLabel4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_LABEL4" length="64" />
+    </property>
+    <property name="invoiceValue4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_VALUE4" length="64" />
+    </property>
+    <property name="invoiceLabel5" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_LABEL5" length="64" />
+    </property>
+    <property name="invoiceValue5" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="INVOICE_VALUE5" length="64" />
+    </property>
+    <property name="custRefNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=40) private</meta>
+      <column name="CUST_REF_NUM" length="40" />
+    </property>
+    <property name="reasonCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="REASON_CODE" length="4" />
+    </property>
+    <property name="reasonDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=60) private</meta>
+      <column name="REASON_DESCR" length="60" />
+    </property>
+    <property name="transactionCurrencyCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="TRANSACT_CURRENCY_CD" length="3" index="JOB_CONTRACT_INVOICE_index_13" />
+    </property>
+    <property name="vatRegId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="VAT_REGISTRATION_ID" length="12" />
+    </property>
+    <property name="buVatRegId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="BU_VAT_REGISTRATION_ID" length="12" />
+    </property>
+    <property name="custSentBy" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="CUST_SENT_BY" length="4" />
+    </property>
+    <property name="invoiceDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="INVOICE_DESCR" length="1024" />
+    </property>
+    <property name="contactId" type="long">
+      <column name="CONTACT_ID" sql-type="NUMBER" />
+    </property>
+    <property name="monthlyFlag" type="yes_no">
+      <column name="MONTHLY_FLAG" length="1" />
+    </property>
+    <property name="monthlyJobNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="MONTHLY_JOB_NUMBER" length="128" />
+    </property>
+    <property name="custLocationNumber" type="java.lang.Integer">
+      <column name="CUST_LOCATION_NUMBER" sql-type="NUMBER" />
+    </property>
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="INVOICE_TYPE" length="3" index="JOB_CONTRACT_INVOICE_index_14" />
+    </property>
+    <property name="taxVatFlag" type="true_false">
+      <column name="TAX_VAT_FLAG" length="1" />
+    </property>
+    <property name="vatRegCountryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="VAT_REGISTRATION_COUNTRY" length="3" />
+    </property>
+    
+    <!-- from PaymentTerm -->
+    <property name="paymentTermsDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="PYMNT_TERMS_DESC" length="50" />
+    </property>
+
+    <!-- from CustAddress -->
+    <property name="custAddress1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="CUST_ADDRESS1" length="55" />
+    </property>
+    <property name="custAddress2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="CUST_ADDRESS2" length="55" />
+    </property>
+    <property name="custAddress3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="CUST_ADDRESS3" length="55" />
+    </property>
+    <property name="custAddress4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="CUST_ADDRESS4" length="55" />
+    </property>
+    <property name="custCity" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CUST_CITY" length="30" />
+    </property>
+    <property name="custCounty" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CUST_COUNTY" length="30" />
+    </property>
+    <property name="custCountry" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="CUST_COUNTRY" length="3" />
+    </property>
+    <property name="custState" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="CUST_STATE" length="6" />
+    </property>
+    <property name="custPostal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="CUST_POSTAL" length="12" />
+    </property>
+
+    <!-- from State -->
+    <property name="custStateName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="CUST_STATE_NAME" length="32" />
+    </property>
+
+    <!-- from Country -->
+    <property name="custCountryName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CUST_COUNTRY_NAME" length="30" />
+    </property>
+
+    <!-- from Customer -->
+    <property name="customerName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CUSTOMERS_NAME" length="128" />
+    </property>
+
+    <!-- from BusinessUnit -->
+    <property name="buDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta>
+      <column name="BUSINESS_UNITS_DESCRIPTION" length="512" />
+    </property>
+    <property name="buCompanyDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=150) private</meta>
+      <column name="BUSINESS_UNITS_COMPANY_DESC" length="150" />
+    </property>
+    <property name="buAddress1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BUSINESS_UNITS_ADDRESS1" length="55" />
+    </property>
+    <property name="buAddress2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BUSINESS_UNITS_ADDRESS2" length="55" />
+    </property>
+    <property name="buAddress3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BUSINESS_UNITS_ADDRESS3" length="55" />
+    </property>
+    <property name="buAddress4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BUSINESS_UNITS_ADDRESS4" length="55" />
+    </property>
+    <property name="buCity" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="BUSINESS_UNITS_CITY" length="30" />
+    </property>
+    <property name="buPostal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="BUSINESS_UNITS_POSTAL" length="12" />
+    </property>
+    <property name="buPhonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BUSINESS_UNITS_PHONE_PREFIX" length="3" />
+    </property>
+    <property name="buPhoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta>
+      <column name="BUSINESS_UNITS_PHONE_NUMBER" length="24" />
+    </property>
+    <property name="buPhoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="BUSINESS_UNITS_PHONE_EXTENSION" length="6" />
+    </property>
+    <property name="buCountryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BUSINESS_UNITS_COUNTRY_CODE" length="3" />
+    </property>
+    <property name="buStateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="BUSINESS_UNITS_STATE_CODE" length="6" />
+    </property>
+
+    <property name="buCountryName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="BUSINESS_UNITS_COUNTRY_NAME" length="30" />
+    </property>
+
+    <!-- from Branch -->
+    <property name="branchCompanyDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=150) private</meta>
+      <column name="BRANCHES_COMPANY_DESC" length="150" />
+    </property>
+    <property name="branchPhonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BRANCHES_PHONE_PREFIX" length="3" />
+    </property>
+    <property name="branchPhoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta>
+      <column name="BRANCHES_PHONE_NUMBER" length="24" />
+    </property>
+    <property name="branchPhoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="BRANCHES_PHONE_EXTENSION" length="6" />
+    </property>
+
+    <!-- from BankAccount -->
+    <property name="bankAcctDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta> 
+      <column name="BANK_ACCT_DESC" length="30" />
+    </property>
+    <property name="dfIdNum" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=12) private</meta> 
+      <column name="DFI_ID_NUM" length="12" />
+    </property>
+    <property name="bankCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="BANK_CODE" length="5" />
+    </property>
+    <property name="bankAcctCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="BANK_ACCT_CODE" length="4" />
+    </property>
+
+    <!-- from Bank -->
+    <property name="bankDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="BANKS_BANK_DESC" length="30" />
+    </property>
+    <property name="bankAddress1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BANKS_ADDRESS1" length="55" />
+    </property>
+    <property name="bankAddress2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BANKS_ADDRESS2" length="55" />
+    </property>
+    <property name="bankAddress3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BANKS_ADDRESS3" length="55" />
+    </property>
+    <property name="bankAddress4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="BANKS_ADDRESS4" length="55" />
+    </property>
+    <property name="bankIdNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="BANKS_BANK_ID_NBR" length="20" />
+    </property>
+    <property name="bankStateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="BANKS_STATE_CODE" length="6" />
+    </property>
+    <property name="bankCountryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BANKS_COUNTRY_CODE" length="3"/>
+    </property>
+
+    <!-- from CountryVAT -->
+    <property name="vatLabel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="VAT_LABEL" length="10" />
+    </property>
+    <property name="salesTaxLabel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="SALES_TAX_LABEL" length="10" />
+    </property>
+    <property name="vatRegLabel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="VAT_REG_LABEL" length="10" />
+    </property>
+    
+    <property name="vatProvince" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="VAT_PROVINCE" length="20" />
+    </property>  
+    <property name="invAmtPreTax" type="java.lang.Double">
+      <column name="INV_AMT_PRE_TAX" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="invAmtPostTax" type="java.lang.Double">
+      <column name="INV_AMT_Post_TAX" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="taxAmt" type="java.lang.Double">
+      <column name="AMT_TAX" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="vatAmt" type="java.lang.Double">
+      <column name="AMT_VAT" sql-type="NUMBER(38,4)" />
+    </property>    
+    <!-- from ServiceLocation -->
+    <property name="serviceLocationName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="SERVICE_LOCATION_NAME" length="254" />
+    </property>
+    <property name="consolBuName" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=5) private</meta>
+      <column name="CONSOL_BU_NAME" length="5" />
+    </property>
+    <many-to-one name="consolidatedInvoice" class="ConsolidatedInvoice" insert="false" update="false">
+      <column name="CONSOL_INVOICE" index="JOB_CONTRACT_INVOICE_index_5" />
+      <column name="CONSOL_BU_NAME" index="JOB_CONTRACT_INVOICE_index_4" />
+    </many-to-one>
+    <set name="invoiceFiles" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key>
+        <column name="JOB_CONTRACT_INVOICE_ID" />
+      </key>
+      <one-to-many class="InvoiceFile" />
+    </set>
+  </class>
+</hibernate-mapping>
+

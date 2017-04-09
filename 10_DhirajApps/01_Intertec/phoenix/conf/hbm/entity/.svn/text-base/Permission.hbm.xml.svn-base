@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Permission" table="PERMS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="PERM_NAME" length="256" />
+    </id>
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <set name="roles" table="ROLE_PERM_MAP" cascade="save-update" lazy="true">
+      <key column="PERM_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+    <set name="links" table="LINK_PERMISSION_MAP" cascade="save-update" lazy="true">
+      <key column="PERM_NAME" />
+      <many-to-many class="Link" column="LINK_NAME" />
+    </set>
+  </class>
+</hibernate-mapping>
+

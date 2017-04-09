@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobVessel" table="JOB_VESSELS">
+    <composite-id name="jobVesselId" class="JobVesselId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+        <column name="JOB_NUMBER" length="128" />
+      </key-property>
+      <key-property name="linkedVslRow" type="java.lang.Integer">
+        <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="jobOrder" class="JobOrder" column="JOB_NUMBER" insert="false" update="false" index="JOB_VESSELS_index_0" />
+    <property name="vesselName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="VESSEL_NAME" length="256" not-null="true" />
+    </property>
+    <property name="type" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=16) private</meta>
+      <column name="VESSEL_TYPE" length="16" />
+    </property>
+    <set name="jobProds" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="ITS_PROD_SEQ_NUM">
+      <key>
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <one-to-many class="JobProd" />
+    </set>
+  </class>
+</hibernate-mapping>
+

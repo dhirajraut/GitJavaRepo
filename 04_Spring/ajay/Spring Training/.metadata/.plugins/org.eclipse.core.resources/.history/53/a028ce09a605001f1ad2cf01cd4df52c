@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="deptObj"  class="com.assignment.Department" scope="singleton">
+	<property name="deptId" value="1"/>
+	 	<property name="deptName" value="BFS"/>
+	 	<property name="location" value="POWAI"/>
+	  <property name="emps">
+	 <list>
+	 		<ref bean="empObj"/>
+	 		<ref bean="empObj1"/>
+	 		
+	 	</list>
+	 </property>
+	 </bean>
+	 	
+	
+	
+	<bean id="empObj"  class="com.assignment.Employee" abstract="true">
+	
+	<constructor-arg value="286175"/>
+	 <constructor-arg value="Jasmin Anthony"/>
+	 	  <constructor-arg value="52444.44"/>
+	 	  <constructor-arg ref="deptObj"/>
+	</bean>
+	
+	<bean id="empObj1"  class="com.assignment.Employee" abstract="true">
+		<constructor-arg value="286422"/>
+	 <constructor-arg value="Tanay mathur"/>
+	 	  <constructor-arg value="20110.00"/>
+	 	  <constructor-arg ref="deptObj"/>
+	</bean>
+	
+	
+	<bean id="manObj"  class="com.assignment.Manager" parent="empObj1">
+	<property name="perks" value="10200"/>
+	</bean>
+	
+	
+	<bean id="empObj"  class="com.assignment.Clerk" parent="empObj">
+	<property name="overtime" value="1000"/>
+	</bean>
+</beans>

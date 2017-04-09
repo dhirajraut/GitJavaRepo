@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ServiceRate" table="PS_ITSC_SRVCE_RATE">
+    <composite-id name="serviceRateId" class="ServiceRateId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="location" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="CFG_LOCATION" length="105" />
+      </key-property>
+      <key-property name="groupId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="GROUP_ID" length="45" />
+      </key-property>
+      <key-property name="vesselType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="VESSEL_TYPE" length="45" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+      <key-property name="withInspection" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="WITH_INSPECTION" length="3" />
+      </key-property>
+      <key-property name="serviceLevel" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=12) private</meta>
+        <column name="ITS_SERVICE_LEVEL" length="12" />
+      </key-property>
+      <key-property name="intData2" type="java.lang.Integer">
+        <column name="INT_DATA_2" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="floatData2" type="java.lang.Double">
+        <column name="FLOAT_DATA_2" sql-type="NUMBER(10, 4)" />
+      </key-property>
+    </composite-id>
+    <property name="rateId" type="java.lang.Integer">
+      <column name="RATE_ID" sql-type="NUMBER" />
+    </property>
+    <property name="currencyCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="CURRENCY_CD" length="9" />
+    </property>
+    <property name="basePrice" type="java.lang.Double">
+      <column name="CFG_BASE_PRICE" sql-type="NUMBER(8, 2)" />
+    </property>
+    <property name="unitPrice" type="java.lang.Double">
+      <column name="CFG_UNIT_PRICE" sql-type="NUMBER(16, 6)" />
+    </property>
+    <property name="minimumPrice" type="java.lang.Double">
+      <column name="MINIMUM_PRICE" sql-type="NUMBER(8, 2)" />
+    </property>
+    <property name="maximumPrice" type="java.lang.Double">
+      <column name="MAXIMUM_PRICE" sql-type="NUMBER(11, 2)" />
+    </property>
+    <property name="unitsIncluded" type="java.lang.Double">
+      <column name="UNITS_INCLUDED" sql-type="NUMBER(7, 2)" />
+    </property>
+    <property name="intData0" type="java.lang.Integer">
+      <column name="INT_DATA_0" sql-type="NUMBER" />
+    </property>
+    <property name="intData1" type="java.lang.Integer">
+      <column name="INT_DATA_1" sql-type="NUMBER" />
+    </property>
+    <property name="intData3" type="java.lang.Long">
+      <column name="INT_DATA_3" sql-type="NUMBER" />
+    </property>
+    <property name="intData4" type="java.lang.Integer">
+      <column name="INT_DATA_4" sql-type="NUMBER" />
+    </property>
+    <property name="floatData0" type="java.lang.Double">
+      <column name="FLOAT_DATA_0" sql-type="NUMBER(10, 4)" />
+    </property>
+    <property name="floatData1" type="java.lang.Double">
+      <column name="FLOAT_DATA_1" sql-type="NUMBER(10, 4)" />
+    </property>
+    <property name="floatData3" type="java.lang.Double">
+      <column name="FLOAT_DATA_3" sql-type="NUMBER(13, 4)" />
+    </property>
+    <property name="floatData4" type="java.lang.Double">
+      <column name="FLOAT_DATA_4" sql-type="NUMBER(10, 4)" />
+    </property>
+    <property name="contractRef" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="CONTRACT_REF" length="45" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>
+

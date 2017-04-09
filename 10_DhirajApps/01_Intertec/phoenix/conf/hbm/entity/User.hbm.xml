@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="User" table="USERS">
+    <id name="loginName" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="LOGIN_NAME" length="128" />
+    </id>
+    <property name="password" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="password" length="128" />
+    </property>
+    <property name="firstName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="first_name" length="128" />
+    </property>
+    <property name="middleName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="middle_name" length="128" />
+    </property>
+    <property name="lastName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="last_name" length="128" />
+    </property>
+    <property name="workFunction" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=25) private</meta>
+      <column name="work_function" length="25" />
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="email" length="70" />
+    </property>
+    <property name="createTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+    <property name="updateTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="date" />
+    </property>
+    <property name="salt" type="string">
+      <column name="salt" length="255" />
+    </property>
+    <property name="activationCode" type="java.lang.Integer">
+      <column name="activation_code" sql-type="NUMBER" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="employeeType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="emp_type" length="1" />
+    </property>
+    <property name="regularTemp" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="reg_temp_flag" length="1" />
+    </property>
+    <property name="fullPartTime" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="full_part_flag" length="1" />
+    </property>
+    <property name="isApprover" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="approver_flag" length="1" />
+    </property>
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" not-null="true" />
+    </property>
+    <many-to-one name="businessUnit" column="BU_NAME" class="BusinessUnit" insert="false" update="false" index="USERS_index_0" />
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="BRANCH_NAME" length="8" not-null="true" />
+    </property>
+    <many-to-one name="branch" column="BRANCH_NAME" class="Branch" insert="false" update="false" index="USERS_index_1" />
+    <property name="jobCodeValue" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="JOB_CODE" length="8" />
+    </property>
+    <many-to-one name="jobCode" column="JOB_CODE" class="JobCode" insert="false" update="false" index="USERS_index_2" />
+   
+    <property name="employeeId" type="string">
+     <meta attribute="scope-field">@Length(min=0, max=11) private</meta>
+     <column name="EMPLOYEE_ID" length="11" />
+    </property>
+	
+    <property name="employeeStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="EMP_STATUS" length="1" />
+    </property>
+    
+	<property name="currencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank  @Length(min=0, max=3) private</meta>
+      <column name="CURRENCY_CD" length="3" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3" />
+    </property>
+    <many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="USERS_index_4" />
+    <set name="roles" table="USER_ROLE_MAP" cascade="save-update" lazy="true">
+      <key column="LOGIN_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+    <property name="preferredTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="PREFERRED_TZ" length="8" />
+    </property>
+    <many-to-one name="preferredTimeZone" column="PREFERRED_TZ" class="TimeZone" insert="false" update="false" index="USERS_index_5" />
+   
+	<property name="supervisorName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="SUPERVISOR_NAME" length="128" />
+    </property>
+    <many-to-one name="supervisor" column="SUPERVISOR_NAME" class="User" insert="false" update="false" index="USERS_index_6" />
+    
+	<property name="jobType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="JOB_TYPE" length="4" />
+    </property>
+    <property name="dateFormat" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="DATE_FORMAT" length="15" />
+    </property>
+    <property name="timeFormat" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="TIME_FORMAT" length="10" />
+    </property>
+    <property name="language" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta> 
+      <column name="LANGUAGE"  length="64" />
+    </property>   
+   <property name="productType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta> 
+      <column name="PRODUCT_TYPE" length="20" />
+    </property>
+
+ 	<property name="url" type="string">
+      <column name="URL" length="512" />
+    </property>
+  
+
+  </class>
+</hibernate-mapping>
+

@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page import="model.StudentList"%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<%StudentList stuList=(StudentList)request.getAttribute("studentList"); 
+%>
+<table>
+<tr><td>Name</td>
+<td>Class</td><td>Grade</td><td>Marks</td><td>Address</td><td>Comments</td>
+</tr>
+<tr>
+<td>
+<%=stuList.getName() %></td>
+<td><%=stuList.getClass1()%></td>
+<td><%=stuList.getGrade()%><td>
+<td><%=stuList.getMarks()%></td>
+<td><%=stuList.getAddress() %></td>
+<td><%=stuList.getAddress()%></td>
+</tr>
+</table>
+</body>
+</html>

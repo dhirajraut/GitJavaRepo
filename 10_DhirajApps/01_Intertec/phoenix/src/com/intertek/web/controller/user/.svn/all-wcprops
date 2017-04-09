@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user
+END
+CreateTaxArticlesFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateTaxArticlesFormController.java
+END
+EditRoleFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/EditRoleFormController.java
+END
+CreatePermissionListFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreatePermissionListFormController.java
+END
+SearchUserRolesPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchUserRolesPopupController.java
+END
+BranchController.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/BranchController.java
+END
+SearchPermissionListPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchPermissionListPopupController.java
+END
+CreateBusinessUnitFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateBusinessUnitFormController.java
+END
+SearchBusinessUnitFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchBusinessUnitFormController.java
+END
+CreateBranchFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateBranchFormController.java
+END
+SearchBranchFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchBranchFormController.java
+END
+SearchBranchPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchBranchPopupController.java
+END
+EditUserFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/EditUserFormController.java
+END
+CreateRoleFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateRoleFormController.java
+END
+SearchLogoPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchLogoPopupController.java
+END
+CreateVatRateFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateVatRateFormController.java
+END
+EditPermissionListFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/EditPermissionListFormController.java
+END
+SearchJobCodePopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchJobCodePopupController.java
+END
+CreateBusinessStreamFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateBusinessStreamFormController.java
+END
+SearchVatRatePopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchVatRatePopupController.java
+END
+EditBusinessUnitFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/EditBusinessUnitFormController.java
+END
+CreateUserFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateUserFormController.java
+END
+EditBranchFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/EditBranchFormController.java
+END
+CreateTaxLabelsFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/CreateTaxLabelsFormController.java
+END
+SearchUserPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchUserPopupController.java
+END
+SearchControlPopupController.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/controller/user/SearchControlPopupController.java
+END

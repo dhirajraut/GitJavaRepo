@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobProd" table="JOB_PRODS">
+    <composite-id name="jobProdId" class="JobProdId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="prodSeqNum" type="java.lang.Integer">
+        <column name="ITS_PROD_SEQ_NUM" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="jobNumber" type="string">
+        <column name="JOB_NUMBER" length="128" />
+      </key-property>
+      <key-property name="linkedVslRow" type="java.lang.Integer">
+        <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="jobVessel" class="JobVessel" insert="false" update="false">
+      <column name="JOB_NUMBER" index="JOB_PRODS_index_0" />
+      <column name="ITS_LINKED_VSL_ROW" index="JOB_PRODS_index_0" />
+    </many-to-one>
+    <property name="jobProductName" type="string">
+      <column name="JOB_PRODUCT_NAME" length="256" not-null="true" />
+    </property>
+    <property name="destination" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="DESTINATION" length="256" />
+    </property>
+    <property name="group" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="JOB_PRODUCT_GROUP" length="40" not-null="true" />
+    </property>
+    <property name="option" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="JOB_PRODUCT_OPTION" length="4" />
+    </property>
+    <property name="plusMinus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="PLUS_MINUS" length="4" />
+    </property>
+    <property name="drafts" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="JOB_PRODUCT_DRAFTS" length="64" />
+    </property>
+    <property name="tanks" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="JOB_PRODUCT_TANKS" length="256" />
+    </property>
+    <property name="plusMinusPct" type="int">
+      <column name="PLUS_MINUS_PCT" sql-type="NUMBER" />
+    </property>
+    <property name="productQty" type="double">
+      <column name="PRODUCT_QTY" sql-type="NUMBER(15, 3)" />
+    </property>
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="UOM" length="4" />
+    </property>
+    <set name="jobProdSamples" lazy="true" inverse="true" cascade="all-delete-orphan"  order-by="ITS_SAMP_SEQ_ID">
+      <key>
+        <column name="ITS_PROD_SEQ_NUM" />
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <one-to-many class="JobProdSample" />
+    </set>
+    <set name="jobEvents" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_EVENT_ID">
+      <key>
+        <column name="ITS_PROD_SEQ_NUM" />
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <one-to-many class="JobEvent" />
+    </set>
+    <set name="jobInspectionEvents" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key>
+        <column name="ITS_PROD_SEQ_NUM" />
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <one-to-many class="JobInspectionEvent" />
+    </set>
+    <set name="jobProdContracts" table="JOB_PROD_CONTRACT" cascade="save-update" lazy="true">
+      <key>
+        <column name="ITS_PROD_SEQ_NUM" />
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <many-to-many class="JobContract">
+        <column name="JOB_CONTRACT_ID" />
+      </many-to-many>
+    </set>
+    <set name="jobProdQtys" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_PROD_QTY_ID">
+      <key>
+        <column name="ITS_PROD_SEQ_NUM" />
+        <column name="JOB_NUMBER" />
+        <column name="ITS_LINKED_VSL_ROW" />
+      </key>
+      <one-to-many class="JobProdQty" />
+    </set>
+  </class>
+</hibernate-mapping>
+

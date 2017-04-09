@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TestLanguage" table="PS_ITSC_TEST_LANG">
+    <composite-id name="testLanguageId" class="TestLanguageId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="testId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=96) private</meta>
+        <column name="TEST_ID" length="96" />
+      </key-property>
+      <key-property name="languageCD" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="LANGUAGE_CD" length="9" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="testDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="ITS_TEST_DESCR" length="9" />
+    </property>
+  </class>
+</hibernate-mapping>
+

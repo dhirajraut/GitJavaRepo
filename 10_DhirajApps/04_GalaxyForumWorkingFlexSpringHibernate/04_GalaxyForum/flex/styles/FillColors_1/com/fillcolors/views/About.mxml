@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.fillcolors.vos.Design;
+			[Bindable] public var aboutFillColorsText:String;
+			[Bindable] public var currentSkin:Design;
+		]]>
+	</mx:Script>
+
+	<mx:TabNavigator  width="100%" y="2" height="100%" historyManagementEnabled="false">
+		<mx:Canvas label="This design" styleName="thisDesignPage" width="100%" height="100%">
+		
+			<mx:Label x="10" y="10"  styleName="thisDesignNameLabel" 	text="Name:"/>
+			<mx:Label x="64" y="10"  styleName="thisDesignNameText" 	text="{currentSkin.name}"/>
+			<mx:Label x="10" y="36"  styleName="thisDesignAuthorLabel" 	text="Author:"/>
+			<mx:Label x="64" y="36"  styleName="thisDesignAuthorText" 	text="{currentSkin.author}"/>
+			<mx:Label x="10" y="88"  styleName="thisDesignRatingLabel"	text="Rating:"/>
+			<mx:Label x="64" y="88"  styleName="thisDesignRatingText"	text="{currentSkin.rating}"/>
+			<mx:Label x="10" y="62"  styleName="thisDesignCountryLabel" text="Country:"/>
+			<mx:Label x="71" y="62"  styleName="thisDesignCountryText"	text="{currentSkin.country}"/>
+			<mx:Text  x="10" y="114" styleName="thisDesignDescriptionText"	htmlText="{currentSkin.description}" width="100%"/>
+			
+		</mx:Canvas>
+		<mx:Canvas label="Fill Colors" width="100%" height="100%" styleName="fillColorsPage" horizontalScrollPolicy="off">
+			<mx:Text width="96%" x="10" styleName="fillColorsText" htmlText="{aboutFillColorsText}" condenseWhite="true" />
+		</mx:Canvas>
+	</mx:TabNavigator>
+	
+</mx:VBox>

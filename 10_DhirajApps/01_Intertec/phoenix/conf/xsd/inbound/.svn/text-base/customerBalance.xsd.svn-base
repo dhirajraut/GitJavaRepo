@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/CustomerBalanceResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/CustomerBalanceResponse" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetCustomerBalanceResponse" type="CustomerBalanceResponseType">
+		<xs:annotation>
+			<xs:documentation>Customer Balance Response From PeopleSoft</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="CustomerBalanceResponseType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MessageDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="CustomerBalance" type="CustomerBalanceType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerBalanceType">
+		<xs:sequence>
+			<xs:element name="BusinessUnit" type="xs:string"/>
+			<xs:element name="BusinessUnitDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerId" type="xs:string"/>
+			<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyCd" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyCdDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="BalanceAmount" type="xs:decimal" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

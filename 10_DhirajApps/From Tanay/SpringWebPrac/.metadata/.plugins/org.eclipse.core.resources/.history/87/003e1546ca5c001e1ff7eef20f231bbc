@@ -1,0 +1,8 @@
+package service;
+
+import model.StudentList;
+
+public interface DetailDataService {
+	StudentList showDetail(int id)
+
+}

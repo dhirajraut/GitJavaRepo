@@ -1,0 +1,296 @@
+
+DIV#container {
+	LEFT: 12px; POSITION: absolute; TOP: 0px;
+	z-index:150;
+}
+
+div#container div#masthead,
+div#container div#masthead div{
+	margin-bottom:0;
+} 
+
+DIV#masthead {
+	WIDTH: 600px;
+	
+}
+
+
+
+/*----- NEW PRIMARY NAV---------*/
+div#primary_nav {
+	width:600px;
+	background:url(../images/intopmenugreybg2.jpg) repeat-x;
+	
+}
+ul#navmenu {
+	padding: 0;
+	margin: 0 0 0 5px;
+	list-style: none;
+	width: 600px;
+	top:56px;
+	left:22px;
+	position:absolute;
+	z-index:1000;
+}
+
+ul#navmenu li {
+  margin-left: 0px;
+  border: 0px none;
+  padding: 0;
+  float: left; /*For Gecko*/
+  display: inline;
+  list-style: none;
+  position: relative;
+  background: url(../images/intopmenugreybg2.jpg) repeat-x ;
+  
+  
+  /*filter:progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr=#ffffff, endColorstr=#bdd1f4);*/
+}
+ul#navmenu li a{
+  padding: 0 10px;
+  /*background: url(../images/tab_left_OB.gif) no-repeat top left;*/
+  line-height:26px;
+  color:#1f55ba;
+
+}
+
+ul#navmenu ul {
+  margin: 0;
+  border-left:0px solid #5787df;
+  border-top:1px solid #5787df;
+  border-right:1px solid #5787df;
+  border-bottom:1px solid #5787df;
+  padding: 0;
+  width:130px;
+  list-style: none;
+  position: absolute;
+  top: 25px;
+}
+ul#navmenu ul ul { 
+	margin-top:-10px;
+}
+ul#navmenu ul:after /*From IE 7 lack of compliance*/{
+	clear: both;
+	font: 1px/0px serif;
+	content: ".";
+	height: 0;
+	visibility: hidden;
+}
+
+ul#navmenu ul li {
+	width: 120px;
+	float: left; /*For IE 7 lack of compliance*/
+	display: block !important;
+	display: inline; /*For IE*/
+	
+}
+
+ul#navmenu li ul { /* second-level lists */
+	position: absolute;
+	left: -1000px;
+	margin-left: 0px;
+	margin-top: 0px;
+	width:130px;
+}
+ul#navmenu ul li {
+	width: 130px;
+	float: left; /*For IE 7 lack of compliance*/
+	display: block !important;
+	display: inline; /*For IE*/
+}
+ul#navmenu li ul ul { /* third-and-above-level lists */
+	left: 0px;
+}
+
+/* Root Menu */
+ul#navmenu a {
+	border: 0px solid #FFF;
+	padding: 0 6px;
+	float: none !important; /*For Opera*/
+	float: left; /*For IE*/
+	display: block;
+	color: #FFF;
+	font: bold 11px Arial, Verdana, Helvetica, sans-serif;
+	text-decoration: none;
+	height: auto !important;
+	height: 1%; /*For IE*/
+}
+
+ul#navmenu li:focus,
+ul#navmenu li.iefocus {
+  background: url(../images/intopmenublubgOver.jpg) repeat-x top right;
+  color: #000;
+}
+ul#navmenu li.on,
+ul#navmenu li.on:focus {
+	/*background: url(../images/intopmenublubgOver.jpg) repeat-x top right;*/
+	
+}
+ul#navmenu li.on a,
+ul#navmenu li.on a:focus{
+	/*background: url(../images/intopmenublubgOver.jpg) repeat-x top left;*/
+	color:#fff;
+}
+
+/* Root Menu focus Persistence */
+ul#navmenu a:focus,
+ul#navmenu li:focus a,
+ul#navmenu li.iefocus a {
+  
+  color: #000;
+}
+ul#navmenu li:focus,
+ul#navmenu li.iefocus {
+  
+  color: #000;
+}
+ul#navmenu li.on,
+ul#navmenu li.on:focus {
+	
+}
+ul#navmenu li.on a,
+ul#navmenu li.on a:focus{
+	
+	color:#fff;
+}
+
+/* 2nd Menu */
+ul#navmenu li:focus li a,
+ul#navmenu li.iefocus li a {
+	float: none;
+	/*To be uncommented later*/
+	filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#ffffff, endColorstr=#bdd1f4);
+	background: url(../images/horizontalbackground1.jpg);
+	/*background: #ececec;*/
+	color: #000;
+	font-weight: bold;
+	border-left: 1px solid #5787df;
+	border-right: 0px solid #cccccc;  
+	border-bottom: 0px solid #cccccc;  
+	border-top: 1px solid #cccccc;
+	padding: 4px 2px 4px 5px; /* modified by Michael Rohan 03062007 */
+	line-height: 15px; /* modified by Michael Rohan 03062007 */
+}
+ul#navmenu li:focus li.hasChild a,
+ul#navmenu li.iefocus li.hasChild a {
+  /*background: #ececec url(../images/arrow_nav_right.gif) no-repeat 100% 50%;*/
+  /*filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#ffffff, endColorstr=#bdd1f4);*/
+}
+
+/* 2nd Menu focus Persistence */
+ul#navmenu li:focus li a:focus,
+ul#navmenu li:focus li:focus a,
+ul#navmenu li.iefocus li a:focus,
+ul#navmenu li.iefocus li.iefocus a {
+	/*To be uncommented later*/
+	filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#bdd1f4, endColorstr=#ffffff);
+	background: url(../images/horizontalbackground.jpg);
+	/*background: #b9d300;*/
+	color:#000;
+}
+ul#navmenu li:focus li.hasChild a:focus,
+ul#navmenu li:focus li.hasChild:focus a,
+ul#navmenu li.iefocus li.hasChild a:focus,
+ul#navmenu li.iefocus li.hasChild.iefocus a  {
+	/*filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#bdd1f4, endColorstr=#ffffff);*/
+	/*background: #b9d300 url(../images/arrow_nav_right.gif) no-repeat 100% 50%;*/
+	color:#000;
+	
+}
+/* 3rd Menu */
+ul#navmenu li:focus li:focus ul,
+ul#navmenu li:focus li.iefocus ul {
+	margin-left:2px;
+}
+ul#navmenu li:focus li:focus li a,
+ul#navmenu li.iefocus li.iefocus li a,
+ul#navmenu li:focus li.hasChild:focus li a {
+	/*To be uncommented later*/
+	filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#ffffff, endColorstr=#bdd1f4);
+	background: url(../images/horizontalbackground1.jpg);
+	/*background: #ececec;*/
+	color: #000;
+}
+/* 3rd Menu focus Persistence */
+ul#navmenu li:focus li:focus li a:focus,
+ul#navmenu li:focus li:focus li:focus a,
+ul#navmenu li.iefocus li.iefocus li a:focus,
+ul#navmenu li.iefocus li.iefocus li.iefocus a {
+	/*To be uncommented later*/
+	filter:progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr=#bdd1f4, endColorstr=#ffffff);
+	background: url(../images/horizontalbackground.jpg);
+	/*background: #b9d300;*/
+	color:#000;
+}
+
+/* 4th Menu */
+ul#navmenu li:focus li:focus li:focus li a,
+ul#navmenu li.iefocus li.iefocus li.iefocus li a {
+	background: #EEE;
+	color: #666;
+}
+
+/* 4th Menu focus */
+ul#navmenu li:focus li:focus li:focus li a:focus,
+ul#navmenu li.iefocus li.iefocus li.iefocus li a:focus {
+	background: #CCC;
+	color: #FFF;
+}
+
+ul#navmenu li ul li:focus ul,
+ul#navmenu li ul li.iefocus ul{
+	position:absolute;
+	left:128px;
+	top:0px;
+}
+* html body ul#navmenu li ul li:focus ul,
+* html body ul#navmenu li ul li.iefocus ul{
+	position:absolute;
+	left:130px;
+	top:0px;
+}
+
+ul#navmenu li:focus ul ul,
+ul#navmenu li:focus ul ul ul, 
+ul#navmenu li:focus ul ul ul ul, 
+ul#navmenu li.iefocus ul ul, 
+ul#navmenu li.iefocus ul ul ul, 
+ul#navmenu li.iefocus ul ul ul ul {
+	left: -1000px;
+}
+ul#navmenu li:focus ul, 
+ul#navmenu li li:focus ul, 
+ul#navmenu li li li:focus ul, 
+ul#navmenu li li li li:focus ul, 
+ul#navmenu li.iefocus ul, 
+ul#navmenu li li.iefocus ul, 
+ul#navmenu li li li.iefocus ul, 
+#nav li li li li.iefocus ul { /* lists nested under focused list items */
+	clear:left;
+	left: auto;
+}
+
+/** Support for the "iefocus-fix.js" **/
+ul#navmenu iframe {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1;
+	filter: progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0);
+}
+/** end **/
+
+
+/*---IE 6 Fixes---*/
+html body div#main {
+	z-index:-100;
+}
+html * { z-index:20 }
+
+
+
+
+#main.inter {position:absolute; top:126px;}
+
+
+

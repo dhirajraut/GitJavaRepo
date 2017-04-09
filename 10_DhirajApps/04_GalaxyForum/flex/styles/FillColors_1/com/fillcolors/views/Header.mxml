@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:mate="http://mate.asfusion.com/03" 
+	xmlns:css="com.fillcolors.css.*"
+	mouseEnabled="false"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import com.fillcolors.events.NavigationEvent;
+			import com.fillcolors.views.states.ContentState;
+		]]>
+	</mx:Script>
+	<!--::Listeners & Dispatchers ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+	<mate:Dispatcher id="navDispatcher" generator="{NavigationEvent}" type="{NavigationEvent.CHANGE}"/>
+	
+	<!--::GUI ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:Text  styleName="mainTitle" text="Fill Colors" y="10" selectable="false" />
+	<mx:Text  styleName="tagLine" 	text="One body, many outfits." y="40" selectable="false" />
+	
+	<mx:Box id="navigation" styleName="navigation" x="600" direction="{boxLayout.value}" mouseEnabled="false">
+		<mx:LinkButton label="Gallery" 		styleName="galleryLink" 	click="navDispatcher.createAndDispatchEvent({navigateTo:ContentState.GALLERY});"/>		
+		<mx:LinkButton label="About" 		styleName="aboutLink" 		click="navDispatcher.createAndDispatchEvent({navigateTo:ContentState.ABOUT});"/>
+		<mx:LinkButton label="Participate"  styleName="participateLink" click="navDispatcher.createAndDispatchEvent({navigateTo:ContentState.PARTICIPATE});"/>
+	</mx:Box>
+	
+	<!--::CSS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<css:CSSProperty defaultValue="horizontal" id="boxLayout" styleName="navigation" property="layout" />
+	
+</mx:Canvas>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<MenuConfig>
+
+  <Displayers>
+    <Displayer   name="DropDown"
+                 type="net.sf.navigator.displayer.DropDownMenuDisplayer"/>
+    <Displayer   name="Simple"
+                 type="net.sf.navigator.displayer.SimpleMenuDisplayer"/>
+    <Displayer   name="CoolMenu"
+                 type="net.sf.navigator.displayer.CoolMenuDisplayer"/>
+    <Displayer   name="CoolMenu4"
+                 type="net.sf.navigator.displayer.CoolMenuDisplayer4"/>
+    <Displayer   name="MenuForm"
+                 type="net.sf.navigator.example.PermissionsFormMenuDisplayer"/>
+    <Displayer   name="ListMenu"
+                 type="net.sf.navigator.displayer.ListMenuDisplayer"/>
+    <Displayer   name="TabbedMenu"
+                 type="net.sf.navigator.displayer.TabbedMenuDisplayer"/>
+    <Displayer   name="Velocity"
+                 type="net.sf.navigator.displayer.VelocityMenuDisplayer"/>
+    <Displayer   name="XtreeMenu"
+                 type="net.sf.navigator.displayer.XtreeMenuDisplayer"/>
+    <Displayer   name="CSSListMenu"
+                 type="net.sf.navigator.displayer.CSSListMenuDisplayer"/>
+  </Displayers>
+
+  <Menus>
+
+    <Menu  name="JobOrderMenu"  title="JOB_ORDER"  description="test" width="50">
+       <Item   name="JobOrderSearch"   title="SEARCH" location="search_job_order.htm"/>
+       <Item   name="JobOrderCreate"    title="CREATE" location="create_job_order.htm"/>
+       <Item   name="JobOrderLog"   title="LOG" location="order_log.htm"/>
+    </Menu>
+
+    <Menu  name="ContractMenu"  title="CONTRACT">
+       <Item  name="ContractSearch" title="SEARCH" location="search_contract.htm" />
+       <Item  name="ContractCreate"  title="CREATE" location="create_contract.htm" />
+    </Menu>
+
+    <Menu  name="VesselMenu"  title="VESSEL">
+       <Item  name="VesselSearch" title="SEARCH" location="search_vessel.htm" />
+       <Item  name="VesselCreate"  title="CREATE" location="create_vessel.htm" />
+    </Menu>
+
+  </Menus>
+
+</MenuConfig>

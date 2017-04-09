@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+
+	<!-- Application Header. -->
+	<mx:ApplicationControlBar width="100%" styleName="padded">
+		<mx:Image source="@Embed(source='../styles/assets/Galaxy.jpeg')"
+			width="50" height="50" />
+		<mx:Label text="Galaxy Forum" styleName="logoText" />
+	</mx:ApplicationControlBar> 
+
+</mx:VBox>

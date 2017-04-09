@@ -1,0 +1,6 @@
+package com.assignment;
+
+public class Manager extends Employee{
+
+	private double perks;
+}

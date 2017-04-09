@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract
+END
+contract_customer_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_customer_tab.jsp
+END
+modify_slate_price_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/modify_slate_price_popup.jsp
+END
+contract_service_tab_edit_rates.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_service_tab_edit_rates.jsp
+END
+edit_contract_main.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_main.jsp
+END
+edit_contract_notes.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_notes.jsp
+END
+edit_contract_attachment.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_attachment.jsp
+END
+contract_slate_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_slate_tab.jsp
+END
+modify_test_price_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/modify_test_price_popup.jsp
+END
+contract_inspection_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_inspection_tab.jsp
+END
+contract_zone_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_zone_tab.jsp
+END
+search_contact_contractCustomer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/search_contact_contractCustomer.jsp
+END
+edit_product_group_set_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_product_group_set_popup.jsp
+END
+create_contract.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/create_contract.jsp
+END
+contract_test_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_test_tab.jsp
+END
+edit_contract_service.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_service.jsp
+END
+contract_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_tab.jsp
+END
+edit_contract_customer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_customer.jsp
+END
+edit_vessel_type_set_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_vessel_type_set_popup.jsp
+END
+search_customer_contractCustomer.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/search_customer_contractCustomer.jsp
+END
+edit_contract_slate.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_slate.jsp
+END
+create_contract_slate_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/create_contract_slate_popup.jsp
+END
+contract_notes_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_notes_tab.jsp
+END
+edit_contract_inspection.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_inspection.jsp
+END
+edit_contract_zone.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_zone.jsp
+END
+edit_contract_test.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract_test.jsp
+END
+create_contract_test_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/create_contract_test_popup.jsp
+END
+edit_contract.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/edit_contract.jsp
+END
+contract_service_tab.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/contract/contract_service_tab.jsp
+END

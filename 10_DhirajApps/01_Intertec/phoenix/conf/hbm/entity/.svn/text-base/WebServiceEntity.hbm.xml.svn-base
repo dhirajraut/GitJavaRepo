@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="WebServiceEntity" table="WEB_SERVICE_ENTITY">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="WEB_SERVICE_ENTITY_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">WEB_SERVICE_ENTITY_SEQ</param>
+      </generator>
+    </id>
+    
+    <property name="entityKey" type="string" index="WEB_SERVICE_ENTITY_INDEX_1">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta>
+      <column name="ENTITY_KEY" length="512" />
+    </property>
+
+    <property name="type" type="string" index="WEB_SERVICE_ENTITY_INDEX_2">
+      <meta attribute="scope-field">@Length(min=0, max=16) private</meta>
+      <column name="TYPE" length="16" />
+    </property>
+
+    <property name="status" type="java.lang.Boolean">
+      <column name="STATUS" />
+    </property>
+
+    <property name="result" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="RESULT" length="1024" />
+    </property>
+
+    <property name="message" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="MESSAGE" length="1024" />
+    </property>
+
+    <property name="createUser" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATE_USER" length="128" />
+    </property>
+
+    <property name="createTime" type="timestamp" index="WEB_SERVICE_ENTITY_INDEX_3">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+    <property name="content" type="text">
+      <column name="CONTENT" length="1048576" />
+    </property>
+    
+  </class>
+</hibernate-mapping>
+

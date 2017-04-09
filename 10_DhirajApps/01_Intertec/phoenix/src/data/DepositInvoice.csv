@@ -1,0 +1,4 @@
+"account","availableAmount","comment","depositAmount","depositPaid","depositReference","depositType","deptId","generatedBy","generatedOn","id","invoiceDate","invoiceFileId","invoiceNumber","jobNumber","paymentType","status","status"
+"","1000.0","","1000.0","","ABCD","","","","","1","","","D1","1","CASH","NEW","NEW"
+"","1000.0","","1000.0","","ABCD","","","","","2","","","D2","1","CASH","NEW","NEW"
+"","1000.0","","1000.0","","ABCD","","","","","3","","","D3","1","CASH","NEW","NEW"

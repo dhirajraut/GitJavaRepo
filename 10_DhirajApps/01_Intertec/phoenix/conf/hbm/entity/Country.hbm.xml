@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Country" table="COUNTRY">
+    <id name="countryCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3" />
+    </id>
+    <property name="name" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="NAME" length="30" />
+    </property>
+    <property name="shortName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="SHORT_NAME" length="10" />
+    </property>
+    <property name="country2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="COUNTRY2" length="2" />
+    </property>
+    <property name="euMemberId" type="yes_no">
+      <column name="EU_MEMBER_ID" length="1" />
+    </property>
+    <property name="addr1Lbl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="ADDR1_LBL" length="15" />
+    </property>
+    <property name="addr1Avail" type="yes_no">
+      <column name="ADDR1_AVAIL" length="1" />
+    </property>
+    <property name="addr2Lbl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="ADDR2_LBL" length="15" />
+    </property>
+    <property name="addr2Avail" type="yes_no">
+      <column name="ADDR2_AVAIL" length="1" />
+    </property>
+    <property name="addr3Lbl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="ADDR3_LBL" length="15" />
+    </property>
+    <property name="addr3Avail" type="yes_no">
+      <column name="ADDR3_AVAIL" length="1" />
+    </property>
+    <property name="addr4Lbl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="ADDR4_LBL" length="15" />
+    </property>
+    <property name="addr4Avail" type="yes_no">
+      <column name="ADDR4_AVAIL" length="1" />
+    </property>
+    <property name="otherLabel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="OTHER_LABEL" length="15" />
+    </property>
+    <property name="otherAvail" type="yes_no">
+      <column name="OTHER_AVAIL" length="1" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="CITY" length="15" />
+    </property>
+    <property name="cityAvail" type="yes_no">
+      <column name="CITY_AVAIL" length="1" />
+    </property>
+    <property name="county" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="COUNTY" length="15" />
+    </property>
+    <property name="countyAvail" type="yes_no">
+      <column name="COUNTY_AVAIL" length="1" />
+    </property>
+    <property name="state" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="STATE" length="15" />
+    </property>
+    <property name="stateAvail" type="yes_no">
+      <column name="STATE_AVAIL" length="1" />
+    </property>
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="POSTAL" length="15" />
+    </property>
+    <property name="postalAvail" type="yes_no">
+      <column name="POSTAL_AVAIL" length="1" />
+    </property>
+    <property name="vatCountry" type="yes_no">
+      <column name="VAT_COUNTRY" length="1" />
+    </property>
+    <property name="vatByProvince" type="yes_no">
+      <column name="VAT_BY_PROVINCE" length="1" />
+    </property>
+    
+    <property name="sameProvinceValidation" type="yes_no">
+      <column name="SAME_PROVINCE_VALIDATION" length="1" />
+    </property>
+    
+    <property name="foreignBuyer" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="FOREIGN_BUYER" length="3" />
+    </property>
+    <property name="url" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="URL" length="254" />
+    </property>
+    <property name="showState" type="yes_no">
+      <column name="SHOW_STATE" length="1" />
+    </property>
+	<property name="stateRequiredInAddress" type="yes_no">
+      <column name="STATE_REQUIRED_IN_ADDR" length="1" />
+    </property>    
+    <set name="states" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="STATE_CODE">
+      <key column="COUNTRY_CODE" />
+      <one-to-many class="State" />
+    </set>
+    <set name="countryVats" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="COUNTRY_CODE" />
+      <one-to-many class="CountryVAT" />
+    </set>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

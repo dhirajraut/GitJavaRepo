@@ -1,0 +1,51 @@
+# db properties
+db.driver=oracle.jdbc.driver.OracleDriver
+#db.url=jdbc:oracle:thin:@172.19.90.73:1521:PHXSTG1
+db.url=jdbc:oracle:thin:@172.19.90.32:1521:dev
+
+db.user=phoenix
+db.password=phoenix
+
+# hibernate properties
+hibernate.dialect=org.hibernate.dialect.Oracle9Dialect
+hibernate.max_fetch_depth=3
+hibernate.show_sql=false
+
+
+#hosting env
+hosting.url=http://localhost:8080/phoenix
+
+#invoice dir
+#invoice.dir=C:/phoenix/invoice/
+invoice.dir=\\\\CBWUSAHOUSRV57\\SHARE01\\OUTPUTS\\PHXDEV\\
+
+
+# email host
+email.host=
+email.port=23
+email.username=
+email.password=
+email.from=
+email.to=xiaofeng.shen@intertek.com
+
+outbound.web.service.delay=6000
+outbound.web.service.period=60000
+
+outbound.web.service.contact.url=https://cbt846dev.mycmsc.com/PSIGW/HttpListeningConnector
+outbound.web.service.customer.url=https://cbt846dev.mycmsc.com/PSIGW/HttpListeningConnector
+outbound.web.service.invoice.url=https://cbt846dev.mycmsc.com/PSIGW/HttpListeningConnector
+outbound.web.service.consolidated_invoice.url=https://cbt846dev.mycmsc.com/PSIGW/HttpListeningConnector
+
+outbound.web.service.lims_contact.url=http://69.7.169.68/smpslink/smpslink.asmx
+outbound.web.service.lims_customer.url=http://69.7.169.68/smpslink/smpslink.asmx
+outbound.web.service.lims_job_order.url=http://69.7.169.68/smpslink/smpslink.asmx
+
+outbound.web.service.sam.url=https://stg.samreporting.com/sam/services/NominationService
+
+outbound.transporter.invoice.exxon.url=https://service.ariba.com/service/transaction/cxml.asp
+
+filepath=\\\\Cbwusahousrv57\\SHARE01\\OUTPUTS\\PHXDEV\\ATTACHMENTS
+contractfilepath=\\\\Cbwusahousrv57\\SHARE01\\OUTPUTS\\PHXDEV\\ATTACHMENTS\\CONTRACT\\
+jobcontractfilepath=\\\\Cbwusahousrv57\\SHARE01\\OUTPUTS\\PHXDEV\\ATTACHMENTS\\JOBCONTRACT
+
+email.timeformat=HH:mm

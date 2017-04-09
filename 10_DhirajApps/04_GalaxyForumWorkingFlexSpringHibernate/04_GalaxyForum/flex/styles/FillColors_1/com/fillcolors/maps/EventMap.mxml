@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:UIComponent xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:mate="http://mate.asfusion.com/03">
+	<mx:Script>
+		<![CDATA[
+			import com.asfusion.mate.core.Source;
+			import com.asfusion.mate.core.SmartArgument;
+			import mx.events.FlexEvent;
+			import com.fillcolors.commands.*;
+			import com.fillcolors.events.*;
+			import com.fillcolors.views.states.GalleryState;
+			import mx.events.DynamicEvent;
+		]]>
+	</mx:Script>
+	
+	<!-- As soon as the application is complete, we load the data -->
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{FlexEvent.INITIALIZE}" >
+	
+		<mate:HTTPServiceBuilder method="POST" resultFormat="e4x" url="assets/sampleData/gallery.xml" >
+			<mate:resultSequence>
+				<mate:WorkerBuilder generator="{XMLParserCommand}" method="parseXmlDocument" arguments="{[new SmartArgument(Source.EVENT, 'result')]}"/>
+			</mate:resultSequence>
+		</mate:HTTPServiceBuilder>
+		
+		<mate:HTTPServiceBuilder method="POST" resultFormat="e4x" url="assets/sampleData/miscellaneous.xml" >
+			<mate:resultSequence>
+				<mate:WorkerBuilder generator="{XMLTextsParserCommand}" method="parseXmlDocument"	arguments="{[new SmartArgument(Source.EVENT, 'result')]}" />
+				<mate:WorkerBuilder generator="{XMLCountriesParserCommand}" method="parseXmlDocument" arguments="{[new SmartArgument(Source.EVENT, 'result')]}" />
+			</mate:resultSequence>
+		</mate:HTTPServiceBuilder>
+
+		
+		<mate:WorkerBuilder  generator="{StateSwitcherCommand}" method="setCurrentView">
+			<mate:arguments>
+				<mx:Number>{GalleryState.THUMBNAIL_VIEW} </mx:Number>
+			</mate:arguments>
+		</mate:WorkerBuilder>
+
+	</mate:ListenerSequence>
+	
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{NavigationEvent.CHANGE}">
+		<mate:WorkerBuilder generator="{StateSwitcherCommand}" method="onNavigationChange" arguments="{[new SmartArgument(Source.EVENT)]}"  />
+	</mate:ListenerSequence>
+	
+	
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{GalleryEvent.VIEW_CHANGE}">
+		<mate:WorkerBuilder generator="{StateSwitcherCommand}" method="onViewChange" arguments="{[new SmartArgument(Source.EVENT)]}"  />
+	</mate:ListenerSequence>
+	
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{GalleryEvent.DESIGN_SELECTED}">
+		<mate:WorkerBuilder generator="{DesignSelectedCommand}" method="execute" arguments="{[new SmartArgument(Source.EVENT)]}" />
+		<mate:WorkerBuilder generator="{StateSwitcherCommand}" method="onDesignSelected" arguments="{[new SmartArgument(Source.EVENT)]}" />
+	</mate:ListenerSequence>
+	
+	<!-- Filtering of the designs in the gallery -->
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{DesignsListEvent.FILTER}">
+		<mate:WorkerBuilder generator="{DesignListChangeCommand}" method="filter" arguments="{[new SmartArgument(Source.EVENT)]}" />
+	</mate:ListenerSequence>
+	
+	<!-- Sorting of the designs in the gallery -->
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{DesignsListEvent.SORT}">
+		<mate:WorkerBuilder generator="{DesignListChangeCommand}" method="sort" arguments="{[new SmartArgument(Source.EVENT)]}"  />
+	</mate:ListenerSequence>
+	
+	<!-- Switching design -->
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{DesignEvent.SELECT}">
+		<mate:WorkerBuilder generator="{SkinChangerCommand}" arguments="{[new SmartArgument(Source.EVENT)]}" method="execute" />
+	</mate:ListenerSequence>
+	
+	<!-- Applying design -->
+	<!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:ListenerSequence type="{DesignEvent.APPLY}" id="applySequence">
+		<mate:WorkerBuilder generator="{SkinChangerCommand}" method="designApplied" arguments="{[new SmartArgument(Source.EVENT)]}"  />
+	</mate:ListenerSequence>
+	
+	
+</mx:UIComponent>

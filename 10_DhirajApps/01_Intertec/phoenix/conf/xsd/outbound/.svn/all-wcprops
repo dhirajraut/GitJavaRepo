@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/conf/xsd/outbound
+END
+warehouse.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6766/branches/phx2.1/conf/xsd/outbound/warehouse.xsd
+END
+businessStream.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/conf/xsd/outbound/businessStream.xsd
+END
+testMethodology.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/conf/xsd/outbound/testMethodology.xsd
+END
+contact.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/phoenix/!svn/ver/6766/branches/phx2.1/conf/xsd/outbound/contact.xsd
+END
+customer.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/conf/xsd/outbound/customer.xsd
+END

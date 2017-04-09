@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+		
+			[Bindable] public var countries:ArrayCollection;
+			
+			//--------------------------------------------------
+			// removing buttons we don't need from the text editor
+			private function removeButtons():void 
+			{
+                editor.toolbar.removeChild(editor.alignButtons);
+                editor.toolbar.removeChild(editor.fontFamilyCombo);
+                editor.toolbar.removeChild(editor.fontSizeCombo);
+                editor.toolbar.removeChild(editor.colorPicker);
+            }
+			
+			//these are not used here, but are used in the live version
+			private function browseForThumbnail():void{}
+			
+			private function browseForLargeThumbnail():void{}	
+			
+			private function browseForSource():void{}
+			
+			private function browseForDesign():void{}
+			
+			private function submitForm():void{}
+			
+		]]>
+	</mx:Script>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::GUI::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<mx:Text width="100%" styleName="participateIntro" condenseWhite="true" selectable="false">
+		<mx:htmlText>
+			<![CDATA[
+				Everybody is invited to participate. It is a great opportunity for you to learn how to skin a Flex application and see how other people do it.
+				<a href="http://www.fillcolors.com/participate"><u> Read more about participating</u></a><br />
+				<br />
+				If you are ready to submit your style, please fill out the form below.
+				We will not show your email address and it will only be used to communicate with you regarding your submission. 
+			]]>
+		</mx:htmlText>
+	</mx:Text>
+	<mx:Accordion height="100%" width="100%" historyManagementEnabled="false" id="formSteps" creationPolicy="all">
+		<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+		<mx:Canvas label="Your Information" width="100%" height="100%" styleName="yourInformation" horizontalScrollPolicy="off">
+		 		
+		 		<mx:Label		x="20" y="10" styleName="yourInfoNameLabel" text="* Name:" />
+		 	 	<mx:TextInput 	x="20" y="25" styleName="yourInfoNameInput" id="nameInput" width="40%"/>
+		 		
+		 		<mx:Label 		x="400" y="10" styleName="yourInfoEmailLabel"  text="* Email:" />
+		 		<mx:TextInput 	x="400" y="25" styleName="yourInfoEmailInput"  id="emailInput" width="40%" />
+			 		
+		 		<mx:Label		x="20" y="55" styleName="yourInfoWebsiteLabel" text="Website / Blog:"  />
+		 		<mx:TextInput 	x="20" y="75" styleName="yourInfoWebsiteInput" text="http://"  id="websiteInput" width="40%"/>
+	
+		 		<mx:Label  		x="400" y="55" styleName="yourInfoCountryLabel" text="* Country:"/>
+		 		<mx:ComboBox 	x="400" y="75" styleName="yourInfoCountryInput" prompt="Please select" dataProvider="{countries}"
+			 						labelField="name" id="countryInput"/>	 		 		
+		</mx:Canvas>	 	
+			 	
+		<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+		<mx:Canvas label="About Your Design" height="100%" width="100%" styleName="aboutDesign" horizontalScrollPolicy="off" >
+			 
+		 		<mx:Label  		x="20" y="10" styleName="aboutDesignTitleLabel" text="* Title:"/>
+		 		<mx:TextInput 	x="20" y="30" styleName="aboutDesignTitleInput" width="40%"  id="designTitle"/>
+			 		
+			 	<mx:Label 		x="20" y="65" styleName="aboutDesignDescriptionLabel" text="Description:"/>
+			 	
+		 		<mx:RichTextEditor x="20" y="87" id="editor" minHeight="100" height="160" width="93%" creationComplete="removeButtons()" />
+			 				  
+		 		<mx:Text 	x="20" y="245" styleName="aboutDesignDescriptionInfo" selectable="false"
+		 				text="This description will be shown in a blog post in the main Fill Colors website"/>
+			 				
+		</mx:Canvas>
+	
+		<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+		<mx:Canvas label="Your Design Files" height="100%" width="100%" styleName="yourDesignFiles" horizontalScrollPolicy="off">
+			 	
+			<mx:Text styleName="designFilesSwfText"  y="10" x="20" width="93%" selectable="false">
+				<mx:htmlText>
+					<![CDATA[You need to provide the style files compiled into a swf file. <a href="http://www.onflex.org/ted/2007/01/flex-201-understand-runtime-css.php"><u>See more information</u></a>]]>
+				</mx:htmlText>
+		 	</mx:Text>
+				 	
+			<mx:Label  x="20" y="34"  styleName="designFilesSwfLabel" text="* Style Sheet File:" id="styleFileLabel"/>
+			<!-- this label only appears once the user has selected the file to upload -->
+			<mx:Label  x="97" y="56" styleName="designFilesSwfInfoLabel" id="swfFile" text="myDesign.swf" enabled="false" />
+			<mx:Button x="20" y="54" styleName="designFilesSwfButton" label="Choose" click="browseForDesign()" />		 		
+			 		
+			<!-- rule................................................................................................-->
+			<mx:HRule x="20" y="93" styleName="designFilesFirstRule" width="93%" />
+			 		
+			<mx:Text x="20" y="103" styleName="designFilesSourceText" width="93%" selectable="false"
+				 text="The source is only required if you wish to make it available for download (Please include a license in your archive)"/>
+			 				 		
+			<mx:Label x="20" y="125" styleName="designFilesSourceLabel" text="Source Zip File:"/>
+			 			
+			<!-- this label only appears once the user has selected the file to upload -->
+			<mx:Label  x="97" y="147" styleName="designFilesSourceInfoLabel" text="mySource.zip" enabled="false" id="sourceFile"/>
+			<mx:Button x="20" y="145" styleName="designFilesSourceButton" label="Choose" click="browseForSource()"/>
+			 		
+			<!--  rule................................................................................................-->	 		
+			<mx:HRule width="93%" y="180" styleName="designFilesSecondRule" x="20" />
+			 		
+			<mx:Text   x="20" y="191" styleName="designFilesThumbnailsText" text="We also need two pictures of your design" selectable="false" />
+			 		
+			<mx:Label  x="20" y="213" styleName="designFilesThumSmallLabel" text="* Thumbnail Image (120 x 100)" id="thumbLabel"/>
+			<mx:Button x="20" y="235" styleName="designFilesThumSmallButton" label="Choose" click="browseForThumbnail()" />
+				 		
+			<!-- this label only appears once the user has selected the file to upload -->
+			<mx:Label  x="97" y="237" styleName="designFilesThumSmallInfoLabel" text="thumbnail.png" enabled="false" id="thumb"/>
+				 		
+			<mx:Label  x="400" y="213" styleName="designFilesThumLargeLabel" text="* Large Thumbnail Image (390 x 200)" id="thumLargeLabel" />		 		
+			<mx:Button x="400" y="235" styleName="designFilesThumLargeButton" label="Choose" click="browseForLargeThumbnail()" />
+				 			 		
+			<!-- this label only appears once the user has selected the file to upload -->
+			<mx:Label x="477" y="237" styleName="designFilesThumLargeInfoLabel" text="largeThumbnail.png" enabled="false" id="thumblarge"/>
+			 	
+		</mx:Canvas>
+		 		
+		<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	 	<mx:Canvas label="The Fine Print" height="100%" width="100%" styleName="theFinePrint" horizontalScrollPolicy="off">
+			 	
+			<mx:CheckBox x="20" y="10" label="" id="termsCheck"/>
+			<mx:Text x="44" y="10" width="93%" condenseWhite="true" styleName="finePrintText" selectable="false"
+		 		htmlText="I understand that my design will be reviewed by Fill Colors to be included in the Fill Colors' design gallery. 
+		 		I am submitting my own work and/or I have the corresponding licenses for the work I am submitting. I grant Fill Colors and its proprietors a perpetual license to display my design and reproduce it in other media with the purpose of promoting the project. 
+		 		My design and images will not be sold, although I may grant additional permissions via the license I provide along with my submission. 
+		 		Finally, I won't blame Fill Colors for anything that goes wrong :)"/>
+			 		
+			<mx:Button x="20" y="111" label="Submit my design!" styleName="finePrintButton" click="submitForm()"/>
+			 		
+			<mx:ProgressBar x="20" mode="event"  y="150" styleName="finePrintUploadProgress" label="Uploading files..." id="uploadProgress" />
+		 	<mx:ProgressBar x="20" mode="event"  y="187" styleName="finePrintSubmitProgress" indeterminate="true" label="Submitting information..." id="submitProgress"/>
+				 	
+		</mx:Canvas>
+			 	
+		</mx:Accordion> 
+</mx:VBox>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<!-- Basic properties of the application. -->        
+   	<display-name>GalaxyForumApplication</display-name>
+	<description>GalaxyForumApplication</description>
+	
+	
+	
+	
+	<!-- Fetch ApplicationContext from WEB-INF. -->
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            WEB-INF/ApplicationContext.xml
+        </param-value>
+    </context-param>
+    
+    
+    
+   
+    
+	<!-- 
+	    Loads the root application context of this web app at startup.
+	    The application context is then available via 
+	    WebApplicationContextUtils.getWebApplicationContext(servletContext).
+	
+		It is wise sometimes to split all the Configuration information across 
+		multiple Configuration Files. In such a case we have to depend on a 
+		Listener Servlet called Context Loader represented by 
+		org.springframework.web.context.ContextLoaderListener. 
+    -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+
+
+
+	<!-- 
+		Initialization Servlet.
+		Intended to load all the Galaxy framework releted properties.
+	-->
+	<servlet>
+		<servlet-name>GalaxyBaseInitServlet</servlet-name>
+		<servlet-class>com.galaxy.base.servlets.GalaxyBaseInitServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GalaxyBaseInitServlet</servlet-name>
+		<url-pattern>*.init</url-pattern>
+	</servlet-mapping>
+
+
+
+
+
+	<!-- Forum specific servlet. -->
+	<servlet>
+		<servlet-name>GalaxyForumServlet</servlet-name>
+		<servlet-class>com.galaxy.forummodule.servlets.GalaxyForumServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GalaxyForumServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+
+
+
+
+	<!-- Welcome Files. -->
+	<welcome-file-list>
+		<welcome-file>jsp/login.jsp</welcome-file>
+	</welcome-file-list>
+	
+	
+</web-app>

@@ -1,0 +1,451 @@
+/*
+ * CEJobOrderDataSource.java
+ * 
+ * @version
+ * 
+ * Jun 22, 2009
+ * 
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ */
+
+package com.intertek.report.dataSource;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.sf.jasperreports.engine.JRDataSource;
+
+import org.apache.log4j.Logger;
+
+import com.intertek.entity.Contact;
+import com.intertek.entity.User;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.PhoenixException;
+import com.intertek.phoenix.entity.Address;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.Estimation;
+import com.intertek.phoenix.entity.JobOrderLineItemNote;
+import com.intertek.phoenix.search.SearchService;
+import com.intertek.phoenix.util.ArrayMap;
+import com.intertek.report.AbstractJasperDataSource;
+import com.intertek.report.ArrayMapDataSource;
+import com.intertek.report.ReportUtil;
+
+/**
+ * The Class CEJobOrderDataSource.
+ * 
+ * @author Patni
+ */
+public class CEJobOrderDataSource extends AbstractJasperDataSource {
+    
+    /** The Constant log. */
+    private static final Logger log = Logger.getLogger(ConsolDataSource.class);
+
+    /** The Constant fieldNames. */
+    public static final String[] fieldNames = { "phoenix_order_num", "quote_issue_date", "quote_number", "ecs_order_date", "ecs_order_num", "order_amount",
+                                               "currency", "payment_terms", "deposit_amount", "deposit_type", "deposit_ref_num", "deposit_paid", "model_num",
+                                               "follow_up_services", "project_num", "operation_status", "billing_status", "project_type", "business_stream",
+                                               "warehouse", "sales_rep", "secondary_sales", "project_manger", "customer_ready_date", "actual_ready_date",
+                                               "promise_completion", "product_evaluation", "service_location", "bill_to_customer", "bill_to_customer_company",
+                                               "bill_to_customer_address1", "bill_to_customer_address2", "bill_to_customer_address3",
+                                               "bill_to_customer_city_state_zip_co","bill_to_customer_customer_num",
+                                               "bill_to_customer_contact", "bill_to_customer_phone", "bill_to_customer_fax", "bill_to_customer_email",
+                                               "ship_to_customer", "ship_to_customer_company", "ship_to_customer_address1", "ship_to_customer_address2",
+                                               "ship_to_customer_address3", "ship_to_customer_city_state_zip_co",
+                                               "ship_to_customer_customer_num", "ship_to_customer_contact", "ship_to_customer_phone", "ship_to_customer_fax",
+                                               "ship_to_customer_email", "manufacture", "manufacture_company", "manufacture_address1", "manufacture_address2",
+                                               "manufacture_address3", "manufacture_city_state_zip_co","manufacture_customer_num",
+                                               "manufacture_contact", "manufacture_phone", "manufacture_fax", "manufacture_email",
+                                               "task",
+                                               "standard_description", "task_description", "task_owner", "service_offering", "task_manager",
+                                               "sample_description", "task_service_location", "task_operation_status", "task_notes", "revenue", "po_number",
+                                               "task_billing_status", "start_date", "completion_date", "ready_date", "eng_data", "tech_data", "adm_data" };
+
+    /** The field types. */
+    static private String[] fieldTypes = { "revenue", "BigDecimal", "customer_ready_date", "Timestamp", "actual_ready_date", "Timestamp", "promise_completion",
+                                          "Timestamp", "start_date", "Timestamp", "completion_date", "Timestamp", "ready_date", "Timestamp", "deposit_amount",
+                                          "BigDecimal", "ecs_order_date", "Timestamp", "quote_issue_date", "Timestamp", "order_amount", "BigDecimal",
+                                          "deposit_paid", "BigDecimal" };
+
+    /**
+     * Instantiates a new cE job order data source.
+     */
+    public CEJobOrderDataSource() {
+        super.fieldNames = fieldNames;
+        super.typeMap = ReportUtil.mapFieldTypes(fieldTypes);
+    }
+
+    /* (non-Javadoc)
+     * @see com.intertek.report.JasperDataSource#getDataSource(java.lang.String, java.util.Map)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public JRDataSource getDataSource(String reportName, Map<String, Object> params) {
+        /*
+         *Current implementation will help to get data from CSv dao for the
+         *integration testing.After the hibernate dao functional,will decide which
+         *search service method(HQL query using search service/Advance serach method) is more suitable for report services.
+         *  
+         */
+        /*
+         * String sql="Select
+         * jo.jobNumber(),qt.quoteDate,jo.quoteNumber,qt.ecsOrderDate,qt.ecsOrderNumber," +
+         * "joli.quotedPrice,cd.contractCurrency,cd.paymentTerms,dipIn.depositAmount,dipIn.depositType," +
+         * "dipIn.depositReference,dipIn.depositPaid,jo.modelNumber,jo.followUp,jo.projectNumber," +
+         * "os.description,bs.description,pt.description,bst.description,jo.warehouseName,jo.SalesPersonName," +
+         * "jo.secondarySalesPersonName,jo.projectManagerName,jo.customerReadyDate,jo.actualReadyDate," +
+         * "jo.promiseCompletionDate," +//product evaluation is missing here
+         * "jo.serviceLocationCode," +
+         * "bcustomer.billTo,bcustomer.getName,ba.address1,ba.address2,ba.address3" +
+         * "ba.city,ba.state,ba.postal,ba.country" +//customer notes missing
+         * here
+         * "cd.billToCustomerNum,bc.firstName,bc.lastName,bc.workPhone,bc.cellPhone,bc.personalPhone,bc.faxNo," +
+         * "bc.workEmail,bc.personalEmail" +
+         * "scustomer.billTo,scustomer.getName,sa.address1,sa.address2,sa.address3" +
+         * "sa.city,sa.state,sa.postal,sa.country" +//customer notes missing
+         * here
+         * "cd.shipToCustomerNum,sc.firstName,sc.lastName,sc.workPhone,sc.cellPhone,sc.personalPhone,sc.faxNo," +
+         * "sc.workEmail,sc.personalEmail" +
+         * "mcustomer.billTo,mcustomer.getName,ma.address1,ma.address2,ma.address3" +
+         * "ma.city,ma.state,ma.postal,ma.country" +//customer notes missing
+         * here
+         * "cd.manfCustomerNum,mc.firstName,mc.lastName,mc.workPhone,mc.cellPhone,mc.personalPhone,mc.faxNo," +
+         * "mc.workEmail,mc.personalEmail,joli.activityId," +
+         * "joli.sampleDescription," +//standard description "joli.description" +
+         * "joli.warehouseName,so.description,tm.firstName,tm.lastName," +
+         * "joli.sampleDescription,joli.serviceLocationCode," +//location
+         * code/location name want to confirm "tos.";
+         */
+
+        
+        SearchService searchService = (SearchService) ServiceLocator.getInstance().getBean("searchService");
+        Map<String, String> criteria = new HashMap<String, String>();
+        criteria.put("jobNumber", params.get("job_Number").toString());
+        List<Object[]> resultSetList = new ArrayList<Object[]>();
+        
+        String[] columns = new String[10];
+        try {
+            List<CEJobOrder> jobList = (List<CEJobOrder>) searchService.search(CEJobOrder.class, criteria);
+            for (CEJobOrder jo : jobList) {
+                for(CEJobContract jc: jo.getJobContracts()){
+                    for (CEJobOrderLineItem joli : jc.getJobOrderLineItems()) {
+
+                        
+                     // TODO: "many fields not belong to CEJobOrderLineItem, instead,
+                     // they belong to CEJobTest". Change it accordingly
+                        
+                    /*
+                        Object[] obArray = new Object[]
+                                                      {jo.getJobNumber(), 
+                                                       null,//jo.getQuote().getQuoteDate(),
+                                                       jo.getQuoteNumber(),
+                                                       null,// jo.getQuote().getEcsOrderDate(),
+                                                       "",//jo.getQuote().getEcsOrderNumber(),
+                                                       BigDecimal.valueOf(joli.getQuotedPrice()),
+                                                       jo.getCustomerDetail().getContractCurrency(),
+                                                       jo.getCustomerDetail().getPaymentTerms(),
+                                                       BigDecimal.valueOf(getDepositInvoice(jo.getDepositInvoices()).getDepositAmount()),//dipInvoice.getDepositAmount();
+                                                       getDepositInvoice(jo.getDepositInvoices()).getDepositType(),
+                                                       getDepositInvoice(jo.getDepositInvoices()).getDepositReference(),
+                                                       getDepositInvoice(jo.getDepositInvoices()).isDepositPaid(),
+                                                       jo.getModelNumber(),
+                                                       getFollowUpService(jo.isFollowUp()),
+                                                       jo.getProjectNumber(),
+                                                       jo.getOperationalStatus().description(),
+                                                       jo.getBillingStatus().description(),
+                                                       "",//jo.getProjectType().description(),
+                                                       "",//jo.getBusinessStream().getDescription(),
+                                                       jo.getBranchName(),//ware house changed to branch
+                                                       jo.getSalesPersonName(),
+                                                       jo.getSecondarySalesPersonName(),
+                                                       jo.getProjectManagerName(),
+                                                       jo.getCustomerReadyDate(),
+                                                       jo.getActualReadyDate(),
+                                                       jo.getPromiseCompletionDate(),
+                                                       jo.getDescription(),//project evaluation
+                                                       jo.getServiceLocationCode(),
+                                                       "",//  jo.getCustomerDetail().getBillToCustomer().getName(),//query raised for this
+                                                       "",//jo.getCustomerDetail().getBillToCustomer().getName(),
+                                                       "",//jo.getCustomerDetail().getBillingAddress().getAddress1(),
+                                                       "",//jo.getCustomerDetail().getBillingAddress().getAddress2(),
+                                                       "",//jo.getCustomerDetail().getBillingAddress().getAddress3(),
+                                                       "",//getAddressDetail(jo.getCustomerDetail().getBillingAddress()),
+                                                       "",//jo.getCustomerDetail().getBillToCustomerNum(),// bill to customer num
+                                                       getCustomerName(jo.getCustomerDetail().getBillingContact()),
+                                                       getCustomerPhone(jo.getCustomerDetail().getBillingContact()),
+                                                       jo.getCustomerDetail().getBillingContact().getFaxNo(),
+                                                       getCustomerEmail(jo.getCustomerDetail().getBillingContact()),
+                                                       "",  //      jo.getCustomerDetail().getShipToCustomer().getName(),//query raised for this
+                                                       "",  //      jo.getCustomerDetail().getShipToCustomer().getName(),
+                                                       "",//      jo.getCustomerDetail().getShippingAddress().getAddress1(),
+                                                       "",//      jo.getCustomerDetail().getShippingAddress().getAddress2(),
+                                                       "",//       jo.getCustomerDetail().getShippingAddress().getAddress3(),
+                                                       "", //      getAddressDetail(jo.getCustomerDetail().getShippingAddress()),
+                                                       "",//      jo.getCustomerDetail().getShipToCustomerNum(),// bill to customer num
+                                                       getCustomerName(jo.getCustomerDetail().getShippingContact()),
+                                                       getCustomerPhone(jo.getCustomerDetail().getShippingContact()),
+                                                       jo.getCustomerDetail().getShippingContact().getFaxNo(),
+                                                       "",// getCustomerEmail(jo.getCustomerDetail().getShippingContact()),
+                                                       "manf cust", //        jo.getCustomerDetail().getManfCustomer().getName(),//query raised for this
+                                                       "", //  jo.getCustomerDetail().getManfCustomer().getName(),
+                                                       "", //  jo.getCustomerDetail().getManufacturerAddress().getAddress1(),
+                                                       "", //  jo.getCustomerDetail().getManufacturerAddress().getAddress2(),
+                                                       "", //  jo.getCustomerDetail().getManufacturerAddress().getAddress3(),
+                                                       "", //  getAddressDetail(jo.getCustomerDetail().getManufacturerAddress()),
+                                                       "", //  jo.getCustomerDetail().getManfCustomerNum(),// bill to customer num
+                                                       getCustomerName(jo.getCustomerDetail().getManufacturerContact()),
+                                                       getCustomerPhone(jo.getCustomerDetail().getManufacturerContact()),
+                                                       jo.getCustomerDetail().getManufacturerContact().getFaxNo(),
+                                                       getCustomerEmail(jo.getCustomerDetail().getManufacturerContact()),
+                                                       String.valueOf(joli.getActivityId()),joli.getTest().getTestDescription(),//want to confirm as std description
+                                                       "",//joli.getDescription(),//wANT TO CONFIRM AS TASKDESCRIPTION
+                                                       "",//joli.getBranchName(), 
+                                                       "",// joli.getServiceOffering().getDescription(),
+                                                       "TM",// getTaskmanager(joli.getTaskManager()),
+                                                       "sample desc",//joli.getSampleDescription(),
+                                                       "",//joli.getServiceLocation().getName(),
+                                                       "",//joli.getOperationalStatus(),
+                                                       "", //getTaskNotes(joli.getNotes()),
+                                                       getDecimal(joli.getRevenue()),
+                                                       joli.getPoNumber(),
+                                                       joli.getBillingstatus(),
+                                                       joli.getStartDate(),
+                                                       joli.getEndDate(),
+                                                       joli.getTaskReadyDate(),
+                                                       getEstimate(joli.getEstimations(),"Engineer"),
+                                                       getEstimate(joli.getEstimations(),"Technician"),
+                                                       getEstimate(joli.getEstimations(),"Admin")
+                                                      };
+                        */                              
+                        
+                        Object[] obArray = new Object[1];
+                        
+                        
+                        resultSetList.add(obArray);
+                    }
+                }
+            }
+        }
+        catch (PhoenixException e) {
+                e.printStackTrace();
+        }
+
+        return new ArrayMapDataSource(new ArrayMap<String, Object>(fieldNames), resultSetList, this, params);
+    }
+
+    /**
+     * Gets the estimate.
+     * 
+     * @param estimations the estimations
+     * @param type the type
+     * 
+     * @return the estimate
+     */
+    private Object getEstimate(Set<Estimation> estimations, String type) {
+        String estimateHour="";
+        for(Estimation estimation:estimations)
+        {
+           if(estimation.getUserType().description().equals(type)){
+                estimateHour=String.valueOf(estimation.getEstimatedHour());
+            }
+            else if(estimation.getUserType().description().equals(type)){
+                estimateHour=String.valueOf(estimation.getEstimatedHour());
+            }
+            else if(estimation.getUserType().description().equals(type)){
+                estimateHour=String.valueOf(estimation.getEstimatedHour());
+            }
+            
+        }
+       
+        return estimateHour;
+    }
+
+    /**
+     * Gets the task notes.
+     * 
+     * @param notes the notes
+     * 
+     * @return the task notes
+     */
+    private Object getTaskNotes(Set<JobOrderLineItemNote> notes) {
+        StringBuffer noteBuffer=new StringBuffer();
+        for(JobOrderLineItemNote note:notes)
+        {
+            if(note.getNoteType().description().equalsIgnoreCase("Billing")){
+                noteBuffer.append(note.getNote());    
+                noteBuffer.append(" ");
+            }
+            
+        }
+        return noteBuffer.toString().trim();
+    }
+
+    /**
+     * Gets the taskmanager.
+     * 
+     * @param taskManager the task manager
+     * 
+     * @return the taskmanager
+     */
+    private Object getTaskmanager(User taskManager) {
+        StringBuffer userName=new StringBuffer();
+        userName.append(taskManager.getFirstName());
+        userName.append(" ");
+        userName.append(taskManager.getLastName());
+               
+        return userName.toString();
+    }
+
+    /**
+     * Gets the follow up service.
+     * 
+     * @param followUp the follow up
+     * 
+     * @return the follow up service
+     */
+    private Object getFollowUpService(boolean followUp) {
+       String value="";
+        if(followUp){
+            value="Yes";   
+        } 
+        else{
+            value="No"; 
+        }
+        return value;
+    }
+
+    /**
+     * Gets the customer email.
+     * 
+     * @param contact the contact
+     * 
+     * @return the customer email
+     */
+    private Object getCustomerEmail(Contact contact) {
+        String email="";
+        if(contact.getWorkEmail()!=null && !contact.getWorkEmail().isEmpty())
+        {
+            email=contact.getWorkEmail();
+        }
+        else if (contact.getPersonalEmail()!=null && !contact.getPersonalEmail().isEmpty())
+        {
+            email=contact.getPersonalEmail();
+        }
+        
+        return email;
+            
+    }
+
+    /**
+     * Gets the customer phone.
+     * 
+     * @param contact the contact
+     * 
+     * @return the customer phone
+     */
+    private Object getCustomerPhone(Contact contact) {
+        String email="";
+        if(contact.getWorkPhone()!=null && !contact.getWorkPhone().isEmpty())
+        {
+            email=contact.getWorkPhone();
+        }
+        else if (contact.getPersonalPhone()!=null && !contact.getPersonalPhone().isEmpty())
+        {
+            email=contact.getPersonalPhone();
+        }
+        
+        return email;
+    }
+
+    /**
+     * Gets the customer name.
+     * 
+     * @param contact the contact
+     * 
+     * @return the customer name
+     */
+    private Object getCustomerName(Contact contact) {
+        StringBuffer nameBuffer=new StringBuffer();
+        nameBuffer.append(contact.getFirstName());
+        nameBuffer.append(" ");
+        nameBuffer.append(contact.getLastName());
+        return nameBuffer.toString();
+    }
+
+    /**
+     * Gets the address detail.
+     * 
+     * @param addr the addr
+     * 
+     * @return the address detail
+     */
+    private Object getAddressDetail(Address addr) {
+        
+        StringBuffer addressBuffer=new StringBuffer();
+        addressBuffer.append(addr.getCity());
+        addressBuffer.append(" ");
+        addressBuffer.append(addr.getState());
+        addressBuffer.append(" ");
+        addressBuffer.append(addr.getPostal());
+        addressBuffer.append(" ");
+        addressBuffer.append(addr.getCountry());
+        return addressBuffer.toString();
+    }
+
+
+    
+    @Override
+    public void dataLoaded(ArrayMapDataSource amds, Map<String, Object> params) {
+        String[] fields = { "order_amount" };
+        double[] results = ReportUtil.summariseFields(fields, amds);
+        amds.addCalculatedField("order_amount", new BigDecimal(String.valueOf(results[0])));
+
+    }
+
+    @Override
+    public Object calculateFieldValue(String fieldName, Map<String, Object> params, ArrayMapDataSource source) {
+        return source.getCalculatedField(fieldName);
+    }
+
+    /**
+     * Gets the deposit invoice.
+     * 
+     * @param depositInvoices the deposit invoices
+     * 
+     * @return the deposit invoice
+     */
+    private DepositInvoice getDepositInvoice(Set<DepositInvoice> depositInvoices )
+    {
+       return depositInvoices.iterator().next();
+    }
+
+    @Override
+    public JRDataSource getDataSource(String reportName, Map<String, Object> params, Connection con) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    //Temporaray implementaion,will use calculateFieldValue method.
+    private BigDecimal getDecimal(String str)
+    {
+        BigDecimal decimal=new BigDecimal(0);
+        try{
+            decimal=BigDecimal.valueOf(Double.valueOf(str));
+        }
+        catch(Exception e)
+        {
+            //TO Do
+        }
+        
+        return decimal;
+        
+    }
+}

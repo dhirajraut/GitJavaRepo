@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+            http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+    <display-name>Phoenix CRM</display-name>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            WEB-INF/applicationContext.xml,
+            WEB-INF/applicationContext-acegi-security.xml,
+            WEB-INF/applicationContext-ws.xml
+            <!-- WEB-INF/applicationContext-timer.xml-->
+        </param-value>
+    </context-param>
+
+
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>hibernateFilter</filter-name>
+        <filter-class>
+            <!--  org.springframework.orm.hibernate3.support.OpenSessionInViewFilter -->
+            com.intertek.phoenix.web.OpenSessionInViewFilter
+        </filter-class>
+        <init-param>
+            <param-name>sessionFactoryBeanName</param-name>
+            <param-value>entitySessionFactory</param-value>
+        </init-param>
+    </filter>
+    
+    <filter-mapping>
+    	<filter-name>hibernateFilter</filter-name>
+<<<<<<< .mine
+    	<url-pattern>/*</url-pattern>
+    </filter-mapping>
+=======
+    	<url-pattern>/phx_add_job_services.htm</url-pattern>
+        <url-pattern>/phx_add_test.htm</url-pattern>
+        <url-pattern>/phx_ajax.htm</url-pattern>
+        <url-pattern>/phx_apply_deposit_popup.htm</url-pattern>
+        <url-pattern>/phx_edit_dep_amount_popup.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview_tab0.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview_tab1.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview_tab2.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview_tab3.htm</url-pattern>
+        <url-pattern>/phx_ce_job_invoice_preview_tab4.htm</url-pattern>
+        <url-pattern>/phx_ce_job_select_charges.htm</url-pattern>
+        <url-pattern>/phx_create_project.htm</url-pattern>
+        <url-pattern>/phx_create_purchase_order.htm</url-pattern>
+        <url-pattern>/phx_credit_reason_ce_popup.htm</url-pattern>
+        <url-pattern>/phx_edit_price_popup.htm</url-pattern>
+        <url-pattern>/phx_job_entry_ce.htm</url-pattern>
+        <url-pattern>/phx_job_instruction_attachfile_popup.htm</url-pattern>
+        <url-pattern>/phx_job_instruction_note_popup.htm</url-pattern>
+        <url-pattern>/phx_job_instruction_test_attribute_popup.htm</url-pattern>
+        <url-pattern>/phx_job_log_ce.htm</url-pattern>
+        <url-pattern>/phx_job_log_ce_mail.htm</url-pattern>
+        <url-pattern>/phx_job_log_ce_results_billing.htm</url-pattern>
+        <url-pattern>/phx_job_log_ce_results_main.htm</url-pattern>
+        <url-pattern>/phx_job_log_ce_results_processlog.htm</url-pattern>
+        <url-pattern>/phx_job_operational_info_ce.htm</url-pattern>
+        <url-pattern>/phx_job_order_ce_pdf_view.htm</url-pattern>
+        <url-pattern>/phx_job_order_note_popup.htm</url-pattern>
+        <url-pattern>/phx_job_order_attachfile_popup.htm</url-pattern>
+        <url-pattern>/phx_job_view_ce_invoice.htm</url-pattern>
+        <url-pattern>/phx_revenue_segregation_popup.htm</url-pattern>
+        <url-pattern>/phx_search.htm</url-pattern>
+        <url-pattern>/phx_search_ce_job_popup.htm</url-pattern>
+        <url-pattern>/phx_search_purchase_order.htm</url-pattern>
+        <url-pattern>/phx_travel_expense_popup.htm</url-pattern>
+        <url-pattern>/phx_add_manual_test.htm</url-pattern>
+        <url-pattern>/phx_common_job_search.htm</url-pattern>
+   </filter-mapping>
+>>>>>>> .r6758
+
+    <filter>
+        <filter-name>Acegi Filter Chain Proxy</filter-name>
+        <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetClass</param-name>
+            <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Acegi Filter Chain Proxy</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>TrackerRes</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>phoenix</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>initServlet</servlet-name>
+        <servlet-class>com.intertek.web.servlet.InitServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>phoenix</servlet-name>
+        <url-pattern>*.htm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>phoenix</servlet-name>
+        <url-pattern>*.tile</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>com.intertek.web.servlet.ApplicationListener</listener-class>
+    </listener>
+
+    <session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.htm</location>
+    </error-page>
+
+
+    <!--
+    - Loads the root application context of this web app at startup.
+    - The application context is then available via 
+    - WebApplicationContextUtils.getWebApplicationContext(servletContext).
+    -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>ws</servlet-name>
+        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ws</servlet-name>
+        <url-pattern>*.ws</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ws</servlet-name>
+        <url-pattern>*.wsdl</url-pattern>
+    </servlet-mapping>
+
+	<servlet>
+		<servlet-name>dwr</servlet-name>
+		<servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dwr</servlet-name>
+		<url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping> 
+</web-app>
+

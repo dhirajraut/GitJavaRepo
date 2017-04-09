@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+  <bean id="contextSource"
+    class="org.springframework.ldap.core.support.LdapContextSource">
+    <property name="url" value="ldap://CBWUSAHOUDC01.cb.winadroot.com:3268" />
+    <property name="base" value="" />
+    <property name="userName" value="CN=cbw.svc.phx,OU=Servers,OU=HOU-Houston CyrusOne,OU=USA-United States,OU=North America,OU=CBW,DC=cb,DC=winadroot,DC=com" />
+    <property name="password" value="ovcfKGQ1E20V" />
+
+    <property name="baseEnvironmentProperties">
+      <map>
+        <entry>
+          <key>
+            <value>java.naming.referral</value>
+          </key>
+          <value>follow</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+  <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+    <constructor-arg ref="contextSource" />
+  </bean>
+</beans>

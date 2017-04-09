@@ -1,0 +1,1438 @@
+<?xml version="1.0"?>
+
+<project name="intertek" default="main" basedir=".">
+
+  <property file="build2.properties" />
+
+  <property name="build.dir" value="../../build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="build.metainf.dir" value="${build.dir}/META-INF"/>
+  <property name="dist.dir" value="../../dist"/>
+  <property name="phoenix.source.dir" value="../../trunk"/>
+  <property name="phoenix2.source.dir" value="../../phx2.1"/> 						
+  <property name="src.dir" value="${project.home}/src"/>
+  <property name="build.war.dir" value="${build.dir}/war"/>
+  <property name="lib.dir" value="${project.home}/lib" />
+  <property name="web.root.dir" value="${project.home}/web" />
+  <property name="config.dir" value="${project.home}/conf" />
+  <property name="server.config.dir" value="${project.home}/env" />	
+  <property name="data.dir" value="${project.home}/data" />
+
+  <property name="deploy.dir" value="${application.server.home}/webapps" />
+
+  <condition property="enable.svn.tag"> 
+    <istrue value="${svn.do.tag}"/> 
+  </condition>
+  
+    <condition property="svn.update"> 
+    <istrue value="true"/> 
+  </condition>
+  
+  <path id="base.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+      <include name="**/*.zip" />
+    </fileset>
+    <fileset dir="${application.server.home}/common/lib">
+    <!--fileset dir="${application.server.home}/lib"-->
+      <include name="**/*.jar" />
+    </fileset>
+		
+    <pathelement location="${build.classes.dir}" />
+
+    <path location="${project.home}/hibernate-ant/hibernate-tools.jar" />
+    <path location="${project.home}/hibernate-ant/freemarker.jar" />
+		
+  </path>
+
+  <target name="prepare">
+    <echo>building prepare...</echo>
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${build.classes.dir}" />
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${build.war.dir}"/>
+  	<mkdir dir="${dist.dir}/dev" />
+  	
+  	<mkdir dir="${dist.dir}/stg-52" />
+  	<mkdir dir="${dist.dir}/stg-53" />
+  	<mkdir dir="${dist.dir}/stg-54" />
+  	
+	<mkdir dir="${dist.dir}/prd-58" />
+  	<mkdir dir="${dist.dir}/prd-59" />
+	<mkdir dir="${dist.dir}/prd-60" />
+	<mkdir dir="${dist.dir}/prd-61" />
+  	<mkdir dir="${dist.dir}/prd-62" />
+  	<mkdir dir="${dist.dir}/prd-63" /> 	
+  	
+	<mkdir dir="${dist.dir}/srv-64" /> <!-- build server (\\cbwusahousrv64)-->
+	
+  	<mkdir dir="${dist.dir}/phx1on37" />  	
+	<mkdir dir="${dist.dir}/jasper" /> 
+	<mkdir dir="${dist.dir}/phx37-1" />  <!-- Linux Box phx37-1) -->
+	<mkdir dir="${dist.dir}/phx37-2" />  <!-- Linux Box phx37-2) -->
+	<mkdir dir="${dist.dir}/phx37-3" />  <!-- Linux Box phx37-3) -->
+	<mkdir dir="${dist.dir}/phx2003y1on39" />  	
+	<mkdir dir="${dist.dir}/ctfdev-23" />  <!-- ATT PHX CTF DEV -->
+	<mkdir dir="${dist.dir}/ctfstg-24" />  <!-- ATT PHX CTF DEV -->
+	
+  </target>
+  
+  <target name="compile" depends="copy-properties">
+  
+    <javac
+      destdir="${build.classes.dir}"
+      debug="${debug}"
+      deprecation="off"
+      optimize="${optimize}"
+      classpathref="base.path" fork="true" memoryInitialSize="128m" memoryMaximumSize="1024m">
+      <src path="${src.dir}"/>
+    </javac>
+
+  </target>
+
+	<target name="jar4SSO" depends="compile">
+	    <jar destfile="${dist.dir}/intertekSSO.jar">
+	        <fileset dir="${build.classes.dir}">
+	            <include name="com/intertek/acegi/AuthenticationFilter*"/>
+	            <include name="com/intertek/util/StringEncrypter*"/>
+	        </fileset>
+	    </jar>
+	</target>
+
+  <target name="compile-jasper-old" description="Compiles the XML report design and produces the .jasper file.">
+  	<delete dir="${dist.dir}/jasper-old"/>
+  	<mkdir dir="${dist.dir}/jasper-old" />
+  	
+    <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask"> 
+      <classpath refid="base.path"/>
+    </taskdef>
+    <jrc destdir="${dist.dir}/jasper-old">
+      <src>
+        <fileset dir="${config.dir}/invoice">
+          <include name="**.jrxml"/>
+        </fileset>
+      </src>
+      <classpath refid="base.path"/>
+    </jrc> 
+    
+    <copy todir="${dist.dir}/jasper-old" filtering="false" overwrite="yes">
+      <fileset dir="${config.dir}/invoice">
+        <include name="**/*.gif" />
+        <include name="**/*.jpg" />
+      </fileset>
+    </copy> 
+  	
+  </target>
+      
+	  <target name="compile-jasper" description="Compiles the XML report design and produces the .jasper file.">
+	    <delete dir="${dist.dir}/jasper"/>
+	    <mkdir dir="${dist.dir}/jasper" />
+	    
+	    <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask"> 
+	      <classpath refid="base.path"/>
+	    </taskdef>
+	    <jrc destdir="${dist.dir}/jasper">
+	      <src>
+	        <fileset dir="${config.dir}/report_src">
+	            <include name="**.jrxml"/>
+	        </fileset>
+	        <fileset dir="${config.dir}/report_ce">
+	            <include name="**.jrxml"/>
+	        </fileset>
+	      </src>
+	      <classpath refid="base.path"/>
+	    </jrc> 
+	    
+	    <copy todir="${dist.dir}/jasper" filtering="false" overwrite="yes">
+	      <fileset dir="${config.dir}/report_src">
+	        <include name="**/*.gif" />
+	        <include name="**/*.jpg" />
+	      </fileset>
+	    </copy> 
+	    
+	  </target>
+	      
+  <target name="copyall-todev" depends="svn-update, tag-svn, build-all, transfer-todev"/>
+    
+	<target name="transfer-todev">
+		<delete includeemptydirs="true">
+			<fileset dir="${dev.dist.dir}" includes="**/*"/>
+		</delete>
+			<echo message="DELETED" />
+		<copy todir="${dev.dist.dir}">
+			<fileset dir="../../dist"/>
+		</copy>	
+	</target>
+	
+   <target name="copy-properties" depends="prepare">
+
+    <filter token="application.server.home" value="${application.server.home}"/>
+
+    <copy todir="${build.classes.dir}" filtering="false" overwrite="yes">
+      <fileset dir="${src.dir}">
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>  
+    <copy todir="${build.classes.dir}" filtering="false" overwrite="yes">
+      <fileset dir="${config.dir}">
+        <include name="**/*.properties" />
+        <include name="**/*.xml" />
+        <include name="**/*.dtd" />
+        <include name="**/*.vm" />
+        <include name="**/*.jrxml" />
+        <include name="**/*.xsd" />
+        <include name="**/*.xsl" />
+      	<include name="**/*.ttf" />
+      </fileset>
+    </copy>  
+    <!--copy todir="${build.classes.dir}" filtering="false" overwrite="yes">
+      <fileset dir="${config.dir}">
+        <include name="**/*.jasper" />
+      </fileset>
+    </copy-->  
+  </target>
+
+	<target name="copy-jasper">
+	    <copy todir="${server.jasper.dir}" filtering="false" overwrite="yes">
+	      <fileset dir="${dist.dir}/jasper">
+	        <include name="**/*.jasper" />
+	      	<include name="**/*.gif" />
+	      	<include name="**/*.jpg" />
+	      </fileset>
+	    </copy>  
+	</target>
+	
+	<target name="copy-jasper-linux">
+	    <scp todir="${username}:${password}@${host.ip}:${server.jasper.dir}" trust ="yes" >
+		<fileset dir="${dist.dir}/jasper">
+	        <include name="**/*.jasper" />
+	      	<include name="**/*.gif" />
+	      	<include name="**/*.jpg" />
+	      </fileset>
+	    </scp>  
+	</target>
+	
+	<target name="prepare-jasper"  depends="compile-jasper" >
+		<delete includeemptydirs="true">
+			<fileset dir="${dev.copyjasper.dir}" includes="**/*"/>
+		</delete>
+		<echo message="Jasper dir at ${dev.copyjasper.dir} DELETED." />
+		<copy todir="${dev.copyjasper.dir}">
+			<fileset dir="../../dist/jasper"/>
+		</copy>
+	</target>
+	
+	<target name="build-dev" depends="clean">
+		<antcall target="war-server">
+			<param name="server" value="dev"/>
+		</antcall>	
+	</target>
+	
+	<target name="build-srv64" depends="clean"> 			<!-- Build for server 64 i.e. CBWUSAHOUSRV64-->
+		<antcall target="war-server">
+			<param name="server" value="srv-64"/>
+		</antcall>	
+	</target>
+	
+	<target name="build-phx2003y1on39" depends="clean">
+		<antcall target="war-server">
+			<param name="server" value="phx2003y1on39"/>
+		</antcall>	
+	</target>
+	
+	<target name="update-build-dev" depends="svn-update, build-dev"/>
+	
+	<target name="update-prepare-jasper" depends="svn-update, prepare-jasper"/>
+	
+	<target name="update-build-all" depends="svn-update, build-all"/>
+	
+	<target name="update-build-srv64" depends="svn-update, build-srv64"/>
+		
+	<target name="build-all" depends="clean">
+				
+		<antcall target="war-server">
+			<param name="server" value="stg-52"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="stg-53"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="stg-54"/>
+		</antcall>
+
+		<antcall target="war-server">
+			<param name="server" value="srv-64"/>
+		</antcall>
+			
+		<antcall target="war-server">
+			<param name="server" value="prd-58"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="prd-59"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="prd-60"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="prd-61"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="prd-62"/>
+		</antcall>
+		<antcall target="war-server">
+			<param name="server" value="prd-63"/>
+		</antcall>
+		
+		<antcall target="compile-jasper"/>		
+	</target>
+		
+	<target name="deploy-dev" depends="build-dev, compile-jasper">
+		<antcall target="deploy-server">
+			<param name="server" value="dev"/>
+			<param name="server.pc" value="${dev.server.pc}"/>
+			<param name="service.name" value="${dev.service.name}"/>
+			<param name="webapps.dir" value="${dev.webapps.dir}"/>
+			<param name="catch.dir" value="${dev.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper-dev"/>
+	</target>
+	
+	<target name="deploy-phx2003y1on39" depends="build-phx2003y1on39, compile-jasper">
+		<antcall target="deploy-server">
+			<param name="server" value="phx2003y1on39"/>
+			<param name="server.pc" value="${phx2003y1on39.server.pc}"/>
+			<param name="service.name" value="${phx2003y1on39.service.name}"/>
+			<param name="webapps.dir" value="${phx2003y1on39.webapps.dir}"/>
+			<param name="catch.dir" value="${phx2003y1on39.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${phx2003y1on39.jasper.dir}" />
+		</antcall>
+	</target>
+	
+	<target name="deploy-phx1on37" depends="clean">
+		
+		<antcall target="war-server">
+			<param name="server" value="phx1on37"/>
+		</antcall>
+				
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${phx1on37.server.pc}"/>
+			<param name="serviceName" value="${phx1on37.service.name2}"/>
+			<param name="command" value="stop"/>
+		</antcall>
+		
+		<antcall target="deploy-server">
+			<param name="server" value="phx1on37"/>
+			<param name="server.pc" value="${phx1on37.server.pc}"/>
+			<param name="service.name" value="${phx1on37.service.name}"/>
+			<param name="webapps.dir" value="${phx1on37.webapps.dir}"/>
+			<param name="catch.dir" value="${phx1on37.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${phx1on37.jasper.dir}" />
+		</antcall>
+		
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${phx1on37.server.pc}"/>
+			<param name="serviceName" value="${phx1on37.service.name2}"/>
+			<param name="command" value="start"/>
+		</antcall>		
+	</target>
+	
+	<target name = "build-phx37-1" depends ="clean">
+		<antcall target="war-server">
+			<param name="server" value="phx37-1" />
+		</antcall>
+	</target>
+	
+	<target name = "build-phx37-2" depends ="clean">
+		<antcall target="war-server">
+			<param name="server" value="phx37-2" />
+		</antcall>
+	</target>
+	
+	<target name = "build-phx37-3" depends ="clean">
+		<antcall target="war-server">
+			<param name="server" value="phx37-3" />
+		</antcall>
+	</target>
+	
+	<target name = "build-ctfdev-23" depends ="clean">
+		<antcall target="war-server">
+			<param name="server" value="ctfdev-23" />
+		</antcall>
+	</target>
+	
+	<target name = "build-ctfstg-24" depends ="clean">
+		<antcall target="war-server">
+			<param name="server" value="ctfstg-24" />
+		</antcall>
+	</target>
+	
+	<target name ="copy-jasper-ctfdev-23" depends ="compile-jasper">	
+		<antcall target="copy-jasper-linux">
+			<param name="server.jasper.dir" value="${phxctf-dev.jasper.dir}" />
+			<param name="username" value="${phxctf-dev.username}" />
+			<param name="password" value="${phxctf-dev.password}" />
+			<param name="host.ip" value="${phxctf-dev.ip}" />
+		</antcall>
+	</target>
+	
+	<target name ="copy-jasper-ctfstg-24" depends ="compile-jasper">	
+		<antcall target="copy-jasper-linux">
+			<param name="server.jasper.dir" value="${phxctf-stg.jasper.dir}" />
+			<param name="username" value="${phxctf-stg.username}" />
+			<param name="password" value="${phxctf-stg.password}" />
+			<param name="host.ip" value="${phxctf-stg.ip}" />
+		</antcall>
+	</target>
+	
+	<target name="deploy-phx37-1" depends="build-phx37-1, compile-jasper">
+		<antcall target="deploy-linuxserver">
+			<param name="server" value="phx37-1" />
+			<param name="server.ip" value="${phx37-1.ip}" />
+			<param name="username" value="${phx37-1.username}" />
+			<param name="password" value="${phx37-1.password}" />
+			<param name="webapps.dir" value="${phx37-1.webapps.dir}" />
+			<param name="catch.dir" value="${phx37-1.catch.dir}" />
+		</antcall>
+		<antcall target="copy-jasper-linux">
+			<param name="username" value="${phx37-1.username}" />
+			<param name="password" value="${phx37-1.password}" />
+			<param name="hostname" value="phx37-1" />
+			<param name="host.ip" value="${phx37-1.ip}" />
+			<param name="server.jasper.dir" value="${phx37-1.jasper.dir}" />
+		</antcall>
+	</target>
+
+	<target name="deploy-phx37-2" depends="build-phx37-2, compile-jasper">
+		<antcall target="deploy-linuxserver">
+			<param name="server" value="phx37-2" />
+			<param name="server.ip" value="${phx37-2.ip}" />
+			<param name="username" value="${phx37-2.username}" />
+			<param name="password" value="${phx37-2.password}" />
+			<param name="webapps.dir" value="${phx37-2.webapps.dir}" />
+			<param name="catch.dir" value="${phx37-2.catch.dir}" />
+		</antcall>
+		<antcall target="copy-jasper-linux">
+			<param name="username" value="${phx37-2.username}" />
+			<param name="password" value="${phx37-2.password}" />
+			<param name="hostname" value="phx37-2" />
+			<param name="host.ip" value="${phx37-2.ip}" />
+			<param name="server.jasper.dir" value="${phx37-2.jasper.dir}" />
+		</antcall>
+	</target>	
+	
+	<target name="deploy-phx37-3" depends="build-phx37-3, compile-jasper">
+		<antcall target="deploy-linuxserver">
+			<param name="server" value="phx37-3" />
+			<param name="server.ip" value="${phx37-3.ip}" />
+			<param name="username" value="${phx37-3.username}" />
+			<param name="password" value="${phx37-3.password}" />
+			<param name="webapps.dir" value="${phx37-3.webapps.dir}" />
+			<param name="catch.dir" value="${phx37-3.catch.dir}" />
+		</antcall>
+	
+		<antcall target="copy-jasper-linux">
+			<param name="username" value="${phx37-3.username}" />
+			<param name="password" value="${phx37-3.password}" />
+			<param name="hostname" value="phx37-3" />
+			<param name="host.ip" value="${phx37-3.ip}" />
+			<param name="server.jasper.dir" value="${phx37-3.jasper.dir}" />
+		</antcall>
+	</target>	
+	
+	<target name="deploy-linuxserver">
+		<echo> Deploying to Linux Server ${server} </echo>
+		<antcall target="tomcatonlinux">
+			<param name="host.ip" value="${server.ip}" />
+			<param name="username" value="${username}" />
+			<param name="password" value="${password}" />
+			<param name="command" value="service tomcat stop" /> 			
+		</antcall>
+		
+		<antcall target="copywar">
+			<param name="username" value="${username}" />
+			<param name="password" value="${password}" />
+			<param name="webapps.dir" value="${webapps.dir}" />
+			<param name="catch.dir" value="${catch.dir}" />
+			<param name="host.ip" value="${server.ip}" />
+		</antcall>
+		
+		<antcall target="delphoenixcatch">
+			<param name="host.ip" value="${server.ip}" />
+			<param name="username" value="${username}" />
+			<param name="password" value="${password}" />
+			<param name="command" value="rm -rf ${webapps.dir}/phoenix; rm -rf ${catch.dir}" />
+		</antcall>
+		
+		
+		<antcall target="tomcatonlinux">
+			<param name="host.ip" value="${server.ip}" />
+			<param name="username" value="${username}" />
+			<param name="password" value="${password}" />
+			<param name="command" value="service tomcat start" /> 			
+		</antcall>
+		
+	</target>
+	
+	<target name="tomcatonlinux">
+	
+		<sshexec	
+			host 	 = "${host.ip}"
+			username = "${username}"
+			password = "${password}"
+			trust	 = "yes"		
+			command	 = "${command}" />		
+	</target>	
+	
+	<target name="copywar">	
+	<echo> Copying Phoenix.war file to ${server} </echo>
+		<scp todir ="${username}:${password}@${host.ip}:${webapps.dir}" trust ="yes" >
+			<fileset dir="${dist.dir}/${server}">
+				<include name="${project.web.war}"/>
+			</fileset>
+		</scp>
+	</target >	
+	
+	<target name="delphoenixcatch">
+	<echo> Deleting Phoenix Cache Dir on ${server} </echo>
+		<sshexec	
+			host 	 = "${host.ip}"
+			username = "${username}"
+			password = "${password}"
+			trust	 = "yes"		
+			command	 = "${command}" />		
+	</target>
+	
+		
+	<target name="deploy-srv64">
+		<antcall target="deploy-server">
+			<param name="server" value="srv-64"/>
+			<param name="server.pc" value="${srv64.server.pc}"/>
+			<param name="service.name" value="${srv64.service.name}"/>
+			<param name="webapps.dir" value="${srv64.webapps.dir}"/>
+			<param name="catch.dir" value="${srv64.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${srv64.jasper.dir}" />
+		</antcall>
+	</target>
+	
+
+	<target name="deploy-stg-all">
+		<antcall target="stg-apache-all">
+			<param name="apacheCommand" value="stop"/>
+		</antcall>
+		<antcall target="deploy-stg52"/>
+		<antcall target="deploy-stg53"/>
+		<antcall target="deploy-stg54"/>
+		<antcall target="deploy-srv64"/>
+		<antcall target="stg-apache-all">
+			<param name="apacheCommand" value="start"/>
+		</antcall>		
+	</target>
+	
+	<target name="deploy-prd-all">
+		<antcall target="prd-apache-all">
+			<param name="apacheCommand" value="stop"/>
+		</antcall>
+		<antcall target="deploy-prd58"/>
+		<antcall target="deploy-prd59"/>
+		<antcall target="deploy-prd60"/>
+		<antcall target="deploy-prd62"/>
+		<antcall target="deploy-prd63"/>
+		<antcall target="prd-apache-all">
+			<param name="apacheCommand" value="start"/>
+		</antcall>		
+	</target>
+
+	<target name="copy-jasper-dev">
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${dev.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="copy-jasper-stg-all">
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg52.jasper.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg53.jasper.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg54.jasper.dir}"/>
+		</antcall>		
+	</target>
+		
+	<target name="copy-jasper-prd-all">
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd58.jasper.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd59.jasper.dir}"/>
+		</antcall>			
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd60.jasper.dir}"/>
+		</antcall>			
+		<!--antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd61.jasper.dir}"/>
+		</antcall-->			
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd62.jasper.dir}"/>
+		</antcall>			
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd63.jasper.dir}"/>
+		</antcall>			
+	</target>
+	
+	<target name="deploy-stg52">
+		<antcall target="deploy-server">
+			<param name="server" value="stg-52"/>
+			<param name="server.pc" value="${stg52.server.pc}"/>
+			<param name="service.name" value="${stg52.service.name}"/>
+			<param name="webapps.dir" value="${stg52.webapps.dir}"/>
+			<param name="catch.dir" value="${stg52.catch.dir}"/>
+		</antcall>
+		
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg52.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-stg53">
+		<antcall target="deploy-server">
+			<param name="server" value="stg-53"/>
+			<param name="server.pc" value="${stg53.server.pc}"/>
+			<param name="service.name" value="${stg53.service.name}"/>
+			<param name="webapps.dir" value="${stg53.webapps.dir}"/>
+			<param name="catch.dir" value="${stg53.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg53.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-stg54">
+		<antcall target="deploy-server">
+			<param name="server" value="stg-54"/>
+			<param name="server.pc" value="${stg54.server.pc}"/>
+			<param name="service.name" value="${stg54.service.name}"/>
+			<param name="webapps.dir" value="${stg54.webapps.dir}"/>
+			<param name="catch.dir" value="${stg54.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${stg54.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-prd58">
+		<antcall target="deploy-server">
+			<param name="server" value="prd-58"/>
+			<param name="server.pc" value="${prd58.server.pc}"/>
+			<param name="service.name" value="${prd58.service.name}"/>
+			<param name="webapps.dir" value="${prd58.webapps.dir}"/>
+			<param name="catch.dir" value="${prd58.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd58.jasper.dir}"/>
+		</antcall>		
+	</target>
+	
+	<target name="deploy-prd59">
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd59.jasper.dir}"/>
+		</antcall>
+		
+		<antcall target="deploy-server">
+			<param name="server" value="prd-59"/>
+			<param name="server.pc" value="${prd59.server.pc}"/>
+			<param name="service.name" value="${prd59.service.name}"/>
+			<param name="webapps.dir" value="${prd59.webapps.dir}"/>
+			<param name="catch.dir" value="${prd59.catch.dir}"/>
+		</antcall>				
+	</target>
+	
+	<target name="deploy-prd60">
+		<antcall target="deploy-server">
+			<param name="server" value="prd-60"/>
+			<param name="server.pc" value="${prd60.server.pc}"/>
+			<param name="service.name" value="${prd60.service.name}"/>
+			<param name="webapps.dir" value="${prd60.webapps.dir}"/>
+			<param name="catch.dir" value="${prd60.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd60.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-prd61">
+		<antcall target="deploy-server">
+			<param name="server" value="prd-61"/>
+			<param name="server.pc" value="${prd61.server.pc}"/>
+			<param name="service.name" value="${prd61.service.name}"/>
+			<param name="webapps.dir" value="${prd61.webapps.dir}"/>
+			<param name="catch.dir" value="${prd61.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd61.jasper.dir}"/>
+		</antcall>
+	</target>
+				
+	<target name="deploy-prd62">
+		<antcall target="deploy-server">
+			<param name="server" value="prd-62"/>
+			<param name="server.pc" value="${prd62.server.pc}"/>
+			<param name="service.name" value="${prd62.service.name}"/>
+			<param name="webapps.dir" value="${prd62.webapps.dir}"/>
+			<param name="catch.dir" value="${prd62.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd62.jasper.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="deploy-prd63">
+		<antcall target="deploy-server">
+			<param name="server" value="prd-63"/>
+			<param name="server.pc" value="${prd63.server.pc}"/>
+			<param name="service.name" value="${prd63.service.name}"/>
+			<param name="webapps.dir" value="${prd63.webapps.dir}"/>
+			<param name="catch.dir" value="${prd63.catch.dir}"/>
+		</antcall>
+		<antcall target="copy-jasper">
+			<param name="server.jasper.dir" value="${prd63.jasper.dir}"/>
+		</antcall>
+	</target>
+
+	<target name="prd-apache-all">
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${prd58.server.pc}"/>
+			<param name="serviceName" value="${prd58.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${prd59.server.pc}"/>
+			<param name="serviceName" value="${prd59.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${prd60.server.pc}"/>
+			<param name="serviceName" value="${prd60.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${prd62.server.pc}"/>
+			<param name="serviceName" value="${prd62.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${prd63.server.pc}"/>
+			<param name="serviceName" value="${prd63.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>			
+	</target>
+
+	<target name="stg-apache-all">
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${stg52.server.pc}"/>
+			<param name="serviceName" value="${stg52.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${stg53.server.pc}"/>
+			<param name="serviceName" value="${stg53.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${stg54.server.pc}"/>
+			<param name="serviceName" value="${stg54.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${srv64.server.pc}"/>
+			<param name="serviceName" value="${srv64.service.name2}"/>
+			<param name="command" value="${apacheCommand}"/>
+		</antcall>		
+	</target>
+				
+	<target name="clean-prd-apache-logs-all">
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd58.server.pc}"/>
+			<param name="service.name" value="${prd58.service.name2}"/>
+		</antcall>
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd59.server.pc}"/>
+			<param name="service.name" value="${prd59.service.name2}"/>
+		</antcall>			
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd60.server.pc}"/>
+			<param name="service.name" value="${prd60.service.name2}"/>
+		</antcall>			
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd61.server.pc}"/>
+			<param name="service.name" value="${prd61.service.name2}"/>
+		</antcall>			
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd62.server.pc}"/>
+			<param name="service.name" value="${prd62.service.name2}"/>
+		</antcall>			
+		<antcall target="clean-server-log">
+			<param name="server.pc" value="${prd63.server.pc}"/>
+			<param name="service.name" value="${prd63.service.name2}"/>
+		</antcall>			
+	</target>
+	
+	<target name="clean-server-log">
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${server.pc}"/>
+			<param name="serviceName" value="${service.name}"/>
+			<param name="command" value="stop"/>
+		</antcall>
+		
+		<delete>
+			<fileset dir="${server.pc}/apache/logs">
+				<include name="*" />
+		  	</fileset>
+		</delete>
+
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${server.pc}"/>
+			<param name="serviceName" value="${service.name}"/>
+			<param name="command" value="start"/>
+		</antcall>		
+	</target>
+	
+	<target name="deploy-server">
+		<echo>Deploying to ${server.pc}</echo>
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${server.pc}"/>
+			<param name="serviceName" value="${service.name}"/>
+			<param name="command" value="stop"/>
+		</antcall>
+		
+		<copy todir="${webapps.dir}" overwrite="true">
+			<fileset dir="${dist.dir}/${server}">
+				<include name="${project.web.war}"/>
+			</fileset>
+		</copy>
+		
+		<delete dir="${webapps.dir}/phoenix"/>
+		<delete dir="${catch.dir}"/>
+		
+		<antcall target="tomcat">
+			<param name="tomcatServer" value="${server.pc}"/>
+			<param name="serviceName" value="${service.name}"/>
+			<param name="command" value="start"/>
+		</antcall>
+	</target>
+
+	<target name="tomcat">
+		<exec executable="sc">
+			<arg value="${tomcatServer}"/>
+			<arg value="${command}"/>
+			<arg value="${serviceName}"/>
+		</exec>		
+	</target>
+	
+	<target name="war-server" depends="compile">
+		<echo>building war for ${server}</echo>
+		<copy todir="${build.classes.dir}" filtering="false" overwrite="yes">
+		  <fileset dir="${server.config.dir}/${server}">
+		  	<include name="**/log4j.properties" />
+		  	<include name="**/filepath.properties" />
+		  	<include name="**/config.properties" />
+		  </fileset>
+		</copy>    	
+  	
+		<delete>
+			<fileset dir="${build.classes.dir}">
+				<include name="**/db.properties" />
+		  	</fileset>
+		</delete>
+  	
+		<war warfile="${dist.dir}/${server}/${project.web.war}" webxml="${server.config.dir}/${server}/WEB-INF/web.xml" >
+			<fileset dir="${web.root.dir}">
+				<exclude name="**/WEB-INF/web.xml"/>
+				<exclude name="**/WEB-INF/applicationContext-ws.xml"/>
+				<exclude name="**/WEB-INF/classes/**"/>
+			</fileset>
+			<fileset dir="${server.config.dir}/${server}">
+				<include name="**/WEB-INF/applicationContext-ws.xml"/>
+			</fileset>
+			
+			<classes dir="${build.classes.dir}" includes="**/*.*" />
+			<lib dir="${project.home}/lib" includes="**/*.*" />
+		</war>
+	</target>
+
+  <target name="zip" depends="compile">
+    <zip destfile="${dist.dir}/${invoice.zip}">
+      <fileset dir="${build.classes.dir}/invoice">
+        <include name="**/*.*" />
+      </fileset>
+      <fileset dir="${web.root.dir}/images">
+        <include name="intertek.gif" />
+      </fileset>
+    </zip>   
+  </target>
+
+  <target name="main" depends="compile, deploy">
+  </target>
+
+  <target name="all" depends="clean, compile, clean-deploy, deploy">
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+  
+  <target name="clean-deploy">
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="${deploy.dir}">
+        <include name="${name}/" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="deploy" depends="deploy-properties, tag-svn">
+  </target>
+
+    
+  <target name="svn-update">
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password">
+  		<update dir="${phoenix.source.dir}"/>  
+  	</svn>
+  </target>
+  
+   <target name="svn-update-phoenix2">
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password">
+  		<update dir="${phoenix2.source.dir}"/>  
+  	</svn>
+  </target>
+  
+  <target name="svn-getlasttag">
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password">
+  		<update dir="${phoenix.source.dir}" revision="PREV"/>  
+  	</svn>
+  </target>
+  
+   <target name="svn-cleanup-phoenix2">		<!-- Cleans up phx2.1 dir, and releases any svn locks-->
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password">
+  		<cleanup dir="${phoenix2.source.dir}"/>  
+  	</svn>
+  </target>
+  
+  <target name="svn-cleanup">		<!-- Cleans up phoenix/trunk dir, and releases any svn locks-->
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password">
+  		<cleanup dir="${phoenix.source.dir}"/>  
+  	</svn>
+  </target>
+  	
+  <target name="svn-switch">
+  	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" />
+  	<svn username="stg" password="password"> 
+  		<switch path="${svn.path.prod}" url="http://172.19.92.30/svn/phoenix/tags/release_${tag.timestamp}/trunk"/> 
+  	</svn> 
+  </target>
+	
+  <target name="tag-svn" if="enable.svn.tag">
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="svnant.jar" /> 
+
+    <tstamp>
+      <format property="tag.timestamp" pattern="yyyy_MM_dd_HH_mm_ss" />
+    </tstamp>
+
+    <echo message="Build started: ${tag.timestamp}" />
+
+    <svn username="stg" password="password">
+      <mkdir url="http://172.19.92.30/svn/phoenix/tags/release_${tag.timestamp}" 
+             message="Create Tag Directory at ${tag.timestamp}" />
+      <copy srcUrl="http://172.19.92.30/svn/phoenix/trunk" 
+            destUrl="http://172.19.92.30/svn/phoenix/tags/release_${tag.timestamp}/trunk"
+            message="Tag at ${tag.timestamp}" />
+    </svn>
+  </target>
+	
+  <target name="copy-deploy" >
+    <copy todir="${deploy.dir}/${name}">
+      <fileset dir="${web.root.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}">
+      <fileset dir="${web.root.dir}">
+        <include name="**" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}/WEB-INF/classes">
+      <fileset dir="${build.classes.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${deploy.dir}/${name}/WEB-INF/lib">
+      <fileset dir="${lib.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+
+    <copy todir="${invoice.dir}">
+      <fileset dir="${build.classes.dir}/invoice">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>  
+    <copy todir="${invoice.dir}">
+      <fileset dir="${web.root.dir}/images">
+        <include name="intertek.gif" />
+      </fileset>
+    </copy>  
+  </target>
+
+  <target name="deploy-properties" depends="copy-deploy">
+
+    <filter token="application.server.home" value="${application.server.home}"/>
+
+    <copy todir="${deploy.dir}/${name}" filtering="false" overwrite="yes">
+      <fileset dir="${web.root.dir}">
+        <include name="**/*.xml" />
+        <include name="**/*.wsdd" />
+      </fileset>
+    </copy>  
+  </target>
+
+  <target name="run-create-schema" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_sequence.sql" />
+    </java>
+  </target>
+
+  <target name="run-change-schema" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_changes.sql" />
+    </java>
+  </target>
+
+  <target name="run-loader-all-data" 
+     depends="run-loader-countries,
+     run-loader-jobcodes,
+       run-loader-users, 
+       run-loader-menus, 
+       run-loader-security,       
+       run-loader-currencies,
+       run-loader-credit-analysts,
+       run-loader-collectors,
+       run-loader-time-zones,
+       run-loader-pricing-models,
+       run-loader-service-types,
+       run-loader-auto-numbers">   
+  </target>
+
+  <target name="run-loader-service-types" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/service_types.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-pricing-models" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/pricing_models.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-auto-numbers" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/auto_numbers.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-time-zones" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/time_zones.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-collectors" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/collectors.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-credit-analysts" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/credit_analysts.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-users" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/users.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-menus" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/menus.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-security" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/security.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-countries" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/countries.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-currencies" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/currencies.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-jobcodes" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/jobcodes.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-shipping-agents" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/shipping_agents.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-test-data" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/test_data.xml" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv" 
+     depends="run-loader-csv-roles,
+       run-loader-csv-perms,
+       run-loader-csv-links, 
+       run-loader-csv-role-to-users, 
+       run-loader-csv-perm-to-roles,       
+       run-loader-csv-perm-to-links,
+       run-loader-csv-menus">   
+  </target>
+
+  <target name="run-loader-csv-roles" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/roles.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/roles.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perms" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perms.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perms.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-links" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/links.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/links.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-role-to-users" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/role_to_users.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/role_to_users.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perm-to-roles" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perm_to_roles.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perm_to_roles.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-perm-to-links" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/perm_to_links.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/perm_to_links.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-menus" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/menus.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/menus.ctl" />
+    </java>
+  </target>
+
+  <target name="run-loader-csv-required-fields" depends="compile">
+    <java classname="com.intertek.tool.loader.LoaderManager" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath path="${data.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/init/csv/required_fields.csv" />
+      <arg value="${config.dir}/castor/castor-mapping-Entity.xml" />
+      <arg value="init/csv/required_fields.ctl" />
+    </java>
+  </target>
+
+
+  <target name="run-update-schema-bubranch" depends="compile">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/schema_update_bubranch.sql" />
+    </java>
+  </target>
+
+  <target name="run-test" depends="compile">
+    <java classname="com.intertek.test.UserTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-ldap" depends="compile">
+    <java classname="com.intertek.test.LdapTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-ws" depends="compile">
+    <java classname="com.intertek.test.WebServiceClientTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-invoice" depends="compile">
+    <java classname="com.intertek.test.InvoiceTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <target name="run-test-cal" depends="compile">
+    <java classname="com.intertek.test.CalculatorTest" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+    </java>
+  </target>
+
+  <!-- target name="codegen" depends="codegen-java, compile, codegen-ddl, codegen-castor">   
+  </target -->
+
+  <target name="codegen">
+    <!--ant antfile="build2.xml" target="codegen-java" /-->
+    <ant antfile="build2.xml" target="compile" />
+    <ant antfile="build2.xml" target="codegen-ddl" />
+    <ant antfile="build2.xml" target="codegen-castor" />
+    <ant antfile="build2.xml" target="codegen-xsd" />
+  </target>
+
+  <taskdef name="hibernatetool" 
+           classname="org.hibernate.tool.ant.HibernateToolTask" 
+           classpathref="base.path" />
+
+  <!--target name="codegen-java" depends="prepare">   
+    <hibernatetool destdir="${src.dir}">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbm2java jdk5="true"/>
+      
+    </hibernatetool>
+  </target-->
+
+  <target name="codegen-ddl" depends="prepare">   
+    <hibernatetool destdir="${data.dir}">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+
+      <hbm2ddl update="false"
+               export="false"
+               drop="false"
+               create="false"
+               console="true"
+               outputfilename="schema.sql"
+               delimiter=";"
+               format="true"/>
+      
+    </hibernatetool>
+  </target>
+  
+  <target name="codegen-castor" depends="prepare">   
+    <hibernatetool destdir="${config.dir}/castor">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbmtemplate
+        templateprefix="dao/"
+        templatepath="${config.dir}" 
+        template="dao/spring_castor_mapping.ftl"
+        filepattern="castor-mapping-Entity.xml">        
+      </hbmtemplate>
+      
+    </hibernatetool>
+  </target>
+
+  <target name="codegen-xsd" depends="prepare">   
+    <hibernatetool destdir="${config.dir}/xsd">    
+      <configuration configurationfile="${config.dir}/hibernate.cfg.xml">
+        <fileset dir="${config.dir}/hbm/entity">
+          <include name="**/*.hbm.xml"/>
+        </fileset>
+      </configuration>
+      
+      <hbmtemplate
+        templateprefix="dao/"
+        templatepath="${config.dir}" 
+        template="dao/spring_xsd_mapping.ftl"
+        filepattern="ws.xsd">        
+      </hbmtemplate>
+      
+    </hibernatetool>
+  </target>
+	
+  <target name="jasper-datasource" depends="compile" description="Build standalone Phoenix datasource for JasperReport.">
+    <echo>Building standalone Phoenix data source for JasperReport.</echo>
+    <jar destfile="../report_runner/phxds.jar">
+        <fileset dir="${build.classes.dir}">
+            <include name="com/intertek/report/**"/>
+            <include name="com/intertek/config/*"/>
+            <include name="com/intertek/exception/*"/>
+        </fileset>
+        <fileset dir="${config.dir}">
+            <include name="log4j.properties" />
+            <include name="config.properties" />
+            <include name="jasperFillReport.properties" />
+            <include name="jasperRes.properties" />
+            <include name="jasperRes_FR.properties" />
+            <include name="TrackerRes.properties" />
+            <include name="fp.properties" />
+        </fileset>
+    </jar>
+  </target>	
+
+	<target name="wsdl2java">
+	    <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
+	        <!--arg line="-uri http://127.0.0.1:8080/Quickstart_publish_as_webservice/ESBServiceSample/HelloWorldPubService?wsdl"/-->
+			<arg line="-uri"/>
+			<!--arg line="C:/source/phoenix/phx2.1/esb/customerbalance.wsdl"/-->
+	    	<arg line="http://172.19.92.46:7080/PHX_BusinessStreamPubSub/Intertek.Phoenix.ESB.PublishSubscribe/PublishBusinessStream?WSDL"/>
+	        <arg line="-u"/>
+	        <arg line="-o c:/temp/wsdl2java"/>
+	        <classpath>
+	            <fileset dir="C:/axis2-1.4.1/lib">
+	                <include name="*.jar"/>
+	            </fileset>
+	        </classpath>
+	    </java>
+	</target>
+
+</project>
+

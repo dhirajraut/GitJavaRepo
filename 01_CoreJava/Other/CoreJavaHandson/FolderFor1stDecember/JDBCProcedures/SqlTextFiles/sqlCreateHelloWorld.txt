@@ -1,0 +1,22 @@
+// Connecting to account
+SQL> connect scott/tiger@orcl;
+Connected.
+
+
+// Creating a procedure
+SQL> create or replace procedure procHelloWorld is
+  2     begin
+  3        dbms_output.put_line('Hello World');
+  4     end;
+  5  /
+
+Procedure created.
+
+
+// Setting server for output
+ SQL> set serveroutput on;
+
+SQL> exec procHelloWorld;
+Hello World
+
+PL/SQL procedure successfully completed.

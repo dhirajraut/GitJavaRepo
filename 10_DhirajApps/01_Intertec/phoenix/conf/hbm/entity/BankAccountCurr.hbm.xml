@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BankAccountCurr" table="BANK_ACCOUNT_CURR">    
+    <composite-id name="bankAccountCurrId" class="BankAccountCurrId">
+      <meta attribute="use-in-equals">true</meta> 
+      <key-property name="businessUnitName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta> 
+        <column name="BUSINESS_UNIT_NAME" length="45" />
+      </key-property>
+      <key-property name="bankCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta> 
+        <column name="BANK_CODE" length="5" />
+      </key-property>
+      <key-property name="bankAcctCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta> 
+        <column name="BANK_ACCT_CODE" length="4" />
+      </key-property>
+      <key-property name="currencyCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta> 
+        <column name="CURRENCY_CODE" length="3" />
+      </key-property>
+    </composite-id>
+    
+    <property name="primary" type="yes_no">
+      <column name="PRIMARY" length="1" />
+    </property>
+    
+  </class>   
+
+</hibernate-mapping>
+

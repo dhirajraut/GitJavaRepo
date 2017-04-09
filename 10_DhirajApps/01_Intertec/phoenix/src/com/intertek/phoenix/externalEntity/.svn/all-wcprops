@@ -1,0 +1,149 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/7035/branches/phx2.1/src/com/intertek/phoenix/externalEntity
+END
+BusinessStreamX.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/6709/branches/phx2.1/src/com/intertek/phoenix/externalEntity/BusinessStreamX.java
+END
+CEInvoiceLineX.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/src/com/intertek/phoenix/externalEntity/CEInvoiceLineX.java
+END
+DCAppJobOrderX.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/phoenix/!svn/ver/7028/branches/phx2.1/src/com/intertek/phoenix/externalEntity/DCAppJobOrderX.java
+END
+EmployeeX.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6707/branches/phx2.1/src/com/intertek/phoenix/externalEntity/EmployeeX.java
+END
+ServiceOfferingX.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6820/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ServiceOfferingX.java
+END
+ProjectValidationX.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6248/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ProjectValidationX.java
+END
+CreditHoldX.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6409/branches/phx2.1/src/com/intertek/phoenix/externalEntity/CreditHoldX.java
+END
+ProjectActivityX.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ProjectActivityX.java
+END
+BillingLineDistributionX.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/phoenix/!svn/ver/6301/branches/phx2.1/src/com/intertek/phoenix/externalEntity/BillingLineDistributionX.java
+END
+PSBillableItemX.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/externalEntity/PSBillableItemX.java
+END
+CEInvoiceLineSplitX.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6709/branches/phx2.1/src/com/intertek/phoenix/externalEntity/CEInvoiceLineSplitX.java
+END
+TestMethodologyX.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/externalEntity/TestMethodologyX.java
+END
+ContactX.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ContactX.java
+END
+DCAppBillableItemX.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6361/branches/phx2.1/src/com/intertek/phoenix/externalEntity/DCAppBillableItemX.java
+END
+MarketRateX.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6210/branches/phx2.1/src/com/intertek/phoenix/externalEntity/MarketRateX.java
+END
+ECSLineItemX.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6496/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ECSLineItemX.java
+END
+CustomerX.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/src/com/intertek/phoenix/externalEntity/CustomerX.java
+END
+ECSJobOrderX.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/7029/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ECSJobOrderX.java
+END
+WarehouseX.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/externalEntity/WarehouseX.java
+END
+ProjectContractX.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6767/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ProjectContractX.java
+END
+CEInvoiceX.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/7035/branches/phx2.1/src/com/intertek/phoenix/externalEntity/CEInvoiceX.java
+END
+DCAppJobOrderLineItemX.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6478/branches/phx2.1/src/com/intertek/phoenix/externalEntity/DCAppJobOrderLineItemX.java
+END
+DCAppBillableLineItemX.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6361/branches/phx2.1/src/com/intertek/phoenix/externalEntity/DCAppBillableLineItemX.java
+END
+ProjectX.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/6427/branches/phx2.1/src/com/intertek/phoenix/externalEntity/ProjectX.java
+END

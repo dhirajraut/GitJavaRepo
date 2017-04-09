@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox label="Home Page" horizontalAlign="center" verticalAlign="middle"
+    xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" 
+    xmlns:forms="com.lntinfotech.rms.views.forms.*"
+    xmlns:views="com.lntinfotech.rms.views.*">
+
+    <mx:VBox height="100%" width="100%">
+    </mx:VBox>
+
+</mx:VBox>

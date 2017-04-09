@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for TreeDemo -->
+<jnlp
+  spec="1.0+"
+  codebase="http://java.sun.com/docs/books/tutorialJWS/uiswing/components/example-1dot4"
+  href="TreeDemo.jnlp">
+  <information>
+    <title>TreeDemo</title>
+    <vendor>The Java(tm) Tutorial: Sun Microsystems, Inc.</vendor>
+    <homepage href="http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/index.html#TreeDemo"/>
+    <description>TreeDemo</description>
+    <description kind="short">Shows the use of a JTree
+    </description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.4+"/>
+    <jar href="allClasses.jar"/>
+    <jar href="treeDemoFiles.jar"/>
+  </resources>
+  <application-desc main-class="TreeDemo"/>
+</jnlp> 

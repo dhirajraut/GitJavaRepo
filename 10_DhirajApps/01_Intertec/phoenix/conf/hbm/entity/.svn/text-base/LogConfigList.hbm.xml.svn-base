@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="LogConfigList" table="LOG_CONFIG_LISTS">
+    <id name="confListId" type="long" unsaved-value="0">
+      <column name="CONF_LIST_ID" sql-type="NUMBER" />
+     
+    </id>
+    <property name="confListName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="CONF_LIST_NAME" length="128" />
+    </property>
+    <property name="accessScope" type="yes_no">
+      <column name="ACCESS_SCOPE" length="1" />
+    </property>
+    <property name="defaultList" type="yes_no">
+      <column name="DEFAULT_LIST" length="1" />
+    </property>
+    <property name="createTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+    <property name="updateTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="date" />
+    </property>
+    <property name="createdByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATED_BY" length="128" />
+    </property>
+    <many-to-one name="createdBy" column="CREATED_BY" class="User" insert="false" update="false" index="LOG_CONFIG_LISTS_index_0" />
+    <property name="updatedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="UPDATED_BY" length="128" />
+    </property>
+    <many-to-one name="updatedBy" column="UPDATED_BY" class="User" insert="false" update="false" index="LOG_CONFIG_LISTS_index_1" />
+    <set name="logConfigDetails" lazy="true" inverse="true" cascade="all-delete-orphan" >
+      <key>
+        <column name="CONF_LIST_ID" />
+      </key>
+      <one-to-many class="LogConfigDetail" />
+    </set>
+  </class>
+</hibernate-mapping>
+

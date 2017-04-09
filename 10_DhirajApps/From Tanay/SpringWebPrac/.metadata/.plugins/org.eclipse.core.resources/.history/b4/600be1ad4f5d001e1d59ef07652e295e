@@ -1,0 +1,10 @@
+package model;
+
+public class StudentList {
+	private String name;
+	private int class1;
+	private String grade;
+	private int marks;
+	private String address;
+	private int id;
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ConsolInvoiceFile" table="CONSOL_INVOICE_FILES">
+    
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CONSOL_INVOICE_FILE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CONSOL_INVOICE_FILE_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="invoiceFileName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=80) private</meta>
+      <column name="INVOICE_FILE_NAME" length="80" not-null="true" unique-key="CONSOL_INVOICE_FILES_UK1"/>
+    </property>
+    <property name="countable" type="yes_no">
+      <column name="COUNTABLE" length="1" />
+    </property>
+    <property name="serialNumber" type="string">
+      <column name="SERIAL_NUMBER" length="80" />
+    </property>     
+    <many-to-one name="consolidatedInvoice" class="ConsolidatedInvoice">
+      <column name="CONSOL_INVOICE" unique-key="CONSOL_INVOICE_FILES_UK1"/>
+      <column name="CONSOL_BU_NAME" unique-key="CONSOL_INVOICE_FILES_UK1"/>
+    </many-to-one>
+    
+    <many-to-one name="invoiceFileType" class="InvoiceFileType">
+      <column name="INVOICE_FILE_TYPE_ID" index="CONSOL_INVOICE_FILES_index_1" />
+    </many-to-one>
+
+  </class>
+</hibernate-mapping>
+

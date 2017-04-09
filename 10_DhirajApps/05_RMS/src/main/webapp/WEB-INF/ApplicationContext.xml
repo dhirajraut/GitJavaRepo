@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- Application Level Wiring. -->
+	<bean id="login" class="com.lnt.rm.controllers.RMLoginController">
+		<property name="service" ref="loginService" />
+		<property name="formView"><value>homepageView</value></property>
+	    <property name="successView"><value>homepageView</value></property>
+		
+	</bean>
+	<bean id="loginService" class="com.lnt.rm.services.RMLoginServiceImpl" />
+
+	<!-- Spring Configuration. -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename">
+			<value>tilesView</value>
+		</property> 
+	</bean>
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles.TilesConfigurer">
+	    <property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles-defn.xml</value>
+			</list>
+	    </property>
+	</bean>
+	<!-- Database Configuration. -->
+	<!-- @Todo
+	<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="jdbc/MySQL" />
+	</bean>
+	<bean id="Sfbean"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+			<value>com/myapp/model/User.hbm.xml</value>
+			<value>com/myapp/model/Add.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	-->
+</beans>

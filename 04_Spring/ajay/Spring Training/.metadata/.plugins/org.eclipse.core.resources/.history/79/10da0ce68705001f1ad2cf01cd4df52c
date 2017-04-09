@@ -1,0 +1,11 @@
+package beanpack;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+
+public class TestIOC {
+
+	public static void main(String[] args) {
+		BeanFactory factory=new XmlBeanFactory("services.xml");
+	}
+}

@@ -1,0 +1,324 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.intertek.entity.Test;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.dao.DaoException;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.ContractServiceLevel;
+import com.intertek.phoenix.entity.JobContractTest;
+import com.intertek.phoenix.entity.JobServiceLevel;
+import com.intertek.phoenix.entity.JobTest;
+import com.intertek.phoenix.job.JobOrderService;
+import com.intertek.phoenix.job.ServiceLevel;
+import com.intertek.phoenix.web.controller.ControllerUtil;
+import com.intertek.util.Constants;
+import com.intertek.web.controller.BaseSimpleFormController;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The class CEJobSelectChargesFormController is used to load all the line items
+ * 
+ * @version 1.0 May 22, 2009
+ * @author Patni
+ */
+public class CEJobSelectChargesFormController extends BaseSimpleFormController {
+
+    /**
+     * Instantiates a new CEJobSelectChargesFormController.
+     */
+    public CEJobSelectChargesFormController() {
+        super();
+        setCommandClass(CESelectChargeForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+
+        JobOrderService jobOrderService = ServiceManager.getJobOrderService();
+        CESelectChargeForm ceSelectChargesForm = (CESelectChargeForm) command;
+        CEJobContract joco = ceSelectChargesForm.getJobContract();
+        joco = loadAndUpdateContract(joco);
+
+        // DB refresh
+        //CEJobContract joco = DaoManager.getDao(CEJobContract.class).find(ceSelectChargesForm.getJobContract().getId());
+        String refreshing = ceSelectChargesForm.getRefreshing();
+        int productIndex = ceSelectChargesForm.getProductIndex();
+        
+        if (refreshing != null && refreshing.equals("addProduct")) {
+            ceSelectChargesForm.setRefreshing("");
+            jobOrderService.createContractServiceLevel(joco.getRootServiceLevel(), ServiceLevel.ServiceLevelType.PRODUCT, "");
+            DaoManager.getDao(CEJobContract.class).saveOrUpdate(joco);
+            ceSelectChargesForm.updateForm(joco);
+            return showForm(request, response, errors);
+        }        
+        
+        if(refreshing !=null && refreshing.equals("deleteProduct"))
+        {
+        	ceSelectChargesForm.setRefreshing("");
+        	CEServiceLevelForm sLvForm = ceSelectChargesForm.getProducts()[productIndex];
+        	ContractServiceLevel serviceLevel = sLvForm.getProduct();
+        	serviceLevel =jobOrderService.findById(ContractServiceLevel.class, serviceLevel.getId());
+        	
+        	ContractServiceLevel parent = serviceLevel.getParentServiceLevel();
+        	jobOrderService.removeContractServiceLevel(parent, serviceLevel);
+            ceSelectChargesForm.updateForm(joco);
+            return showForm(request, response, errors);
+        	
+        }
+        
+        if (refreshing != null && refreshing.equals("addTest")) {
+
+            CETestSearchForm addTestForm = (CETestSearchForm) request.getSession().getAttribute(AddTestController.class.getName() + ".FORM.command");
+            List<Test> selectedTests = addTestForm.getSelectedTests();
+            Long productId = Long.valueOf(addTestForm.getProductId());
+            String joliIndex = ceSelectChargesForm.getJoliIndex();
+            
+            ContractServiceLevel productSL = DaoManager.getDao(ContractServiceLevel.class).find(productId);
+
+            for (Test test : selectedTests) {
+                test = DaoManager.getDao(Test.class).merge(test);
+                JobContractTest jocoTest = jobOrderService.createJobContractTest(productSL, test);
+                DaoManager.getDao(CEJobContract.class).saveOrUpdate(joco);
+
+                try {
+                    CEJobOrderLineItem joli = jobOrderService.updateJobOrderLineItem(joco, productSL, jocoTest);
+                    joli.setJobContract(joco);
+                    joli.setJobOrderContractId(joco.getId());
+                    joco.addLineItem(joli);
+                    
+                    //for splits
+                    if(joliIndex != null && !joliIndex.equals("")) {
+                        CEJobOrderLineItem masterJoli = DaoManager.getDao(CEJobOrderLineItem.class).find(Long.parseLong(joliIndex));
+                        masterJoli.addRelated(joli);
+                        joli.setMaster(masterJoli);
+                        
+                    }
+                    
+                    DaoManager.getDao(JobContractTest.class).saveOrUpdate(jocoTest);
+                    DaoManager.getDao(CEJobOrderLineItem.class).saveOrUpdate(joli);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ceSelectChargesForm.updateForm(joco);
+        }
+
+        if (refreshing != null && refreshing.equals("refresh")) {
+            CEJobContract jobContract = DaoManager.getDao(CEJobContract.class).find(joco.getId());
+            ceSelectChargesForm.updateForm(jobContract);
+            return showForm(request, response, errors);
+        }
+        if (refreshing != null && refreshing.equals("sort")) {
+            //Reflect the ordering at JobTest level
+            //save(ceSelectChargesForm.getJobContract());
+            ceSelectChargesForm.updateForm(joco);
+            return showForm(request, response, errors);
+        }
+        else if (refreshing.equals(Constants.SAVE_ACTION)) {
+            save(joco);
+            ceSelectChargesForm.setRefreshing("");
+            return showForm(request, response, errors);
+        }
+        else if (refreshing.equals(Constants.NEXT_ACTION)) {
+            save(joco);
+            ModelAndView modelAndView = new ModelAndView("ce-job-invoice-preview-r");
+            modelAndView.addObject("jobNumber", joco.getJobOrderNumber());
+            ceSelectChargesForm.setRefreshing("");
+            return modelAndView;
+        }
+
+        return showForm(request, response, errors);
+    }
+
+    private CEJobContract loadAndUpdateContract(CEJobContract joco) throws DaoException {
+        
+        for(ContractServiceLevel product : joco.getRootServiceLevel().getChildServiceLevels()) {
+            ControllerUtil.loadAndUpdate(product, ContractServiceLevel.class);
+        }
+        
+        joco = ControllerUtil.loadAndUpdate(joco, CEJobContract.class);
+        
+        return joco;
+    }
+    
+    private void save(CEJobContract joco) throws DaoException {
+        CEJobOrder jo = joco.getJobOrder();
+        if((jo.getPageNumber() == null) || (jo.getPageNumber().intValue() < 3)){
+            jo.setPageNumber(Integer.valueOf(3));
+        }
+        DaoManager.getDao(CEJobContract.class).saveOrUpdate(joco);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#suppressValidation(javax.servlet.http.HttpServletRequest)
+     */
+
+    protected boolean suppressValidation(HttpServletRequest request, Object command) {
+        String refreshing = request.getParameter("refreshing");
+        if ((refreshing != null) && "true".equals(refreshing)) {
+            return true;
+        }
+        return super.suppressValidation(request, command);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, null, new CustomDateEditor(dateFormat, true));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        String jobNumber = request.getParameter("jobNumber");
+        CEJobOrder jo = ControllerUtil.findById(CEJobOrder.class, jobNumber);
+        
+/*        
+        Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+        CEJobOrder jo = jobDao.find(jobNumber);
+        jo = jobDao.refresh(jo);
+*/
+        CEJobContract joco = jo.getJobContract();
+
+        JobOrderService jobOrderService = ServiceManager.getJobOrderService();
+
+        // create JOLI out of JobTest flowing from Job Instructions page
+        for (JobServiceLevel jobProdLevel : jo.getRootServiceLevel().getChildServiceLevels()) {
+            for (CEJobContract contract : jo.getContractJobOrder()) {
+                ContractServiceLevel contractSL = findContractSL(contract, jobProdLevel);
+                if (contractSL == null) {
+                    contractSL = jobOrderService.createContractServiceLevel(contract, jobProdLevel);
+                }
+
+                for (JobTest jobTest : jobProdLevel.getJobTests()) {
+                    if(jobTest.getMaster() == null) {
+                	createJoliForTest(jobTest, contract, contractSL, null);
+                    }
+                }
+            }
+        }
+
+        CESelectChargeForm ceSelectChargeForm = new CESelectChargeForm(joco);
+        return ceSelectChargeForm;
+    }
+
+    private void createJoliForTest(JobTest jobTest, CEJobContract contract, ContractServiceLevel contractSL, JobTest masterTest) throws Exception {
+        JobOrderService jobOrderService = ServiceManager.getJobOrderService();
+        JobContractTest jobContractTest = findJobContractTest(jobTest, contract);
+
+        if (jobContractTest == null) {
+            jobContractTest = jobOrderService.createOrUpdateJobContractTest(contractSL, jobTest);
+
+        }
+
+        CEJobOrderLineItem joli = jobOrderService.updateJobOrderLineItem(contract, contractSL, jobContractTest);
+        joli.setJobContract(contract);
+        joli.setJobOrderContractId(contract.getId());
+        contract.addLineItem(joli);
+        DaoManager.getDao(CEJobOrderLineItem.class).saveOrUpdate(joli);
+
+        //for splits
+        for (JobTest splitTest : jobTest.getRelated()) {
+            JobContractTest splitJobContractTest = findJobContractTest(splitTest, contract);
+
+            if (splitJobContractTest == null) {
+                splitJobContractTest = jobOrderService.createOrUpdateJobContractTest(contractSL, splitTest);
+                jobContractTest.addRelated(splitJobContractTest);
+                splitJobContractTest.setMaster(jobContractTest);
+            }
+
+            CEJobOrderLineItem splitJoli = jobOrderService.updateJobOrderLineItem(contract, contractSL, splitJobContractTest);
+            splitJoli.setMaster(joli);
+            joli.addRelated(splitJoli);
+            splitJoli.setJobContract(contract);
+            splitJoli.setJobOrderContractId(contract.getId());
+            DaoManager.getDao(CEJobOrderLineItem.class).saveOrUpdate(splitJoli);
+        }
+    }
+
+    
+    
+    public JobTest findJobTest(CEJobOrderLineItem joli) {
+        for(ContractServiceLevel contractSL : joli.getJobContract().getRootServiceLevel().getChildServiceLevels()) {
+            for(JobContractTest jocoTest : contractSL.getJobContractTests()) {
+                if(jocoTest.getJobOrderLineItemId().equals(joli.getId()))
+                    return jocoTest.getJobTest();
+                }
+            }
+        return null;
+    }
+
+    /**
+     * Find ContractServiceLevel associated with the given JobServiceLevel
+     * 
+     * @param joco
+     * @param jobSL
+     * @return
+     */
+    private ContractServiceLevel findContractSL(CEJobContract joco, JobServiceLevel jobSL) {
+        for (ContractServiceLevel contractSL : joco.getRootServiceLevel().getChildServiceLevels()) {
+            if (jobSL.getId().equals(contractSL.getJobServiceLevelId())) {
+                return contractSL;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find JobContractTest associated with the given contract and JobTest
+     * 
+     * @param jobTest
+     * @param contract
+     * @return
+     */
+    private JobContractTest findJobContractTest(JobTest jobTest, CEJobContract contract) {
+        for (JobContractTest jct : jobTest.getJobContractTests()) {
+            String contractNo = jct.getContractRefNo();
+            String contractCode = contract.getContractCode();
+            if (contractNo.equals(contractCode)) {
+                return jct;
+            }
+        }
+        return null;
+    }
+
+}

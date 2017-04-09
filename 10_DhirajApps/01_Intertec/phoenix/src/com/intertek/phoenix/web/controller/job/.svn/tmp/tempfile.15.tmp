@@ -1,0 +1,184 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+
+import com.intertek.entity.CfgContract;
+import com.intertek.entity.Test;
+import com.intertek.exception.ServiceException;
+import com.intertek.pagination.Pagination;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.job.JobOrderService;
+import com.intertek.phoenix.job.JobSrvcException;
+import com.intertek.util.Constants;
+
+/**
+ * Common 'Add Test' popup
+ * @author patni
+ * 
+ */
+public class AddTestController extends SimpleFormController {
+
+    /**
+     * Instantiates AddTestController
+     */
+    public AddTestController() {
+        super();
+        setCommandClass(CETestSearchForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        String searchForm = request.getParameter("searchForm");
+        String operation = request.getParameter("operation");
+        CETestSearchForm search = (CETestSearchForm) command;
+        try {
+            search.setSearchForm(searchForm);
+
+            if (operation != null && operation.equals("searchTests")) {
+                searchTests(search);
+                return showForm(request, response, errors);
+            }
+            request.getSession().setAttribute("CETestSearchForm", search);
+        }
+        catch (Throwable t) {
+            errors.reject("generic.error", new Object[] { t.getMessage() }, null);
+        }
+        return showForm(request, response, errors);
+    }
+
+    /**
+     * Retrieves all tests matching the criteria
+     * 
+     * @param search
+     *            form object
+     * @throws JobSrvcException
+     */
+    private void searchTests(CETestSearchForm search) throws JobSrvcException {
+        JobOrderService jobOrderSrvc = ServiceManager.getJobOrderService();
+        CEJobContract jobContract = search.getContract();
+        CEJobOrder jobOrder = jobContract.getJobOrder();
+
+        String contractCode = jobContract.getContract().getContractCode();
+        Date nominationDate = jobOrder.getNominationDate();
+
+        CfgContract cfgContract = jobOrderSrvc.getCfgContractByContractId(contractCode, nominationDate);
+
+        String location = null;
+        String language = null;
+        if (cfgContract != null) {
+            location = jobContract.getZone();
+            language = jobContract.getInvoiceLanguage();
+        }
+        else {
+            location = "*";
+            language = "ENG";
+        }
+        
+        Pagination pagination = doPagination(search.getPageNumber(), Pagination.UNDEFINED);
+        List<Test> searchTests = jobOrderSrvc.getTests(cfgContract, search.getProductGroup(), search.getCriteria1(), search.getTestSearchVal(), search
+                .getCriteria2(), location, nominationDate, language, pagination);
+        List<TestSearchResultRow> resultRows = new ArrayList<TestSearchResultRow>();
+
+        for (Test test : searchTests) {
+            TestSearchResultRow row = new TestSearchResultRow(test);
+            resultRows.add(row);
+        }
+
+        pagination.calculatePages();
+        search.setResults(resultRows);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+        
+        if(request.getParameter("manualTest")!=null && request.getParameter("manualTest").equalsIgnoreCase("true")){
+            CETestSearchForm testSearch = (CETestSearchForm) request.getSession()
+            .getAttribute("com.intertek.phoenix.web.controller.job.AddTestController.FORM.command");
+            if(testSearch == null){
+                testSearch= new CETestSearchForm(null);
+            }
+            testSearch.setManualTest("true");
+            testSearch.setQuantity(1);
+            testSearch.setUnitPrice(1);
+            testSearch.setOperation("manualTest");
+            return testSearch;
+        }
+        CEJobOrder jo = null;
+        String jobNumber = request.getParameter("jobNumber");
+        if (jobNumber != null && !"".equals(jobNumber)) {
+            jo = jobDao.find(jobNumber);
+        }
+        if (jo == null) {
+            throw new ServiceException("record.not.exist.error", new Object[] { jobNumber }, null);
+        }
+
+        Set<CEJobContract> contract = jo.getJobContracts();
+        String rowNum = request.getParameter("rowNum");
+        String productId = request.getParameter("productId");
+        String divName1 = request.getParameter("div1");
+        String divName2 = request.getParameter("div2");
+        CETestSearchForm testSearch = new CETestSearchForm(jo);
+        testSearch.setRowNum(rowNum);
+        testSearch.setProductId(productId);
+        testSearch.setChosenContracts(String.valueOf(jo.getJobContract().getId()));
+        testSearch.setDivName1(divName1);
+        testSearch.setDivName2(divName2);
+        testSearch.setContracts(contract);
+        testSearch.setCriteria1(Constants.BOTH);
+        testSearch.setCriteria2(Constants.BOTH);
+        return testSearch;
+    }
+    private Pagination doPagination(String numStr, int totalRecords) {
+        int pageNumber = 0;
+        try {
+            pageNumber = Integer.parseInt(numStr);
+        }
+        catch (Exception e) {
+            pageNumber = 1;
+        }
+        Pagination pagination = new Pagination(totalRecords, 20, pageNumber, 10);
+        return pagination;
+    }
+
+}

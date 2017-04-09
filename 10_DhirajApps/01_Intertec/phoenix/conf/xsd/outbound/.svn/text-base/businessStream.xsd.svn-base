@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/BusinessStream" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/BusinessStream" elementFormDefault="qualified" attributeFormDefault="unqualified">
+ <xs:element name="PublishBusinessStreamRequest" type="BusinessStreamType">
+  <xs:annotation>
+   <xs:documentation>Publish BusinessStream ESB Request</xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ <xs:complexType name="BusinessStreamType">
+  <xs:sequence>
+   <xs:element name="MessageData" type="MsgDataType"/>
+  </xs:sequence>
+ </xs:complexType>
+ <xs:complexType name="MsgDataType">
+  <xs:sequence>
+   <xs:element name="ProductGroupId" type="xs:string"/>
+   <xs:element name="ProductGroupSet" type="xs:string" minOccurs="0"/>
+   <xs:element name="Description" type="xs:string" minOccurs="0"/>
+   <xs:element name="BeginDate" type="xs:date" minOccurs="0"/>
+   <xs:element name="EndDate" type="xs:date" minOccurs="0"/>
+  </xs:sequence>
+ </xs:complexType>
+</xs:schema>

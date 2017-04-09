@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/phoenix/!svn/ver/7155/branches/phx2.1/web/WEB-INF/views/user
+END
+search_user_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_user_popup.jsp
+END
+search_role.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_role.jsp
+END
+search_control_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_control_popup.jsp
+END
+edit_permission_list.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/edit_permission_list.jsp
+END
+create_vat_rate.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/create_vat_rate.jsp
+END
+create_business_stream.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/create_business_stream.jsp
+END
+search_user_roles_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_user_roles_popup.jsp
+END
+search_permission_list_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_permission_list_popup.jsp
+END
+edit_business_unit.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/edit_business_unit.jsp
+END
+create_user.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/phoenix/!svn/ver/7155/branches/phx2.1/web/WEB-INF/views/user/create_user.jsp
+END
+search_user.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_user.jsp
+END
+search_link_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_link_popup.jsp
+END
+search_branch_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_branch_popup.jsp
+END
+edit_role.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/edit_role.jsp
+END
+search_logo_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_logo_popup.jsp
+END
+search_permission_list.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_permission_list.jsp
+END
+login.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/login.jsp
+END
+search_job_code_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_job_code_popup.jsp
+END
+search_vat_rate_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_vat_rate_popup.jsp
+END
+create_business_unit.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/7114/branches/phx2.1/web/WEB-INF/views/user/create_business_unit.jsp
+END
+create_tax_label.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/create_tax_label.jsp
+END
+search_business_unit.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_business_unit.jsp
+END
+search_branch.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/search_branch.jsp
+END
+create_tax_article.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/user/create_tax_article.jsp
+END
+edit_user.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/7155/branches/phx2.1/web/WEB-INF/views/user/edit_user.jsp
+END

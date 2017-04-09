@@ -1,0 +1,30 @@
+<!ELEMENT statemachines (description?, statemachine+)>
+
+<!ELEMENT statemachine (description?, states+, transitions+)>
+<!ATTLIST statemachine name CDATA #REQUIRED>
+
+<!ELEMENT states (state+)>
+
+<!ELEMENT state EMPTY>
+<!ATTLIST state name CDATA #REQUIRED>
+
+<!ELEMENT transitions (transition+)>
+
+<!ELEMENT transition (from?, to, permission?, actions*)>
+<!ATTLIST transition event CDATA #REQUIRED>
+
+<!ELEMENT from EMPTY>
+<!ATTLIST from name CDATA #REQUIRED>
+
+<!ELEMENT to EMPTY>
+<!ATTLIST to name CDATA #REQUIRED>
+
+<!ELEMENT permission EMPTY>
+<!ATTLIST permission name CDATA #REQUIRED>
+
+<!ELEMENT actions (action+)>
+
+<!ELEMENT action EMPTY>
+<!ATTLIST action service CDATA #REQUIRED>
+<!ATTLIST action api CDATA #REQUIRED>
+

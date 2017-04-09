@@ -1,0 +1,35 @@
+/* CSS file */
+Application{
+	backgroundColor:#ffffff;	
+	backgroundGradientColors:#ffffff,#ffffff;
+}
+RichTextEditor {
+	borderStyle:"none";
+	headerHeight: 0;
+	borderThicknessLeft:0;
+	borderThicknessRight:0;
+}
+Label{
+	fontWeight:bold;	
+}
+Text{
+	fontWeight:normal;	
+}
+
+/* Header     ---------------------------------------------------------------------------------------------------*/
+.mainTitle{
+   fontSize: 24;
+}
+
+.tagLine{
+	fontSize: 15;
+}
+
+LoadingStyleWindow {
+	modalTransparency: 1.0;
+	modalTransparencyColor: #FFFFFF;
+	modalTransparencyBlur: 0;
+}
+SuperImage{
+	 borderStyle:none;
+}

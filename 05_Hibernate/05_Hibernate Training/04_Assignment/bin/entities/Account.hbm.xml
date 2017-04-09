@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="entities">
+
+	<class name="Account" table="ACCOUNT">
+		<id name="id" column="ID">
+			<generator class="increment" />
+		</id>
+        <discriminator column="ACCOUNT_TYPE" />
+        <property name="accountHolder" column="ACC_HOLDER" not-null="true" />
+		<property name="balance" column="BALANCE" not-null="true" />
+
+		<many-to-one name="customer" column="CUSTOMER" fetch="select" />
+
+		<subclass name="SavingsAccount" discriminator-value="S">
+			<property name="minimumBalance" />
+		</subclass>
+
+		<subclass name="CurrentAccount" discriminator-value="C">
+			<property name="overdraft" />
+		</subclass>
+	</class>
+
+</hibernate-mapping>

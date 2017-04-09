@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="HighLevelService" table="PS_ITS_HI_LVL_SRVC">
+    <id name="highLevelServiceId" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+      <column name="ITS_HI_LVL_SRVC_ID" length="45" />
+    </id>
+    <property name="serviceDescription" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=135) private</meta>
+      <column name="ITS_SERVICE_DESCR" length="135" not-null="true"/>
+    </property>
+    <property name="priceBookInd" type="yes_no">
+      <column name="ITS_PRICEBOOK_IND" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

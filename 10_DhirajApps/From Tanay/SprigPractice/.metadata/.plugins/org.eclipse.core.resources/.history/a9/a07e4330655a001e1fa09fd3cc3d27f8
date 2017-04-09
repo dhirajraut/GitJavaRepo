@@ -1,0 +1,30 @@
+package com;
+
+public class StudentData {
+
+	private String fName;
+	String lName;
+	String add;
+
+
+	public String getAdd() {
+		return add;
+	}
+	public void setAdd(String add) {
+		this.add = add;
+	}
+
+	public String getFName() {
+		return fName;
+	}
+	public void setFName(String name) {
+		fName = name;
+	}
+	public String getLName() {
+		return lName;
+	}
+	public void setLName(String name) {
+		lName = name;
+	}
+	
+}

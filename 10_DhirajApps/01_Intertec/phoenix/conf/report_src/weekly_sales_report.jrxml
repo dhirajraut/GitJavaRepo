@@ -1,0 +1,1847 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="weekly_sales_report"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="842"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="5"
+		 bottomMargin="5"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false"
+		 resourceBundle="jasperRes">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="business_unit" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Business Unit]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="operating_unit" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Operating Unit]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="as_of_dt" isForPrompting="true" class="java.util.Date">
+		<parameterDescription><![CDATA[As of Date]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="start_dt" isForPrompting="true" class="java.util.Date">
+		<parameterDescription><![CDATA[Begin Date]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="currency" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Select currency]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+jo.JOB_NUMBER,
+jo.JOB_FINISH_DATE,
+jo.BU_NAME,
+jo.BRANCH_NAME,
+jc.JOB_CONTRACT_ID,
+jci.GENERATED_DATE_TIME,
+jci.INVOICE,
+0 AS INV_AMT_POST_TAX,
+jci.INVOICE_DATE,
+(SUM (NVL(p.base_net_price*rt.RATE_MULT/rt.RATE_DIV,0) + NVL(p.base_tax_amt*rt.RATE_MULT/rt.RATE_DIV,0) + NVL(p.base_vat_amt*rt.RATE_MULT/rt.RATE_DIV,0))) as PREBILL
+,cur.DECIMAL_DIGITS
+
+FROM PHOENIX.JOB_ORDERS jo, PHOENIX.JOB_CONTRACTS jc, PHOENIX.PREBILLS p, 
+PHOENIX.JOB_CONTRACT_INVOICE jci, 
+PHOENIX.PS_RT_RATE_TBL rt, 
+PHOENIX.CURRENCY cur
+
+WHERE jo.JOB_FINISH_DATE IS NOT NULL
+AND months_between(sysdate, jo.JOB_FINISH_DATE) <= 3
+AND jo.JOB_NUMBER = jc.JOB_NUMBER
+AND jc.job_contract_id = p.job_contract_id
+AND jc.job_contract_id = jci.job_contract_id (+)
+AND jci.GENERATED_DATE_TIME is NULL
+AND p.BASE_CURRENCY_CD = rt.FROM_CUR
+AND rt.TO_CUR = $P{currency}
+AND rt.RT_TYPE = 'CRRNT'
+AND rt.RT_RATE_INDEX = 'MODEL'
+AND rt.EFFDT = (SELECT MAX(RT_ED.EFFDT) FROM PHOENIX.PS_RT_RATE_TBL RT_ED
+                WHERE RT.RT_RATE_INDEX = RT_ED.RT_RATE_INDEX
+                AND RT.TERM = RT_ED.TERM
+                AND RT.FROM_CUR = RT_ED.FROM_CUR
+                AND RT.TO_CUR = RT_ED.TO_CUR
+                AND RT.RT_TYPE = RT_ED.RT_TYPE
+                AND RT_ED.EFFDT <=  jo.JOB_FINISH_DATE)
+AND jo.BU_NAME LIKE $P{business_unit}
+AND jo.BRANCH_NAME LIKE $P{operating_unit}
+AND cur.CURRENCY_CD = $P{currency}
+
+GROUP BY 
+jo.JOB_NUMBER,
+jo.JOB_FINISH_DATE,
+jo.BU_NAME,
+jo.BRANCH_NAME,
+jc.JOB_CONTRACT_ID,
+jci.GENERATED_DATE_TIME,
+jci.INVOICE,
+0,
+jci.INVOICE_DATE,
+cur.DECIMAL_DIGITS
+
+UNION
+
+SELECT
+
+jo.JOB_NUMBER,
+jo.JOB_FINISH_DATE,
+jo.BU_NAME,
+jo.BRANCH_NAME,
+jc.JOB_CONTRACT_ID,
+jci.GENERATED_DATE_TIME,
+jci.INVOICE,
+(SUM (NVL(il.base_net_price*rt.RATE_MULT/rt.RATE_DIV,0) + NVL(il.base_tax_amt*rt.RATE_MULT/rt.RATE_DIV,0) + NVL(il.base_vat_amt*rt.RATE_MULT/rt.RATE_DIV,0))) as INVOICE_AMOUNT,
+jci.INVOICE_DATE,
+0,
+cur.DECIMAL_DIGITS
+
+FROM PHOENIX.JOB_ORDERS jo, PHOENIX.JOB_CONTRACTS jc, 
+PHOENIX.INVOICE_LINES il,
+PHOENIX.JOB_CONTRACT_INVOICE jci,
+PHOENIX.PS_RT_RATE_TBL rt, 
+PHOENIX.CURRENCY cur
+
+WHERE jci.GENERATED_DATE_TIME is NOT NULL
+AND jo.JOB_NUMBER = jc.JOB_NUMBER
+AND jc.job_contract_id = jci.job_contract_id
+AND jci.GENERATED_DATE_TIME <= $P{as_of_dt}
+AND jci.GENERATED_DATE_TIME >= $P{start_dt}
+AND jci.job_contract_invoice_id = il.job_contract_invoice_id
+AND il.BASE_CURRENCY_CD = rt.FROM_CUR
+AND rt.TO_CUR = $P{currency}
+AND rt.RT_TYPE = 'CRRNT'
+AND rt.RT_RATE_INDEX = 'MODEL'
+AND rt.EFFDT = (SELECT MAX(RT_ED.EFFDT) FROM PHOENIX.PS_RT_RATE_TBL RT_ED
+                WHERE RT.RT_RATE_INDEX = RT_ED.RT_RATE_INDEX
+                AND RT.TERM = RT_ED.TERM
+                AND RT.FROM_CUR = RT_ED.FROM_CUR
+                AND RT.TO_CUR = RT_ED.TO_CUR
+                AND RT.RT_TYPE = RT_ED.RT_TYPE
+                AND RT_ED.EFFDT <=  jo.JOB_FINISH_DATE)
+AND jo.BU_NAME LIKE $P{business_unit}
+AND jo.BRANCH_NAME LIKE $P{operating_unit}
+AND cur.CURRENCY_CD = $P{currency}
+
+GROUP BY 
+jo.JOB_NUMBER,
+jo.JOB_FINISH_DATE,
+jo.BU_NAME,
+jo.BRANCH_NAME,
+jc.JOB_CONTRACT_ID,
+jci.GENERATED_DATE_TIME,
+jci.INVOICE,
+0,
+jci.INVOICE_DATE,
+cur.DECIMAL_DIGITS
+
+ORDER BY 3,4,2]]></queryString>
+
+	<field name="JOB_NUMBER" class="java.lang.String"/>
+	<field name="JOB_FINISH_DATE" class="java.sql.Timestamp"/>
+	<field name="BU_NAME" class="java.lang.String"/>
+	<field name="BRANCH_NAME" class="java.lang.String"/>
+	<field name="JOB_CONTRACT_ID" class="java.math.BigDecimal"/>
+	<field name="GENERATED_DATE_TIME" class="oracle.sql.TIMESTAMP"/>
+	<field name="INVOICE" class="java.lang.String"/>
+	<field name="INV_AMT_POST_TAX" class="java.math.BigDecimal"/>
+	<field name="INVOICE_DATE" class="java.sql.Timestamp"/>
+	<field name="PREBILL" class="java.math.BigDecimal"/>
+	<field name="DECIMAL_DIGITS" class="java.math.BigDecimal"/>
+
+	<variable name="Week12" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($P{as_of_dt}.getTime())]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week11" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($P{as_of_dt}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week10" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week11}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week9" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week10}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week8" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week9}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week7" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week8}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week6" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week7}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week5" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week6}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week4" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week5}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week3" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week4}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week2" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week3}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="Week1" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week2}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="InvAmt_Week12" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+(($F{GENERATED_DATE_TIME}.timestampValue()).after( $V{Week11} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week12} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0))]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week11" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week11} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week10} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week11} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week10" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week10} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week9} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week10} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week9" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week9} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week8} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week9} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week8" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week8} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week7} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week8} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week7" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week7} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week6} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().equals( $V{Week7} ) ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week6" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week6} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week5} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week6} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week5" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( ($F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week5} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week4} )) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week5} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week4" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week4} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week3} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week4} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week3" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week3} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week2} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week3} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week2" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null ?
+new BigDecimal(0)
+:
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week2} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week1} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo( $V{Week2} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{INV_AMT_POST_TAX}==null ?
+new BigDecimal(0)
+:
+
+( $F{GENERATED_DATE_TIME}.timestampValue().before( $V{Week1} ) && 
+$F{GENERATED_DATE_TIME}.timestampValue().after( $V{Week0} ) ||
+$F{GENERATED_DATE_TIME}.timestampValue().compareTo(  $V{Week1} ) == 0 ? 
+$F{INV_AMT_POST_TAX} : new BigDecimal(0) )]]></variableExpression>
+	</variable>
+	<variable name="ChrgSelectedAmt" class="java.math.BigDecimal" resetType="Report" calculation="Nothing">
+	</variable>
+	<variable name="Charges_Week1" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week2} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week1} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week2} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week2" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week3} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week2} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week3} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week3" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week4} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week3} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week4} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week4" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week5} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week4} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week5} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week5" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week6} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week5} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week6} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week6" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week7} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week6} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week7} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week7" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week8} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week7} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week8} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week8" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week9} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week8} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week9} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week9" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+
+( $F{JOB_FINISH_DATE}.before( $V{Week10} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week9} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week10} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week10" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+
+( $F{JOB_FINISH_DATE}.before( $V{Week11} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week10} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week11} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week11" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null || $F{INV_AMT_POST_TAX}== new BigDecimal(0) ?
+
+( $F{JOB_FINISH_DATE}.before( $V{Week12} ) && 
+$F{JOB_FINISH_DATE}.after( $V{Week11} ) ||
+$F{JOB_FINISH_DATE}.compareTo(  $V{Week12} ) == 0 ? 
+$F{PREBILL} : new BigDecimal(0) )
+:new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Charges_Week12" class="java.math.BigDecimal" resetType="Group" resetGroup="OU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{INVOICE}==null  ?
+
+ $F{PREBILL} : new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Total1" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week1}]]></variableExpression>
+	</variable>
+	<variable name="Total11" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week11}]]></variableExpression>
+	</variable>
+	<variable name="Total2" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week2}]]></variableExpression>
+	</variable>
+	<variable name="Total3" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week3}]]></variableExpression>
+	</variable>
+	<variable name="Total10" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week10}]]></variableExpression>
+	</variable>
+	<variable name="Total4" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week4}]]></variableExpression>
+	</variable>
+	<variable name="Total5" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week5}]]></variableExpression>
+	</variable>
+	<variable name="Total6" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week6}]]></variableExpression>
+	</variable>
+	<variable name="Total7" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week7}]]></variableExpression>
+	</variable>
+	<variable name="Total8" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week8}]]></variableExpression>
+	</variable>
+	<variable name="Total9" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{InvAmt_Week9}]]></variableExpression>
+	</variable>
+	<variable name="Total12" class="java.math.BigDecimal" resetType="Report" incrementType="Group" incrementGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Charges_Week12}.add($V{InvAmt_Week12})]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal12" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total12}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal11" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total11}]]></variableExpression>
+	</variable>
+	<variable name="Week0" class="java.util.Date" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[new Date($V{Week1}.getTime()- 604800000)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="GrandTotal10" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total10}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal9" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total9}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal8" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total8}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal7" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total7}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal6" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total6}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal5" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total5}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal4" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total4}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal3" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total3}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal2" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total2}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotal1" class="java.math.BigDecimal" resetType="Group" incrementType="Group" incrementGroup="OU_Group" resetGroup="BU_Group" calculation="Sum">
+		<variableExpression><![CDATA[$V{Total1}]]></variableExpression>
+	</variable>
+	<variable name="InvAmt_Week1b" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+	</variable>
+
+		<group  name="BU_Group" >
+			<groupExpression><![CDATA[$F{BU_NAME}]]></groupExpression>
+			<groupHeader>
+			<band height="13"  isSplitAllowed="false" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="842"
+						height="13"
+						backcolor="#F2F2F2"
+						key="rectangle-1"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="5"
+						y="0"
+						width="103"
+						height="13"
+						forecolor="#000080"
+						key="textField-15"
+						stretchType="RelativeToBandHeight"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial.ttf" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="186"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-31"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="128"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-32"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="719"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-22"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week11}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="660"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-23"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="600"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-24"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="541"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-25"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week8}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="482"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-26"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="417"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-27"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="360"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-28"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="302"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-29"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="243"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-30"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="779"
+						y="0"
+						width="38"
+						height="12"
+						key="textField-43"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{Week12}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="40"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="763"
+						y="14"
+						width="54"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal12}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true" isPdfEmbedded ="false"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal11}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="7"
+						width="842"
+						height="0"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="645"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="585"
+						y="14"
+						width="54"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="14"
+						width="52"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal8}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="467"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="402"
+						y="14"
+						width="54"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="345"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="286"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="227"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="112"
+						y="14"
+						width="53"
+						height="12"
+						key="textField">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="11"
+						y="14"
+						width="96"
+						height="12"
+						key="textField-57"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="arial.ttf" size="8" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["GRAND TOTAL"]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="30"
+						width="842"
+						height="0"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-93">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="227"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-94">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="286"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-95">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="345"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-96">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="402"
+						y="14"
+						width="54"
+						height="12"
+						key="textField-97">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="467"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-98">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="14"
+						width="52"
+						height="12"
+						key="textField-99">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal8}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="585"
+						y="14"
+						width="54"
+						height="12"
+						key="textField-100">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="645"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-101">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-102">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true" isPdfEmbedded ="false"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal11}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="763"
+						y="14"
+						width="67"
+						height="12"
+						key="textField-103">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal12}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="112"
+						y="14"
+						width="53"
+						height="12"
+						key="textField-104">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{GrandTotal1}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="OU_Group" minHeightToStartNewPage="62" >
+			<groupExpression><![CDATA[$F{BRANCH_NAME}]]></groupExpression>
+			<groupHeader>
+			<band height="18"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="12"
+						y="0"
+						width="169"
+						height="16"
+						key="textField-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="arial.ttf" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BRANCH_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="43"  isSplitAllowed="false" >
+				<staticText>
+					<reportElement
+						x="35"
+						y="0"
+						width="73"
+						height="12"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Invoiced Amount:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="764"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-20">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week12}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-21">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week11}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="645"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-33">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="585"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-34">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-35">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week8}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="467"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-36">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="402"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-37">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="345"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-38">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="287"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-39">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-40">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="171"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-41">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-42">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="757"
+						y="14"
+						width="62"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-55">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Charges_Week12}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="34"
+						y="27"
+						width="783"
+						height="0"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-58">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="764"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-59">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week12}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-62">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week11}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="34"
+						y="27"
+						width="783"
+						height="0"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="645"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-64">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="585"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-67">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-70">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() != 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week8}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="34"
+						y="27"
+						width="783"
+						height="0"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="467"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-73">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="402"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-76">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="345"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-79">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="287"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-82">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-85">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="171"
+						y="0"
+						width="53"
+						height="12"
+						key="textField-88">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{InvAmt_Week2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="654"
+						y="14"
+						width="86"
+						height="12"
+						forecolor="#0000FF"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Selected Charges: Amount:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="757"
+						y="14"
+						width="62"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-105">
+							<printWhenExpression><![CDATA[new Boolean($F{DECIMAL_DIGITS}.intValue() == 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Charges_Week12}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="59"  isSplitAllowed="true" >
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="5"
+						y="0"
+						width="85"
+						height="40"
+						key="image-1"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{dirName} + "intertek.gif"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						x="217"
+						y="0"
+						width="349"
+						height="20"
+						forecolor="#800000"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="16" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Weekly Sales Report]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="301"
+						y="34"
+						width="185"
+						height="16"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["As of " + new SimpleDateFormat("dd-MMM-yyyy").format($P{as_of_dt})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="357"
+						y="19"
+						width="148"
+						height="15"
+						key="textField-56"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="arial.ttf" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["in " + $P{currency} + " currency"]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="12"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 1"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="171"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 2"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 3"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="287"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 4"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="345"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 5"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="402"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 6"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="467"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 7"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 8"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="585"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 9"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="645"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-12"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 10"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 11"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="764"
+						y="0"
+						width="53"
+						height="12"
+						forecolor="#808080"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Week 12"]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="19"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="287"
+						y="6"
+						width="100"
+						height="12"
+						key="textField-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="444"
+						y="6"
+						width="100"
+						height="12"
+						key="textField-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="FolderFor1stDecember/StringOperations/|FolderFor1stDecember/JDBCProcedures/TestConnectionPool/|FolderFor1stDecember/InnerClasses/|FolderFor1stDecember/JDBCProcedures/|FolderFor1stDecember/SystemAndRuntimeClass/|FolderFor1stDecember/Swings/Look&amp;Feel/src/|FolderFor1stDecember/Threads/|FolderFor1stDecember/Concurrency/CyclicBarrier/|FolderFor1stDecember/Swings/DragAndDrop/|FolderFor1stDecember/Finalizers/|FolderFor1stDecember/Swings/TreeDemo/|FolderFor1stDecember/Concurrency/|FolderFor1stDecember/Swings/SwingsRecentRecent/Look&amp;Feel/|FolderFor1stDecember/WrapperClasses/|FolderFor1stDecember/Concurrency/CountDownLatch/|FolderFor1stDecember/Swings/Look&amp;Feel/|FolderFor1stDecember/Swings/SwingsRecentRecent/DragAndDrop/|FolderFor1stDecember/JDBCRecent/JDBCProcedures/|FolderFor1stDecember/Collections/|FolderFor1stDecember/Swings/FileFiltersNChoosers/|FolderFor1stDecember/IOManagement/|FolderFor1stDecember/Swings/SwingsRecentRecent/TreeDemo/|FolderFor1stDecember/Swings/SwingRecent/|FolderFor1stDecember/Swings/SwingsRecentRecent/Look&amp;Feel/src/|FolderFor1stDecember/Concurrency/Executors/|FolderFor1stDecember/Concurrency/Semaphore/|FolderFor1stDecember/JDBCRecent/|FolderFor1stDecember/Swings/SwingsRecentRecent/FileFiltersNChoosers/|FolderFor1stDecember/Swings/SwingsRecentRecent/|FolderFor1stDecember/IOManagement/Serialization/|FolderFor1stDecember/CreatingClone/|FolderFor1stDecember/ExceptionManagement/|FolderFor1stDecember/Swings/SwingsRecentRecent/SwingRecent/|FolderFor1stDecember/Swings/" kind="src" path=""/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Collections"/>
+	<classpathentry excluding="CyclicBarrier/|CountDownLatch/|Executors/|Semaphore/" kind="src" path="FolderFor1stDecember/Concurrency"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Concurrency/CountDownLatch"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Concurrency/CyclicBarrier"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Concurrency/Executors"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Concurrency/Semaphore"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/CreatingClone"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/ExceptionManagement"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Finalizers"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/InnerClasses"/>
+	<classpathentry excluding="Serialization/" kind="src" path="FolderFor1stDecember/IOManagement"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/IOManagement/Serialization"/>
+	<classpathentry excluding="TestConnectionPool/" kind="src" path="FolderFor1stDecember/JDBCProcedures"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/JDBCProcedures/TestConnectionPool"/>
+	<classpathentry excluding="JDBCProcedures/" kind="src" path="FolderFor1stDecember/JDBCRecent"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/JDBCRecent/JDBCProcedures"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/StringOperations"/>
+	<classpathentry excluding="Look&amp;Feel/src/|DragAndDrop/|TreeDemo/|SwingsRecentRecent/Look&amp;Feel/|Look&amp;Feel/|SwingsRecentRecent/DragAndDrop/|FileFiltersNChoosers/|SwingsRecentRecent/TreeDemo/|SwingRecent/|SwingsRecentRecent/Look&amp;Feel/src/|SwingsRecentRecent/FileFiltersNChoosers/|SwingsRecentRecent/|SwingsRecentRecent/SwingRecent/" kind="src" path="FolderFor1stDecember/Swings"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/DragAndDrop"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/FileFiltersNChoosers"/>
+	<classpathentry excluding="src/" kind="src" path="FolderFor1stDecember/Swings/Look&amp;Feel"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/Look&amp;Feel/src"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingRecent"/>
+	<classpathentry excluding="Look&amp;Feel/|DragAndDrop/|TreeDemo/|Look&amp;Feel/src/|FileFiltersNChoosers/|SwingRecent/" kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/DragAndDrop"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/FileFiltersNChoosers"/>
+	<classpathentry excluding="src/" kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/Look&amp;Feel"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/Look&amp;Feel/src"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/SwingRecent"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/SwingsRecentRecent/TreeDemo"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Swings/TreeDemo"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/SystemAndRuntimeClass"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/Threads"/>
+	<classpathentry kind="src" path="FolderFor1stDecember/WrapperClasses"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TaxRate" table="TAX_RATES">
+    
+    <composite-id name="taxRateId" class="TaxRateId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="taxCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+        <column name="TAX_CODE" length="8" />
+      </key-property>
+      <key-property name="effDate" type="date">
+      	<column name="EFF_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    
+   <property name="description" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="TAX_DESC" length="128"/>
+    </property>
+
+
+    <property name="taxType" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="TAX_TYPE" length="1" not-null="true" />
+    </property>
+
+    <property name="taxPct" type="double">
+      <column name="TAX_PCT" sql-type="NUMBER(6,4)" />
+    </property>
+  </class>
+</hibernate-mapping>
+

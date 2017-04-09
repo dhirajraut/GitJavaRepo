@@ -1,0 +1,6 @@
+commons-fileupload-1.2.1.jar
+freemarker-2.3.13.jar
+ognl-2.6.11.jar
+servlet-api.jar
+struts2-core-2.1.6.jar
+xwork-2.1.2.jar

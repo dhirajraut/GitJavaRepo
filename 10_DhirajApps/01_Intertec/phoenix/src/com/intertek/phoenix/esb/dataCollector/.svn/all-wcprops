@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6709/branches/phx2.1/src/com/intertek/phoenix/esb/dataCollector
+END
+CEInvoiceDataCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/phoenix/!svn/ver/6709/branches/phx2.1/src/com/intertek/phoenix/esb/dataCollector/CEInvoiceDataCollector.java
+END
+BusinessStreamDataCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/phoenix/!svn/ver/6217/branches/phx2.1/src/com/intertek/phoenix/esb/dataCollector/BusinessStreamDataCollector.java
+END
+TestMethodologyDataCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/phoenix/!svn/ver/6279/branches/phx2.1/src/com/intertek/phoenix/esb/dataCollector/TestMethodologyDataCollector.java
+END

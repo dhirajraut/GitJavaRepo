@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BusinessUnit" table="BUSINESS_UNITS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" />
+    </id>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="currencyBase" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="CURRENCY_BASE" length="32" />
+    </property>
+    <property name="description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=512) private</meta>
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <property name="shortDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="SHORT_DESCR" length="128" />
+    </property>
+    <property name="defaultBuInd" type="java.lang.Boolean">
+      <column name="DEFAULT_BU_IND" />
+    </property>
+    <property name="vatEnabledInd" type="java.lang.Boolean">
+      <column name="VAT_ENABLED_IND" />
+    </property>
+    <property name="orgName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ORG_NAME" length="128" />
+    </property>
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS1" length="55" />
+    </property>
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CITY" length="30" />
+    </property>
+    <property name="num1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="NUM1" length="6" />
+    </property>
+    <property name="num2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="NUM2" length="4" />
+    </property>
+    <property name="houseType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="HOUSE_TYPE" length="2" />
+    </property>
+    <property name="addrField1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="ADDR_FIELD1" length="2" />
+    </property>
+    <property name="addrField2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="ADDR_FIELD2" length="4" />
+    </property>
+    <property name="addrField3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="ADDR_FIELD3" length="4" />
+    </property>
+    <property name="county" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="COUNTY" length="30" />
+    </property>
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="POSTAL" length="12" />
+    </property>
+    <property name="phonePrefix" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="PHONE_PREFIX" length="3" />
+    </property>
+    <property name="phoneNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=24) private</meta>
+      <column name="PHONE_NUMBER" length="24" />
+    </property>
+    <property name="phoneExtension" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="PHONE_EXTENSION" length="6" />
+    </property>
+    <property name="fax" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="FAX" length="30" />
+    </property>
+    <property name="retainPeriod" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="RETAIN_PERIOD" length="4" />
+    </property>
+    <property name="companyDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=150) private</meta>
+      <column name="COMPANY_DESC" length="150" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3" />
+    </property>
+    <property name="stateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE_CODE" length="6" />
+    </property>
+    <many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="BUSINESS_UNITS_index_0" />
+    <many-to-one name="state" class="State" insert="false" update="false">
+      <column name="STATE_CODE" index="BUSINESS_UNITS_index_1" />
+      <column name="COUNTRY_CODE" index="BUSINESS_UNITS_index_1" />
+    </many-to-one>
+    <many-to-one name="organization" column="ORG_NAME" class="Organization" insert="false" update="false" index="BUSINESS_UNITS_index_2" />
+    <set name="branches" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="BU_NAME" />
+      <one-to-many class="Branch" />
+    </set>
+    <set name="busUnitVatLocs" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="BU_NAME" />
+      <one-to-many class="BusUnitVatLoc" />
+    </set>
+  </class>
+</hibernate-mapping>
+

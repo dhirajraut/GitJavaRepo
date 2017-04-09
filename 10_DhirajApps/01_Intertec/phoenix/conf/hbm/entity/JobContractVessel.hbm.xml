@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractVessel" table="JOB_CTR_VESSELS">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CTR_VESSEL_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CTR_VESSEL_SEQ</param>
+      </generator>
+    </id>
+    <many-to-one name="jobContract" column="JOB_CONTRACT_ID" class="JobContract" index="JOB_CTR_VESSELS_index_0" />
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="JOB_NUMBER" length="128" />
+    </property>
+    <property name="linkedVslRow" type="java.lang.Integer">
+      <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+    </property>
+    <property name="vesselName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="VESSEL_NAME" length="256" not-null="true" />
+    </property>
+    <property name="type" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=16) private</meta>
+      <column name="VESSEL_TYPE" length="16" not-null="true" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+    <set name="jobContractProds" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_VESSEL_ID" />
+      </key>
+      <one-to-many class="JobContractProd" />
+    </set>
+    <set name="jobContractVesselServices" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_VESSEL_ID" />
+      </key>
+      <one-to-many class="JobContractVesselService" />
+    </set>
+    <set name="controls" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_V_CTL_ID">
+      <key>
+        <column name="JOB_CTR_VESSEL_ID" />
+      </key>
+      <one-to-many class="JobContractVesselControl" />
+    </set>
+    <set name="results" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_V_INSP_RLT_ID">
+      <key>
+        <column name="JOB_CTR_VESSEL_ID" />
+      </key>
+      <one-to-many class="JobContractVesselInspectionResult" />
+    </set>
+  </class>
+</hibernate-mapping>
+

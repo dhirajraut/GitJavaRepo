@@ -1,0 +1,31 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ */
+package com.intertek.phoenix.esb;
+
+import com.intertek.entity.JobOrder;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.Project;
+import com.intertek.phoenix.entity.ProjectType;
+
+/**
+ * ESB Related services
+ * 
+ * @author Eric.Nguyen
+ */
+public class ESBServiceImpl implements ESBService {
+
+	/**
+	 * @see com.intertek.phoenix.esb.ESBService#createProject(com.intertek.phoenix.entity.CEJobOrder)
+	 */
+	@Override
+	public Project createProject(CEJobOrder jobOrder){
+		//TODO : Eric - merge projectId returned form esb to Phoenix system 
+		ESBSender sender=(ESBSender)ServiceLocator.getInstance().getBean("esbProjectUpdater");
+		Project p=(Project)sender.send(jobOrder);
+		return p;
+	}
+}

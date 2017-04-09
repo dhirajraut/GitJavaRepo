@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Service" table="PS_ITSC_SERVICE">
+    <composite-id name="serviceId" class="ServiceId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="serviceName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=60) private</meta>
+        <column name="ITSC_SERVICE" length="60" />
+      </key-property>
+      <key-property name="parentServiceId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=96) private</meta>
+        <column name="PARENT_SERVICE_ID" length="96" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="rbKey" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=450) private</meta>
+      <column name="RB_KEY" length="450" />
+    </property>
+    <property name="url" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="URL" length="762" />
+    </property>
+    <property name="imageUrl" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=300) private</meta>
+      <column name="IMAGE_URL" length="300" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="inputComponentType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="INPUT_COMPNT_TYPE" length="45" />
+    </property>
+    <property name="highLevelServiceId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="ITS_HI_LVL_SRVC_ID" length="45" />
+    </property>
+    <property name="serviceLevel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_SERVICE_LEVEL" length="12" />
+    </property>
+    <property name="visibleInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="ITS_VISIBLE_IND" length="3" />
+    </property>
+    <property name="visibility" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_VISIBILITY" length="12" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    <property name="rollUp" type="yes_no">
+      <column name="ROLL_UP" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

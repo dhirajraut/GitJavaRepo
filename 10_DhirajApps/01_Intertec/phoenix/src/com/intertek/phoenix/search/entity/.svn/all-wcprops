@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/phoenix/search/entity
+END
+UserSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/phoenix/search/entity/UserSearch.java
+END
+RoleSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/phoenix/search/entity/RoleSearch.java
+END
+CEJobSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6510/branches/phx2.1/src/com/intertek/phoenix/search/entity/CEJobSearch.java
+END
+PermissionSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/phoenix/search/entity/PermissionSearch.java
+END

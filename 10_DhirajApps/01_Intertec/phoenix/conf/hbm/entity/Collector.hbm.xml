@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Collector" table="COLLECTOR">
+    <id name="collectorCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="COLLECTOR_CODE" length="8" />
+    </id>
+    <property name="collectorName" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="COLLECTOR_NAME" length="40" not-null="true" unique="true" />
+    </property>
+  </class>
+</hibernate-mapping>
+

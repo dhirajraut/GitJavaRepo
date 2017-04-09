@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Solution" table="SOLUTIONS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="SOLUTION_NAME" length="256" />
+    </id>
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <property name="seqNumber" type="int">
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />
+    </property>
+    <set name="menus" table="SOLUTION_MENU_MAP" lazy="true" cascade="save-update">
+      <key column="SOLUTION_NAME" />
+      <many-to-many class="Menu" column="MENU_NAME" />
+    </set>
+    <set name="roles" table="SOLUTION_ROLE_MAP" cascade="save-update" lazy="true">
+      <key column="SOLUTION_NAME" />
+      <many-to-many class="Role" column="ROLE_NAME" />
+    </set>
+  </class>
+</hibernate-mapping>
+

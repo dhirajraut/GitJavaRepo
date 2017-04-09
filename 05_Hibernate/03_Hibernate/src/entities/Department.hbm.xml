@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="entities">
+
+	<class name="Department" table="DEPARTMENT">
+		<id name="id" column="ID">
+			<generator class="increment"/>
+		</id>
+		<property name="name" column="NAME" not-null="true"/>
+		
+        <component name="address">
+            <property name="street" column="STREET" not-null="true"/>
+            <property name="city" column="CITY" not-null="true"/>
+            <property name="pinCode" column="PIN" not-null="true"/>
+        </component>
+        
+        <bag name="employeeList" inverse="false" cascade="all" fetch="join" lazy="true">
+            <key column="id" />
+            <one-to-many class="entities.Employee" />
+        </bag>
+        
+	</class>
+
+</hibernate-mapping>

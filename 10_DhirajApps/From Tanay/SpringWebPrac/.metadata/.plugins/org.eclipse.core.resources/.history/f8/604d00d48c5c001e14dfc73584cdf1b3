@@ -1,0 +1,36 @@
+package dao;
+
+import java.sql.DriverManager;
+
+import model.Login;
+
+public class LoginDaoImpl implements LoginDao {
+
+	public boolean checkLogin(Login l) {
+		
+		
+		java.sql.Connection con;
+		String dbname="dace";
+	int count=-1;
+	try {
+			
+		System.out.println("I am In Dao");
+		String dbUrl="jdbc:mysql://localhost/";
+		Class.forName("com.mysql.jdbc.Driver");
+		con = DriverManager.getConnection(dbUrl + dbname,"root","Lms");
+		StringBuffer str = new StringBuffer();
+		str.append("Insert into practise.personal_details(personal_id,p_Name,p_Age,p_Sex,p_MobNum)")
+			.append("values(?,?,?,?,?)");
+       						
+		java.sql.PreparedStatement pstmt = con.prepareStatement(str.toString());
+		
+		count=pstmt.executeUpdate();
+		
+	
+		if(l.getName().equals("user")&&l.getPassword().equals("pass")){
+		return true;
+		}
+		return false;
+	}
+
+}

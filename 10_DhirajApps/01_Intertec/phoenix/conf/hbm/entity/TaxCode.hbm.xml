@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TaxCode" table="TAX_CODES">
+    <id name="taxCodeHeader" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="TAX_CODE_HDR" length="8" />
+    </id>
+    <property name="taxDescr" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="TAX_DESCR" length="30" />
+    </property>
+    <property name="taxType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="TAX_TYPE" length="1" />
+    </property>
+     <property name="includeVat" type="yes_no">
+      <column name="INCLUDE_VAT" length="1" />
+    </property>
+    <set name="taxCodeTaxRates" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="TAX_CODE_HDR" />
+      <one-to-many class="TaxCodeTaxRate" />
+    </set>
+  
+  </class>
+</hibernate-mapping>

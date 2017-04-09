@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="classes/|lib/" kind="src" path="WEB-INF"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/struts/struts-2.1.6/lib/struts2-core-2.1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/servlet/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/struts/struts-2.1.6/lib/xwork-2.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/struts/struts-2.1.6/lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/struts/struts-2.1.6/lib/freemarker-2.3.13.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/struts/struts-2.1.6/lib/ognl-2.6.11.jar"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>

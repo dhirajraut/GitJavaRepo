@@ -1,0 +1,10 @@
+
+public class GreetingServiceImpl implements GreetingService {
+	String greeting;
+	public void printGreeting() {
+		// TODO Auto-generated method stub
+	
+		System.out.println(greeting);
+	}
+
+}

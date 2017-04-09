@@ -1,0 +1,323 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.intertek.entity.Test;
+import com.intertek.exception.ServiceException;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.common.Form;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoException;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.JobServiceLevel;
+import com.intertek.phoenix.entity.JobTest;
+import com.intertek.phoenix.job.JobOrderService;
+import com.intertek.phoenix.job.JobSrvcException;
+import com.intertek.phoenix.job.ServiceLevel.ServiceLevelType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JobOperationalInstrCEFormController.
+ * 
+ * @author eric.nguyen/patni
+ */
+public class JobOperationalInstrCEFormController extends SimpleFormController {
+
+    /** The log. */
+    private static Log log = LogFactory.getLog(JobOperationalInstrCEFormController.class);
+
+    /**
+     * Instantiates a new job operational instr ce form controller.
+     */
+    public JobOperationalInstrCEFormController() {
+        super();
+        setCommandClass(CEJobOrderForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax
+     *      .servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    /**
+     * On submit.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param command
+     *            the command
+     * @param errors
+     *            the errors
+     * 
+     * @return the model and view
+     * 
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("unchecked")
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        
+        log.debug("inside on Submit in JobOperationalInstrCEFormController");
+        CEJobOrderForm ceJobOrderForm = (CEJobOrderForm) command;
+        int prodIndex = ceJobOrderForm.getProdIndex();
+        int testIndex = ceJobOrderForm.getTestIndex();
+        String addOrDeleteTestLine = request.getParameter("addOrDeleteTestLines");
+        String addOrDeleteDepositLine = request.getParameter("addOrDeleteDepositLines");
+        String addOrDeleteSplitLine = request.getParameter("addOrDeleteSplitLines");
+        String scrollflag = request.getParameter("scrollFlag");
+
+        if (scrollflag != null && !scrollflag.trim().equals("")) {
+            ceJobOrderForm.setScrollFlag(scrollflag);
+        }
+        CEJobOrder ceJobOrder = ceJobOrderForm.getCeJobOrder();
+        
+        
+        
+        JobOrderService jobSrvc = ServiceManager.getJobOrderService();
+
+        if ((addOrDeleteTestLine != null) && ("addProduct".equals(addOrDeleteTestLine) || "deleteProduct".equals(addOrDeleteTestLine))) {
+            if ("addProduct".equals(addOrDeleteTestLine)) {                
+                JobServiceLevel product = jobSrvc.createJobServiceLevel(ceJobOrder.getRootServiceLevel(), ServiceLevelType.PRODUCT, "");
+                ceJobOrderForm.addServiceForm(product);
+            }
+            else if ("deleteProduct".equals(addOrDeleteTestLine)) {
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                JobServiceLevel serviceLevel = sf.getProduct();
+                jobSrvc.removeJobServiceLevel(ceJobOrder.getRootServiceLevel(), serviceLevel);
+                ceJobOrderForm.removeServiceLevelForm(sf);
+            }
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteTestLine != null) && ("addTest".equals(addOrDeleteTestLine) || "deleteTest".equals(addOrDeleteTestLine))) {
+            JobOrderService ceService = ServiceManager.getCEJobService();
+            ServiceLevelForm serviceForm = ceJobOrderForm.getServiceLevelForm(prodIndex);
+            if ("addTest".equals(addOrDeleteTestLine)) {
+                CETestSearchForm addTestForm = (CETestSearchForm) request.getSession()
+                        .getAttribute("com.intertek.phoenix.web.controller.job.AddTestController.FORM.command");
+                if (addTestForm == null) {
+                    addTestForm = (CETestSearchForm) request.getSession().getAttribute("CETestSearchForm");
+                }
+                List<Test> selectedTests = addTestForm.getSelectedTests();
+                for (Test test1 : selectedTests) {
+                    JobTest jTest = ceService.createJobTest(serviceForm.getProduct(), test1);
+                    jTest.setBranchName(addTestForm.getJobOrder().getBranchName());
+                }
+            }
+            else if ("deleteTest".equals(addOrDeleteTestLine)) {
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                JobTest jobTest = sf.getJobTest()[testIndex];
+
+                for (JobTest jt : sf.getProduct().getJobTests()) {
+                    if (jt.getId() == jobTest.getId()) {
+                        jobSrvc.removeJobTest(sf.getProduct(), jt);
+                        break;
+                    }
+                }
+                // jobSrvc.removeJobTest(sf.getProduct(), jobTest);
+            }
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            jobSrvc.updateJobOrder(ceJobOrder);
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteTestLine != null) && "saveother".equals(addOrDeleteTestLine)) {
+            String key = prodIndex + "," + testIndex;
+            HttpSession session = request.getSession();
+            HashMap<String, JobTest> testMap = (HashMap<String, JobTest>) session.getAttribute("TestAttribute");
+            ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+            if (testMap != null && testMap.get(key) != null) {
+                JobTest sessionTest = testMap.get(key);
+                // RQ: need to reload JobTest
+//                JobTest ceJobTest = sf.getJobTest()[testIndex];
+//                CommonUtil.copyCEJobTest(sessionTest, ceJobTest);
+                sf.getJobTest()[testIndex] = jobSrvc.findById(JobTest.class, sessionTest.getId());
+            }
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteDepositLine != null) && ("adddep".equals(addOrDeleteDepositLine) || "deldep".equals(addOrDeleteDepositLine))) {
+
+            if ("adddep".equals(addOrDeleteDepositLine)) {
+                DepositInvoice dpInvoice = jobSrvc.createDepositInvoice(ceJobOrderForm.getCeJobOrder());
+                jobSrvc.addDepositInvoice(ceJobOrderForm.getCeJobOrder(), dpInvoice);
+            }
+            else {
+                int depInd = ceJobOrderForm.getDepIndex();
+                
+                Object[] obj = ceJobOrderForm.getCeJobOrder().getDepositInvoices().toArray();
+                if (obj.length > depInd) {
+                    DepositInvoice rDepInvoice = (DepositInvoice) obj[depInd];
+                    jobSrvc.removeDepositInvoice(ceJobOrder, rDepInvoice);
+                }
+            }
+            jobSrvc.updateJobOrder(ceJobOrder);
+            ceJobOrderForm.setAddOrDeleteDepositLines("none");
+            return showForm(request, response, errors);
+        }
+        if ((addOrDeleteSplitLine != null) && ("addspl".equals(addOrDeleteSplitLine) || "delspl".equals(addOrDeleteSplitLine))) {
+            if ("addspl".equals(addOrDeleteSplitLine)) {
+                // TODO: need to add method in the servicemethod to
+                // createRelatedJobTest
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                JobTest jobTest = sf.getJobTest()[testIndex];
+                JobTest relatedJobTest = sf.getProduct().createJobTest(JobTest.class, jobTest.getTest());
+                relatedJobTest.setMaster(jobTest);
+                jobTest.addRelated(relatedJobTest);
+                try {
+                    DaoManager.getDao(JobTest.class).saveOrUpdate(relatedJobTest);
+                    DaoManager.getDao(JobTest.class).saveOrUpdate(jobTest);
+                }
+                catch (DaoException e) {
+                    throw new JobSrvcException("Failed to save new JobTest", e);
+                }
+            }
+            else if ("delspl".equals(addOrDeleteSplitLine)) {
+                ServiceLevelForm sf = ceJobOrderForm.getServiceLevelForm(prodIndex);
+                JobTest jobTest = sf.getJobTest()[testIndex];
+
+                for (JobTest jt : sf.getProduct().getJobTests()) {
+                    if (jt.getId() == jobTest.getId()) {
+                        jobSrvc.removeJobTest(sf.getProduct(), jt);
+                        break;
+                    }
+                }
+                // jobSrvc.removeJobTest(sf.getProduct(), jobTest);
+            }
+            return showForm(request, response, errors);
+            /*
+             * 
+             * if ("addspl".equals(addOrDeleteSplitLine)) { CEJobOrderLineItem
+             * ceJobOrderLineItem[] = jobContractForm.getCejobOrderLineItems();
+             * SplitLineItem splitLineItem =
+             * jobOrderService.createSplitLineItem(ceJobOrderLineItem[splIndex]);
+             * jobOrderService.addSplitJobOrderLineItem(ceJobOrderLineItem[splIndex],
+             * splitLineItem); } else { Object[] obj =
+             * jobContract.getJobOrderLineItems().toArray(); CEJobOrderLineItem
+             * cline = (CEJobOrderLineItem) obj[testIndex]; SplitLineItem[]
+             * splits = cline.getSplitLineItem();
+             * jobOrderService.removeSplitJobOrderLineItem(cline,
+             * splits[splIndex]); }
+             * ceJobOrderForm.setAddOrDeleteSplitLines("none"); return
+             * showForm(request, response, errors);
+             */
+        }
+        if ((addOrDeleteTestLine != null) && ("save".equals(addOrDeleteTestLine) || "saveandnext".equals(addOrDeleteTestLine))) {
+            //
+            for (ServiceLevelForm jsf : ceJobOrderForm.getProducts()) {
+                jsf.updateServiceLevelName();
+            }
+            CEJobOrder jobOrder = ceJobOrderForm.getCeJobOrder();
+            JobOrderService service = ServiceManager.getJobOrderService();
+            service.updateJobInstructions(jobOrder);
+            service.updateJobOrder(jobOrder);
+            service.updateCEJobTest(jobOrder);
+            service.updateJobOrder(jobOrder);
+            service.updateDepositInvoice(jobOrder);
+            service.updateJobOrder(jobOrder);
+            ceJobOrderForm.setAddOrDeleteTestLines("none");
+            if ("save".equals(addOrDeleteTestLine)) {
+                return showForm(request, response, errors);
+            }
+        }
+        return new ModelAndView(new RedirectView("phx_ce_job_select_charges.htm?jobNumber=" + ceJobOrderForm.getJobNumber()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#suppressValidation(javax.servlet.http.HttpServletRequest,
+     *      java.lang.Object)
+     */
+    @SuppressWarnings("deprecation")
+    protected boolean suppressValidation(HttpServletRequest request, Object command) {
+        String refreshing = request.getParameter("refreshing");
+
+        if ((refreshing != null) && "true".equals(refreshing)) {
+            return true;
+        }
+        String addOrDeleteTestLine = request.getParameter("addOrDeleteTestLines");
+        if ((addOrDeleteTestLine != null)) {
+            return true;
+        }
+        String addOrDeleteDepositLine = request.getParameter("addOrDeleteDepositLines");
+        if ((addOrDeleteDepositLine != null) && ("adddep".equals(addOrDeleteDepositLine))) {
+            return true;
+        }
+        String addOrDeleteSplitLine = request.getParameter("addOrDeleteSplitLines");
+        if ((addOrDeleteSplitLine != null) && ("addspl".equals(addOrDeleteSplitLine))) {
+            return true;
+        }
+        boolean result = super.suppressValidation(request);
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Form.getCurrentUserFormat());
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, null, new CustomDateEditor(dateFormat, true));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+
+        String jobNumber = request.getParameter("jobNumber");
+        CEJobOrder jo = null;
+
+        if (jobNumber != null && !"".equals(jobNumber)) {
+            try {
+                jo = jobDao.find(jobNumber);
+                if (jo != null && jo.getRootServiceLevel() == null) {
+                }
+            }
+            catch (Exception e) {
+                throw new ServiceException("record.not.exist.error", new Object[] { jobNumber }, new Throwable(e.getCause().getMessage() + e.getMessage()));
+            }
+        }
+
+        JobOrderService jobOrderService = ServiceManager.getJobOrderService();
+        jobOrderService.setDefaultInstructions(jo);
+        jobOrderService.updateJobOrder(jo);
+        CEJobOrderForm myForm = new CEJobOrderForm(jo);
+        return myForm;
+    }
+
+}

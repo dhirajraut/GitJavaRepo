@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="State" table="STATE">
+    <composite-id name="stateId" class="StateId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="stateCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta>
+        <column name="STATE_CODE" length="6" />
+      </key-property>
+      <key-property name="countryCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="COUNTRY_CODE" length="3" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="country" class="Country" insert="false" update="false">
+      <column name="COUNTRY_CODE" index="STATE_index_0" />
+    </many-to-one>
+    <property name="name" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="STATE_NAME" length="32" />
+    </property>
+    <property name="numericCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="NUMERIC_CD" length="2" />
+    </property>
+  </class>
+</hibernate-mapping>
+

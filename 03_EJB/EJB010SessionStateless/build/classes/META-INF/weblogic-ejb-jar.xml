@@ -1,0 +1,24 @@
+<!DOCTYPE weblogic-ejb-jar PUBLIC '-//BEA Systems, Inc.//DTD WebLogic 8.1.0 EJB//EN' 'http://www.bea.com/servers/wls810/dtd/weblogic-ejb-jar.dtd'>
+
+
+<!-- Generated XML! -->
+
+<weblogic-ejb-jar>
+  <weblogic-enterprise-bean>
+    <ejb-name>DiscountBean</ejb-name>
+    <stateless-session-descriptor>
+      <pool>
+      </pool>
+
+      <stateless-clustering>
+      </stateless-clustering>
+
+    </stateless-session-descriptor>
+
+    <transaction-descriptor>
+    </transaction-descriptor>
+
+    <jndi-name>DiscountEngine</jndi-name>
+    <local-jndi-name>DiscountEngineL</local-jndi-name>
+  </weblogic-enterprise-bean>
+</weblogic-ejb-jar>

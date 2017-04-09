@@ -1,0 +1,79 @@
+function updateOthersIframeSrc(productIndex,testIndex){	
+
+/*    if(splIndex ==-1)	{
+  	 document.getElementById('othersFr'+testIndex).setAttribute("src","job_instruction_test_attribute_popup.htm?testIndex="+testIndex+"&splitIndex="+splIndex+"&div1=others"+testIndex+"&div2=othersbody"+testIndex);
+	 }
+	  else {
+		document.getElementById('othersFr'+testIndex).setAttribute("src","job_instruction_test_attribute_popup.htm?testIndex="+testIndex+"&splitIndex="+splIndex+"&div1=others"+testIndex+"&div2=othersbody"+testIndex);
+		}
+*/
+  	 document.getElementById('othersFr'+productIndex).setAttribute("src","job_instruction_test_attribute_popup.htm?productIndex="+productIndex+"&testIndex="+testIndex+"&div1=others"+productIndex+"&div2=othersbody"+productIndex);
+		
+	}
+
+function searchPopupBranch(inputField,buName) {    
+ url="search.htm?searchType=warehouse&targetFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm&buName="+buName;
+ newwindow=window.open(url,'lookup','height=630,width=600,resizable=no');
+ if (window.focus) {newwindow.focus()}
+    return false;
+ }
+   function showTestIFrameSrc(nomDate,jobNumber)  { 
+  
+    document.getElementById('testFr').setAttribute("src","add_test.htm?jobNumber="+jobNumber+"&searchForm=jobOrderOpInstrCEForm&div1=test&div2=testbody&nomDate="+nomDate);
+    document.getElementById('testFr').height = "500px";
+  }
+ 
+ function popTest(){ 
+ popup_show('test', 'test_drag', 'test_exit', 'screen-corner', 40, 80);
+	showPopupDiv('test','testbody');
+	hideIt();
+	popupboxenable();
+ }
+ 
+ function submitFunction() {
+	document.addTestForm.pageNumber.value = "1";
+	document.addTestForm.sortFlag.value = "";
+	document.addTestForm.submit();
+}
+
+function selectAllTests(rowCount) {
+	for(i=0;i<rowCount;i++)	{
+	 var elemName = "chk" + i;
+	 document.getElementById(elemName).checked = true;
+	 }	 
+}
+
+function clearAllTests(rowCount) {
+	for(i=0;i<rowCount;i++) {
+	 var elemName = "chk" + i;
+	 document.getElementById(elemName).checked = false;
+	 }
+}
+
+function setSelectedTestIds(rowCount,searchFlag) {
+	for(i=0;i<rowCount;i++)	 {
+		var elemName = "chk" + i;
+		if(document.getElementById(elemName).checked) {			
+			if(document.addTestForm.chosenTestIds.value == "")	{
+				document.addTestForm.chosenTestIds.value = document.getElementById(elemName).value;
+			  }
+			else {
+				var existingVal = document.addTestForm.chosenTestIds.value;
+				document.addTestForm.chosenTestIds.value = existingVal + ";" + document.getElementById(elemName).value;
+			 }
+			document.getElementById(elemName).checked = false;
+		 }
+	 }
+	 if(searchFlag == "addtest") {
+	 	document.addTestForm.pageNumber.value = document.addTestForm.pageNo.value;
+		document.addTestForm.submit();
+	 }
+	 
+ }
+
+function submitform(){			
+ var chosenVal = document.addTestForm.chosenTestIds.value;
+ top.document.forms[0].chosenTestIds.value = chosenVal;
+ top.document.forms[0].submit();			
+}
+ 

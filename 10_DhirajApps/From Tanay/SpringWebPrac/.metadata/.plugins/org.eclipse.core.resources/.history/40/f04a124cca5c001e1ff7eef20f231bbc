@@ -1,0 +1,12 @@
+package service;
+
+import dao.DetailDataDao;
+import model.StudentList;
+
+public class DetailDataServiceImpl implements DetailDataService {
+	DetailDataDao detailDataDao;
+	StudentList showDetail(int id)
+	{
+		detailDataDao.showDetails(id);
+	}
+}

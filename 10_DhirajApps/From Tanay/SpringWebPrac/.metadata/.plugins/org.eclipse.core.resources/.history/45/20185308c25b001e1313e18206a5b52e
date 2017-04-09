@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"  "http://www.springframework.org/dtd/spring-beans.dtd"> 
+
+<beans>
+<bean name="/Logincontroller.htm" class="controller.loginController">
+	<property name="formView" value="l" />
+	<property name="successView" value="welcome" />
+	<property name="validator">
+	<property name="commandName"><value>command</value></property>
+	<property name="commandClass"><value>model.Login</value></property>
+	
+	
+</bean>
+
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	
+ <property name="viewClass">
+ 	<value>org.springframework.web.servlet.view.JstlView</value>
+ </property>
+
+	<property name="prefix">
+		<value>/WEB-INF/Jsp/</value>
+	</property>
+	
+	<property name="suffix">
+		<value>.jsp</value>
+	</property>
+
+</bean>
+
+
+</beans>

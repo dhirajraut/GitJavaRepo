@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Disclaimer
+	Fill Colors doesn’t try to show best practices with regards of usability or code. 
+	In order to keep it simple, we did not add features that may have been useful to the user. 
+	In some other parts, we added controls that may not be the best choice, but we wanted to have 
+	a certain amount of variety of controls to skin. 
+	In addition, Fill Colors’ code may not adhere to best practices. For example we used a lot of fixed x and y
+	positions because are easier to modify	in the style sheet via top, left right and bottom instead of using 
+	layout managers (ie: HBox, VBox, etc). Also, we used styleName in every component to give the designer 
+	the freedom to choose what to style, which is usually not necessary in normal applications.
+	Lastly, we have some custom tags like CSSAnimateProperty and CSSProperty that expose more properties and behaviors
+	trough CSS. This kind of things usually are not common on a real app. 
+-->
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"  
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	xmlns:views="com.fillcolors.views.*" layout="absolute" 
+	xmlns:events="com.fillcolors.events.*" 
+	xmlns:mate="http://mate.asfusion.com/03"
+	 creationComplete="applyDesign();"
+	xmlns:maps="com.fillcolors.maps.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.fillcolors.views.MainUI;
+			import com.fillcolors.events.*;
+			import mx.controls.Alert;
+			
+			private var mainUI:DisplayObject;
+			
+			private function applyDesign(event:DesignEvent = null):void
+			{
+				if(mainUI) 
+					removeChild(mainUI);
+				
+				mainUI = new MainUI();
+				addChild(mainUI);
+				
+			}
+		]]>
+	</mx:Script>
+
+	<!-- ::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- If you remove all style sheet references, you will see the default Flex style
+		 While creating your design, you can simply change the style reference to your own file.
+		 
+		 When you upload your style to Fill Colors' website, however, your design will be
+		 used on top of the "base" style, which has a white background. It is better, then,
+		 to develop your style having "base" applied.
+	  -->
+	<mx:Style source="/assets/styles/base/Main.css"/>
+	
+	<!-- Uncomment this style and change to your style name -->
+	<mx:Style source="/assets/styles/template/template.css"/>
+	
+	<mate:Listener type="{DesignEvent.APPLY}" method="applyDesign"/>
+	<maps:EventMap />
+</mx:Application>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobSearchCriteria" table="JOB_SEARCH_CRITERIA">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_SEARCH_CRITERIA_ID_SEQ</param>
+      </generator>
+    </id>
+    <property name="loginName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="LOGIN_NAME" length="128" />
+    </property>    
+    <property name="searchName" type="string">
+      <meta attribute="scope-field">@NotBlank</meta> 
+      <column name="SEARCH_NAME" not-null="true" sql-type="nvarchar2(50)"/>
+    </property>
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" />
+    </property>
+    <property name="branchCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="BRANCH_CODE" length="50" />
+    </property>
+    <property name="jobLogStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="JOB_LOG_STATUS" length="50" />
+    </property>
+    <property name="jobType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="JOB_TYPE" length="50" />
+    </property>
+    <property name="fromJobId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="FROM_JOB_ID" length="50" />
+    </property>
+    <property name="toJobId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="TO_JOB_ID" length="50" />
+    </property>
+    <property name="fromJobFinishDate" type="timestamp">
+      <column name="FROM_JOB_FINISH_DATE" sql-type="date" />
+    </property>
+    <property name="toJobFinishDate" type="timestamp">
+      <column name="TO_JOB_FINISH_DATE" sql-type="date" />
+    </property>
+    <property name="fromETA" type="timestamp">
+      <column name="FROM_ETA" sql-type="date"/>
+    </property>    
+    <property name="toETA" type="timestamp">
+      <column name="TO_ETA" sql-type="date"/>
+    </property>
+    <property name="fromNomDate" type="timestamp">
+      <column name="FROM_NOM_DATE" sql-type="date"/>
+    </property>    
+    <property name="toNomDate" type="timestamp">
+      <column name="TO_NOM_DATE" sql-type="date"/>
+    </property>    
+    <property name="vesselOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="VESSEL_OPERATOR" length="50" />
+    </property>    
+    <property name="vessel" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="VESSEL" length="50" />
+    </property>    
+    <property name="productOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="PRODUCT_OPERATOR" length="50" />
+    </property>    
+    <property name="product" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="PRODUCT" length="50" />
+    </property>    
+    <property name="custRefNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CUST_REF_NUM" length="50" />
+    </property>    
+    <property name="icbRefNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="ICB_REF_NUM" length="50" />
+    </property>    
+    <property name="invoice" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="INVOICE" length="50" />
+    </property>    
+    <property name="invoiceStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="INVOICE_STATUS" length="50" />
+    </property>    
+    <property name="contractDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CONTRACT_DESCRIPTION" length="50" />
+    </property>    
+    <property name="contractIdOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CONTRACT_ID_OPERATOR" length="50" />
+    </property>    
+    <property name="contractId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CONTRACT_ID" length="50" />
+    </property>    
+    <property name="createdBy" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CREATED_BY" length="50" />
+    </property>    
+    <property name="modifiedBy" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="MODIFIED_BY" length="50" />
+    </property>    
+    <property name="portOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="PORT_OPERATOR" length="50" />
+    </property>    
+    <property name="port" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="PORT" length="50" />
+    </property>    
+    <property name="serviceLocationOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SERVICE_LOCATION_OPERATOR" length="50" />
+    </property>    
+    <property name="serviceLocation" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SERVICE_LOCATION" length="50" />
+    </property>    
+    <property name="companyIdOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="COMPANY_ID_OPERATOR" length="50" />
+    </property>    
+    <property name="companyId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="COMPANY_ID" length="50" />
+    </property>    
+    <property name="companyOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="COMPANY_OPERATOR" length="50" />
+    </property>    
+    <property name="company" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="COMPANY" length="50" />
+    </property>    
+    <property name="contactIdOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="CONTACT_ID_OPERATOR" length="50" />
+    </property>    
+    <property name="contactId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="contactId" length="50" />
+    </property>    
+    <property name="billingContactOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="BILLING_CONTACT_OPERATOR" length="50" />
+    </property>    
+    <property name="billingContact" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="BILLING_CONTACT" length="50" />
+    </property>    
+    <property name="schedulerIdOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SCHEDULER_ID_OPERATOR" length="50" />
+    </property>    
+    <property name="schedulerId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SCHEDULER_ID" length="50" />
+    </property>    
+    <property name="schedulerOperator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SCHEDULER_OPERATOR" length="50" />
+    </property>    
+    <property name="scheduler" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="SCHEDULER" length="50" />
+    </property>    
+  </class>
+</hibernate-mapping>
+

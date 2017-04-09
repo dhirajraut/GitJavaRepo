@@ -1,0 +1,50 @@
+package dao;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import model.Login;
+
+public class LoginDaoImpl implements LoginDao {
+
+	public boolean checkLogin(Login l) {
+		
+		
+		java.sql.Connection con;
+		String dbname="test";
+	boolean flag= false;
+	try {
+			
+		System.out.println("I am In Dao");
+		String dbUrl="jdbc:mysql://localhost/";
+		Class.forName("com.mysql.jdbc.Driver");
+		con = DriverManager.getConnection(dbUrl + dbname,"","");
+		StringBuffer str = new StringBuffer();
+		str.append("Select * from tb_login");
+       						
+		java.sql.PreparedStatement pstmt = con.prepareStatement(str.toString());
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			if((rs.getString(1).equals(l.getName()))&& (rs.getString(2).equals(l.getPassword()))){
+				flag=true;
+				break;
+			}
+				
+		}
+		
+	}
+	catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+		return flag;
+	
+	}
+}

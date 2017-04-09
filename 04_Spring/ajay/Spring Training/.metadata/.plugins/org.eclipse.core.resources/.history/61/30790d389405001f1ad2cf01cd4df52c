@@ -1,0 +1,11 @@
+package beanpack;
+
+public class Current extends Account {
+
+	@Override
+	public void withdraw() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

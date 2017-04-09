@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Test" table="PS_ITSC_TEST">
+    <id name="testId" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=96) private</meta>
+      <column name="TEST_ID" length="96" />
+    </id>
+    <property name="rbKey" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=450) private</meta>
+      <column name="RB_KEY" length="450" />
+    </property>
+    <property name="testDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_TEST_DESCR" length="762" />
+    </property>
+    <property name="methodNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_METHOD_NUM" length="96" />
+    </property>
+    <property name="methodTitle" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_METHOD_TITLE" length="762" />
+    </property>
+    <property name="busStream" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_BUS_STREAM" length="96" />
+    </property>
+    <property name="linkedMethod" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_LINKED_METHOD" length="96" />
+    </property>
+    <property name="methodPbNote" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_METHOD_PB_NOTE" length="762" />
+    </property>
+    <property name="techRemarks" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_TECH_REMARKS" length="762" />
+    </property>
+    <property name="equivMethod" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=96) private</meta>
+      <column name="ITS_EQUIV_METHOD" length="96" />
+    </property>
+    <property name="billingGuideLine" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_BILL_GUIDELINE" length="762" />
+    </property>
+    <property name="testCategory" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_TEST_CATEGORY" length="12" />
+    </property>
+    <property name="testStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_TEST_STATUS" length="12" />
+    </property>
+    <property name="sdo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_SDO" length="12" />
+    </property>
+    <property name="technique" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="ITS_TECHNIQUE" length="12" />
+    </property>
+    <property name="searchText254" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="SEARCH_TEXT_254" length="762" />
+    </property>
+    <property name="notes254" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="NOTES_254" length="762" />
+    </property>
+    <property name="pbDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=762) private</meta>
+      <column name="ITS_PB_DESC" length="762" />
+    </property>
+  </class>
+</hibernate-mapping>
+

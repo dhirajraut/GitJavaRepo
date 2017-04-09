@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ExpressionGLCode" table="PS_ITSC_EXP_GLCODE">
+    <composite-id name="expressionGLCodeId" class="ExpressionGLCodeId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="nominationType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="NOMINATION_TYPE" length="45" />
+      </key-property>
+    </composite-id>
+    <property name="GLCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="GL_CODE" length="45" />
+    </property>
+    <property name="useProdFlag" type="java.lang.Integer">
+      <column name="USEPROD_FLAG" sql-type="NUMBER" />
+    </property>
+    <property name="noProdCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="NOPROD_CODE" length="45" />
+    </property>
+  </class>
+</hibernate-mapping>
+

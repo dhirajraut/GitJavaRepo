@@ -1,0 +1,25 @@
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import servicepack.IBankService;
+
+import beanpack.AccountPojo;
+
+
+public class TestAOP {
+public static void main(String[] args) {
+	
+	ApplicationContext context=new ClassPathXmlApplicationContext("BankService.xml");
+	AccountPojo acct=(AccountPojo) context.getBean("accObjFrom");
+	AccountPojo acct2=(AccountPojo) context.getBean("accObjTo");
+	System.out.println(acct.getAcctId());
+	System.out.println(acct2.getBalance());
+	
+	IBankService bObj=(IBankService) context.getBean("serObj");
+	System.out.println(acct.getBalance());
+	bObj.deposit(acct, 2000);
+	bObj.withdraw(acct, 5000);
+	System.out.println(acct.getBalance());
+	
+}
+}

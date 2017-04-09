@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Contact" table="CONTACTS">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="CONTACT_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">CONTACT_SEQ</param>
+      </generator>
+    </id>
+    <property name="finContactId" type="long">
+      <column name="FIN_CONTACT_ID" sql-type="NUMBER" />
+    </property>
+    <property name="firstName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="FIRST_NAME" length="128" not-null="true" />
+    </property>
+    <property name="lastName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="LAST_NAME" length="128" not-null="true" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="title" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="TITLE" length="32" />
+    </property>
+    <property name="fax" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="FAX" length="30" />
+    </property>
+    <property name="workEmail" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="WORK_EMAIL" length="70" />
+    </property>
+    <property name="personalEmail" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="PERSONAL_EMAIL" length="70" />
+    </property>
+    <property name="workPhone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="WORK_PHONE" length="64" />
+    </property>
+    <property name="personalPhone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="PERSONAL_PHONE" length="64" />
+    </property>
+    <property name="cellPhone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="CELL_PHONE" length="64" />
+    </property>
+    <property name="salutationCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="SALUTATION_CD" length="8" />
+    </property>
+    <property name="contactFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="CONTACT_FLAG" length="8" />
+    </property>
+    <property name="prefCommunication" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="PREF_COMMUNICATION" length="8" />
+    </property>
+    <property name="newFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="NEW_FLAG" length="8" />
+    </property>
+    <property name="updateFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="UPDATE_FLAG" length="8" />
+    </property>
+    <property name="updateLimsFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="UPDATE_LIMS_FLAG" length="8" />
+    </property>
+    <property name="createdTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="creByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATED_BY" length="128" />
+    </property>
+    <property name="updatedTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="modByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="UPDATED_BY" length="128" />
+    </property>
+    
+    <set name="contactCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CONTACT_ID" />
+      <one-to-many class="ContactCust" />
+    </set>
+  </class>
+</hibernate-mapping>
+

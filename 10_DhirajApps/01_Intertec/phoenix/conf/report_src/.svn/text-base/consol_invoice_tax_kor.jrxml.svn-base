@@ -1,0 +1,2792 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="consol_invoice_tax_kor"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="595"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="29"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false"
+		 resourceBundle="jasperRes">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BuName" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CustCode" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ConsolInvoice" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="serialNumber" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT  
+        civ.CONSL_INV_BU_NAME AS "CONS_BU_NAME",
+        civ.CUST_CODE,
+        civ.CONSOL_INVOICE,
+        civ.INVOICE_DT,
+	jci.TRANSACT_CURRENCY_CD, 
+        civ.CONSL_INV_AMT_PRE_TAX,
+        civ.CONSL_INV_AMT_POST_TAX,
+        (civ.CONSL_INV_AMT_POST_TAX - civ.CONSL_INV_AMT_PRE_TAX) AS "TAX AMOUNT",
+        jci.VAT_REGISTRATION_ID,
+        jci.BU_VAT_REGISTRATION_ID AS "SELLER VAT REG ID",
+	bl.COMPANY_DESC AS "BRANCH CO DESC", 
+	bl.ADDRESS1 AS "BRANCH ADD1",
+	bl.ADDRESS2 AS "BRANCH ADD2",
+	bl.ADDRESS3 AS "BRANCH ADD3",
+	bl.ADDRESS4 AS "BRANCH ADD4",
+	bl.CITY AS "BRANCH CITY",
+	bl.COUNTY AS "BRANCH COUNTY",
+	bl.POSTAL AS "BRANCH POSTAL",
+        bul.address1, 
+        bul.address2, 
+        bul.address3, 
+        bul.address4, 
+        bul.business_item AS "BU BUSINESS ITEM", 
+        bul.business_type AS "BU BUSINESS TYPE", 
+        bul.city, 
+        bul.company_desc, 
+        bul.county,
+        bul.postal AS "BU POSTAL",
+        bul.REP_DIRECTOR AS "BU DIRECTOR",
+        cl.NAME AS "CU NAME",
+        cl.REP_DIRECTOR,
+        cl.BUSINESS_TYPE AS "CU BUSINESS TYPE",
+        cl.BUSINESS_ITEM AS "CU BUSINESS ITEM",
+        cal.ADDRESS1 AS "CU ADD1",
+        cal.ADDRESS2 AS "CU ADD2",
+        cal.ADDRESS3 AS "CU ADD3",
+        cal.ADDRESS4 AS "CU ADD4",
+        cal.CITY AS "CU CITY",
+        cal.COUNTY AS "CU COUNTY",
+        cal.POSTAL AS "CU POSTAL",
+	cal.REP_DIRECTOR AS "CUADDR REP_DIRECTOR",
+        cal.BUSINESS_ITEM AS "CUADDR BUSINESS_ITEM",
+        cal.BUSINESS_TYPE AS "CUADDR BUSINESS_TYPE",
+	(select MIN(JOB_NUMBER) from PHOENIX.CONSOL_INV_VW civ
+         where civ.consl_inv_bu_name = $P{BuName}
+		AND civ.cust_code = $P{CustCode}
+		AND civ.consol_invoice = $P{ConsolInvoice}) as "JOB ID",
+         bu.CURRENCY_BASE AS "TO_CURRENCY",
+         rt.RATE_MULT,
+         rt.RATE_DIV,
+	 jc.OVERRIDE_CURR_RATE
+FROM 
+		PHOENIX.JOB_CONTRACTS jc, 
+		PHOENIX.JOB_CONTRACT_INVOICE jci, 
+		PHOENIX.JOB_ORDERS jo, 
+		PHOENIX.BUSINESS_UNITS_LANG bul, 
+		PHOENIX.CUSTOMERS_LANG cl, 
+		PHOENIX.CUST_ADDRESSES ca, 
+		PHOENIX.BUSINESS_UNITS bu,
+		PHOENIX.CUST_ADDRESSES_LANG cal, 
+		PHOENIX.CONSOL_INV_VW civ,
+		PHOENIX.BRANCHES_LANG bl,
+                PHOENIX.PS_RT_RATE_TBL rt
+
+WHERE 
+		civ.CONSOL_INVOICE = jci.CONSOL_INVOICE
+		AND civ.INVOICE = jci.INVOICE
+		AND jci.JOB_CONTRACT_ID = jc.JOB_CONTRACT_ID
+		AND jc.JOB_NUMBER = jo.JOB_NUMBER
+		AND civ.CONSL_INV_BU_NAME = bu.BU_NAME
+		AND civ.CONSL_INV_BU_NAME = bul.BU_NAME
+		AND bl.BRANCH_NAME = (SELECT MAX(b.VAT_BRANCH_NAME) 
+                                      FROM PHOENIX.BRANCHES b
+                                      WHERE b.STATE_CODE = civ.VAT_PROVINCE)
+		AND civ.CUST_CODE = cl.CUST_CODE
+		AND bl.LANGUAGE_CD = 'KOR'
+		AND cl.LANGUAGE_CD = 'KOR'
+		AND bul.LANGUAGE_CD = 'KOR'
+		AND cal.LANGUAGE_CD = 'KOR'
+		AND civ.CUST_CODE = ca.CUST_CODE
+		AND civ.LOCATION_NUMBER = ca.LOCATION_NUMBER
+		AND ca.EFF_DATE = (SELECT MAX(CA_ED.EFF_DATE) FROM PHOENIX.CUST_ADDRESSES CA_ED
+                        WHERE ca.CUST_ADDRESS_ID = CA_ED.CUST_ADDRESS_ID
+                          AND ca.EFF_DATE = CA_ED.EFF_DATE)
+		AND ca.CUST_ADDRESS_ID = cal.CUST_ADDRESS_ID
+		AND jci.TRANSACT_CURRENCY_CD = rt.FROM_CUR
+                AND bu.CURRENCY_BASE = rt.TO_CUR
+                AND rt.RT_TYPE = 'CRRNT'
+                AND rt.EFFDT = (SELECT MAX(RT_ED.EFFDT) FROM PHOENIX.PS_RT_RATE_TBL RT_ED
+                        WHERE RT.RT_RATE_INDEX = RT_ED.RT_RATE_INDEX
+                          AND RT.TERM = RT_ED.TERM
+                          AND RT.FROM_CUR = RT_ED.FROM_CUR
+                          AND RT.TO_CUR = RT_ED.TO_CUR
+                          AND RT.RT_TYPE = RT_ED.RT_TYPE
+                          AND RT_ED.EFFDT <=  jci.JOB_FINISH_DATE)
+		AND civ.consl_inv_bu_name = $P{BuName}
+		AND civ.cust_code = $P{CustCode}
+		AND civ.consol_invoice = $P{ConsolInvoice}
+GROUP BY
+        civ.CONSL_INV_BU_NAME ,
+        civ.CUST_CODE,
+        civ.CONSOL_INVOICE,
+        civ.INVOICE_DT,
+	jci.TRANSACT_CURRENCY_CD, 
+        civ.CONSL_INV_AMT_PRE_TAX,
+        civ.CONSL_INV_AMT_POST_TAX,
+        (civ.CONSL_INV_AMT_POST_TAX - civ.CONSL_INV_AMT_PRE_TAX),
+        jci.VAT_REGISTRATION_ID,
+        jci.BU_VAT_REGISTRATION_ID,
+	bl.COMPANY_DESC, 
+	bl.ADDRESS1,
+	bl.ADDRESS2,
+	bl.ADDRESS3,
+	bl.ADDRESS4,
+	bl.CITY,
+	bl.COUNTY,
+	bl.POSTAL,
+        bul.address1, 
+        bul.address2, 
+        bul.address3, 
+        bul.address4, 
+        bul.business_item, 
+        bul.business_type, 
+        bul.city, 
+        bul.company_desc, 
+        bul.county,
+        bul.postal,
+        bul.REP_DIRECTOR,
+        cl.NAME,
+        cl.REP_DIRECTOR,
+        cl.BUSINESS_TYPE,
+        cl.BUSINESS_ITEM,
+        cal.ADDRESS1,
+        cal.ADDRESS2,
+        cal.ADDRESS3,
+        cal.ADDRESS4,
+        cal.CITY,
+        cal.COUNTY,
+        cal.POSTAL,
+	cal.REP_DIRECTOR,
+        cal.BUSINESS_ITEM,
+        cal.BUSINESS_TYPE,
+         bu.CURRENCY_BASE,
+         rt.RATE_MULT,
+         rt.RATE_DIV,
+	 jc.OVERRIDE_CURR_RATE]]></queryString>
+
+	<field name="CONS_BU_NAME" class="java.lang.String"/>
+	<field name="CUST_CODE" class="java.lang.String"/>
+	<field name="CONSOL_INVOICE" class="java.lang.String"/>
+	<field name="INVOICE_DT" class="java.sql.Timestamp"/>
+	<field name="TRANSACT_CURRENCY_CD" class="java.lang.String"/>
+	<field name="CONSL_INV_AMT_PRE_TAX" class="java.math.BigDecimal"/>
+	<field name="CONSL_INV_AMT_POST_TAX" class="java.math.BigDecimal"/>
+	<field name="TAX AMOUNT" class="java.math.BigDecimal"/>
+	<field name="VAT_REGISTRATION_ID" class="java.lang.String"/>
+	<field name="SELLER VAT REG ID" class="java.lang.String"/>
+	<field name="BRANCH CO DESC" class="java.lang.String"/>
+	<field name="BRANCH ADD1" class="java.lang.String"/>
+	<field name="BRANCH ADD2" class="java.lang.String"/>
+	<field name="BRANCH ADD3" class="java.lang.String"/>
+	<field name="BRANCH ADD4" class="java.lang.String"/>
+	<field name="BRANCH CITY" class="java.lang.String"/>
+	<field name="BRANCH COUNTY" class="java.lang.String"/>
+	<field name="BRANCH POSTAL" class="java.lang.String"/>
+	<field name="ADDRESS1" class="java.lang.String"/>
+	<field name="ADDRESS2" class="java.lang.String"/>
+	<field name="ADDRESS3" class="java.lang.String"/>
+	<field name="ADDRESS4" class="java.lang.String"/>
+	<field name="BU BUSINESS ITEM" class="java.lang.String"/>
+	<field name="BU BUSINESS TYPE" class="java.lang.String"/>
+	<field name="CITY" class="java.lang.String"/>
+	<field name="COMPANY_DESC" class="java.lang.String"/>
+	<field name="COUNTY" class="java.lang.String"/>
+	<field name="BU POSTAL" class="java.lang.String"/>
+	<field name="BU DIRECTOR" class="java.lang.String"/>
+	<field name="CU NAME" class="java.lang.String"/>
+	<field name="REP_DIRECTOR" class="java.lang.String"/>
+	<field name="CU BUSINESS TYPE" class="java.lang.String"/>
+	<field name="CU BUSINESS ITEM" class="java.lang.String"/>
+	<field name="CU ADD1" class="java.lang.String"/>
+	<field name="CU ADD2" class="java.lang.String"/>
+	<field name="CU ADD3" class="java.lang.String"/>
+	<field name="CU ADD4" class="java.lang.String"/>
+	<field name="CU CITY" class="java.lang.String"/>
+	<field name="CU COUNTY" class="java.lang.String"/>
+	<field name="CU POSTAL" class="java.lang.String"/>
+	<field name="CUADDR REP_DIRECTOR" class="java.lang.String"/>
+	<field name="CUADDR BUSINESS_ITEM" class="java.lang.String"/>
+	<field name="CUADDR BUSINESS_TYPE" class="java.lang.String"/>
+	<field name="JOB ID" class="java.lang.String"/>
+	<field name="TO_CURRENCY" class="java.lang.String"/>
+	<field name="RATE_MULT" class="java.math.BigDecimal"/>
+	<field name="RATE_DIV" class="java.math.BigDecimal"/>
+	<field name="OVERRIDE_CURR_RATE" class="java.math.BigDecimal"/>
+
+	<variable name="Total" class="java.math.BigDecimal" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? $F{CONSL_INV_AMT_POST_TAX} :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).add( new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) ) : 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).add( new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue())) ))]]></variableExpression>
+	</variable>
+	<variable name="Spaces" class="java.lang.Long" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new java.lang.Long((11-(new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()).setScale(0,4).longValue()+"").length())) :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new java.lang.Long((11-(new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4).longValue()+"").length())) : 
+new java.lang.Long((11-(new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4).longValue()+"").length())) ))]]></variableExpression>
+	</variable>
+	<variable name="INV_AMT_SPACE" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") : 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") ))]]></variableExpression>
+	</variable>
+	<variable name="VAT_AMT_SPACE" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") : 
+new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4).toString().replaceAll("(.)", "$1  ") ))]]></variableExpression>
+	</variable>
+	<variable name="CurrencyEquivalen_Inv_Amt" class="java.math.BigDecimal" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()) :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new BigDecimal($F{CONSL_INV_AMT_PRE_TAX}.setScale(2,4).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()) ))]]></variableExpression>
+	</variable>
+	<variable name="CurrencyEquivalen_Vat_Amt" class="java.math.BigDecimal" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()) :  
+( ($F{OVERRIDE_CURR_RATE} == null) ? 
+new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new BigDecimal($F{TAX AMOUNT}.setScale(0,1).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()) ))]]></variableExpression>
+	</variable>
+		<background>
+			<band height="390"  isSplitAllowed="true" >
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="279"
+						y="102"
+						width="61"
+						height="52"
+						key="image-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{dirName} + "division_ingam.gif"]]></imageExpression>
+				</image>
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="813"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Transparent"
+						x="26"
+						y="446"
+						width="535"
+						height="330"
+						forecolor="#0000FF"
+						key="rectangle-2"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</rectangle>
+				<rectangle>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="46"
+						width="535"
+						height="330"
+						forecolor="#FF0000"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="295"
+						y="91"
+						width="23"
+						height="120"
+						key="staticText-38"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-V"/>
+					</textElement>
+				<text><![CDATA[공
+급
+받
+는
+자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="91"
+						width="24"
+						height="120"
+						key="staticText-25"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-V"/>
+					</textElement>
+				<text><![CDATA[공
+
+급
+
+자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="331"
+						width="75"
+						height="15"
+						key="staticText-64"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[합 계 금 액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="101"
+						y="331"
+						width="71"
+						height="15"
+						key="staticText-65"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[현     금]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="171"
+						y="331"
+						width="74"
+						height="15"
+						key="staticText-66"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[수     표]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="331"
+						width="75"
+						height="15"
+						key="staticText-67"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[외 상 미 수 금]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="245"
+						y="331"
+						width="73"
+						height="15"
+						key="staticText-68"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[어     음]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="331"
+						width="48"
+						height="15"
+						key="staticText-69"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[취급자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="346"
+						width="48"
+						height="30"
+						key="staticText-70"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="101"
+						y="346"
+						width="71"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-72"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="171"
+						y="346"
+						width="74"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-73"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="245"
+						y="346"
+						width="73"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-75"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="91"
+						width="32"
+						height="30"
+						key="staticText-13"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[등 록 
+번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="121"
+						width="32"
+						height="30"
+						key="staticText-14"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[상호
+(법인명)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="151"
+						width="32"
+						height="30"
+						key="staticText-15"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[사업장
+주소]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="181"
+						width="32"
+						height="30"
+						key="staticText-16"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[업 태]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="121"
+						width="115"
+						height="30"
+						key="textField-17"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COMPANY_DESC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="151"
+						width="212"
+						height="30"
+						key="textField-20"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((($F{BRANCH ADD1} == null) || (($F{BRANCH ADD1}.trim()).isEmpty()))&&
+(($F{BRANCH ADD2} == null) || (($F{BRANCH ADD2}.trim()).isEmpty()))&&
+(($F{BRANCH ADD3} == null) || (($F{BRANCH ADD3}.trim()).isEmpty()))&&
+(($F{BRANCH ADD4} == null) || (($F{BRANCH ADD4}.trim()).isEmpty())))
+?
+( (($F{ADDRESS1} == null) || ($F{ADDRESS1}.trim()).isEmpty()) ? "" : $F{ADDRESS1}+" ")
++ ( (($F{ADDRESS2} == null) || ($F{ADDRESS2}.trim()).isEmpty()) ? "" : $F{ADDRESS2}+" ") 
++ ( (($F{ADDRESS3} == null) || ($F{ADDRESS3}.trim()).isEmpty()) ? "" : $F{ADDRESS3}+" ")
++ ( (($F{ADDRESS4} == null) || ($F{ADDRESS4}.trim()).isEmpty()) ? "" : $F{ADDRESS4}+" ")
++ ( (($F{CITY} == null) || ($F{CITY}.trim()).isEmpty()) ? "" : $F{CITY}+" ") 
++ ( (($F{BU POSTAL} == null) || ($F{BU POSTAL}.trim()).isEmpty()) ? "" : $F{BU POSTAL})
++ ( (($F{COUNTY} == null) || ($F{COUNTY}.trim()).isEmpty()) ? "" : 
+     " " + $F{COUNTY})
+:
+(( (($F{BRANCH ADD1} == null) || ($F{BRANCH ADD1}.trim()).isEmpty()) ? "" : $F{BRANCH ADD1} +" " )
++ ( (($F{BRANCH ADD2} == null) || ($F{BRANCH ADD2}.trim()).isEmpty()) ? "" : $F{BRANCH ADD2} +" ") 
++ ( (($F{BRANCH ADD3} == null) || ($F{BRANCH ADD3}.trim()).isEmpty()) ? "" : $F{BRANCH ADD3} +" ")
++ ( (($F{BRANCH ADD4} == null) || ($F{BRANCH ADD4}.trim()).isEmpty()) ? "" : $F{BRANCH ADD4} +" ")
++ ( (($F{BRANCH CITY} == null) || ($F{BRANCH CITY}.trim()).isEmpty()) ? "" : $F{BRANCH CITY} +" ") 
++ ( (($F{BRANCH POSTAL} == null) || ($F{BRANCH POSTAL}.trim()).isEmpty()) ? "" : $F{BRANCH POSTAL} +" ")
++ ( (($F{BRANCH COUNTY} == null) || ($F{BRANCH COUNTY}.trim()).isEmpty()) ? "" : $F{BRANCH COUNTY} +" "))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="198"
+						y="121"
+						width="32"
+						height="30"
+						key="staticText-21"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[성  명]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="172"
+						y="181"
+						width="25"
+						height="30"
+						key="staticText-22"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[종 목]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="230"
+						y="121"
+						width="65"
+						height="30"
+						key="textField-18"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU DIRECTOR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="91"
+						width="32"
+						height="30"
+						key="staticText-26"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[등 록
+번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="121"
+						width="32"
+						height="30"
+						key="staticText-27"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[상호
+(법인명)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="151"
+						width="32"
+						height="30"
+						key="staticText-28"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[사업장
+주소]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="181"
+						width="32"
+						height="30"
+						key="staticText-29"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[업 태]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="121"
+						width="139"
+						height="30"
+						key="textField-19"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CU NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="151"
+						width="212"
+						height="30"
+						key="textField-22"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[( (($F{CU ADD1} == null) || ($F{CU ADD1}.trim()).isEmpty()) ? "" : $F{CU ADD1}+" ")
++ ( (($F{CU ADD2} == null) || ($F{CU ADD2}.trim()).isEmpty()) ? "" : $F{CU ADD2}+" ") 
++ ( (($F{CU ADD3} == null) || ($F{CU ADD3}.trim()).isEmpty()) ? "" : $F{CU ADD3}+" ")
++ ( (($F{CU ADD4} == null) || ($F{CU ADD4}.trim()).isEmpty()) ? "" : $F{CU ADD4}+" ")
++ ( (($F{CU CITY} == null) || ($F{CU CITY}.trim()).isEmpty()) ? "" : $F{CU CITY}+" ") 
++ ( (($F{CU POSTAL} == null) || ($F{CU POSTAL}.trim()).isEmpty()) ? "" : $F{CU POSTAL})
++ ( (($F{CU COUNTY} == null) || ($F{CU COUNTY}.trim()).isEmpty()) ? "" : 
+     " " + $F{CU COUNTY})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="181"
+						width="90"
+						height="30"
+						key="textField-15"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR BUSINESS_TYPE} == null) || ($F{CUADDR BUSINESS_TYPE}.trim()).isEmpty()) ? 
+$F{CU BUSINESS TYPE} : $F{CUADDR BUSINESS_TYPE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="489"
+						y="121"
+						width="26"
+						height="30"
+						key="staticText-34"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[성  명]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="440"
+						y="181"
+						width="27"
+						height="30"
+						key="staticText-35"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[종 목]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="467"
+						y="181"
+						width="95"
+						height="30"
+						key="textField-16"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR BUSINESS_ITEM} == null) || ($F{CUADDR BUSINESS_ITEM}.trim()).isEmpty()) ? 
+$F{CU BUSINESS ITEM} : $F{CUADDR BUSINESS_ITEM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="121"
+						width="48"
+						height="30"
+						key="textField-21"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR REP_DIRECTOR} == null) || ($F{CUADDR REP_DIRECTOR}.trim()).isEmpty()) ? 
+$F{REP_DIRECTOR} : $F{CUADDR REP_DIRECTOR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="211"
+						width="84"
+						height="15"
+						key="staticText-39"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[작성]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="211"
+						width="145"
+						height="15"
+						key="staticText-40"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공     급     가     액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="211"
+						width="105"
+						height="15"
+						key="staticText-41"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세             액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="360"
+						y="211"
+						width="202"
+						height="15"
+						key="staticText-42"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[비                     고]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="226"
+						width="43"
+						height="15"
+						key="staticText-43"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[년]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="226"
+						width="21"
+						height="15"
+						key="staticText-44"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[월]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="226"
+						width="21"
+						height="15"
+						key="staticText-45"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="226"
+						width="26"
+						height="15"
+						key="staticText-46"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공란수]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="137"
+						y="226"
+						width="119"
+						height="15"
+						key="staticText-47"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[백 십 억 천 백 십 만 천 백 십 일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="226"
+						width="105"
+						height="15"
+						key="staticText-48"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[십 억 천 백 십 만 천 백 십 일]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="241"
+						width="26"
+						height="15"
+						key="textField-26"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Long"><![CDATA[$V{Spaces}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="137"
+						y="241"
+						width="119"
+						height="15"
+						key="textField-24"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="2" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{INV_AMT_SPACE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="241"
+						width="105"
+						height="15"
+						key="textField-25"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="2" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{VAT_AMT_SPACE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="27"
+						y="27"
+						width="219"
+						height="15"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="None" bottomBorderColor="#FF0000"/>
+					<textElement>
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[[별지제11호서식]]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="382"
+						y="50"
+						width="54"
+						height="15"
+						key="staticText-7"/>
+					<box topBorder="None" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="None" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[Inv. No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="382"
+						y="67"
+						width="54"
+						height="15"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="None" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일 련 번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="50"
+						width="131"
+						height="36"
+						key="staticText-9"/>
+					<box topBorder="None" topBorderColor="#FF0000" leftBorder="None" leftBorderColor="#FF0000" rightBorder="None" rightBorderColor="#FF0000" bottomBorder="None" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="18" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세금계산서]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="439"
+						y="50"
+						width="111"
+						height="15"
+						key="textField-23"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CONSOL_INVOICE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="439"
+						y="67"
+						width="111"
+						height="15"
+						key="textField-59"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{serialNumber}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="256"
+						width="22"
+						height="15"
+						key="staticText-56"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[월]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="256"
+						width="133"
+						height="15"
+						key="staticText-57"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[품              목]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="203"
+						y="256"
+						width="43"
+						height="15"
+						key="staticText-58"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[규 격]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="246"
+						y="256"
+						width="43"
+						height="15"
+						key="staticText-59"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[수 량]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="289"
+						y="256"
+						width="42"
+						height="15"
+						key="staticText-60"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[단 가]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="331"
+						y="256"
+						width="91"
+						height="15"
+						key="staticText-61"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공 급 가 액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="422"
+						y="256"
+						width="92"
+						height="15"
+						key="staticText-62"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세  액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="256"
+						width="48"
+						height="15"
+						key="staticText-63"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[비   고]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="203"
+						y="271"
+						width="43"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-78"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="246"
+						y="271"
+						width="43"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-79"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="289"
+						y="271"
+						width="42"
+						height="60"
+						key="staticText-80"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="271"
+						width="48"
+						height="60"
+						backcolor="#FFFFFF"
+						key="staticText-83"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="91"
+						width="212"
+						height="30"
+						key="textField-1"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SELLER VAT REG ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="91"
+						width="212"
+						height="30"
+						key="textField-2"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VAT_REGISTRATION_ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="241"
+						width="43"
+						height="15"
+						key="textField-3"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getYear() + 1900)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="241"
+						width="21"
+						height="15"
+						key="textField-4"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getMonth() + 1)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="241"
+						width="21"
+						height="15"
+						key="textField-5"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getDate())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="271"
+						width="22"
+						height="60"
+						key="textField-6"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getMonth() + 1)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="49"
+						y="271"
+						width="21"
+						height="60"
+						key="textField-7"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getDate())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="331"
+						y="271"
+						width="91"
+						height="60"
+						key="textField-8"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="3" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{CurrencyEquivalen_Inv_Amt}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="422"
+						y="271"
+						width="92"
+						height="60"
+						key="textField-9"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="3" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{CurrencyEquivalen_Vat_Amt}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="346"
+						width="75"
+						height="30"
+						key="textField-10"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="3" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Total}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="181"
+						width="89"
+						height="30"
+						key="textField-12"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU BUSINESS TYPE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="197"
+						y="181"
+						width="98"
+						height="30"
+						key="textField-13"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU BUSINESS ITEM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="346"
+						width="75"
+						height="30"
+						key="textField-28"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" rightPadding="3" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Total}]]></textFieldExpression>
+				</textField>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="477"
+						y="2"
+						width="85"
+						height="40"
+						key="image-1"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{dirName} + "intertek.gif"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="295"
+						y="491"
+						width="23"
+						height="120"
+						key="staticText-84"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-V"/>
+					</textElement>
+				<text><![CDATA[공
+급
+받
+는
+자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="491"
+						width="24"
+						height="120"
+						key="staticText-85"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-V"/>
+					</textElement>
+				<text><![CDATA[공
+
+급
+
+자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="491"
+						width="32"
+						height="30"
+						key="staticText-86"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[등 록 
+번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="521"
+						width="32"
+						height="30"
+						key="staticText-87"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[상호
+(법인명)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="551"
+						width="32"
+						height="30"
+						key="staticText-88"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[사업장
+주소]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="51"
+						y="581"
+						width="32"
+						height="30"
+						key="staticText-89"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[업 태]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="521"
+						width="115"
+						height="30"
+						key="textField-29"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COMPANY_DESC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="551"
+						width="212"
+						height="30"
+						key="textField-30"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((($F{BRANCH ADD1} == null) || (($F{BRANCH ADD1}.trim()).isEmpty()))&&
+(($F{BRANCH ADD2} == null) || (($F{BRANCH ADD2}.trim()).isEmpty()))&&
+(($F{BRANCH ADD3} == null) || (($F{BRANCH ADD3}.trim()).isEmpty()))&&
+(($F{BRANCH ADD4} == null) || (($F{BRANCH ADD4}.trim()).isEmpty())))
+?
+( (($F{ADDRESS1} == null) || ($F{ADDRESS1}.trim()).isEmpty()) ? "" : $F{ADDRESS1}+" ")
++ ( (($F{ADDRESS2} == null) || ($F{ADDRESS2}.trim()).isEmpty()) ? "" : $F{ADDRESS2}+" ") 
++ ( (($F{ADDRESS3} == null) || ($F{ADDRESS3}.trim()).isEmpty()) ? "" : $F{ADDRESS3}+" ")
++ ( (($F{ADDRESS4} == null) || ($F{ADDRESS4}.trim()).isEmpty()) ? "" : $F{ADDRESS4}+" ")
++ ( (($F{CITY} == null) || ($F{CITY}.trim()).isEmpty()) ? "" : $F{CITY}+" ") 
++ ( (($F{BU POSTAL} == null) || ($F{BU POSTAL}.trim()).isEmpty()) ? "" : $F{BU POSTAL})
++ ( (($F{COUNTY} == null) || ($F{COUNTY}.trim()).isEmpty()) ? "" : 
+     " " + $F{COUNTY})
+:
+(( (($F{BRANCH ADD1} == null) || ($F{BRANCH ADD1}.trim()).isEmpty()) ? "" : $F{BRANCH ADD1} +" " )
++ ( (($F{BRANCH ADD2} == null) || ($F{BRANCH ADD2}.trim()).isEmpty()) ? "" : $F{BRANCH ADD2} +" ") 
++ ( (($F{BRANCH ADD3} == null) || ($F{BRANCH ADD3}.trim()).isEmpty()) ? "" : $F{BRANCH ADD3} +" ")
++ ( (($F{BRANCH ADD4} == null) || ($F{BRANCH ADD4}.trim()).isEmpty()) ? "" : $F{BRANCH ADD4} +" ")
++ ( (($F{BRANCH CITY} == null) || ($F{BRANCH CITY}.trim()).isEmpty()) ? "" : $F{BRANCH CITY} +" ") 
++ ( (($F{BRANCH POSTAL} == null) || ($F{BRANCH POSTAL}.trim()).isEmpty()) ? "" : $F{BRANCH POSTAL} +" ")
++ ( (($F{BRANCH COUNTY} == null) || ($F{BRANCH COUNTY}.trim()).isEmpty()) ? "" : $F{BRANCH COUNTY} +" "))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="198"
+						y="521"
+						width="32"
+						height="30"
+						key="staticText-90"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[성  명]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="172"
+						y="581"
+						width="25"
+						height="30"
+						key="staticText-91"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[종 목]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="230"
+						y="521"
+						width="65"
+						height="30"
+						key="textField-31"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU DIRECTOR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="491"
+						width="32"
+						height="30"
+						key="staticText-92"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[등 록
+번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="521"
+						width="32"
+						height="30"
+						key="staticText-93"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[상호
+(법인명)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="551"
+						width="32"
+						height="30"
+						key="staticText-94"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[사업장
+주소]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="581"
+						width="32"
+						height="30"
+						key="staticText-95"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[업 태]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="521"
+						width="139"
+						height="30"
+						key="textField-32"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CU NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="551"
+						width="212"
+						height="30"
+						key="textField-33"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[( (($F{CU ADD1} == null) || ($F{CU ADD1}.trim()).isEmpty()) ? "" : $F{CU ADD1}+" ")
++ ( (($F{CU ADD2} == null) || ($F{CU ADD2}.trim()).isEmpty()) ? "" : $F{CU ADD2}+" ") 
++ ( (($F{CU ADD3} == null) || ($F{CU ADD3}.trim()).isEmpty()) ? "" : $F{CU ADD3}+" ")
++ ( (($F{CU ADD4} == null) || ($F{CU ADD4}.trim()).isEmpty()) ? "" : $F{CU ADD4}+" ")
++ ( (($F{CU CITY} == null) || ($F{CU CITY}.trim()).isEmpty()) ? "" : $F{CU CITY}+" ") 
++ ( (($F{CU POSTAL} == null) || ($F{CU POSTAL}.trim()).isEmpty()) ? "" : $F{CU POSTAL})
++ ( (($F{CU COUNTY} == null) || ($F{CU COUNTY}.trim()).isEmpty()) ? "" : 
+     " " + $F{CU COUNTY})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="581"
+						width="90"
+						height="30"
+						key="textField-34"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR BUSINESS_TYPE} == null) || ($F{CUADDR BUSINESS_TYPE}.trim()).isEmpty()) ? 
+$F{CU BUSINESS TYPE} : $F{CUADDR BUSINESS_TYPE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="489"
+						y="521"
+						width="26"
+						height="30"
+						key="staticText-96"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[성  명]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="440"
+						y="581"
+						width="27"
+						height="30"
+						key="staticText-97"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[종 목]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="467"
+						y="581"
+						width="95"
+						height="30"
+						key="textField-35"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR BUSINESS_ITEM} == null) || ($F{CUADDR BUSINESS_ITEM}.trim()).isEmpty()) ? 
+$F{CU BUSINESS ITEM} : $F{CUADDR BUSINESS_ITEM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="521"
+						width="48"
+						height="30"
+						key="textField-36"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(($F{CUADDR REP_DIRECTOR} == null) || ($F{CUADDR REP_DIRECTOR}.trim()).isEmpty()) ? 
+$F{REP_DIRECTOR} : $F{CUADDR REP_DIRECTOR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="611"
+						width="84"
+						height="15"
+						key="staticText-98"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[작성]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="611"
+						width="145"
+						height="15"
+						key="staticText-99"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공     급     가     액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="611"
+						width="105"
+						height="15"
+						key="staticText-100"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세             액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="360"
+						y="611"
+						width="202"
+						height="15"
+						key="staticText-101"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[비                     고]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="626"
+						width="43"
+						height="15"
+						key="staticText-102"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[년]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="626"
+						width="21"
+						height="15"
+						key="staticText-103"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[월]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="626"
+						width="21"
+						height="15"
+						key="staticText-104"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="626"
+						width="26"
+						height="15"
+						key="staticText-105"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공란수]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="137"
+						y="626"
+						width="119"
+						height="15"
+						key="staticText-106"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[백 십 억 천 백 십 만 천 백 십 일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="626"
+						width="105"
+						height="15"
+						key="staticText-107"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[십 억 천 백 십 만 천 백 십 일]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="111"
+						y="641"
+						width="26"
+						height="15"
+						key="textField-37"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Long"><![CDATA[$V{Spaces}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="137"
+						y="641"
+						width="119"
+						height="15"
+						key="textField-38"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="2" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{INV_AMT_SPACE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="255"
+						y="641"
+						width="105"
+						height="15"
+						key="textField-39"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="2" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{VAT_AMT_SPACE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="27"
+						y="427"
+						width="219"
+						height="15"
+						key="staticText-109"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement>
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[[별지제11호서식]]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="382"
+						y="450"
+						width="54"
+						height="15"
+						key="staticText-110"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[Inv. No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="382"
+						y="467"
+						width="54"
+						height="15"
+						key="staticText-111"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일 련 번 호]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="449"
+						width="131"
+						height="37"
+						key="staticText-112"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="18" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세금계산서]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="439"
+						y="450"
+						width="111"
+						height="15"
+						key="textField-40"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CONSOL_INVOICE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="439"
+						y="467"
+						width="111"
+						height="15"
+						key="textField-60"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{serialNumber}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="656"
+						width="22"
+						height="15"
+						key="staticText-114"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[월]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="656"
+						width="133"
+						height="15"
+						key="staticText-115"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[품              목]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="203"
+						y="656"
+						width="43"
+						height="15"
+						key="staticText-116"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[규 격]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="246"
+						y="656"
+						width="43"
+						height="15"
+						key="staticText-117"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[수 량]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="289"
+						y="656"
+						width="42"
+						height="15"
+						key="staticText-118"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[단 가]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="331"
+						y="656"
+						width="91"
+						height="15"
+						key="staticText-119"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[공 급 가 액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="422"
+						y="656"
+						width="92"
+						height="15"
+						key="staticText-120"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[세  액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="656"
+						width="48"
+						height="15"
+						key="staticText-121"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[비   고]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="203"
+						y="671"
+						width="43"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-122"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="246"
+						y="671"
+						width="43"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-123"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="289"
+						y="671"
+						width="42"
+						height="60"
+						key="staticText-124"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="671"
+						width="48"
+						height="60"
+						backcolor="#FFFFFF"
+						key="staticText-125"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="491"
+						width="212"
+						height="30"
+						key="textField-41"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SELLER VAT REG ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="350"
+						y="491"
+						width="212"
+						height="30"
+						key="textField-42"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VAT_REGISTRATION_ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="641"
+						width="43"
+						height="15"
+						key="textField-43"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getYear() + 1900)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="641"
+						width="21"
+						height="15"
+						key="textField-44"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getMonth() + 1)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="90"
+						y="641"
+						width="21"
+						height="15"
+						key="textField-45"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getDate())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="671"
+						width="22"
+						height="60"
+						key="textField-46"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getMonth() + 1)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="49"
+						y="671"
+						width="21"
+						height="60"
+						key="textField-47"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($F{INVOICE_DT}.getDate())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="331"
+						y="671"
+						width="91"
+						height="60"
+						key="textField-48"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="3" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{CurrencyEquivalen_Inv_Amt}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="422"
+						y="671"
+						width="92"
+						height="60"
+						key="textField-49"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="3" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{CurrencyEquivalen_Vat_Amt}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="83"
+						y="581"
+						width="89"
+						height="30"
+						key="textField-50"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU BUSINESS TYPE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="197"
+						y="581"
+						width="98"
+						height="30"
+						key="textField-51"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU BUSINESS ITEM}]]></textFieldExpression>
+				</textField>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="477"
+						y="402"
+						width="85"
+						height="40"
+						key="image-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{dirName} + "intertek.gif"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="731"
+						width="75"
+						height="15"
+						key="staticText-126"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[합 계 금 액]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="101"
+						y="731"
+						width="71"
+						height="15"
+						key="staticText-127"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[현     금]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="171"
+						y="731"
+						width="74"
+						height="15"
+						key="staticText-128"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[수     표]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="731"
+						width="75"
+						height="15"
+						key="staticText-129"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[외 상 미 수 금]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="245"
+						y="731"
+						width="73"
+						height="15"
+						key="staticText-130"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[어     음]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="731"
+						width="48"
+						height="15"
+						key="staticText-131"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[취급자]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="514"
+						y="746"
+						width="48"
+						height="30"
+						key="staticText-132"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="101"
+						y="746"
+						width="71"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-133"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="171"
+						y="746"
+						width="74"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-134"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="245"
+						y="746"
+						width="73"
+						height="30"
+						backcolor="#FFFF00"
+						key="staticText-135"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[0]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="27"
+						y="746"
+						width="75"
+						height="30"
+						key="textField-53"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="3" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Total}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="318"
+						y="746"
+						width="75"
+						height="30"
+						key="textField-54"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" rightPadding="3" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{Total}]]></textFieldExpression>
+				</textField>
+				<break>
+					<reportElement
+						x="0"
+						y="397"
+						width="595"
+						height="0"
+						key="element-1"/>
+				</break>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="221"
+						y="50"
+						width="124"
+						height="36"
+						key="staticText-136"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="12" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[(공급자보관용)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="221"
+						y="449"
+						width="124"
+						height="37"
+						key="staticText-137"/>
+					<box topBorder="None" topBorderColor="#0000FF" leftBorder="None" leftBorderColor="#0000FF" rightBorder="None" rightBorderColor="#0000FF" bottomBorder="None" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="9" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[(공급받는 자 보관용)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="49"
+						y="256"
+						width="21"
+						height="15"
+						key="staticText-138"/>
+					<box topBorder="2Point" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="271"
+						width="133"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-139"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="2Point" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[검 정 료]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="393"
+						y="331"
+						width="121"
+						height="45"
+						key="staticText-140"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[이 금액을 청구함]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="49"
+						y="656"
+						width="21"
+						height="15"
+						key="staticText-141"/>
+					<box topBorder="2Point" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[일]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="393"
+						y="730"
+						width="121"
+						height="46"
+						key="staticText-142"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[이 금액을 청구함]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="499"
+						y="378"
+						width="64"
+						height="18"
+						key="textField-55"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="451"
+						y="378"
+						width="48"
+						height="18"
+						key="staticText-143"/>
+					<box topBorder="None" topBorderColor="#FFFFFF" leftBorder="None" leftBorderColor="#FFFFFF" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[Print Date:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="498"
+						y="778"
+						width="64"
+						height="18"
+						key="textField-56"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="450"
+						y="778"
+						width="48"
+						height="18"
+						key="staticText-144"/>
+					<box topBorder="None" topBorderColor="#FFFFFF" leftBorder="None" leftBorderColor="#FFFFFF" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[Print Date:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="70"
+						y="671"
+						width="133"
+						height="60"
+						backcolor="#FFFF00"
+						key="staticText-145"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="2Point" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[검 정 료]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="360"
+						y="226"
+						width="202"
+						height="30"
+						key="textField-57"/>
+					<box topBorder="Thin" topBorderColor="#FF0000" leftBorder="Thin" leftBorderColor="#FF0000" rightBorder="Thin" rightBorderColor="#FF0000" bottomBorder="Thin" bottomBorderColor="#FF0000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{JOB ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="360"
+						y="626"
+						width="202"
+						height="30"
+						key="textField-58"/>
+					<box topBorder="Thin" topBorderColor="#0000FF" leftBorder="Thin" leftBorderColor="#0000FF" rightBorder="Thin" rightBorderColor="#0000FF" bottomBorder="Thin" bottomBorderColor="#0000FF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Unicode MS" pdfFontName="HYSMyeongJo-Medium" size="8" isPdfEmbedded ="true" pdfEncoding ="UniKS-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{JOB ID}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

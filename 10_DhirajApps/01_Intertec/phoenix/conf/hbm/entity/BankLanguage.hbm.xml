@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BankLanguage" table="BANKS_LANGUAGE">
+    <composite-id name="bankLanguageId" class="BankLanguageId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="bankCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+        <column name="BANK_CODE" length="5"/>
+      </key-property>
+      <key-property name="languageCD" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="LANGUAGE_CD" length="9" />
+      </key-property>
+    </composite-id>
+
+    <property name="bankDesc" type="string">
+    <meta attribute="scope-field">@NotBlank</meta>
+      <column name="BANK_DESC" not-null="true" unique="true"  sql-type="nvarchar2(30)"/>
+    </property>
+    
+    <property name="address1" type="string">
+      <column name="ADDRESS1" sql-type="nvarchar2(55)" />
+    </property>
+
+    <property name="address2" type="string">
+      <column name="ADDRESS2" sql-type="nvarchar2(55)" />
+    </property>
+
+    <property name="address3" type="string">
+      <column name="ADDRESS3" sql-type="nvarchar2(55)" />
+    </property>
+
+    <property name="address4" type="string">
+      <column name="ADDRESS4" sql-type="nvarchar2(55)" />
+    </property>
+
+    <property name="city" type="string">
+      <column name="CITY" sql-type="nvarchar2(30)"/>
+    </property>
+    
+	<property name="postal" type="string">
+      <column name="POSTAL" sql-type="nvarchar2(12)" />
+    </property>
+    
+    <many-to-one name="bank" class="Bank" insert="false" update="false">
+      <column name="BANK_CODE" index="BANKS_LANGUAGE_index_1" />
+    </many-to-one>
+
+  </class>
+</hibernate-mapping>
+

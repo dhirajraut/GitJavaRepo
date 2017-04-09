@@ -1,0 +1,23 @@
+package com;
+
+public class StudentData {
+
+	private String fName = null;
+	private String lName = null;
+	private String add = null;
+	
+	
+	public void setAdd(String add) {
+		this.add = add;
+	}
+	public void setFName(String name) {
+		fName = name;
+	}
+	public void setLName(String name) {
+		lName = name;
+	}
+
+
+	
+	
+}

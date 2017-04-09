@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobNote" table="JOB_NOTES">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_NOTE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_NOTE_SEQ</param>
+      </generator>
+    </id>
+    <property name="noteSummary" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="NOTE_SUMMARY" length="128" not-null="true" />
+    </property>
+    <property name="note" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="NOTE" length="1024" />
+    </property>
+    <property name="jobNumber" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="JOB_NUMBER" length="128" not-null="true" />
+    </property>
+    <many-to-one name="jobOrder" column="JOB_NUMBER" class="JobOrder" insert="false" update="false" index="JOB_NOTES_index_0" />
+  </class>
+</hibernate-mapping>
+

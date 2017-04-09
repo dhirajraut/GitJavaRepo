@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/ProjectContractRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/ProjectContractRequest" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetProjectContractRequest" type="ProjectContractRequestType">
+		<xs:annotation>
+			<xs:documentation>Project Contract ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ProjectContractRequestType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="ProjectHeader" type="ProjectHeaderType"/>
+			<xs:element name="ProjectActivity" type="ProjectActivityType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProjectHeaderType">
+		<xs:sequence>
+			<xs:element name="BusinessUnit" type="xs:string"/>
+			<xs:element name="JobNumber" type="xs:string"/>
+			<xs:element name="JobDescription" type="xs:string"/>
+			<xs:element name="JobDescriptionDetail" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProjectType" type="xs:string"/>
+			<xs:element name="CustomerId" type="xs:string"/>
+			<xs:element name="ProjectManager" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProjectManagerEffDt" type="xs:date" minOccurs="0"/>
+			<xs:element name="OperatingUnit" type="xs:string"/>
+			<xs:element name="Product" type="xs:string"/>
+			<xs:element name="ServiceOffering" type="xs:string"/>
+			<xs:element name="CharfieldtEffDt" type="xs:date" minOccurs="0"/>
+			<xs:element name="JobStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="JobStatusEffDt" type="xs:date" minOccurs="0"/>
+			<xs:element name="MsgAction" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProjectActivityType">
+		<xs:sequence>
+			<xs:element name="BusinessUnit" type="xs:string"/>
+			<xs:element name="JobNumber" type="xs:string"/>
+			<xs:element name="JobLineNumber" type="xs:string"/>
+			<xs:element name="JobLineDescription" type="xs:string"/>
+			<xs:element name="JobLineDetailDescription" type="xs:string"/>
+			<xs:element name="JobLineStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="JobLineStatusEffDt" type="xs:date" minOccurs="0"/>
+			<xs:element name="OperatingUnit" type="xs:string"/>
+			<xs:element name="DepartmentId" type="xs:string"/>
+			<xs:element name="Product" type="xs:string"/>
+			<xs:element name="ServiceOffering" type="xs:string"/>
+			<xs:element name="ChartfieldEffDt" type="xs:date" minOccurs="0"/>
+			<xs:element name="MsgAction" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

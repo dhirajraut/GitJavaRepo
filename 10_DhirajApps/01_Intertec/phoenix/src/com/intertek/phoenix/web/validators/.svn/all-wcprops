@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/web/validators
+END
+CEJobInstructionOthersValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/phoenix/!svn/ver/6985/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEJobInstructionOthersValidator.java
+END
+CEJobInvoicePreviewTab2Validator.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/phoenix/!svn/ver/6760/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEJobInvoicePreviewTab2Validator.java
+END
+CEJobOrderValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6985/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEJobOrderValidator.java
+END
+CEInvoicePreviewApplyDepositInvoiceValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/phoenix/!svn/ver/6839/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEInvoicePreviewApplyDepositInvoiceValidator.java
+END
+CESelectChargesValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/phoenix/!svn/ver/6839/branches/phx2.1/src/com/intertek/phoenix/web/validators/CESelectChargesValidator.java
+END
+CEJobInstructionValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEJobInstructionValidator.java
+END
+CEJobOrderNoteValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/phoenix/!svn/ver/6679/branches/phx2.1/src/com/intertek/phoenix/web/validators/CEJobOrderNoteValidator.java
+END
+PurchaseOrderValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6679/branches/phx2.1/src/com/intertek/phoenix/web/validators/PurchaseOrderValidator.java
+END
+EditPriceValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6891/branches/phx2.1/src/com/intertek/phoenix/web/validators/EditPriceValidator.java
+END

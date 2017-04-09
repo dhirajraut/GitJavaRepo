@@ -1,0 +1,1946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+  <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    <property name="paramName" value="siteLanguage"/>
+  </bean>
+
+  <bean id="phoenixInterceptor" class="com.intertek.web.servlet.PhoenixInterceptor"/>
+  <bean id="lockingInterceptor" class="com.intertek.web.servlet.LockingInterceptor">
+  <property name="jobLockRequiredUrls">
+      <props>
+        <!--
+          The following URLS will NOT release the job lock. 
+          All other URLS NOT in the below list will force the system to release any Job Lock held in session.
+          
+          Developers MUST add Any NEW Job Related URL to the list otherwise the system will release the lock wrong-fully.
+          parameter: jobNumber being the key.  
+        -->
+        <prop key="/servicelocation.htm">/message.htm</prop>
+   		<prop key="/create_job_operational_info_insp.htm">/message.htm</prop>
+        <prop key="/edit_job_operational_info_insp.htm">/message.htm</prop>
+        <prop key="/view_job_operational_info_insp.htm">/message.htm</prop>
+        <prop key="/edit_job_select_charges.htm">/message.htm</prop>
+        <prop key="/view_job_select_charges.htm">/message.htm</prop>
+        <prop key="/edit_job_invoice_preview.htm">/message.htm</prop>
+        <prop key="/edit_job_invoice_preview_tab1.htm">/message.htm</prop>
+        <prop key="/edit_job_invoice_preview_tab2.htm">/message.htm</prop>
+        <prop key="/edit_job_invoice_preview_tab3.htm">/message.htm</prop>
+        <prop key="/edit_job_invoice_preview_tab4.htm">/message.htm</prop>
+        <prop key="/edit_job_view_invoice.htm">/message.htm</prop>
+        <prop key="/branch_alloc_popup.htm">/message.htm</prop>
+        <prop key="/search_job_contract_insp_popup.htm">/message.htm</prop>
+        <prop key="/create_job_add_customer_attachfile_popup.htm">/message.htm</prop>
+        <prop key="/create_job_add_customer_note_popup.htm">/message.htm</prop>
+        <prop key="/search_bank_popup.htm">/message.htm</prop>
+        <prop key="/search_bank_account_popup.htm">/message.htm</prop>
+        <prop key="/copy_pb_test_price_popup.htm">/message.htm</prop>
+        <prop key="/modify_test_price_popup.htm">/message.htm</prop>
+        <prop key="/create_contract_test_popup.htm">/message.htm</prop>
+        <prop key="/copy_pb_slate_price_popup.htm">/message.htm</prop>
+        <prop key="/modify_slate_price_popup.htm">/message.htm</prop>
+        <prop key="/create_contract_slate_popup.htm">/message.htm</prop>
+        <prop key="/edit_product_group_set_popup.htm">/message.htm</prop>
+        <prop key="/edit_vessel_type_set_popup.htm">/message.htm</prop>
+        <prop key="/joborder.htm">/message.htm</prop>
+        <prop key="/search_template_popup.htm">/message.htm</prop>
+        <prop key="/search_branch_popup.htm">/message.htm</prop>
+        <prop key="/search_creditanalyst_popup.htm">/message.htm</prop>
+        <prop key="/search_job_code_popup.htm">/message.htm</prop>
+        <prop key="/search_supervisor_id_popup.htm">/message.htm</prop>
+        <prop key="/search_currency_popup.htm">/message.htm</prop>
+        <prop key="/search_user_roles_popup.htm">/message.htm</prop>
+        <prop key="/search_permission_list_popup.htm">/message.htm</prop>
+        <prop key="/create_contract_popup.htm">/message.htm</prop>
+        <prop key="/search_address_sequence_popup.htm">/message.htm</prop>
+        <prop key="/search_customer_id_popup.htm">/message.htm</prop>
+        <prop key="/search_collector_popup.htm">/message.htm</prop>
+        <prop key="/search_businessunit_popup.htm">/message.htm</prop>
+        <prop key="/search_user_popup.htm">/message.htm</prop>
+        <prop key="/search_companyname_popup.htm">/message.htm</prop>
+        <prop key="/search_contract_popup.htm">/message.htm</prop>
+        <prop key="/search_contact_popup.htm">/message.htm</prop>
+        <prop key="/search_control_popup.htm">/message.htm</prop>
+        <prop key="/search_link_popup.htm">/message.htm</prop>
+        <prop key="/search_customer_popup.htm">/message.htm</prop>
+        <prop key="/search_state_popup.htm">/message.htm</prop>
+        <prop key="/search_vessel_popup.htm">/message.htm</prop>
+        <!--prop key="/create_job_entry_insp.htm">/message.htm</prop-->
+        <!--prop key="/create_job_entry_analytical_service.htm">/message.htm</prop-->
+        <!--prop key="/create_job_entry_marine.htm">/message.htm</prop-->
+        <!--prop key="/create_job_entry_outsourcing.htm">/message.htm</prop-->
+        <prop key="/edit_job_entry_marine.htm">/message.htm</prop>
+        <prop key="/view_job_entry_marine.htm">/message.htm</prop>
+        <prop key="/edit_job_entry_outsourcing.htm">/message.htm</prop>
+        <prop key="/view_job_entry_outsourcing.htm">/message.htm</prop>
+        <prop key="/edit_job_entry_insp.htm">/message.htm</prop>
+        <prop key="/view_job_entry_insp.htm">/message.htm</prop>
+        <prop key="/edit_job_entry_analytical_service.htm">/message.htm</prop>
+        <prop key="/view_job_entry_analytical_service.htm">/message.htm</prop>
+        <prop key="/search_project_popup.htm">/message.htm</prop>
+        <prop key="/credit_reason_popup.htm">/message.htm</prop>
+        <prop key="/job_cancel_reason_popup.htm">/message.htm</prop>
+        <prop key="/search_towingcompany_popup.htm">/message.htm</prop>
+        <prop key="/search_shippingagent_popup.htm">/message.htm</prop>
+        <prop key="/search_serviceLocation_popup.htm">/message.htm</prop>
+        <prop key="/search_timezone_popup.htm">/message.htm</prop>
+        <prop key="/search_slate_popup.htm">/message.htm</prop>
+        <prop key="/search_test_popup.htm">/message.htm</prop>
+        <prop key="/copy_product_popup.htm">/message.htm</prop>
+        <prop key="/display_control_popup.htm">/message.htm</prop>
+        <prop key="/add_test_service_popup.htm">/message.htm</prop>
+        <prop key="/edit_test_service_popup.htm">/message.htm</prop>
+        <prop key="/add_slate_service_popup.htm">/message.htm</prop>
+        <prop key="/edit_slate_service_popup.htm">/message.htm</prop>
+        <prop key="/add_manual_test_service_popup.htm">/message.htm</prop>
+        <prop key="/add_job_contract_vessel_popup.htm">/message.htm</prop>
+        <prop key="/view_contract_popup.htm">/message.htm</prop>
+        <prop key="/view_contact_popup.htm">/message.htm</prop>
+        <prop key="/search_jobid_popup.htm">/message.htm</prop>
+        <prop key="/job_log_mail_popup.htm">/message.htm</prop>
+        <prop key="/add_inspection_service_popup.htm">/message.htm</prop>
+        <prop key="/edit_job_type.htm">/message.htm</prop>
+        <prop key="/search_operation_popup.htm">/message.htm</prop>
+        <prop key="/search_operations.htm">/message.htm</prop>
+        <prop key="/create_operation_event.htm">/message.htm</prop>
+        <prop key="/search_event_popup.htm">/message.htm</prop>
+        <prop key="/invoice_preview.htm">/message.htm</prop>
+        <prop key="/invoice_view.htm">/message.htm</prop>
+        <prop key="/create_consl_inv.htm">/message.htm</prop>
+        <prop key="/edit_consl_inv.htm">/message.htm</prop>
+        <prop key="/redirect.htm">/message.htm</prop>
+        <prop key="/search_logo_popup.htm">/message.htm</prop>
+        <prop key="/view_contract_attach_popup.htm">/message.htm</prop>
+        <prop key="/view_jobcontract_attach_popup.htm">/message.htm</prop>
+        <prop key="/search_monthly_job_popup.htm">/message.htm</prop>
+        <prop key="/error.htm">/message.htm</prop>
+      <prop key="/search_configuration_popup.htm">/message.htm</prop>
+      <prop key="/create_multilingual_branch_popup.htm">/message.htm</prop>
+      <prop key="/create_multilingual_bunit_popup.htm">/message.htm</prop>
+      <prop key="/create_multilingual_customer_popup.htm">/message.htm</prop>
+      <prop key="/create_multilingual_quick_customeraddr_popup.htm">/message.htm</prop>
+      <prop key="/create_multilingual_customer_address_popup.htm">/message.htm</prop>
+        <prop key="/edit_contract_select_services_popup.htm">/message.htm</prop>
+        <prop key="/edit_contract_select_branches_popup.htm">/message.htm</prop>
+        <prop key="/edit_contract_select_zone_popup.htm">/message.htm</prop>
+        <prop key="/choose_apply_levels_popup.htm">/message.htm</prop>
+        <prop key="/edit_question_notes_popup.htm">/message.htm</prop>
+      <prop key="/create_business_stream.htm">/message.htm</prop>
+      <prop key="/view_job_integration_log.htm">/message.htm</prop>
+      <prop key="/body_unloaded.htm">/message.htm</prop>
+
+        <prop key="/edit_contract_select_products_popup.htm">/message.htm</prop>
+        <prop key="/edit_contract_update_uom_notes_popup.htm">/message.htm</prop>
+        <prop key="/sample_location_popup.htm">/message.htm</prop>
+        <prop key="/job_entry_ce.htm">/message.htm</prop>
+        <prop key="/job_operational_info_ce.htm">/message.htm</prop>
+         <!-- 
+        <prop key="/job_instruction_attachfile_popup.htm">/message.htm</prop>
+        <prop key="/job_instruction_note_popup.htm">/message.htm</prop>
+        <prop key="/job_instruction_test_attribute_popup.htm">/message.htm</prop>
+        <prop key="/search_purchase_order_popup.htm">/message.htm</prop>-->
+
+        <prop key="/job_instruction_note_popup.htm">/message.htm</prop>
+        
+
+        <prop key="/job_instruction_attachfile_popup.htm">/message.htm</prop>
+      
+        <prop key="/job_view_ce_invoice.htm">/message.htm</prop>      
+       
+	   <prop key="/ce_job_select_charges.htm">/message.htm</prop> 
+       <prop key="/search_ce_job_popup.htm">/message.htm</prop>
+	   <prop key="/credit_reason_ce_popup.htm">/message.htm</prop>
+	   <prop key="/job_order_note_popup.htm">/message.htm</prop>
+	   <prop key="/job_order_attachfile_popup.htm">/message.htm</prop>
+      </props>  
+    </property>  
+  </bean>
+
+  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+
+  <bean id="multipartResolver" 
+    class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize"> <value>10240000000</value> </property> 
+  </bean>
+  
+  <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles.TilesConfigurer">
+    <property name="definitions">
+      <list>
+        <value>/WEB-INF/tiles-layout.xml</value>
+      </list>
+    </property>
+  </bean> 
+    
+  <bean id="themeResolver" class="org.springframework.web.servlet.theme.FixedThemeResolver">
+    <property name="defaultThemeName"><value>cool</value></property>
+  </bean>
+  
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+    <property name="basename"><value>views</value></property> 
+  </bean>
+  
+  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="basenames">
+        <list>
+          <value>messages</value>
+          <value>TrackerRes</value>
+        </list>
+      </property>
+  </bean> 
+  
+  <bean id="publicUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="interceptors">
+      <list>
+        <ref bean="localeChangeInterceptor"/>
+        <ref bean="phoenixInterceptor"/>
+        <ref bean="lockingInterceptor"/>
+      </list>
+    </property>
+    
+    <property name="mappings">
+      <props>
+        <prop key="/index.htm">indexController</prop>                
+        <prop key="/login.htm">loginFormController</prop>                
+        <prop key="/logout.htm">logoutController</prop>             
+      <prop key="/phx_dashboard.htm">phoenixDashBoardController</prop>                
+        <prop key="/create_job_operational_info_insp.htm">createJobOperationalInstrFormController</prop>  
+        <prop key="/edit_job_operational_info_insp.htm">editJobOperationalInstrFormController</prop>  
+        <prop key="/view_job_operational_info_insp.htm">viewJobOperationalInstrFormController</prop>  
+        <prop key="/search_job.htm">searchJobController</prop>                        
+        <prop key="/search_job_results.htm">searchJobResultsController</prop>
+        <prop key="/search_job_criteria.htm">searchJobCriteriaController</prop>                        
+        <prop key="/batch_reprint.htm">batchReprintController</prop>
+        <prop key="/edit_job_select_charges.htm">editJobSelectChargesFormController</prop>  
+        <prop key="/view_job_select_charges.htm">viewJobSelectChargesController</prop>  
+
+        <prop key="/edit_job_invoice_preview.htm">editJobInvoicePreviewFormController</prop>  
+        <prop key="/edit_job_invoice_preview_tab1.htm">editJobInvoicePreviewTab1FormController</prop>  
+        <prop key="/edit_job_invoice_preview_tab2.htm">editJobInvoicePreviewTab2FormController</prop>  
+        <prop key="/edit_job_invoice_preview_tab3.htm">editJobInvoicePreviewTab3FormController</prop>  
+        <prop key="/edit_job_invoice_preview_tab4.htm">editJobInvoicePreviewTab4FormController</prop>  
+        <prop key="/edit_job_view_invoice.htm">editJobViewInvoiceFormController</prop>  
+        <prop key="/branch_alloc_popup.htm">branchAllocPopupController</prop>
+
+        <prop key="/search_job_contract_insp_popup.htm">searchJobOrderInspPopupFormController</prop>
+        <prop key="/create_job_add_customer_attachfile_popup.htm">createJobAddCustomerAttachFilePopupFormController</prop>
+        <prop key="/create_job_add_customer_note_popup.htm">createJobAddCustomerNotePopupFormController</prop>
+        <prop key="/search_bank_popup.htm">searchBankPopupFormController</prop>
+        <prop key="/search_bank_account_popup.htm">searchBankAccountPopupFormController</prop>
+        <prop key="/create_contact.htm">createContactFormController</prop>    
+        <prop key="/edit_contact.htm">editContactFormController</prop>    
+        <prop key="/search_contact.htm">searchContactFormController</prop>
+        <prop key="/contract_file_view.htm">contractFileViewController</prop>    
+
+        <prop key="/create_customer.htm">createCustomerFormController</prop>    
+        <prop key="/edit_customer.htm">editCustomerFormController</prop>    
+        <prop key="/search_customer.htm">searchCustomerFormController</prop>    
+        <prop key="/quickcreate_customer.htm">quickCreateCustomerFormController</prop>    
+
+        <prop key="/edit_contract_customer.htm">editContractCustomerFormController</prop>    
+        <prop key="/edit_contract_attachment.htm">editContractAttachmentFormController</prop>    
+        <prop key="/edit_contract_zone.htm">editContractZoneFormController</prop>    
+        <prop key="/edit_contract_inspection.htm">editContractInspectionFormController</prop>    
+        <prop key="/edit_contract_service.htm">editContractServiceFormController</prop>    
+        <prop key="/edit_contract_test.htm">editContractTestFormController</prop>    
+        <prop key="/edit_contract_slate.htm">editContractSlateFormController</prop>    
+        <prop key="/copy_pb_test_price_popup.htm">copyPbTestPricePopupController</prop>                        
+        <prop key="/modify_test_price_popup.htm">modifyTestPricePopupController</prop>   
+        <prop key="/create_contract_test_popup.htm">createContractTestPopupController</prop>           
+
+        <prop key="/copy_pb_slate_price_popup.htm">copyPbSlatePricePopupController</prop>                        
+        <prop key="/modify_slate_price_popup.htm">modifySlatePricePopupController</prop>   
+        <prop key="/create_contract_slate_popup.htm">createContractSlatePopupController</prop>           
+        
+        <prop key="/create_contract.htm">createContractMainFormController</prop>    
+        <prop key="/edit_contract.htm">editContractMainFormController</prop>    
+        <prop key="/search_contract.htm">searchContractFormController</prop>    
+        <prop key="/file_upload.htm">fileUploadController</prop>    
+        <prop key="/edit_product_group_set_popup.htm">editProductGroupSetPopupFormController</prop>    
+        <prop key="/edit_vessel_type_set_popup.htm">editVesselTypeSetPopupFormController</prop>    
+
+
+        <prop key="/create_shipping_agent.htm">createShippingAgentFormController</prop>    
+        <prop key="/edit_shipping_agent.htm">editShippingAgentFormController</prop>    
+        <prop key="/search_shipping_agent.htm">searchShippingAgentFormController</prop>    
+        
+        <prop key="/create_towing_company.htm">createTowingCompanyFormController</prop>    
+        <prop key="/edit_towing_company.htm">editTowingCompanyFormController</prop>    
+        <prop key="/search_towing_company.htm">searchTowingCompanyFormController</prop>    
+
+        <prop key="/create_business_unit.htm">createBusinessUnitFormController</prop>    
+        <prop key="/edit_business_unit.htm">editBusinessUnitFormController</prop>    
+        <prop key="/search_business_unit.htm">searchBusinessUnitFormController</prop>    
+
+        <prop key="/create_branch.htm">createBranchFormController</prop>    
+        <prop key="/edit_branch.htm">editBranchFormController</prop>    
+        <prop key="/search_branch.htm">searchBranchFormController</prop>    
+
+        <prop key="/create_service_location.htm">createServiceLocationFormController</prop>    
+        <prop key="/edit_service_location.htm">editServiceLocationFormController</prop>    
+        <prop key="/search_service_location.htm">searchServiceLocationFormController</prop>    
+
+        <prop key="/create_user.htm">createUserFormController</prop>    
+        <prop key="/edit_user.htm">editUserFormController</prop>    
+        <prop key="/search_user.htm">searchUserFormController</prop>    
+        <prop key="/createuser.htm">createUserController</prop>
+      <prop key="/change_user.htm">changeUserFormController</prop> 
+
+        <prop key="/business_unit.htm">businessUnitController</prop>    
+        <prop key="/shipping_agent.htm">shippingAgentController</prop> 
+        <prop key="/towingco.htm">towingCompanyController</prop>
+        <prop key="/servicelocation.htm">serviceLocationController</prop>
+        <prop key="/joborder.htm">jobOrderController</prop>
+        <prop key="/country.htm">countryController</prop> 
+        <prop key="/branch.htm">branchController</prop>     
+        <prop key="/customer.htm">customerController</prop>     
+        <prop key="/customer_address.htm">customerAddressController</prop>    
+        <prop key="/contract.htm">contractController</prop>
+        <prop key="/taxrate.htm">taxRateController</prop>     
+      <prop key="/template.htm">templateController</prop>
+      <prop key="/search_template_popup.htm">searchTemplatePopupController</prop>
+        <prop key="/create_vat_rate.htm">createVatRateFormController</prop>
+        <prop key="/create_permission_list.htm">createPermissionListFormController</prop>
+        <prop key="/search_permission_list.htm">searchPermissionFormController</prop>
+        <prop key="/edit_permission_list.htm">editPermissionListFormController</prop>
+
+    <prop key="/body_unloaded.htm">bodyUnloadedController</prop>
+        <prop key="/message.htm">messageController</prop>            
+        <prop key="/messagepopup.htm">messagePopupController</prop>
+        <prop key="/message_error.htm">messageErrorController</prop> 
+        <prop key="/current_users.htm">currentUsersController</prop>
+        <prop key="/job_locks.htm">jobLocksController</prop>
+        
+        <prop key="/order_log.htm">logJobOrderController</prop>                                
+        <prop key="/create_vessel.htm">createVesselController</prop>                        
+        <prop key="/search_branch_popup.htm">searchBranchPopupController</prop>                        
+        <prop key="/create_country.htm">createCountryFormController</prop>  
+        <prop key="/edit_country.htm">editCountryFormController</prop>
+        <prop key="/search_vat_rate_popup.htm">searchVatRatePopupController</prop>
+        <prop key="/create_role.htm">createRoleFormController</prop>
+        <prop key="/create_new_contact.htm">createNewContactPopupController</prop>
+
+        <prop key="/search_creditanalyst_popup.htm">searchCreditAnalystPopupController</prop>
+        <prop key="/search_job_code_popup.htm">searchJobCodePopupController</prop>
+        <prop key="/search_supervisor_id_popup.htm">searchSupervisorIdPopupController</prop>
+        <prop key="/search_currency_popup.htm">searchCurrencyPopupController</prop>   
+  
+        <prop key="/search_user_roles_popup.htm">searchUserRolesPopupController</prop>
+        <prop key="/search_permission_list_popup.htm">searchPermissionListPopupController</prop>
+        <prop key="/create_contract_popup.htm">createContractPopupController</prop>
+        <prop key="/search_address_sequence_popup.htm">addressSeqSearchPopupController</prop>
+        <prop key="/search_customer_id_popup.htm">searchCustomerIdPopupController</prop>
+  
+        <prop key="/search_role.htm">searchRoleFormController</prop>
+        <prop key="/edit_role.htm">editRoleFormController</prop>
+        <prop key="/search_collector_popup.htm">searchCollectorPopupController</prop>
+        <prop key="/search_businessunit_popup.htm">searchBusinessUnitPopupController</prop>
+        <prop key="/search_user_popup.htm">searchUserPopupController</prop>
+        <prop key="/search_companyname_popup.htm">searchCompanyNamePopupController</prop>
+        <prop key="/search_contract_popup.htm">searchContractPopupController</prop>
+        <prop key="/search_contact_popup.htm">searchContactPopupController</prop>
+        <prop key="/search_control_popup.htm">searchControlPopupController</prop>
+        <prop key="/search_link_popup.htm">searchLinkPopupController</prop>
+        <prop key="/search_customer_popup.htm">searchCustomerPopupController</prop>
+        <prop key="/search_state_popup.htm">searchStatePopupController</prop>
+        <prop key="/search_country.htm">searchCountryFormController</prop>
+        <prop key="/search_vessel_popup.htm">searchVesselPopupController</prop>
+        <prop key="/create_job_entry_insp.htm">createJobOrderInspFormController</prop>
+        <prop key="/create_job_entry_analytical_service.htm">createJobOrderAnalyticalServiceFormController</prop>
+        <prop key="/create_job_entry_marine.htm">createJobOrderMarineFormController</prop>
+        <prop key="/create_job_entry_outsourcing.htm">createJobOrderOutSourcingFormController</prop>
+    
+        <prop key="/edit_job_entry_marine.htm">editJobOrderMarineFormController</prop>
+        <prop key="/view_job_entry_marine.htm">viewJobOrderMarineFormController</prop>
+        <prop key="/edit_job_entry_outsourcing.htm">editJobOrderOutSourcingFormController</prop>
+        <prop key="/view_job_entry_outsourcing.htm">viewJobOrderOutSourcingFormController</prop>
+
+        <prop key="/edit_job_entry_insp.htm">editJobOrderInspFormController</prop>
+        <prop key="/view_job_entry_insp.htm">viewJobOrderInspFormController</prop>
+        <prop key="/edit_job_entry_analytical_service.htm">editJobOrderAnalyticalServiceFormController</prop>
+        <prop key="/view_job_entry_analytical_service.htm">viewJobOrderAnalyticalServiceFormController</prop>
+        <prop key="/search_project_popup.htm">searchProjectPopupController</prop>
+        <prop key="/credit_reason_popup.htm">creditReasonPopupController</prop>
+      <prop key="/job_cancel_reason_popup.htm">jobCancelReasonPopupController</prop>
+
+        <prop key="/search_towingcompany_popup.htm">searchTowingCompanyPopupController</prop>
+        <prop key="/create_new_towingcompany.htm">createNewTowingCompanyPopupController</prop>
+        <prop key="/search_shippingagent_popup.htm">searchShippingAgentPopupController</prop> 
+        <prop key="/create_new_shippingagent.htm">createNewShippingAgentPopupController</prop>
+        <prop key="/create_new_servicelocation.htm">createNewServiceLocationPopupController</prop>
+        <prop key="/search_serviceLocation_popup.htm">searchServiceLocationPopupController</prop>
+        <prop key="/search_timezone_popup.htm">searchTimeZonePopupController</prop>
+        <prop key="/search_slate_popup.htm">searchSlatePopupController</prop>
+        <prop key="/search_test_popup.htm">searchTestPopupController</prop>
+        <prop key="/add_manual_test.htm">addManualTestPopupController</prop>
+        <prop key="/copy_product_popup.htm">copyProductPopupController</prop>
+                
+        <prop key="/display_control_popup.htm">displayControlPopupController</prop>                        
+        <prop key="/add_test_service_popup.htm">addTestServicePopupController</prop>                        
+        <prop key="/edit_test_service_popup.htm">editTestServicePopupController</prop>                        
+        <prop key="/add_slate_service_popup.htm">addSlateServicePopupController</prop>                        
+        <prop key="/edit_slate_service_popup.htm">editSlateServicePopupController</prop>                        
+        <prop key="/add_manual_test_service_popup.htm">addManualTestServicePopupController</prop>                        
+        <prop key="/add_job_contract_vessel_popup.htm">addJobContractVesselPopupController</prop>          
+
+        <prop key="/view_contract_popup.htm">viewContractPopupController</prop>
+        <prop key="/view_contact_popup.htm">viewContactPopupController</prop>
+        <prop key="/search_jobid_popup.htm">searchJobidPopupController</prop>
+        <prop key="/job_log_mail_popup.htm">jobLogMailPopupController</prop>
+
+        <prop key="/add_inspection_service_popup.htm">addInspectionServicePopupController</prop>             
+
+        <prop key="/create_job_type.htm">createJobTypeFormController</prop>
+        <prop key="/configure_dropdown.htm">configureDropDownController</prop>
+        <prop key="/search_job_type.htm">searchJobTypeFormController</prop>
+        <prop key="/edit_job_type.htm">editJobTypeFormController</prop>
+        <prop key="/search_operation_popup.htm">searchOperationPopupController</prop>
+        <prop key="/search_operations.htm">searchOperationsFormController</prop>
+        <prop key="/create_operation_event.htm">createOperationEventFormController</prop>
+        <prop key="/search_event_popup.htm">searchEventPopupController</prop>
+
+
+        <prop key="/invoice_preview.htm">invoicePreviewController</prop>
+        <prop key="/invoice_view.htm">invoiceViewController</prop>
+        <prop key="/create_tax_article.htm">createTaxArticlesFormController</prop>
+      <prop key="/sam_lims_int.htm">createSAMLIMSBranchIntFormController</prop>
+
+        <prop key="/view_job_integration_log.htm">viewJobIntegrationLogController</prop>
+
+        <prop key="/create_consl_inv.htm">createConsolidatedInvoiceFormController</prop> 
+
+        <prop key="/edit_consl_inv.htm">editConsolidatedInvoiceFormController</prop>    
+        <prop key="/search_consl_inv.htm">searchConsolidatedInvoiceFormController</prop>    
+        <prop key="/redirect.htm">redirectFormController</prop>
+
+        <prop key="/job_order_pdf_view.htm">jobOrderPdfViewController</prop>
+        <prop key="/search_logo_popup.htm">searchLogoPopupController</prop>
+        <prop key="/view_contract_attach_popup.htm">viewContractAttachPopupFormController</prop>
+        <prop key="/view_jobcontract_attach_popup.htm">viewJobContractAttachPopupFormController</prop>
+        <prop key="/search_monthly_job_popup.htm">monthlyJobPopupFormController</prop>
+        <prop key="/error.htm">errorController</prop>
+      <prop key="/search_configuration_popup.htm">searchConfigurationPopupFormController</prop>
+      <prop key="/search_webservice_log.htm">searchWebServiceLogController</prop>
+      <prop key="/search_bank_account.htm">searchBankAccountController</prop>
+      <prop key="/edit_bank_account.htm">editBankAccountController</prop>
+      <prop key="/required_fields.htm">requiredFieldsController</prop>
+      <prop key="/search_webservice_log_detail.htm">searchWebServiceLogDetailController</prop>
+      <prop key="/search_webservice_log_xml_detail.htm">searchWebServiceLogXMLDetailController</prop>
+      <prop key="/webservice_control_switches.htm">webServiceControlSwitches</prop>
+
+
+      <prop key="/create_multilingual_branch_popup.htm">createMultilingualBranchPopupController</prop>
+  
+      <prop key="/create_multilingual_bunit_popup.htm">createMultilingualBunitPopupController</prop>
+  
+      <prop key="/create_multilingual_customer_popup.htm">createMultilingualCustomerPopupController</prop>
+  
+  
+      <prop key="/create_multilingual_quick_customeraddr_popup.htm">createMultilingualQuickCustomerAddrPopupController</prop>
+  
+      <prop key="/create_multilingual_customer_address_popup.htm">createMultilingualCustomerAddressPopupController</prop>
+      <prop key="/create_tax_label.htm">createTaxLabelsFormController</prop>
+      <prop key="/monthly_job_log.htm">monthlyJobLogDetailsFormController</prop>
+      <prop key="/weekly_report.htm">weeklyReportController</prop>
+  
+      <!--prop key="/resend_webservice.htm">resendWebServiceController</prop-->
+
+        <prop key="/edit_contract_select_services_popup.htm">editContractSelectServicesPopupFormController</prop>          
+        <prop key="/edit_contract_select_branches_popup.htm">editContractSelectBranchesPopupFormController</prop>          
+        <prop key="/edit_contract_select_zone_popup.htm">editContractSelectZonePopupFormController</prop>          
+        <prop key="/choose_apply_levels_popup.htm">chooseApplyLevelsPopupFormController</prop>          
+        <prop key="/edit_question_notes_popup.htm">editQuestionNotesPopupFormController</prop>  
+      <prop key="/create_business_stream.htm">createBusinessStreamFormController</prop>
+
+        <prop key="/edit_contract_select_products_popup.htm">editContractSelectProductsPopupFormController</prop>          
+        <prop key="/edit_contract_update_uom_notes_popup.htm">editContractUpdateUomNotesPopupFormController</prop>          
+        <prop key="/sample_location_popup.htm">sampleLocationPopupFormController</prop>
+          <prop key="/create_purchase_order.htm">purchaseOrderFormController</prop>
+        <prop key="/search_purchase_order.htm">searchPurchaseOrderFormController</prop>
+        
+
+        <prop key="/job_entry_ce.htm">jobOrderCEFormController</prop>
+        <prop key="/job_operational_info_ce.htm">jobOperationalInstrCEFormController</prop>
+        <prop key="/ce_job_invoice_preview.htm">ceInvoicePreviewController</prop>
+        <prop key="/ce_job_invoice_preview_tab0.htm">ceInvoicePreviewTab0FormController</prop>
+        <prop key="/ce_job_invoice_preview_tab1.htm">ceInvoicePreviewTab1FormController</prop>
+        <prop key="/ce_job_invoice_preview_tab2.htm">ceInvoicePreviewTab2FormController</prop>
+        <prop key="/ce_job_invoice_preview_tab3.htm">ceInvoicePreviewTab3FormController</prop>
+        <prop key="/ce_job_invoice_preview_tab4.htm">ceInvoicePreviewTab4FormController</prop> 
+        <prop key="/apply_deposit_popup.htm">applyDepositPopupController</prop>
+
+	    <prop key="/revenue_segregation_popup.htm">revenueSegregationPopupController</prop>
+	    <prop key="/job_view_ce_invoice.htm">jobViewCEInvoiceFormController</prop>
+        <prop key="/credit_reason_ce_popup.htm">creditReasonCEPopupController</prop>
+
+        <prop key="/search.htm">searchFormController</prop>
+        <prop key="/ajax.htm">ajaxController</prop>      
+        <prop key="/fetch_contact_info.htm">fetchContactInfoFormController</prop>       
+       <prop key="/job_instruction_attachfile_popup.htm">jobInstructionAttachFilePopupFormController</prop>
+        <prop key="/job_instruction_note_popup.htm">jobInstructionNotePopupFormController</prop>
+
+       <!-- 
+              
+        <prop key="/job_instruction_attachfile_popup.htm">jobInstructionAttachFilePopupFormController</prop>
+        <prop key="/job_instruction_note_popup.htm">jobInstructionNotePopupFormController</prop>
+        <prop key="/search_purchase_order_popup.htm">searchPurchaseOrderPopupFormController</prop> 
+        -->
+        <prop key="/job_instruction_test_attribute_popup.htm">jobInstructionTestAttributePopupFormController</prop>
+        <prop key="/create_project.htm">createProjectController</prop>
+        
+        <!-- Start of  the job log ce page  -->
+        <prop key="/job_log_ce.htm">jobLogCeController</prop>    
+                          
+        <prop key="/job_log_ce_results_main.htm">jobLogCeMainController</prop>  
+        <prop key="/job_log_ce_results_billing.htm">jobLogCeBillingController</prop>                 
+        <prop key="/job_log_ce_results_processlog.htm">jobLogCeLogController</prop> 
+		<prop key="/job_log_ce_mail.htm">jobLogCEMailController</prop>
+        <!--  end of the job log ce page         -->
+ 		<prop key="/ce_job_select_charges.htm">ceJobSelectChargesFormController</prop>
+        <prop key="/edit_price_popup.htm">editPricePopupController</prop>
+        <prop key="/travel_expense_popup.htm">travelExpensePopupController</prop>
+        
+        <prop key="/add_test.htm">addTestController</prop>
+        <prop key="/add_job_services.htm">addJobServicesController</prop>
+        
+        <!-- Start of the invoice preivew page
+
+        
+		<prop key="/apply_deposit_popup.htm">applyDepositPopupController</prop>
+		<prop key="/revenue_segregation_popup.htm">revenueSegregationPopupController</prop>
+		
+		End of the invoie preview page
+		-->
+         <prop key="/search_ce_job_popup.htm">searchCEJobPopupFormController</prop>
+         <prop key="/job_order_note_popup.htm">jobOrderNotePopupFormController</prop>
+         <prop key="/job_order_attachfile_popup.htm">jobOrderAttachPopupFormController</prop>
+      </props>
+    </property>
+  </bean>
+  
+  <!-- ====================================== Controllers ============================================== -->
+  
+  <bean id="fetchContactInfoFormController" class="com.intertek.phoenix.web.controller.job.FetchContactInfoFormController">
+  </bean>
+  
+    <bean id="createProjectController" class="com.intertek.phoenix.web.controller.job.CreateProjectController">
+  </bean>
+    
+  <bean id="webServiceControlSwitches" class="com.intertek.web.controller.ws.WebServiceControlSwitches">
+  </bean>   
+  <bean id="searchBankAccountController" class="com.intertek.web.controller.bank.SearchBankAccountController">
+    <property name="formView">
+      <value>search-bank-account</value>
+    </property>
+    <property name="successView">
+      <value>search-bank-account</value>
+    </property>
+  </bean>
+    <bean id="editBankAccountController" class="com.intertek.web.controller.bank.EditBankAccountController">
+    <property name="formView">
+      <value>edit-bank-account</value>
+    </property>
+    <property name="successView">
+      <value>edit-bank-account</value>
+    </property>
+  </bean> 
+   
+  <bean id="requiredFieldsController" class="com.intertek.web.controller.help.RequiredFieldsController"></bean>
+
+  <bean id="searchWebServiceLogController" class="com.intertek.web.controller.ws.SearchWebServiceLogController">
+    <property name="formView">
+      <value>search-webservice-log</value>
+    </property>
+    <property name="successView">
+      <value>search-webservice-log</value>
+    </property>
+  </bean> 
+  <bean id="searchWebServiceLogDetailController" class="com.intertek.web.controller.ws.SearchWebServiceLogDetailController">
+    <property name="formView">
+      <value>search-webservice-log-detail</value>
+    </property>
+    <property name="successView">
+      <value>search-webservice-log-detail</value>
+    </property>
+  </bean>
+  <!-- bean id="resendWebServiceController" class="com.intertek.web.controller.ws.ResendWebServiceController" parent="searchWebServiceLogDetailController"/>-->
+  <bean id="searchWebServiceLogXMLDetailController" class="com.intertek.web.controller.ws.SearchWebServiceLogXMLDetailController">
+  </bean>   
+
+  <bean id="indexController" class="com.intertek.web.controller.user.IndexController" />
+  <bean id="loginFormController" class="com.intertek.web.controller.user.LoginFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>user-login</value></property>
+    <property name="successView"><value>search-job-r</value></property>
+  </bean>
+  <bean id="logoutController" class="com.intertek.web.controller.user.LogoutController"/>  
+
+  <bean id="phoenixDashBoardController" class="com.intertek.web.controller.user.PhoenixDashBoardController">
+    <property name="formView"><value>phx-dashboard</value></property>
+    <property name="successView"><value>phx-dashboard</value></property>
+  </bean>
+
+ 
+
+
+
+  <bean id="createJobOperationalInstrFormController" class="com.intertek.web.controller.job.CreateJobOperationalInstrFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-job-operational-info-insp</value></property>
+  </bean>
+  
+  <bean id="editJobOperationalInstrFormController" class="com.intertek.web.controller.job.EditJobOperationalInstrFormController">
+      <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-job-operational-info-insp</value></property>
+  </bean>  
+
+    <bean id="viewJobOperationalInstrFormController" class="com.intertek.web.controller.job.ViewJobOperationalInstrFormController">
+      <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>view-job-operational-info-insp</value></property>
+  </bean>  
+
+
+  <bean id="editJobSelectChargesFormController" class="com.intertek.web.controller.job.EditJobSelectChargesFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addJobOrderSelectChargeValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-job-select-charges</value></property>
+  </bean>  
+
+  <bean id="viewJobSelectChargesController" class="com.intertek.web.controller.job.ViewJobSelectChargesController" />
+
+  <bean id="editJobInvoicePreviewFormController" class="com.intertek.web.controller.job.EditJobInvoicePreviewFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-job-invoice-preview</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.job.EditJobInvoicePreviewTab1FormController.FORM.command</value>
+        <value>com.intertek.web.controller.job.EditJobInvoicePreviewTab2FormController.FORM.command</value>
+        <value>com.intertek.web.controller.job.EditJobInvoicePreviewTab3FormController.FORM.command</value>
+        <value>com.intertek.web.controller.job.EditJobInvoicePreviewTab4FormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>  
+
+  <bean id="editJobInvoicePreviewTab1FormController" class="com.intertek.web.controller.job.EditJobInvoicePreviewTab1FormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addJobContractPreviewValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-job-invoice-preview-tab1</value></property>
+  </bean>  
+
+  <bean id="editJobInvoicePreviewTab2FormController" class="com.intertek.web.controller.job.EditJobInvoicePreviewTab2FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-job-invoice-preview-tab2</value></property>
+  </bean>  
+
+  <bean id="editJobInvoicePreviewTab3FormController" class="com.intertek.web.controller.job.EditJobInvoicePreviewTab3FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-job-invoice-preview-tab3</value></property>
+  </bean>  
+
+  <bean id="editJobInvoicePreviewTab4FormController" class="com.intertek.web.controller.job.EditJobInvoicePreviewTab4FormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addJobContractPreviewValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-job-invoice-preview-tab4</value></property>
+  </bean>  
+
+  <bean id="editJobViewInvoiceFormController" class="com.intertek.web.controller.job.EditJobViewInvoiceFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-job-view-invoice</value></property>
+  </bean>  
+
+  <bean id="branchAllocPopupController" class="com.intertek.web.controller.job.BranchAllocPopupController">
+    <property name="formView"><value>branch-alloc-popup</value></property>
+    <property name="successView"><value>branch-alloc-popup</value></property>
+  </bean>
+
+    <bean id="creditReasonPopupController" class="com.intertek.web.controller.job.CreditReasonPopupController">
+    <property name="formView"><value>credit-reason-popup</value></property>
+    <property name="successView"><value>credit-reason-popup</value></property>
+  </bean>
+
+   <bean id="jobCancelReasonPopupController" class="com.intertek.web.controller.job.JobCancelReasonPopupController">
+    <property name="formView"><value>cancel-reason-popup</value></property>
+    <property name="successView"><value>cancel-reason-popup</value></property>
+  </bean>
+
+  <bean id="createContractMainFormController" class="com.intertek.web.controller.contract.CreateContractMainFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addContractValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>create-contract-main</value></property>
+  </bean>
+
+  <bean id="editContractMainFormController" class="com.intertek.web.controller.contract.EditContractMainFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addContractValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-main</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractCustomerFormController" class="com.intertek.web.controller.contract.EditContractCustomerFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-customer</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractAttachmentFormController" class="com.intertek.web.controller.contract.EditContractAttachmentFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-attachment</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractZoneFormController" class="com.intertek.web.controller.contract.EditContractZoneFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addContractZoneValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-zone</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractInspectionFormController" class="com.intertek.web.controller.contract.EditContractInspectionFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="editInspectionRateValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-inspection</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractServiceFormController" class="com.intertek.web.controller.contract.EditContractServiceFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="addContractServiceValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-service</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractTestFormController" class="com.intertek.web.controller.contract.EditContractTestFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-test</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="editContractSlateFormController" class="com.intertek.web.controller.contract.EditContractSlateFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+      </list>
+     </property>  
+    <property name="formView"><value>edit-contract-slate</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.web.controller.contract.SearchContractFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+
+  <bean id="copyPbTestPricePopupController" class="com.intertek.web.controller.contract.CopyPbTestPricePopupController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>copy-pb-test-price-popup</value></property>
+    <property name="successView"><value>copy-pb-test-price-popup</value></property>
+  </bean>
+
+  <bean id="modifyTestPricePopupController" class="com.intertek.web.controller.contract.ModifyTestPricePopupController">
+    <property name="validator"><ref bean="testPriceExtValidator"/></property>
+    <property name="formView"><value>modify-test-price-popup</value></property>
+    <property name="successView"><value>modify-test-price-popup</value></property>
+  </bean>
+
+  <bean id="createContractTestPopupController" class="com.intertek.web.controller.contract.CreateContractTestPopupController">
+    <property name="validator"><ref bean="contractTestExtValidator"/></property>
+    <property name="formView"><value>create-contract-test-popup</value></property>
+    <property name="successView"><value>create-contract-test-popup</value></property>
+  </bean>
+
+  <bean id="copyPbSlatePricePopupController" class="com.intertek.web.controller.contract.CopyPbSlatePricePopupController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>copy-pb-slate-price-popup</value></property>
+    <property name="successView"><value>copy-pb-slate-price-popup</value></property>
+  </bean>
+
+  <bean id="modifySlatePricePopupController" class="com.intertek.web.controller.contract.ModifySlatePricePopupController">
+    <property name="validator"><ref bean="slatePriceExtValidator"/></property>
+    <property name="formView"><value>modify-slate-price-popup</value></property>
+    <property name="successView"><value>modify-slate-price-popup</value></property>
+  </bean>
+
+  <bean id="createContractSlatePopupController" class="com.intertek.web.controller.contract.CreateContractSlatePopupController">
+    <property name="validator"><ref bean="contractSlateExtValidator"/></property>
+    <property name="formView"><value>create-contract-slate-popup</value></property>
+    <property name="successView"><value>create-contract-slate-popup</value></property>
+  </bean>
+  
+  <bean id="editJobFormController" class="com.intertek.web.controller.job.EditJobFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="pages">
+      <list>
+        <value>edit-job-entry</value>
+        <value>edit-job-operational-info</value>
+        <value>edit-job-prebill</value>
+        <value>edit-job-notes</value>
+        <value>edit-job-history</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="searchJobController" class="com.intertek.web.controller.job.SearchJobFormController">
+    <property name="formView"><value>search-job</value></property>
+    <property name="successView"><value>search-job</value></property>
+  <property name="bindOnNewForm" value="true"/>
+     <property name="sessionForm" value="true"/>
+  </bean>
+  
+  <bean id="searchJobCriteriaController" class="com.intertek.web.controller.job.SearchJobCriteriaController">
+    <property name="formView"><value>search-job-result</value></property>
+    <property name="successView"><value>search-job-result</value></property>
+  </bean>
+  
+  <bean id="searchJobResultsController" class="com.intertek.web.controller.job.SearchJobResultsController">
+    <property name="formView"><value>search-job-result</value></property>
+    <property name="successView"><value>search-job-result</value></property>
+  </bean>
+  <bean id="batchReprintController" class="com.intertek.web.controller.job.BatchReprintController">
+    <property name="formView"><value>batch-reprint</value></property>
+    <property name="successView"><value>batch-reprint</value></property>
+  </bean>
+<bean id="searchJobOrderInspPopupFormController" class="com.intertek.web.controller.job.SearchJobOrderInspPopupFormController">
+  <property name="formView"><value>search-job-contract-insp-popup</value></property>
+  <property name="successView"><value>search-job-contract-insp-popup</value></property>
+  </bean>
+
+<bean id="createJobAddCustomerAttachFilePopupFormController" class="com.intertek.web.controller.job.CreateJobAddCustomerAttachFilePopupFormController">
+  <property name="formView"><value>create-job-add-customer-attachfile-popup</value></property>
+  <property name="successView"><value>create-job-add-customer-attachfile-popup</value></property>
+  </bean>
+
+  <bean id="createJobAddCustomerNotePopupFormController" class="com.intertek.web.controller.job.CreateJobAddCustomerNotePopupFormController">
+    <property name="formView"><value>create-job-add-customer-note-popup</value></property>
+    <property name="successView"><value>create-job-add-customer-note-popup</value></property>
+  </bean>
+
+<bean id="searchBankPopupFormController" class="com.intertek.web.controller.job.SearchBankPopupFormController">
+  <property name="formView"><value>search-bank-popup</value></property>
+  <property name="successView"><value>search-bank-popup</value></property>
+  </bean>
+
+<bean id="searchBankAccountPopupFormController" class="com.intertek.web.controller.job.SearchBankAccountPopupFormController">
+  <property name="formView"><value>search-bank-account-popup</value></property>
+  <property name="successView"><value>search-bank-account-popup</value></property>
+  </bean>
+
+
+
+  <bean id="createContactFormController" class="com.intertek.web.controller.customer.CreateContactFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-contact</value></property>
+  </bean>
+
+  <bean id="editContactFormController" class="com.intertek.web.controller.customer.EditContactFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-contact</value></property>
+  </bean>
+
+  <bean id="searchContactFormController" class="com.intertek.web.controller.customer.SearchContactFormController">
+    <property name="formView"><value>search-contact</value></property>
+    <property name="successView"><value>search-contact</value></property>
+  </bean>
+
+
+  <bean id="createCustomerFormController" class="com.intertek.web.controller.customer.CreateCustomerFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-customer</value></property>
+  </bean>
+
+  <bean id="editCustomerFormController" class="com.intertek.web.controller.customer.EditCustomerFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-customer</value></property>
+  </bean>
+
+  <bean id="searchCustomerFormController" class="com.intertek.web.controller.customer.SearchCustomerFormController">
+    <property name="formView"><value>search-customer</value></property>
+    <property name="successView"><value>search-customer</value></property>
+  </bean>
+
+  <bean id="quickCreateCustomerFormController" class="com.intertek.web.controller.customer.QuickCreateCustomerFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>quickcreate-customer</value></property>
+  </bean>
+
+  <bean id="searchContractFormController" class="com.intertek.web.controller.contract.SearchContractFormController">
+    <property name="formView"><value>search-contract</value></property>
+    <property name="successView"><value>search-contract</value></property>
+  </bean>
+
+  <bean id="fileUploadController" class="com.intertek.web.controller.contract.FileUploadController">
+    <property name="formView"><value>file-upload</value></property>
+    <property name="successView"><value>file-upload</value></property>
+  </bean>
+
+  <bean id="editProductGroupSetPopupFormController" class="com.intertek.web.controller.contract.EditProductGroupSetPopupFormController">
+    <property name="validators">
+      <list>
+        <ref bean="editProductGroupSetValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-product-group-set-popup</value></property>
+  </bean>
+
+  <bean id="editVesselTypeSetPopupFormController" class="com.intertek.web.controller.contract.EditVesselTypeSetPopupFormController">
+    <property name="validators">
+      <list>
+        <ref bean="editVesselTypeSetValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-vessel-type-set-popup</value></property>
+  </bean>
+
+
+  <bean id="createShippingAgentFormController" class="com.intertek.web.controller.shippingagent.CreateShippingAgentFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-shipping-agent</value></property>
+  </bean>
+
+  <bean id="editShippingAgentFormController" class="com.intertek.web.controller.shippingagent.EditShippingAgentFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-shipping-agent</value></property>
+  </bean>
+
+  <bean id="searchShippingAgentFormController" class="com.intertek.web.controller.shippingagent.SearchShippingAgentFormController">
+    <property name="formView"><value>search-shipping-agent</value></property>
+    <property name="successView"><value>search-shipping-agent</value></property>
+  </bean>
+
+  <bean id="createTowingCompanyFormController" class="com.intertek.web.controller.towingcompany.CreateTowingCompanyFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-towing-company</value></property>
+  </bean>
+
+  <bean id="editTowingCompanyFormController" class="com.intertek.web.controller.towingcompany.EditTowingCompanyFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-towing-company</value></property>
+  </bean>
+
+  <bean id="searchTowingCompanyFormController" class="com.intertek.web.controller.towingcompany.SearchTowingCompanyFormController">
+    <property name="formView"><value>search-towing-company</value></property>
+    <property name="successView"><value>search-towing-company</value></property>
+  </bean>
+
+  <bean id="createBusinessUnitFormController" class="com.intertek.web.controller.user.CreateBusinessUnitFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-business-unit</value></property>
+  </bean>
+
+
+  <bean id="editBusinessUnitFormController" class="com.intertek.web.controller.user.EditBusinessUnitFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-business-unit</value></property>
+  </bean>
+
+  <bean id="searchBusinessUnitFormController" class="com.intertek.web.controller.user.SearchBusinessUnitFormController">
+    <property name="formView"><value>search-business-unit</value></property>
+    <property name="successView"><value>search-business-unit</value></property>
+  </bean>
+
+
+  <bean id="createBranchFormController" class="com.intertek.web.controller.user.CreateBranchFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-branch</value></property>
+
+  </bean>
+
+  <bean id="editBranchFormController" class="com.intertek.web.controller.user.EditBranchFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-branch</value></property>
+  </bean>
+
+  <bean id="searchBranchFormController" class="com.intertek.web.controller.user.SearchBranchFormController">
+    <property name="formView"><value>search-branch</value></property>
+    <property name="successView"><value>search-branch</value></property>
+  </bean>
+
+<bean id="searchRoleFormController" class="com.intertek.phoenix.web.controller.user.SearchRoleFormController">
+    <property name="formView"><value>search-role</value></property>
+    <property name="successView"><value>search-role</value></property>
+  </bean>
+    <bean id="searchBranchPopupController" class="com.intertek.web.controller.user.SearchBranchPopupController">
+    <property name="formView"><value>search-branch-popup</value></property>
+    <property name="successView"><value>search-branch-popup</value></property>
+  </bean>
+
+  <bean id="searchVatRatePopupController" class="com.intertek.web.controller.user.SearchVatRatePopupController">
+    <property name="formView"><value>search-vat-rate-popup</value></property>
+    <property name="successView"><value>search-vat-rate-popup</value></property>
+  </bean>
+
+  <bean id="searchJobCodePopupController" class="com.intertek.web.controller.user.SearchJobCodePopupController">
+  <property name="formView"><value>search-job-code-popup</value></property>
+  <property name="successView"><value>search-job-code-popup</value></property>
+  </bean>
+
+  <bean id="searchSupervisorIdPopupController" class="com.intertek.web.controller.user.SearchSupervisorIdPopupController">
+  <property name="formView"><value>search-supervisor-id-popup</value></property>
+  <property name="successView"><value>search-supervisor-id-popup</value></property>
+  </bean>
+   <bean id="searchUserRolesPopupController" class="com.intertek.web.controller.user.SearchUserRolesPopupController">
+    <property name="formView"><value>search-user-roles-popup</value></property>
+    <property name="successView"><value>search-user-roles-popup</value></property>
+    </bean>
+  <bean id="searchCurrencyPopupController" class="com.intertek.web.controller.user.SearchCurrencyPopupController">
+  <property name="formView"><value>search-currency-popup</value></property>
+  <property name="successView"><value>search-currency-popup</value></property>
+  </bean>
+
+  <bean id="searchPermissionListPopupController" class="com.intertek.web.controller.user.SearchPermissionListPopupController">
+  <property name="formView"><value>search-permission-list-popup</value></property>
+  <property name="successView"><value>search-permission-list-popup</value></property>
+  </bean>
+
+  
+
+  <bean id="createContractPopupController" class="com.intertek.web.controller.contract.CreateContractPopupController">
+  <property name="formView"><value>create-contract-popup</value></property>
+  <property name="successView"><value>create-contract-popup</value></property>
+  </bean>
+
+  <bean id="addressSeqSearchPopupController"  
+  class="com.intertek.web.controller.customer.AddressSeqSearchPopupController">
+  <property name="formView"><value>search-address-sequence-popup</value></property>
+  <property name="successView"><value>search-address-sequence-popup</value></property>
+  </bean>
+
+  <bean id="searchCustomerIdPopupController" class="com.intertek.web.controller.customer.SearchCustomerIdPopupController">
+  <property name="formView"><value>search-customer-id-popup</value></property>
+  <property name="successView"><value>search-customer-id-popup</value></property>
+  </bean>
+
+
+<bean id="searchContractPopupController" class="com.intertek.web.controller.contract.SearchContractPopupController">
+  <property name="formView"><value>search-contract-popup</value></property>
+  <property name="successView"><value>search-contract-popup</value></property>
+  </bean>
+
+  <bean id="createServiceLocationFormController" class="com.intertek.web.controller.servicelocation.CreateServiceLocationFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-service-location</value></property>
+  </bean>
+
+  <bean id="editServiceLocationFormController" class="com.intertek.web.controller.servicelocation.EditServiceLocationFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-service-location</value></property>
+  </bean>
+
+  <bean id="searchServiceLocationFormController" class="com.intertek.web.controller.servicelocation.SearchServiceLocationFormController">
+    <property name="formView"><value>search-service-location</value></property>
+    <property name="successView"><value>search-service-location</value></property>
+  </bean>
+
+
+  <bean id="createUserFormController" class="com.intertek.web.controller.user.CreateUserFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-user</value></property>
+  </bean>
+
+  <bean id="editUserFormController" class="com.intertek.web.controller.user.EditUserFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-user</value></property>
+  </bean>
+
+  <bean id="searchUserFormController" class="com.intertek.phoenix.web.controller.user.SearchUserFormController">
+    <property name="formView"><value>search-user</value></property>
+    <property name="successView"><value>search-user</value></property>
+  </bean>
+
+  <bean id="changeUserFormController" class="com.intertek.web.controller.user.ChangeUserFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>change-user</value></property>
+  </bean>
+
+  <bean id="createCountryFormController" class="com.intertek.web.controller.country.CreateCountryFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-country</value></property>
+  </bean>
+   
+   <bean id="editCountryFormController" class="com.intertek.web.controller.country.EditCountryFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-country</value></property>
+  </bean>
+
+   <bean id="createVatRateFormController" class="com.intertek.web.controller.user.CreateVatRateFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-vat-rate</value></property>
+  </bean>
+
+     <bean id="createSAMLIMSBranchIntFormController" class="com.intertek.web.controller.user.CreateSAMLIMSBranchIntFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>sam-lims-int</value></property>
+  </bean>
+
+
+     <bean id="createPermissionListFormController" class="com.intertek.web.controller.user.CreatePermissionListFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-permission-list</value></property>
+  </bean>
+    <bean id="searchPermissionFormController" class="com.intertek.phoenix.web.controller.user.SearchPermissionFormController">
+  <property name="formView"><value>search-permission-list</value></property>  
+  <property name="successView"><value>search-permission-list</value></property>
+  </bean>
+
+    <bean id="editPermissionListFormController" class="com.intertek.web.controller.user.EditPermissionListFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+  <property name="formView"><value>edit-permission-list</value></property>
+  </bean>
+  <bean id="createRoleFormController" class="com.intertek.web.controller.user.CreateRoleFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-role</value></property>
+   </bean>
+   <bean id="editRoleFormController" class="com.intertek.web.controller.user.EditRoleFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-role</value></property>
+   </bean>
+
+       <bean id="searchCreditAnalystPopupController" class="com.intertek.web.controller.customer.SearchCreditAnalystPopupController">
+     <property name="successView"><value>search-creditanalyst</value></property> 
+    <property name="formView"><value>search-creditanalyst</value></property>
+   </bean>
+
+    <bean id="searchCollectorPopupController" class="com.intertek.web.controller.customer.SearchCollectorPopupController">
+     <property name="successView"><value>search-collector</value></property>   
+    <property name="formView"><value>search-collector</value></property>
+   </bean>
+   
+    <bean id="searchBusinessUnitPopupController" class="com.intertek.web.controller.user.SearchBusinessUnitPopupController">
+    <property name="successView"><value>search-businessunit</value></property> 
+    <property name="formView"><value>search-businessunit</value></property>
+   </bean>
+   <bean id="searchContactPopupController" class="com.intertek.web.controller.customer.SearchContactPopupController">
+    <property name="successView"><value>search-contactid</value></property> 
+    <property name="formView"><value>search-contactid</value></property>
+   </bean>
+    <bean id="searchCompanyNamePopupController" class="com.intertek.web.controller.customer.SearchCompanyNamePopupController">
+    <property name="successView"><value>search-companyname</value></property> 
+    <property name="formView"><value>search-companyname</value></property>
+   </bean>
+   <bean id="searchControlPopupController" class="com.intertek.web.controller.user.SearchControlPopupController">
+    <property name="successView"><value>search-control-popup</value></property> 
+    <property name="formView"><value>search-control-popup</value></property>
+   </bean>
+   <bean id="searchLinkPopupController" class="com.intertek.web.controller.user.SearchControlPopupController">
+    <property name="successView"><value>search-link-popup</value></property> 
+    <property name="formView"><value>search-link-popup</value></property>
+   </bean>
+
+      
+    <bean id="createNewContactPopupController" class="com.intertek.web.controller.customer.CreateNewContactPopupController">
+    <property name="successView"><value>create-newcontact</value></property> 
+    <property name="formView"><value>create-newcontact</value></property>
+   </bean>
+   
+    <bean id="searchUserPopupController" class="com.intertek.web.controller.user.SearchUserPopupController">
+     <property name="successView"><value>search-accountowner</value></property>  
+    <property name="formView"><value>search-accountowner</value></property>
+   </bean>
+ <bean id="searchCustomerPopupController" class="com.intertek.web.controller.customer.SearchCustomerPopupController">
+     <property name="successView"><value>search-customer-popup</value></property>  
+    <property name="formView"><value>search-customer-popup</value></property>
+   </bean>
+
+   <bean id="searchStatePopupController" class="com.intertek.web.controller.country.SearchStatePopupController">
+    <property name="formView"><value>search-state-popup</value></property>
+    <property name="successView"><value>search-state-popup</value></property>
+  </bean>
+  
+  <bean id="searchTowingCompanyPopupController" class="com.intertek.web.controller.towingcompany.SearchTowingCompanyPopupController">
+    <property name="formView"><value>search-towingcompany-popup</value></property>
+    <property name="successView"><value>search-towingcompany-popup</value></property>
+  </bean>
+ <bean id="searchShippingAgentPopupController" class="com.intertek.web.controller.shippingagent.SearchShippingAgentPopupController">
+    <property name="formView"><value>search-shippingagent-popup</value></property>
+    <property name="successView"><value>search-shippingagent-popup</value></property>
+  </bean>
+
+   <bean id="searchServiceLocationPopupController" class="com.intertek.web.controller.servicelocation.SearchServiceLocationPopupController">
+    <property name="formView"><value>search-servicelocation-popup</value></property>
+    <property name="successView"><value>search-servicelocation-popup</value></property>
+  </bean>
+
+
+   <bean id="createNewTowingCompanyPopupController" class="com.intertek.web.controller.towingcompany.CreateNewTowingCompanyPopupController">
+    <property name="formView"><value>create-newtowingcompany-popup</value></property>
+    <property name="successView"><value>create-newtowingcompany-popup</value></property>
+  </bean>
+
+   <bean id="createNewShippingAgentPopupController" 
+   class="com.intertek.web.controller.shippingagent.CreateNewShippingAgentPopupController">
+    <property name="formView"><value>create-shippingagent-popup</value></property>
+    <property name="successView"><value>create-shippingagent-popup</value></property>
+  </bean>
+
+   <bean id="createNewServiceLocationPopupController" 
+   class="com.intertek.web.controller.servicelocation.CreateNewServiceLocationPopupController">
+    <property name="formView"><value>create-servicelocation-popup</value></property>
+    <property name="successView"><value>create-servicelocation-popup</value></property>
+  </bean>
+
+   <bean id="searchTimeZonePopupController" 
+   class="com.intertek.web.controller.job.SearchTimeZonePopupController">
+    <property name="formView"><value>search-timezone-popup</value></property>
+    <property name="successView"><value>search-timezone-popup</value></property>
+  </bean>
+  
+  <bean id="jobOrderCEFormController" class="com.intertek.phoenix.web.controller.job.JobOrderCEFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>job-entry-ce</value></property>
+  </bean>
+  
+   <bean id="createJobOrderInspFormController" class="com.intertek.web.controller.job.CreateJobOrderInspFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>create-job-entry-insp</value></property>
+  </bean>
+   <bean id="searchCountryFormController" class="com.intertek.web.controller.country.SearchCountryFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>search-country</value></property>
+    </bean>
+    
+   <bean id="searchVesselPopupController" class="com.intertek.web.controller.job.SearchVesselPopupController">
+    <property name="successView"><value>search-vessel-popup</value></property> 
+    <property name="formView"><value>search-vessel-popup</value></property>
+   </bean>    
+
+   <bean id="searchSlatePopupController" class="com.intertek.web.controller.job.SearchSlatePopupController">
+    <property name="successView"><value>search-slate-popup</value></property> 
+    <property name="formView"><value>search-slate-popup</value></property>
+   </bean>    
+
+   <bean id="searchTestPopupController" class="com.intertek.web.controller.job.SearchTestPopupController">
+    <property name="successView"><value>search-test-popup</value></property> 
+    <property name="formView"><value>search-test-popup</value></property>
+   </bean>    
+   
+    <bean id=" searchProjectPopupController" 
+   class="com.intertek.web.controller.project.SearchProjectPopupController">
+    <property name="formView"><value>search-project-popup</value></property>
+    <property name="successView"><value>search-project-popup</value></property>
+  </bean>
+
+   <bean id="createJobOrderAnalyticalServiceFormController" class="com.intertek.web.controller.job.CreateJobOrderAnalyticalServiceFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>create-job-entry-analytical-service</value></property>
+  </bean>
+  <bean id="createJobOrderOutSourcingFormController" class="com.intertek.web.controller.job.CreateJobOrderOutSourcingFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>create-job-entry-outsourcing</value></property>
+  </bean>
+
+  <bean id="editJobOrderAnalyticalServiceFormController" class="com.intertek.web.controller.job.EditJobOrderAnalyticalServiceFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>edit-job-entry-analytical-service</value></property>
+  </bean>
+
+  <bean id="viewJobOrderAnalyticalServiceFormController" class="com.intertek.web.controller.job.ViewJobOrderAnalyticalServiceFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>view-job-entry-analytical-service</value></property>
+  </bean>
+   <bean id="editJobOrderOutSourcingFormController" class="com.intertek.web.controller.job.EditJobOrderOutSourcingFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>edit-job-entry-outsourcing</value></property>
+  </bean>
+
+  <bean id="viewJobOrderOutSourcingFormController" class="com.intertek.web.controller.job.ViewJobOrderOutSourcingFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>view-job-entry-outsourcing</value></property>
+  </bean>
+  <bean id="editJobOrderInspFormController" class="com.intertek.web.controller.job.EditJobOrderInspFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>edit-job-entry-insp</value></property>
+  </bean>
+
+   <bean id="viewJobOrderInspFormController" class="com.intertek.web.controller.job.ViewJobOrderInspFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>view-job-entry-insp</value></property>
+  </bean>
+
+    <bean id="createJobOrderMarineFormController" class="com.intertek.web.controller.job.CreateJobOrderMarineFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>create-job-entry-marine</value></property>
+  </bean>
+ <bean id="editJobOrderMarineFormController" class="com.intertek.web.controller.job.EditJobOrderMarineFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>edit-job-entry-marine</value></property>
+  </bean>
+
+ <bean id="viewJobOrderMarineFormController" class="com.intertek.web.controller.job.ViewJobOrderMarineFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>
+   <property name="formView"><value>view-job-entry-marine</value></property>
+  </bean>
+   <bean id="addManualTestPopupController" class="com.intertek.web.controller.job.AddManualTestPopupController">
+    <property name="successView"><value>add-manual-test-popup</value></property> 
+    <property name="formView"><value>add-manual-test-popup</value></property>
+   </bean>    
+   
+   <bean id="copyProductPopupController" class="com.intertek.web.controller.job.CopyProductPopupController">
+    <property name="successView"><value>copy-product-popup</value></property> 
+    <property name="formView"><value>copy-product-popup</value></property>
+   </bean>       
+ <bean id="jobLogMailPopupController" class="com.intertek.web.controller.job.JobLogMailPopupController">
+    <property name="successView"><value>job-log-mail-popup</value></property> 
+    <property name="formView"><value>job-log-mail-popup</value></property>
+</bean>
+<bean id="searchJobidPopupController" class="com.intertek.web.controller.job.SearchJobIdPopupController">
+    <property name="formView"><value>search-jobid-popup</value></property>
+    <property name="successView"><value>search-jobid-popup</value></property>
+  </bean>
+   <bean id="viewContractPopupController" class="com.intertek.web.controller.contract.ViewContractPopupController">
+  <property name="formView"><value>view-contract-popup</value></property>
+  <property name="successView"><value>view-contract-popup</value></property>
+  </bean>
+
+   <bean id="viewContactPopupController" class="com.intertek.web.controller.customer.ViewContactPopupController">
+  <property name="formView"><value>view-contact-popup</value></property>
+  <property name="successView"><value>view-contact-popup</value></property>
+  </bean>
+
+  <bean id="createJobTypeFormController" class="com.intertek.web.controller.jobtype.CreateJobTypeFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-job-type</value></property>
+  </bean>
+
+  <bean id="configureDropDownController" class="com.intertek.web.controller.dropdown.ConfigureDropDownController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>configure-dropdown</value></property>
+  </bean>
+    <bean id="searchJobTypeFormController" class="com.intertek.web.controller.jobtype.SearchJobTypeFormController">
+  <property name="formView"><value>search-job-type</value></property>  
+  <property name="successView"><value>search-job-type</value></property>
+  </bean>
+
+ <bean id="editJobTypeFormController" class="com.intertek.web.controller.jobtype.EditJobTypeFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+  <property name="formView"><value>edit-job-type</value></property>
+  </bean>
+
+<bean id="searchOperationPopupController" class="com.intertek.web.controller.jobtype.SearchOperationPopupController">
+  <property name="formView"><value>search-operation-popup</value></property>
+  <property name="successView"><value>search-operation-popup</value></property>
+  </bean>
+  <bean id="searchOperationsFormController" class="com.intertek.web.controller.jobtype.SearchOperationsFormController">
+  <property name="formView"><value>search-operations</value></property>  
+  <property name="successView"><value>search-operations</value></property>
+  </bean>
+
+ <bean id="createOperationEventFormController" class="com.intertek.web.controller.jobtype.CreateOperationEventFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-operation-event</value></property>
+  </bean>
+
+<bean id="searchEventPopupController" class="com.intertek.web.controller.jobtype.SearchEventPopupController">
+  <property name="formView"><value>search-event-popup</value></property>
+  <property name="successView"><value>search-event-popup</value></property>
+  </bean>
+
+<bean id="createTaxArticlesFormController" class="com.intertek.web.controller.user.CreateTaxArticlesFormController">
+  <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-tax-article</value></property>
+  </bean>
+
+<bean id="searchLogoPopupController" class="com.intertek.web.controller.user.SearchLogoPopupController">
+  <property name="formView"><value>search-logo-popup</value></property>
+  <property name="successView"><value>search-logo-popup</value></property>
+  </bean>
+
+  <bean id="viewContractAttachPopupFormController" class="com.intertek.web.controller.contract.ViewContractAttachPopupFormController">
+  <property name="formView"><value>view-contract-attach-popup</value></property>
+  <property name="successView"><value>view-contract-attach-popup</value></property>
+  </bean> 
+  
+<bean id="monthlyJobPopupFormController" class="com.intertek.web.controller.job.MonthlyJobPopupFormController">
+  <property name="formView"><value>search-monthly-job-popup</value></property>
+  <property name="successView"><value>search-monthly-job-popup</value></property>
+  </bean>
+  <bean id="weeklyReportController" class="com.intertek.web.controller.report.WeeklyReportController">
+    <property name="formView"><value>weekly-report</value></property>
+    <property name="successView"><value>weekly-report</value></property>
+  </bean>
+  
+
+  <bean id="searchConfigurationPopupFormController" class="com.intertek.web.controller.job.SearchConfigurationPopupFormController">
+  <property name="formView"><value>search-configuration-popup</value></property>
+  <property name="successView"><value>search-configuration-popup</value></property>
+  </bean>
+
+<bean id="sampleLocationPopupFormController" class="com.intertek.web.controller.job.SampleLocationPopupFormController">
+  <property name="formView"><value>sample-location-popup</value></property>
+  <property name="successView"><value>sample-location-popup</value></property>
+  </bean>
+
+  <bean id="viewJobContractAttachPopupFormController" class="com.intertek.web.controller.job.ViewJobContractAttachPopupFormController"/>
+  <bean id="contractFileViewController" class="com.intertek.web.controller.contract.ViewContractAttachController"/>
+
+ <bean id="messagePopupController" class="com.intertek.web.controller.common.MessagePopupController">
+  </bean>
+
+
+  <bean id="createUserController" class="com.intertek.web.controller.user.CreateUserController">
+  </bean>
+
+  <bean id="businessUnitController" class="com.intertek.web.controller.user.BusinessUnitController">
+  </bean>
+
+  <bean id="shippingAgentController" class="com.intertek.web.controller.shippingagent.ShippingAgentController">
+  </bean>
+  <bean id="serviceLocationController" class="com.intertek.web.controller.servicelocation.ServiceLocationController">
+  </bean>
+   <bean id="jobOrderController" class="com.intertek.web.controller.job.JobOrderController">
+  </bean>
+  
+  <bean id="towingCompanyController" class="com.intertek.web.controller.towingcompany.TowingCompanyController">
+  </bean>
+
+  <bean id="ajaxController" class="com.intertek.phoenix.ajax.AjaxController"/>
+
+  <bean id="bodyUnloadedController" class="com.intertek.web.controller.common.BodyUnloadedController">
+    <property name="formView">
+      <value>body-unloaded</value>
+    </property>
+    <property name="successView">
+      <value>body-unloaded</value>
+    </property>
+  </bean> 
+  
+  
+  <bean id="messageController" class="com.intertek.web.controller.common.MessageController"/>
+  <bean id="messageErrorController" class="com.intertek.web.controller.common.MessageErrorController"/> 
+  <bean id="currentUsersController" class="com.intertek.web.controller.common.CurrentUsersController"/>
+  <bean id="jobLocksController" class="com.intertek.web.controller.job.JobLocksController"/>
+
+  <bean id="countryController" class="com.intertek.web.controller.user.CountryController">
+  </bean>
+  <bean id="branchController" class="com.intertek.web.controller.user.BranchController">
+  </bean>
+  <bean id="customerController" class="com.intertek.web.controller.customer.CustomerController">
+  </bean>
+  <bean id="customerAddressController" class="com.intertek.web.controller.customer.CustomerAddressController">
+  </bean>
+  <bean id="contractController" class="com.intertek.web.controller.contract.ContractController">
+  </bean>
+  <bean id="taxRateController" class="com.intertek.web.controller.user.TaxRateController">
+  </bean>
+ <bean id="templateController" class="com.intertek.web.controller.job.TemplateController">
+  </bean>
+
+  <bean id="searchTemplatePopupController" class="com.intertek.web.controller.job.SearchTemplatePopupController">
+  <property name="formView"><value>search-template-popup</value></property>
+  <property name="successView"><value>search-template-popup</value></property>
+  </bean>
+
+  <bean id="logJobOrderController" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+    <property name="viewName"><value>order-log</value></property>
+  </bean>
+
+  <bean id="createVesselController" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+    <property name="viewName"><value>vessel-create</value></property>
+  </bean>
+
+  <bean id="displayControlPopupController" class="com.intertek.web.controller.calculator.DisplayControlPopupController">
+    <property name="formView"><value>display-control-popup</value></property>
+    <property name="successView"><value>display-control-popup</value></property>
+  </bean>
+
+  <bean id="addTestServicePopupController" class="com.intertek.web.controller.calculator.AddTestServicePopupController">
+    <property name="validator"><ref bean="addTestServiceValidator"/></property>
+    <property name="formView"><value>add-test-service-popup</value></property>
+    <property name="successView"><value>add-test-service-popup</value></property>
+  </bean>
+
+  <bean id="editTestServicePopupController" class="com.intertek.web.controller.calculator.EditTestServicePopupController">
+    <property name="validator"><ref bean="editTestServiceValidator"/></property>
+    <property name="formView"><value>edit-test-service-popup</value></property>
+    <property name="successView"><value>edit-test-service-popup</value></property>
+  </bean>
+
+  <bean id="addSlateServicePopupController" class="com.intertek.web.controller.calculator.AddSlateServicePopupController">
+    <property name="validator"><ref bean="addSlateServiceValidator"/></property>
+    <property name="formView"><value>add-slate-service-popup</value></property>
+    <property name="successView"><value>add-slate-service-popup</value></property>
+  </bean>
+
+  <bean id="editSlateServicePopupController" class="com.intertek.web.controller.calculator.EditSlateServicePopupController">
+    <property name="validator"><ref bean="editSlateServiceValidator"/></property>
+    <property name="formView"><value>edit-slate-service-popup</value></property>
+    <property name="successView"><value>edit-slate-service-popup</value></property>
+  </bean>
+
+  <bean id="addManualTestServicePopupController" class="com.intertek.web.controller.calculator.AddManualTestServicePopupController">
+    <property name="validator"><ref bean="manualTestServiceValidator"/></property>
+    <property name="formView"><value>add-manual-test-service-popup</value></property>
+    <property name="successView"><value>add-manual-test-service-popup</value></property>
+  </bean>
+
+  <bean id="addInspectionServicePopupController" class="com.intertek.web.controller.calculator.AddInspectionServicePopupController">
+    <property name="validator"><ref bean="addJobContractProdValidator"/></property>
+    <property name="formView"><value>add-inspection-service-popup</value></property>
+    <property name="successView"><value>add-inspection-service-popup</value></property>
+  </bean>
+
+  <bean id="invoicePreviewController" class="com.intertek.web.controller.job.InvoicePreviewController" />
+  <bean id="invoiceViewController" class="com.intertek.web.controller.job.InvoiceViewController" />
+
+  <bean id="addJobContractVesselPopupController" class="com.intertek.web.controller.calculator.AddJobContractVesselPopupController">
+    <property name="validator"><ref bean="addJobContractVesselValidator"/></property>
+    <property name="formView"><value>add-job-contract-vessel-popup</value></property>
+    <property name="successView"><value>add-job-contract-vessel-popup</value></property>
+  </bean>
+
+  <bean id="createConsolidatedInvoiceFormController" class="com.intertek.web.controller.conslinv.CreateConsolidatedInvoiceFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>create-consl-inv</value></property>
+  </bean>
+
+
+  <bean id="editConsolidatedInvoiceFormController" class="com.intertek.web.controller.conslinv.EditConsolidatedInvoiceFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>edit-consl-inv</value></property>
+  </bean>
+
+  <bean id="searchConsolidatedInvoiceFormController" class="com.intertek.web.controller.conslinv.SearchConsolidatedInvoiceFormController">
+    <property name="formView"><value>search-consl-inv</value></property>
+    <property name="successView"><value>search-consl-inv</value></property>
+  </bean>
+
+
+<bean id="createMultilingualBranchPopupController" class="com.intertek.web.controller.user.CreateMultilingualBranchPopupController">
+    <property name="successView"><value>create-multilingual-branch-popup</value></property> 
+    <property name="formView"><value>create-multilingual-branch-popup</value></property>
+   </bean>
+
+<bean id="createMultilingualBunitPopupController" class="com.intertek.web.controller.user.CreateMultilingualBunitPopupController">
+    <property name="successView"><value>create-multilingual-bunit-popup</value></property> 
+    <property name="formView"><value>create-multilingual-bunit-popup</value></property>
+   </bean>
+
+
+<bean id="createMultilingualCustomerPopupController" class="com.intertek.web.controller.customer.CreateMultilingualCustomerPopupController">
+    <property name="formView"><value>create-multilingual-customer-popup</value></property>
+    <property name="successView"><value>create-multilingual-customer-popup</value></property>
+  </bean>
+
+
+
+
+<bean id="createMultilingualQuickCustomerAddrPopupController" class="com.intertek.web.controller.customer.CreateMultilingualQuickCustomerAddrPopupController">
+    <property name="formView"><value>create-multilingual-quickcustomer-addr-popup</value></property>
+    <property name="successView"><value>create-multilingual-quickcustomer-addr-popup</value></property>
+  </bean>
+
+<bean id="createMultilingualCustomerAddressPopupController" class="com.intertek.web.controller.customer.CreateMultilingualCustomerAddressPopupController">
+    <property name="formView"><value>create-multilingual-customer-address-popup</value></property>
+    <property name="successView"><value>create-multilingual-customer-address-popup</value></property>
+  </bean>
+  
+  <bean id="createTaxLabelsFormController" class="com.intertek.web.controller.user.CreateTaxLabelsFormController">
+    <property name="formView"><value>create-tax-labels</value></property>
+    <property name="successView"><value>create-tax-labels</value></property>
+  </bean>
+  
+  <bean id="monthlyJobLogDetailsFormController" class="com.intertek.web.controller.job.MonthlyJobLogDetailsFormController">
+    <property name="formView"><value>monthly-job-log</value></property>
+    <property name="successView"><value>monthly-job-log</value></property>
+  </bean>
+  
+
+
+<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+  <property name="exceptionMappings">
+    <props>
+      <prop key="java.lang.Throwable">common-error</prop>
+    </props>
+  </property>
+</bean>
+
+  <bean id="viewJobIntegrationLogController" class="com.intertek.web.controller.ws.ViewJobIntegrationLogController">
+  </bean>
+
+  <bean id="redirectFormController" class="com.intertek.web.controller.user.RedirectFormController">
+  </bean>
+
+  <bean id="jobOrderPdfViewController" class="com.intertek.web.controller.job.JobOrderPdfViewController">
+  </bean>
+
+  <bean id="errorController" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+    <property name="viewName"><value>common-error</value></property>
+  </bean>
+
+  <bean id="editContractSelectServicesPopupFormController" class="com.intertek.web.controller.contract.EditContractSelectServicesPopupFormController">
+    <property name="formView"><value>edit-contract-select-services-popup</value></property>
+    <property name="successView"><value>edit-contract-select-services-popup</value></property>
+  </bean>
+
+  <bean id="editContractSelectBranchesPopupFormController" class="com.intertek.web.controller.contract.EditContractSelectBranchesPopupFormController">
+    <property name="formView"><value>edit-contract-select-branches-popup</value></property>
+    <property name="successView"><value>edit-contract-select-branches-popup</value></property>
+  </bean>
+
+  <bean id="editContractSelectZonePopupFormController" class="com.intertek.web.controller.contract.EditContractSelectZonePopupFormController">
+    <property name="formView"><value>edit-contract-select-zone-popup</value></property>
+    <property name="successView"><value>edit-contract-select-zone-popup</value></property>
+  </bean>
+
+  <bean id="chooseApplyLevelsPopupFormController" class="com.intertek.web.controller.contract.ChooseApplyLevelsPopupFormController">
+    <property name="formView"><value>choose-apply-levels-popup</value></property>
+    <property name="successView"><value>choose-apply-levels-popup</value></property>
+  </bean>
+  
+  <bean id="editQuestionNotesPopupFormController" class="com.intertek.web.controller.contract.EditQuestionNotesPopupFormController">
+    <property name="formView"><value>edit-question-notes-popup</value></property>
+    <property name="successView"><value>edit-question-notes-popup</value></property>
+  </bean>
+
+   <bean id="createBusinessStreamFormController" class="com.intertek.web.controller.user.CreateBusinessStreamFormController">
+    <property name="formView"><value>create-business-stream</value></property>
+    <property name="successView"><value>create-business-stream</value></property>
+  </bean>
+
+  <bean id="editContractSelectProductsPopupFormController" class="com.intertek.web.controller.contract.EditContractSelectProductsPopupFormController">
+    <property name="formView"><value>edit-contract-select-products-popup</value></property>
+    <property name="successView"><value>edit-contract-select-products-popup</value></property>
+  </bean>
+
+  <bean id="editContractUpdateUomNotesPopupFormController" class="com.intertek.web.controller.contract.EditContractUpdateUomNotesPopupFormController">
+    <property name="validators">
+      <list>
+        <ref bean="updateUomNotesValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>edit-contract-update-uom-notes-popup</value></property>
+    <property name="successView"><value>edit-contract-update-uom-notes-popup</value></property>
+  </bean>
+  
+  <bean id="purchaseOrderFormController" class="com.intertek.phoenix.web.controller.purchaseorder.PurchaseOrderFormController">
+    <property name="validators">
+      <list>
+        <ref bean="beanValidator"/>
+        <ref bean="purchaseorderValidator"/>
+      </list>
+    </property>  
+    <property name="formView"><value>purchase-order</value></property>
+    <property name="successView"><value>purchase-order</value></property>
+  </bean>
+  
+  <bean id="searchPurchaseOrderFormController" class="com.intertek.phoenix.web.controller.purchaseorder.SearchPurchaseOrderFormController">
+    <property name="formView"><value>search-purchase-order</value></property>
+    <property name="successView"><value>search-purchase-order</value></property>
+  </bean>
+  
+   <bean id="jobOperationalInstrCEFormController" class="com.intertek.phoenix.web.controller.job.JobOperationalInstrCEFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="successView"><value>job-operational-info-ce</value></property>
+    <property name="formView"><value>job-operational-info-ce</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.phoenix.web.controller.job.JobOperationalInstrCEFormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+  
+<bean id="ceInvoicePreviewController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab1FormController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab2FormController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab3FormController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab4FormController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+  
+  <bean id="ceInvoicePreviewTab0FormController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab0FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview-tab0</value></property>
+  </bean>  
+
+  <bean id="ceInvoicePreviewTab1FormController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab1FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview-tab1</value></property>
+  </bean>  
+
+  <bean id="ceInvoicePreviewTab2FormController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab2FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview-tab2</value></property>
+  </bean>  
+
+  <bean id="ceInvoicePreviewTab3FormController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab3FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview-tab3</value></property>
+  </bean>  
+
+  <bean id="ceInvoicePreviewTab4FormController" class="com.intertek.phoenix.web.controller.invoice.CEJobInvoicePreviewTab4FormController">
+    <property name="validator"><ref bean="beanValidator"/></property>
+    <property name="formView"><value>ce-job-invoice-preview-tab4</value></property>
+  </bean>  
+    
+  <bean id="applyDepositPopupController" class="com.intertek.phoenix.web.controller.invoice.ApplyDepositPopupController">
+  	<property name="formView"><value>apply-deposit-popup</value></property>
+  	<property name="successView"><value>apply-deposit-popup</value></property>
+  </bean>
+
+  <bean id="revenueSegregationPopupController" class="com.intertek.phoenix.web.controller.invoice.RevenueSegregationPopupController">
+  	<property name="formView"><value>revenue-segregation-popup</value></property>
+  	<property name="successView"><value>revenue-segregation-popup</value></property>
+  </bean> 
+
+  <bean id="jobViewCEInvoiceFormController" class="com.intertek.phoenix.web.controller.invoice.JobViewCEInvoiceFormController">
+    <property name="validator"><ref bean="beanValidator"/></property>  
+    <property name="formView"><value>job-view-ce-invoice</value></property>
+  </bean>  
+
+  <bean id="searchFormController" class="com.intertek.phoenix.search.SearchFormController">
+  	<property name="formView"><value>search</value></property>
+  	<property name="successView"><value>search</value></property>
+  </bean>  
+
+  
+<bean id="jobInstructionAttachFilePopupFormController" class="com.intertek.phoenix.web.controller.job.JobInstructionAttachFilePopupFormController">
+  <property name="formView"><value>job-instruction-attachfile-popup</value></property>
+  <property name="successView"><value>job-instruction-attachfile-popup</value></property>
+  </bean>
+
+  <bean id="jobInstructionNotePopupFormController" class="com.intertek.phoenix.web.controller.job.JobInstructionNotePopupFormController">
+    <property name="formView"><value>job-instruction-note-popup</value></property>
+    <property name="successView"><value>job-instruction-note-popup</value></property>
+  </bean>
+
+ <!--
+  <bean id="searchPurchaseOrderPopupFormController" class="com.intertek.phoenix.web.controller.po.SearchPurchaseOrderPopupFormController">
+    <property name="formView"><value>search-purchase-order-popup</value></property>
+    <property name="successView"><value>search-purchase-order-popup</value></property>
+  </bean>
+-->
+  
+
+  <bean id="jobInstructionTestAttributePopupFormController" class="com.intertek.phoenix.web.controller.job.JobInstructionTestAttributePopupFormController">
+    <property name="formView"><value>job-instruction-test-attribute-popup</value></property>
+    <property name="successView"><value>job-instruction-test-attribute-popup</value></property>
+  </bean>
+  
+
+<!-- Start of the job log ce  -->
+    <bean id="jobLogCeController" class="com.intertek.phoenix.web.controller.joblog.JobLogCEFormController">
+    <property name="formView"><value>job-log-ce</value></property>
+    <property name="successView"><value>job-log-ce</value></property>
+  </bean>
+
+  <bean id="jobLogCeMainController" class="com.intertek.phoenix.web.controller.joblog.JobLogCEFormController">
+    <property name="formView"><value>job-log-ce-results-main</value></property>
+    <property name="successView"><value>job-log-ce-results-main</value></property>
+  </bean>
+
+  <bean id="jobLogCeBillingController" class="com.intertek.phoenix.web.controller.joblog.JobLogCEFormController">
+    <property name="formView"><value>job-log-ce-results-billing</value></property>
+    <property name="successView"><value>job-log-ce-results-billing</value></property>
+  </bean>
+
+  <bean id="jobLogCeLogController" class="com.intertek.phoenix.web.controller.joblog.JobLogCEFormController">
+    <property name="formView"><value>job-log-ce-results-processlog</value></property>
+    <property name="successView"><value>job-log-ce-results-processlog</value></property>
+  </bean>
+  
+
+  <bean id="jobLogCEMailController" class="com.intertek.phoenix.web.controller.joblog.JobLogCEMailController">
+    <property name="formView"><value>job-log-ce-mail</value></property>
+    <property name="successView"><value>job-log-ce-mail</value></property>
+  </bean>
+
+
+
+
+  
+<!--   End of the job log ce-->
+  
+ 
+  
+   <bean id="creditReasonCEPopupController" class="com.intertek.phoenix.web.controller.invoice.CreditReasonCEPopupController">
+    <property name="formView"><value>credit-reason-ce-popup</value></property>
+    <property name="successView"><value>credit-reason-ce-popup</value></property>
+  </bean>
+
+
+
+  <bean id="searchCEJobPopupFormController" class="com.intertek.phoenix.web.controller.job.SearchCEJobPopupFormController">
+  <property name="formView"><value>search-ce-job-popup</value></property>
+  <property name="successView"><value>search-ce-job-popup</value></property>
+  </bean>
+  
+
+  <bean id="jobOrderNotePopupFormController" class="com.intertek.phoenix.web.controller.job.JobOrderNotePopupFormController">
+    <property name="formView"><value>job-order-note-popup</value></property>
+    <property name="successView"><value>job-order-note-popup</value></property>
+  </bean>
+
+
+  <bean id="jobOrderAttachPopupFormController" class="com.intertek.phoenix.web.controller.job.JobOrderAttachPopupFormController">
+    <property name="formView"><value>job-order-attachfile-popup</value></property>
+    <property name="successView"><value>job-order-attachfile-popup</value></property>
+  </bean>
+
+  <bean id="ceJobSelectChargesFormController" class="com.intertek.phoenix.web.controller.job.CEJobSelectChargesFormController">
+    <property name="validators">
+       <list>
+            <ref bean="beanValidator"/>
+            <ref bean="ceSelectChargesValidator"/>
+       </list>
+    </property>  
+    <property name="formView"><value>ce-job-select-charges</value></property>
+    <property name="keptSessionVariableSet">
+      <set>
+        <value>com.intertek.phoenix.web.controller.job.EditPricePopupController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.job.TravelExpensePopupController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.job.AddTestController.FORM.command</value>
+        <value>com.intertek.phoenix.web.controller.job.AddJobServicesController.FORM.command</value>
+      </set>
+    </property>    
+  </bean>
+ 
+ 
+   <bean id="editPricePopupController" class="com.intertek.phoenix.web.controller.job.EditPricePopupController">
+  	<property name="formView"><value>edit-price-popup</value></property>
+  	<property name="successView"><value>edit-price-popup</value></property>
+  </bean> 
+ 
+   <bean id="travelExpensePopupController" class="com.intertek.phoenix.web.controller.job.TravelExpensePopupController">
+  	<property name="formView"><value>travel-expense-popup</value></property>
+  	<property name="successView"><value>travel-expense-popup</value></property>
+  </bean> 
+  
+  <bean id="addTestController" class="com.intertek.phoenix.web.controller.job.AddTestController">
+  	<property name="formView"><value>add-test-popup</value></property>
+  	<property name="successView"><value>add-test-popup</value></property>
+  </bean>
+ 
+  <bean id="addJobServicesController" class="com.intertek.phoenix.web.controller.job.AddJobServicesController">
+  	<property name="formView"><value>add-job-services-popup</value></property>
+  	<property name="successView"><value>add-job-services-popup</value></property>
+  </bean>
+  
+  <!-- Manual Validators -->
+  <bean id="addJobContractVesselValidator" class="com.intertek.web.validators.AddJobContractVesselValidator"/>
+  <bean id="addJobContractProdValidator" class="com.intertek.web.validators.AddJobContractProdValidator"/>
+  <bean id="manualTestServiceValidator" class="com.intertek.web.validators.ManualTestServiceValidator"/>
+  <bean id="addTestServiceValidator" class="com.intertek.web.validators.AddTestServiceValidator"/>
+  <bean id="editTestServiceValidator" class="com.intertek.web.validators.EditTestServiceValidator"/>
+  <bean id="addSlateServiceValidator" class="com.intertek.web.validators.AddSlateServiceValidator"/>
+  <bean id="editSlateServiceValidator" class="com.intertek.web.validators.EditSlateServiceValidator"/>
+  <bean id="addContractValidator" class="com.intertek.web.validators.AddContractValidator"/>
+  <bean id="addContractZoneValidator" class="com.intertek.web.validators.AddContractZoneValidator"/>
+  <bean id="addContractServiceValidator" class="com.intertek.web.validators.AddContractServiceValidator"/>
+  <bean id="testPriceExtValidator" class="com.intertek.web.validators.TestPriceExtValidator"/>
+  <bean id="slatePriceExtValidator" class="com.intertek.web.validators.SlatePriceExtValidator"/>
+  <bean id="contractTestExtValidator" class="com.intertek.web.validators.ContractTestExtValidator"/>
+  <bean id="contractSlateExtValidator" class="com.intertek.web.validators.ContractSlateExtValidator"/>
+  <bean id="addJobOrderSelectChargeValidator" class="com.intertek.web.validators.AddJobOrderSelectChargeValidator"/>
+  <bean id="addJobContractPreviewValidator" class="com.intertek.web.validators.AddJobContractPreviewValidator"/>
+  <bean id="editProductGroupSetValidator" class="com.intertek.web.validators.EditProductGroupSetValidator"/>
+  <bean id="editVesselTypeSetValidator" class="com.intertek.web.validators.EditVesselTypeSetValidator"/>
+  <bean id="updateUomNotesValidator" class="com.intertek.web.validators.UpdateUomNotesValidator"/>
+  <bean id="editInspectionRateValidator" class="com.intertek.web.validators.EditInspectionRateValidator"/>
+  <bean id="purchaseorderValidator" class="com.intertek.phoenix.web.validators.PurchaseOrderValidator"/>
+   <bean id="ceSelectChargesValidator" class="com.intertek.phoenix.web.validators.CESelectChargesValidator"/>
+  
+  <!--- Bean Validation Framework -->
+  <bean id="simpleErrorCodeConverter" class="org.springmodules.validation.bean.converter.KeepAsIsErrorCodeConverter">
+  </bean>
+
+  <bean id="beanValidator" class="org.springmodules.validation.bean.BeanValidator">
+    <property name="configurationLoader" ref="beanValidatorConfigurationLoader"/>
+    <property name="errorCodeConverter" ref="simpleErrorCodeConverter" />
+  </bean>
+
+  <bean id="beanValidatorConfigurationLoader" class="org.springmodules.validation.bean.conf.loader.annotation.AnnotationBeanValidationConfigurationLoader">
+  </bean>
+
+  <!-- Menu Loader -->
+  <bean id="menu" class="net.sf.navigator.menu.MenuLoader">
+    <property name="menuConfig">
+      <value>/WEB-INF/menu-config.xml</value>
+     </property>
+   </bean>
+
+  <!-- View -->
+  <bean id="xmlView" class="com.intertek.web.views.XmlView"/>
+  <bean id="pdfView" class="com.intertek.web.views.PdfView"/>
+  <bean id="fileView" class="com.intertek.web.views.FileView"/>
+  
+</beans>

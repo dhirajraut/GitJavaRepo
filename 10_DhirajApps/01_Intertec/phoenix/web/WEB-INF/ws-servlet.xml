@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <!--property name="location" value="classpath:config.properties"/-->
+    <property name="locations">
+      <list>
+        <value>classpath:db.properties</value>
+        <value>classpath:config.properties</value>
+      </list>
+    </property>        
+  </bean>
+    
+<bean id="updateDCAppBillableItems" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/DCAppBillableItems.xsd"/>
+        <property name="portTypeName" value="DCAppBillableItems"/>
+        <property name="locationUri" value="${hosting.url}/updateDCAppBillableItems.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/DCBillableItemRequest"/>
+      </bean>
+    </property>
+  </bean>
+
+<bean id="updatePeopleSoftBillableItems" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/PSBillableItems.xsd"/>
+        <property name="portTypeName" value="PeopleSoftBillableItems"/>
+        <property name="locationUri" value="${hosting.url}/updatePeopleSoftBillableItems.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/PSBillableItem"/>
+      </bean>
+    </property>
+  </bean>
+  
+<bean id="updateDCAppJobOrder" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/DCAppJobOrder.xsd"/>
+        <property name="portTypeName" value="DCAppJobOrder"/>
+        <property name="locationUri" value="${hosting.url}/updateDCAppJobOrder.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/DCJobOrderRequest"/>
+      </bean>
+    </property>
+  </bean>
+
+<bean id="updateECSJobOrder" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/ECSJobOrder.xsd"/>
+        <property name="portTypeName" value="ECSJobOrder"/>
+        <property name="locationUri" value="${hosting.url}/updateECSJobOrder.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/ECSJobOrderRequest"/>
+      </bean>
+    </property>
+  </bean>
+  
+  <bean id="updateCreditHold" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/creditHold.xsd"/>
+        <property name="portTypeName" value="updateCreditHold"/>
+        <property name="locationUri" value="${hosting.url}/updateCreditHold.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/CreditHold"/>
+      </bean>
+    </property>
+  </bean>
+    
+  <bean id="updateMarketRates" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/marketRates.xsd"/>
+        <property name="portTypeName" value="updateMarketRates"/>
+        <property name="locationUri" value="${hosting.url}/updateMarketRates.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/MarketRates"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="validateCustomerProject" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/projectValidation.xsd"/>
+        <property name="portTypeName" value="validateCustomerProject"/>
+        <property name="locationUri" value="${hosting.url}/validateCustomerProject.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/ProjectValidationRequest"/>
+      </bean>
+    </property>
+  </bean>
+
+ <bean id="updateEntityService" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/ws.xsd"/>
+        <property name="portTypeName" value="UpdateEntity"/>
+        <property name="locationUri" value="${hosting.url}/updateEntityService.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/phoenix/schemas"/>
+      </bean>
+    </property>
+  </bean>
+  
+  <bean id="updateEmployees" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">
+    <property name="builder">
+      <bean class="org.springframework.ws.wsdl.wsdl11.builder.XsdBasedSoap11Wsdl4jDefinitionBuilder">
+        <property name="schema" value="classpath:/xsd/inbound/employee.xsd"/>
+        <property name="portTypeName" value="updateEmployees"/>
+        <property name="locationUri" value="${hosting.url}/updateEmployees.ws"/>
+        <property name="targetNamespace" value="http://www.intertek.com/ESB/Employee"/>
+      </bean>
+    </property>
+  </bean>
+  
+  <bean class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
+    <property name="mappings">
+      <props>
+        <prop key="{http://www.intertek.com/phoenix/schemas}updateEntity">updateEntityEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/DCBillableItemRequest}GetBillableItemRequest">updateDCAppBillableItemsEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/PSBillableItem}PublishBillableItemRequest">updatePeopleSoftBillableItemsEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/DCJobOrderRequest}GetJobOrderRequest">updateDCAppJobOrderEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/ECSJobOrderRequest}GetJobOrderRequest">updateECSJobOrderEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/CreditHold}PublishCreditHoldRequest">updateCreditHoldEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/MarketRates}PublishMarketRatesRequest">updateMarketRatesEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/ProjectValidationRequest}GetProjectValidationRequest">validateCustomerProjectEndpoint</prop>
+        <prop key="{http://www.intertek.com/ESB/Employee}PublishEmployeeRequest">employeeEndpoint</prop>
+      </props>
+    </property>
+    <property name="interceptors">
+      <bean class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor"/>
+    </property>
+  </bean>
+
+	<bean id="inOutBoundTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+		<property name="stylesheet" value="classpath:xsl/inOutBoundTransformer.xsl"/>
+	</bean>
+		
+  <bean id="updateDCAppBillableItemsEndpoint" class="com.intertek.phoenix.webservices.DCAppBillableItemsEndpoint">
+  	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/DCAppBillableItems.xsl"/>
+		</bean>	  	
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>  	
+  	<property name="esbService"><ref bean="esbService"/></property>
+  	<property name="searchService"><ref bean="searchService"/></property>
+  	<property name="type" value="DCBillableItems"/>
+  </bean>
+  <bean id="updatePeopleSoftBillableItemsEndpoint" class="com.intertek.phoenix.webservices.PeopleSoftBillableItemsProjectEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/PSBillableItems.xsl"/>
+		</bean>	
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+  	<property name="esbService"><ref bean="esbService"/></property>
+  	<property name="searchService"><ref bean="searchService"/></property>
+	<property name="type" value="PSBillableItems"/>
+  </bean>
+  <bean id="updateDCAppJobOrderEndpoint" class="com.intertek.phoenix.webservices.DCAppJobOrderEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/DCAppJobOrder.xsl"/>
+		</bean>		
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+	<property name="esbService"><ref bean="esbService"/></property>
+	<property name="jobOrderService"><ref bean="jobOrderService"/></property>
+	<property name="type" value="DCJobOrder"/>
+  </bean>
+  <bean id="updateECSJobOrderEndpoint" class="com.intertek.phoenix.webservices.ECSJobOrderEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/ECSJobOrder.xsl"/>
+		</bean>		
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+  	<property name="esbService"><ref bean="esbService"/></property>
+  	<property name="jobOrderService"><ref bean="jobOrderService"/></property>
+  	<property name="type" value="ECSJobOrder"/>    
+  </bean>
+  <bean id="updateCreditHoldEndpoint" class="com.intertek.phoenix.webservices.UpdateCreditHoldEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/creditHold.xsl"/>
+		</bean>		
+	</property>  
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+	<property name="esbService"><ref bean="esbService"/></property>
+	<property name="type" value="CreditHold"/>
+  </bean>
+  <bean id="updateMarketRatesEndpoint" class="com.intertek.phoenix.webservices.UpdateMarketRatesEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/marketRates.xsl"/>
+		</bean>		
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+	<property name="esbService"><ref bean="esbService"/></property>
+	<property name="type" value="MarketRates"/>
+  </bean>
+  <bean id="employeeEndpoint" class="com.intertek.phoenix.webservices.EmployeeEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/employee.xsl"/>
+		</bean>		
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+	<property name="esbService"><ref bean="esbService"/></property>
+	<property name="type" value="Employee"/>
+  </bean>
+  
+  <bean id="validateCustomerProjectEndpoint" class="com.intertek.phoenix.webservices.ValidateCustomerProjectEndpoint">
+	<property name="dataTransformer">
+		<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+			<property name="stylesheet" value="classpath:xsl/inbound/customerProject.xsl"/>
+		</bean>		
+	</property>
+  	<property name="oxmManager"><ref bean="ESBOxmManager"/></property>
+	<property name="esbService"><ref bean="esbService"/></property>
+	<property name="searchService"><ref bean="searchService"/></property>
+	<property name="type" value="CustomerProject"/>
+  </bean>
+
+
+  <bean id="updateEntityEndpoint" class="com.intertek.webservice.UpdateEntityEndpoint">
+    <property name="webServiceManager">
+      <ref bean="webServiceManager"/>
+    </property>
+  </bean>
+  
+  <bean id="webServiceManager" class="com.intertek.webservice.WebServiceManagerImpl">
+    <property name="oxmManager">
+      <ref bean="oxmManager"/>
+    </property>   
+    <property name="handlerMap">
+      <map>
+        <entry key="paymentTerm"><ref bean="paymentTermHandler"/></entry>
+        <entry key="bank"><ref bean="bankHandler"/></entry>
+        <entry key="bankAccount"><ref bean="bankAccountHandler"/></entry>
+        <entry key="bankAccountCurr"><ref bean="bankAccountCurrHandler"/></entry>
+        <entry key="businessUnit"><ref bean="businessUnitHandler"/></entry>
+        <entry key="busUnitVatLoc"><ref bean="busUnitVatLocHandler"/></entry>
+        <entry key="country"><ref bean="countryHandler"/></entry>
+        <entry key="countryVAT"><ref bean="countryVATHandler"/></entry>
+        <entry key="taxRate"><ref bean="taxRateHandler"/></entry>
+        <entry key="taxCode"><ref bean="taxCodeHandler"/></entry>
+        <entry key="gLAccount"><ref bean="glAccountHandler"/></entry>
+        <entry key="gLDepartment"><ref bean="glDepartmentHandler"/></entry>
+        <entry key="gLProductGroup"><ref bean="glProductGroupHandler"/></entry>
+        <entry key="openPeriod"><ref bean="openPeriodHandler"/></entry>
+        <entry key="currencyRate"><ref bean="currencyRateHandler"/></entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="paymentTermHandler" class="com.intertek.webservice.handler.PaymentTermHandler" />
+  <bean id="bankHandler" class="com.intertek.webservice.handler.BankHandler" />
+  <bean id="bankAccountHandler" class="com.intertek.webservice.handler.BankAccountHandler" />
+  <bean id="bankAccountCurrHandler" class="com.intertek.webservice.handler.BankAccountCurrHandler" />
+  <bean id="businessUnitHandler" class="com.intertek.webservice.handler.BusinessUnitHandler" />
+  <bean id="busUnitVatLocHandler" class="com.intertek.webservice.handler.BusUnitVatLocHandler" />
+  <bean id="countryHandler" class="com.intertek.webservice.handler.CountryHandler" />
+  <bean id="countryVATHandler" class="com.intertek.webservice.handler.CountryVATHandler" />
+  <bean id="taxRateHandler" class="com.intertek.webservice.handler.TaxRateHandler" />
+  <bean id="taxCodeHandler" class="com.intertek.webservice.handler.TaxCodeHandler"/>
+
+  <bean id="glAccountHandler" class="com.intertek.webservice.handler.GLAccountHandler" />
+  <bean id="glDepartmentHandler" class="com.intertek.webservice.handler.GLDepartmentHandler" />
+  <bean id="glProductGroupHandler" class="com.intertek.webservice.handler.GLProductGroupHandler" />
+  <bean id="openPeriodHandler" class="com.intertek.webservice.handler.OpenPeriodHandler" />
+  <bean id="currencyRateHandler" class="com.intertek.webservice.handler.CurrencyRateHandler" />
+
+</beans>

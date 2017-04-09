@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/phoenix/!svn/ver/7033/branches/phx2.1/conf/xsl/outbound
+END
+testMethodology.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6798/branches/phx2.1/conf/xsl/outbound/testMethodology.xsl
+END
+contact.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/phoenix/!svn/ver/6766/branches/phx2.1/conf/xsl/outbound/contact.xsl
+END
+customer.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/6843/branches/phx2.1/conf/xsl/outbound/customer.xsl
+END
+warehouse.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6766/branches/phx2.1/conf/xsl/outbound/warehouse.xsl
+END
+projectContract.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6427/branches/phx2.1/conf/xsl/outbound/projectContract.xsl
+END
+ceInvoice.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/7033/branches/phx2.1/conf/xsl/outbound/ceInvoice.xsl
+END
+businessStream.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/conf/xsl/outbound/businessStream.xsl
+END

@@ -1,0 +1,9 @@
+<projectDescription>
+  <name>GalaxyForumEAR</name>
+  <comment>GalaxyForumEAR</comment>
+  <projects>
+    <project>GalaxyForumWAR</project>
+  </projects>
+  <buildSpec/>
+  <natures/>
+</projectDescription>

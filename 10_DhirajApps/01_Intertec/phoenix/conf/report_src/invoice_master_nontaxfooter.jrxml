@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="invoice_master_nontaxfooter"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="575"
+		 columnSpacing="0"
+		 leftMargin="10"
+		 rightMargin="10"
+		 topMargin="29"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="com.intertek.report.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Job_Number" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Invoice" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="uid20" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Invoice_Id" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NoPrebillFlag" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Indicates if credit invoice on invoice
+originating in PS]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="JdbcConnection" isForPrompting="false" class="java.sql.Connection"/>
+	<parameter name="JobType" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="InvType" isForPrompting="false" class="java.lang.String"/>
+
+	<field name="JOB_NUMBER" class="java.lang.String"/>
+	<field name="UID20" class="java.lang.String"/>
+	<field name="TAX_VAT_FLAG" class="java.lang.String"/>
+	<field name="INVOICE" class="java.lang.String"/>
+	<field name="BU_NAME" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="58"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="56"
+						key="subreport-8"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "F" ) && $P{NoPrebillFlag}.contentEquals( "T" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "invoice_noprebill", 
+                                new String[]{"Job_Number", "Invoice", "uid20", "dirName"},
+                                new Object[]{$F{JOB_NUMBER}, $F{INVOICE}, $F{UID20}, $P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_noprebill.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="56"
+						key="subreport-7"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "T" ) && $P{NoPrebillFlag}.contentEquals( "T" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "invoice_tax_noprebill", 
+                                new String[]{"Job_Number", "Invoice", "uid20", "dirName"},
+                                new Object[]{$F{JOB_NUMBER}, $F{INVOICE}, $F{UID20}, $P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax_noprebill.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="56"
+						key="subreport-1"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "F" ) && $P{NoPrebillFlag}.contentEquals( "F" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JobType">
+						<subreportParameterExpression><![CDATA[$P{JobType}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="InvType">
+						<subreportParameterExpression><![CDATA[$P{InvType}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JdbcConnection">
+						<subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[DataSourceManager.getReportDataSource(
+                                "invoice", 
+                                new String[]{"Job_Number", "Invoice", "uid20", "dirName","JobType","InvType"},
+				new Object[]{$F{JOB_NUMBER}, $F{INVOICE}, $F{UID20}, $P{dirName}, $P{JobType}, $P{InvType}}, 
+				$P{JdbcConnection}
+                            )]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="56"
+						key="subreport-2"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "T" ) && $P{NoPrebillFlag}.contentEquals( "F" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JobType">
+						<subreportParameterExpression><![CDATA[$P{JobType}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JdbcConnection">
+						<subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[DataSourceManager.getReportDataSource(
+                                "invoice_tax", 
+                                new String[]{"Job_Number", "Invoice", "uid20", "dirName","JobType"},
+				new Object[]{$F{JOB_NUMBER}, $F{INVOICE}, $F{UID20}, $P{dirName}, $P{JobType}}, 
+				$P{JdbcConnection}
+                            )]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="45"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="45"
+						key="subreport-3"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JobType">
+						<subreportParameterExpression><![CDATA[$P{JobType}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="InvType">
+						<subreportParameterExpression><![CDATA[$P{InvType}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="JdbcConnection">
+						<subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[DataSourceManager.getReportDataSource(
+                                "invoice_nontax_footer", 
+                                new String[]{"Job_Number", "Invoice", "uid20", "dirName","JobType","InvType"},
+				new Object[]{$F{JOB_NUMBER}, $F{INVOICE}, $F{UID20}, $P{dirName}, $P{JobType}, $P{InvType}}, 
+				$P{JdbcConnection}
+                            )]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_nontax_footer.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

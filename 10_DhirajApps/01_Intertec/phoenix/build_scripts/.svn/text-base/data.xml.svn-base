@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+
+<project name="intertek"  basedir=".">
+
+  <property file="build.properties" />
+
+  <property name="build.dir" value="./build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="build.metainf.dir" value="${build.dir}/META-INF"/>
+  <property name="dist.dir" value="./dist"/>
+  <property name="src.dir" value="${project.home}/src"/>
+  <property name="build.war.dir" value="${build.dir}/war"/>
+  <property name="lib.dir" value="${project.home}/lib" />
+  <property name="web.root.dir" value="${project.home}/web" />
+  <property name="config.dir" value="${project.home}/conf" />
+  <property name="data.dir" value="${project.home}/data" />
+
+  <property name="deploy.dir" value="${application.server.home}/webapps" />
+  
+  <path id="base.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+      <include name="**/*.zip" />
+    </fileset>
+    <fileset dir="${application.server.home}/common/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${build.classes.dir}" />
+
+    <path location="${project.home}/hibernate-ant/hibernate-tools.jar" />
+    <path location="${project.home}/hibernate-ant/freemarker.jar" />
+  </path>
+
+  <target name="run-loader-cfg-data">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/branchCode.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/branchLocation.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/busStream.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/contract.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/contractExpression.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/contractSlate.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/contractTest.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/control.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/controlMap.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/department.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/expGlcode.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/expression.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/inspectionRate.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/jobCode.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/locationDiscount.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/pbook.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/portLoc.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/productCode.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/productGrp.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/rateTbl.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/rb.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/rbLang.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/refField.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/service.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/serviceRate.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/slate.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/slatePrice.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/test.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/testPrice.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/vesselType.sql" />
+    </java>
+  </target>
+
+  <target name="run-loader-cfg-data-1">
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/testProduct.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/testProductGroup.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/testPriceBook.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/slatePriceBook.sql" />
+    </java>
+    <java classname="com.intertek.tool.schema.SchemaCreator" fork="true">
+      <classpath path="${build.classes.dir}"/>
+      <classpath refid="base.path" />
+      <arg value="${data.dir}/cfg/priceBookTestMod.sql" />
+    </java>
+  </target>
+  
+</project>
+

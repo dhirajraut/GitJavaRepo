@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/servlet/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Dhiraj/02_Workspace/01_Eclipse/01_Java/00_Repository/log4j/apache-log4j-1.2.15/log4j-1.2.15.jar"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>

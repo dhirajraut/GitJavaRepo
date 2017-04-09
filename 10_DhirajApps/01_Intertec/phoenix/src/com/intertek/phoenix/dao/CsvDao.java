@@ -1,0 +1,505 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ */
+package com.intertek.phoenix.dao;
+
+import java.io.File;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.Entity;
+
+import com.intertek.entity.JobOrder;
+import com.intertek.pagination.Pagination;
+import com.intertek.phoenix.entity.Address;
+import com.intertek.phoenix.entity.Period;
+import com.intertek.phoenix.util.CommonUtil;
+import com.intertek.report.FieldType;
+
+/**
+ * A simple DAO implementation that does not use JDBC or Hibernate. Instead, all
+ * objects are loaded from csv files at initialization time and created and
+ * managed in memory. This implementation maintains a map for all the objects.
+ * Whenever an object is requested, it first tries to find an object in the map.
+ * If not found, a new object of the given type will be created and put into the
+ * map, so it can be used later. This mechanism gurantees that there is only one
+ * instance of every business entity in the scope of the entire application.
+ * This implementation extends MemoryDao with the persistence support from and
+ * to CSV files.
+ * 
+ * @author richard.qin
+ */
+public class CsvDao<T> extends MemoryDao<T> {
+    private String csvfile;
+    // the default csv test directory is set to the root of classpath
+    //private static String defaultCsvPath = "/test/data/phoenix/";
+    private static String defaultCsvPath = CommonUtil.getConfigValue("DEFAULT_CSV_PATH");
+
+    /**
+     * @param type
+     * @throws DaoException 
+     */
+    public CsvDao(Class<T> entityCls) {
+        super(entityCls);
+        csvfile = getCsvDataStorePath() + entityCls.getSimpleName() + ".csv";
+        // populate all the objects from the CSV file
+        try {
+            loadAll();
+        }
+        catch (Exception e) {
+            System.out.println("Failed to load objects from the csv file, caused by:");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Save the entity in-memory to he csv file
+     * @throws DaoException 
+     * 
+     * @see com.intertek.phoenix.dao.MemoryDao#flush()
+     */
+
+    public void flush() throws DaoException {
+        saveAll();
+    }
+    
+    /**
+     * Treat the name of the query as the name of a csv file to load, and
+     * load everything in the named file.
+     * Pagination is kind of supported, but sorting will not be.
+     * @see com.intertek.phoenix.dao.AbstractDao#query(java.lang.Object)
+     */
+
+    public List<Object[]> query(String name, Object statement, Pagination pagination, SortInfo sort) {
+        List<Object[]> result = new ArrayList<Object[]>();
+        String path = getCsvDataStorePath() + name + ".csv";
+        File file = new File(path);
+        List<String[]> data = null;
+        if(file.exists()){
+            data = CommonUtil.loadFromCsv(path, 0);
+        }
+        // the column names in the csv file
+        String[] headings = data.get(0);
+        String[] types = data.get(1); // this is a hack
+        // the names of the fields to be returned
+        String[] fieldNames = parseFieldNames((String)statement);
+        
+        int toskip = 0;
+        int toload = data.size();
+        if(pagination != null){
+            toskip = pagination.getCurrentPageNum() * pagination.getNumInPage();
+            toload = toskip + pagination.getNumInPage();
+            if(toload > pagination.getTotalRecord()){
+                toload = pagination.getTotalRecord();
+            }
+        }
+        
+        // TODO make sure the data range is correct
+        for(int k=2 + toskip; k<toload; k++){
+            String[] fields = data.get(k);
+            // determine the number of fields to return
+            int fieldCount = headings.length;
+            if(fieldCount < fieldNames.length){
+                fieldCount = fieldNames.length;
+            }
+            Object[] objects = new Object[fieldCount];
+            
+            for(int j=0; j<fields.length; j++){
+                FieldType t = FieldType.valueOf(types[j]);
+                int idx = -1;
+                // for each column heading, adjust its position in the returned field list
+                for(int g=0; g<fieldNames.length; g++){
+                    if(headings[j].equalsIgnoreCase(fieldNames[g])){
+                        idx = g;
+                        break;
+                    }
+                }
+                if(idx < 0){
+                 // this field is not needed
+                    continue; 
+                }
+                // there is always an issue with "null" versus blank
+                else if(fields[j].length() == 0 || fields[j].equals("(null)")){
+                    objects[idx] = null;
+                }
+                else if(t != null){ // a type other than String
+                    switch(t){
+                        case BigDecimal:
+                            objects[idx] = new BigDecimal(fields[j]);
+                            break;
+                        case Timestamp:
+                            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yy");
+                            try {
+                                Date d = df.parse(fields[j]);
+                                objects[idx] = new Timestamp(d.getTime());
+                            }
+                            catch (ParseException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                            break;
+                        default:
+                            objects[idx] = fields[j];
+                            break;
+                    }
+                }
+                else{ // all others are treated as Strings
+                    objects[idx] = fields[j];
+                }
+            }
+            result.add(objects);
+        }
+        
+        return result;
+    }
+    
+
+    /**
+     * @param statement
+     * @return
+     */
+    private String[] parseFieldNames(String statement) {
+        statement = statement.toLowerCase();
+        int begin = statement.indexOf("select") + "select".length();
+        int end = statement.indexOf("from");
+        String text = statement.substring(begin, end);
+        String[] parts = text.split(",");
+        String[] names = new String[parts.length];
+        
+        for(int k=0; k<parts.length; k++){
+            int pos = parts[k].indexOf("as") + 2;
+            names[k] = parts[k].substring(pos).trim();
+        }
+        return names;
+    }
+
+    /**
+     * @throws DaoException 
+     * @see com.intertek.phoenix.dao.MemoryDao#saveOrUpdate(java.util.List)
+     */
+
+    public List<T> saveOrUpdate(List<T> entities) throws DaoException {
+        // make sure that the entity is in the pool, then save the entire pool
+        super.saveOrUpdate(entities);
+        if(saveAll()){
+            return entities;
+        }
+        else{
+            throw new DaoException("Failed to save entities");
+        }
+    }
+
+    /**
+     * @throws DaoException 
+     * @see com.intertek.phoenix.dao.MemoryDao#saveOrUpdate(java.lang.Object)
+     */
+
+    public T saveOrUpdate(T entity) throws DaoException {
+        // make sure that the entity is in the pool, then save the entire pool
+        super.saveOrUpdate(entity);
+        saveAll();
+        return entity;
+    }
+
+    private boolean loadAll() throws DaoException {
+        boolean result = false;
+
+        File file = new File(csvfile);
+        if(file.exists()){
+            List<String[]> contents = CommonUtil.loadFromCsv(this.csvfile, 0);
+            for (int k=1; k<contents.size(); k++) { // the first line is headers
+                String[] content = contents.get(k);
+                T entity = toEntity(contents.get(0), content);
+                Serializable pk = super.getPrimaryKey(entity, entity.getClass());
+                super.objectPool.put(pk, entity);
+            }
+        }
+        return result;
+    }
+
+    private boolean saveAll() throws DaoException {
+        Set<Class<?>> exclude = new HashSet<Class<?>>();
+        exclude.add(this.getEntityClass());
+        return saveAll(exclude);
+    }
+
+    private boolean saveAll(Set<Class<?>> exclude) throws DaoException {
+        boolean ok = true;
+        List<String[]> list = new ArrayList<String[]>();
+        for (T entity : super.objectPool.values()) {
+            String[] content = toStrings(entity);
+            list.add(content);
+        }
+        String[] headers = getHeaders(this.getEntityClass());
+        ok = CommonUtil.saveToCsv(csvfile, headers, list);
+        
+//        exclude.add(this.getEntityClass());
+        // need to save all the related object types
+        Set<Class<?>> related = findAllRelatedEntityType(exclude);
+//        exclude.addAll(related);
+        for(Class<?> cls: related){
+            ok = CsvDao.saveAll(cls, exclude);
+            if(!ok){
+                break;
+            }
+        }
+        
+        return ok;
+    }
+    
+    // this method is responsible for saving all entity instances of a
+    // specific type
+    private static <T> boolean saveAll(Class<T> cls, Set<Class<?>> exclude) throws DaoException{
+        boolean ok = true;
+        
+        GenericDao<?> dao = (GenericDao<?>) DaoManager.getDao(cls);
+        CsvDao<?> csvDao = (CsvDao<?>)dao.getDelegate();
+        exclude.add(cls);
+        csvDao.saveAll(exclude);
+        
+        return ok;
+    }
+
+    /**
+     * @param entityClass
+     * @return
+     */
+    private String[] getHeaders(Class<T> cls) {
+        List<String> headers = new ArrayList<String>();
+        fieldsToHeaders(headers, cls, null);
+        return headers.toArray(new String[0]);
+    }
+    
+    // a prefix is need to resolve name conflicts in value objects.
+    private void fieldsToHeaders(List<String> headers, Class<?> cls, String prefix){
+        Field[] fields = getSortedFields(cls);
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Class<?> fieldCls = field.getType();
+            if (isValueClass(fieldCls)) {
+                // a value object may have other value objects
+                fieldsToHeaders(headers, fieldCls, field.getName());
+            }
+            else if(isColumnType(fieldCls)){
+                if(prefix != null){
+                    headers.add(prefix + "." + field.getName());
+                }
+                else{
+                    headers.add(field.getName());
+                }
+            }
+        }
+    }
+
+    // TODO refactor this method for general use, move it to a util class
+    @SuppressWarnings("unchecked")
+    protected T toEntity(String[] headers, String[] content) {
+        //int pos = 0;
+        T result = null;
+        try {
+            result = (T) toObject(getEntityClass(), headers, content, null);
+            //result = (T) toObject(getEntityClass(), content, pos);
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // TODO refactor this method for general use, move it to a util class
+    protected String[] toStrings(T entity) {
+        String[] result = null;
+        List<String> content = new ArrayList<String>();
+        try {
+            objectToStrings(content, entity, entity.getClass());
+            result = content.toArray(new String[0]);
+        }
+        catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private Object toObject(Class<?> cls, String[] content, int pos) throws InstantiationException,
+                    IllegalAccessException {
+        Object obj = cls.newInstance();
+        Field[] fields = getSortedFields(cls);
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Class<?> fieldCls = field.getType();
+            if (isValueClass(fieldCls)) {
+                // map the next group of strings to the value object
+                Object valueObj = toObject(fieldCls, content, pos);
+                // advance pos
+                //int valueObjFieldCount = fieldCls.getDeclaredFields().length;
+                int valueObjFieldCount = CommonUtil.getAllDeclaredFields(fieldCls).size();
+                pos += valueObjFieldCount;
+                // set the value object to the host (entity) object
+                field.set(obj, valueObj);
+            }
+            else if(isColumnType(fieldCls)){
+                Object valueObj = CommonUtil.stringToObject(fieldCls, content[pos]);
+                if(valueObj != null){
+                    field.set(obj, valueObj);
+                }
+                pos++;
+            }
+        }
+        return obj;
+    }
+
+    private Object toObject(Class<?> cls, String[] headers, String[] content, String prefix) throws InstantiationException, IllegalAccessException {
+        Object obj = cls.newInstance();
+        Field[] fields = getSortedFields(cls);
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Class<?> fieldCls = field.getType();
+            if (isValueClass(fieldCls)) {
+                // map the next group of strings to the value object
+                Object valueObj = toObject(fieldCls, headers, content, prefix);
+
+                // set the value object to the host (entity) object
+                field.set(obj, valueObj);
+            }
+            else if (isColumnType(fieldCls)) {
+                int pos = findPosition(field.getName(), headers, prefix);
+                if(pos != -1){
+                    Object valueObj = CommonUtil.stringToObject(fieldCls, content[pos]);
+                    if (valueObj != null) {
+                        field.set(obj, valueObj);
+                    }
+                }
+            }
+        }
+        return obj;
+    }
+
+
+    /**
+     * @param fieldCls
+     * @param headers
+     * @param prefix
+     * @return
+     */
+    private int findPosition(String fieldName, String[] headers, String prefix) {
+        int pos = -1;
+        for(int k=0; k<headers.length; k++){
+            if(prefix != null && fieldName.equals(prefix + "." + headers[k])){
+                pos = k;
+                break;
+            }
+            else if(prefix == null && fieldName.equals(headers[k])){
+                pos = k;
+                break;
+            }
+        }
+        return pos;
+    }
+
+    private void objectToStrings(List<String> content, Object obj, Class<?> objCls) throws IllegalArgumentException, IllegalAccessException {
+        Field[] fields = getSortedFields(objCls);
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Class<?> fieldCls = field.getType();
+            Object value = null;
+            if(obj != null){ // the host object may be null, it should still work.
+                value = field.get(obj);
+            }
+            if (isValueClass(fieldCls)) {
+                // a value object may have other value objects
+                objectToStrings(content, value, fieldCls);
+            }
+            else if(isColumnType(fieldCls)){
+                content.add(CommonUtil.toString(value));
+            }
+        }
+    }
+
+    private Field[] getSortedFields(Class<?> cls) {
+//        Field[] fields = cls.getDeclaredFields();
+        List<Field> list = CommonUtil.getAllDeclaredFields(cls);
+        Field[] fields = list.toArray(new Field[0]);
+        Arrays.sort(fields, new Comparator<Field>() {
+        
+            public int compare(Field field1, Field field2) {
+                String name1 = field1.getName();
+                String name2 = field2.getName();
+                return name1.compareTo(name2);
+            }
+        });
+        return fields;
+    }
+    
+    private boolean isColumnType(Class<?> cls){
+        if (cls.isPrimitive() || cls.equals(String.class) || cls.equals(Timestamp.class)
+            || cls.equals(BigDecimal.class) || cls.isEnum() || cls.equals(Boolean.class)
+            || cls.equals(Long.class) || cls.equals(Integer.class) || cls.equals(Double.class)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isValueClass(Class<?> cls) {
+        if (isColumnType(cls)) {
+            return false;
+        }
+        else {
+            if(Collection.class.isAssignableFrom(cls)){
+                return false;
+            }
+            else if(Map.class.isAssignableFrom(cls)){
+                return false;
+            }
+            // this condition is added to work around existing object defined in com.intertek.entity.
+            // need to be revised and possibly removed.
+            else if(!cls.equals(Period.class) && !cls.equals(Address.class)){
+                return false;
+            }
+            else {
+                Entity anno = cls.getAnnotation(Entity.class);
+                if(anno == null){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    
+    private String getCsvDataStorePath(){
+        if(defaultCsvPath == null || defaultCsvPath.length() == 0){
+            defaultCsvPath = "C:/temp/csvdao/";
+        }
+        return defaultCsvPath;
+    }
+    
+    public static void main(String[] args){
+        CsvDao<JobOrder> dao = new CsvDao<JobOrder>(JobOrder.class);
+        String statement = "select col_age as age, col_name as name, col_time as time from whatever";
+        List<Object[]> result = dao.query("JobLog", statement, null, null);
+        for(Object[] objects: result){
+            System.out.println(objects);
+        }
+    }
+}

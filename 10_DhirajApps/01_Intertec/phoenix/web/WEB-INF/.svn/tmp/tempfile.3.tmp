@@ -1,0 +1,1042 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+  <!-- Abstract root definition -->
+  <definition name=".root1" path="/WEB-INF/views/tiles/root1.jsp">
+    <put name="header" value="/WEB-INF/views/tiles/header.jsp"/>
+    <put name="footer" value="/WEB-INF/views/tiles/footer.jsp"/>
+  </definition>
+
+  <definition name=".root" path="/WEB-INF/views/tiles/root.jsp">
+    <put name="header" value="/WEB-INF/views/tiles/header.jsp"/>
+    <put name="footer" value="/WEB-INF/views/tiles/footer.jsp"/>
+    <put name="menu" value="/WEB-INF/views/tiles/menu.jsp"/>
+  </definition>
+
+  <definition name=".root.popup" path="/WEB-INF/views/tiles/root_popup.jsp">
+  </definition>
+
+  <definition name=".root.popup.1" path="/WEB-INF/views/tiles/root_popup_1.jsp">
+  </definition>
+
+  <definition name=".root.tab" path="/WEB-INF/views/tiles/root_tab.jsp">
+  </definition>
+    
+  <definition name="search" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/search/master.jsp"/>
+  </definition>
+      
+  <definition name=".user.index" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/index.jsp"/>
+  </definition>
+
+  <definition name=".common.error" extends=".root">
+    <put name="body" value="/WEB-INF/views/common/error.jsp"/>
+  </definition>
+
+  <definition name=".user.login" extends=".root1">
+    <put name="body" value="/WEB-INF/views/user/login.jsp"/>
+  </definition>
+
+  <definition name=".common.message" extends=".root">
+    <put name="body" value="/WEB-INF/views/common/message.jsp"/>
+  </definition>
+  
+  <definition name=".batch.reprint" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/batch_reprint.jsp"/>
+  </definition>
+
+  <definition name=".search.job" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/search_job.jsp"/>
+  </definition>
+  <definition name=".search.job.result" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/search_job_results.jsp"/>
+  </definition>
+
+  <definition name=".create.job.entry" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_entry.jsp"/>
+  </definition>
+
+  <definition name=".create.job.operational.info.insp" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_operational_info_insp.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.operational.info.insp" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_operational_info_insp.jsp"/>
+  </definition>
+
+    <definition name=".view.job.operational.info.insp" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_operational_info_insp.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.select.charges" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_select_charges.jsp"/>
+  </definition>
+
+  <definition name=".view.job.select.charges" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_select_charges.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.invoice.preview" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_invoice_preview.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.invoice.preview.tab1" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/job/edit_job_invoice_preview_tab1.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.invoice.preview.tab2" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/job/edit_job_invoice_preview_tab2.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.invoice.preview.tab3" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/job/edit_job_invoice_preview_tab3.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.invoice.preview.tab4" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/job/edit_job_invoice_preview_tab4.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.view.invoice" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_view_invoice.jsp"/>
+  </definition>
+  
+  <definition name=".create.job.prebill" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_prebill.jsp"/>
+  </definition>
+
+  <definition name=".create.job.notes" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_notes.jsp"/>
+  </definition>
+
+  <definition name=".create.job.history" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_history.jsp"/>
+  </definition>
+
+  <definition name=".branch.alloc.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/branch_alloc_popup.jsp"/>
+  </definition>
+
+  <definition name=".credit.reason.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/credit_reason_popup.jsp"/>
+  </definition>
+
+  <definition name=".cancel.reason.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/job_cancel_reason_popup.jsp"/>
+  </definition>
+
+ 
+
+  <definition name=".edit.job.entry" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.operational.info" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_operational_info.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.prebill" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_prebill.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.notes" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_notes.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.history" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_history.jsp"/>
+  </definition>
+
+
+  <definition name=".create.contact" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/create_contact.jsp"/>
+  </definition>
+
+  <definition name=".edit.contact" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/edit_contact.jsp"/>
+  </definition>
+
+  <definition name=".search.contact" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/search_contact.jsp"/>
+  </definition>
+
+
+
+  <definition name=".create.customer" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/create_customer.jsp"/>
+  </definition>
+
+  <definition name=".edit.customer" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/edit_customer.jsp"/>
+  </definition>
+
+  <definition name=".search.customer" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/search_customer.jsp"/>
+  </definition>
+
+  <definition name=".quickcreate.customer" extends=".root">
+    <put name="body" value="/WEB-INF/views/customer/quickcreate_customer.jsp"/>
+  </definition>
+
+  <definition name=".create.contract" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/create_contract.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract.jsp"/>
+  </definition>
+
+  <definition name=".search.contract" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/search_contract.jsp"/>
+  </definition>
+  
+  <definition name=".file.upload" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/file_upload.jsp"/>
+  </definition>
+
+  <definition name=".edit.product.group.set.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_product_group_set_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.vessel.type.set.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_vessel_type_set_popup.jsp"/>
+  </definition>
+
+
+  <definition name=".create.shipping.agent" extends=".root">
+    <put name="body" value="/WEB-INF/views/shippingagent/create_shipping_agent.jsp"/>
+  </definition>
+
+  <definition name=".edit.shipping.agent" extends=".root">
+    <put name="body" value="/WEB-INF/views/shippingagent/edit_shipping_agent.jsp"/>
+  </definition>
+
+  <definition name=".search.shipping.agent" extends=".root">
+    <put name="body" value="/WEB-INF/views/shippingagent/search_shipping_agent.jsp"/>
+  </definition>
+  
+  
+  <definition name=".create.towing.company" extends=".root">
+    <put name="body" value="/WEB-INF/views/towingcompany/create_towing_company.jsp"/>
+  </definition>
+
+  <definition name=".edit.towing.company" extends=".root">
+    <put name="body" value="/WEB-INF/views/towingcompany/edit_towing_company.jsp"/>
+  </definition>
+
+  <definition name=".search.towing.company" extends=".root">
+    <put name="body" value="/WEB-INF/views/towingcompany/search_towing_company.jsp"/>
+  </definition>
+  
+  
+  <definition name=".create.business.unit" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_business_unit.jsp"/>
+  </definition>
+
+  <definition name=".edit.business.unit" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/edit_business_unit.jsp"/>
+  </definition>
+
+  <definition name=".search.business.unit" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/search_business_unit.jsp"/>
+  </definition>
+
+
+  <definition name=".create.branch" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_branch.jsp"/>
+  </definition>
+
+  <definition name=".edit.branch" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/edit_branch.jsp"/>
+  </definition>
+
+  <definition name=".search.branch" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/search_branch.jsp"/>
+  </definition>
+
+  <definition name=".search.role" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/search_role.jsp"/>
+  </definition>
+  <definition name=".search.branch.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_branch_popup.jsp"/>
+  </definition>
+  
+
+  <definition name=".create.service.location" extends=".root">
+    <put name="body" value="/WEB-INF/views/servicelocation/create_service_location.jsp"/>
+  </definition>
+
+  <definition name=".edit.service.location" extends=".root">
+    <put name="body" value="/WEB-INF/views/servicelocation/edit_service_location.jsp"/>
+  </definition>
+
+  <definition name=".search.service.location" extends=".root">
+    <put name="body" value="/WEB-INF/views/servicelocation/search_service_location.jsp"/>
+  </definition>
+
+
+  <definition name=".create.user" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_user.jsp"/>
+  </definition>
+
+  <definition name=".edit.user" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/edit_user.jsp"/>
+  </definition>
+
+  <definition name=".search.user" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/search_user.jsp"/>
+  </definition>
+
+   <definition name=".change.user" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/change_user.jsp"/>
+  </definition>
+
+  <definition name=".create.country" extends=".root">
+   <put name="body" value="/WEB-INF/views/country/create_country.jsp"/>
+  </definition>
+ 
+  <definition name=".edit.country" extends=".root">
+   <put name="body" value="/WEB-INF/views/country/edit_country.jsp"/>
+  </definition>
+
+  <definition name=".create.role" extends=".root">
+   <put name="body" value="/WEB-INF/views/user/create_role.jsp"/>
+  </definition>
+
+  <definition name=".edit.role" extends=".root">
+   <put name="body" value="/WEB-INF/views/user/edit_role.jsp"/>
+  </definition>
+  <definition name=".job.order.log" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/order_log.jsp"/>
+  </definition>
+
+  <definition name=".vessel.create" extends=".root">
+    <put name="body" value="/WEB-INF/views/vessel/create.jsp"/>
+  </definition>
+
+  <definition name=".create.vat.rate" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_vat_rate.jsp"/>
+  </definition>
+
+  <definition name=".create.permission.list" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_permission_list.jsp"/>
+  </definition>
+
+  <definition name=".search.permission.list" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/search_permission_list.jsp"/>
+  </definition>
+
+  <definition name=".edit.permission.list" extends=".root">
+     <put name="body" value="/WEB-INF/views/user/edit_permission_list.jsp"/>
+  </definition> 
+   
+  <definition name=".search.job.code.popup"  extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_job_code_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.supervisor.id.popup" extends=".root.popup">
+    <put name="body"  value="/WEB-INF/views/user/search_supervisor_id_popup.jsp"/>
+  </definition>
+  <definition name=".search.user.roles.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_user_roles_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.vat.rate.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_vat_rate_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.currency.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_currency_popup.jsp"/>
+  </definition>
+ 
+  <definition name=".search.permission.list.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_permission_list_popup.jsp"/>
+  </definition>
+  
+  <definition name=".create.contract.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/create_contract_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.address.sequence.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_address_sequence_popup.jsp"/>
+  </definition>
+
+
+  <definition name=".search.customer.id.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_customer_id_popup.jsp"/>
+  </definition>
+
+
+  <definition name=".search.contract.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/search_contract_popup.jsp"/>
+  </definition>
+
+  <definition name=".common.messagepopup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/message_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.creditanalyst" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_credit_analyst_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.collector" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_collector_popup.jsp"/>
+  </definition>
+ 
+  <definition name=".search.businessunit" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_businessunit_popup.jsp"/>
+  </definition>
+   
+  <definition name=".search.companyname" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_companyname_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.contract.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_contract_popup.jsp"/>
+  </definition>
+ 
+  <definition name=".search.control.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_control_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.link.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_link_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.contactid" extends=".root.popup">
+   <put name="body" value="/WEB-INF/views/customer/search_contact_popup.jsp"/>
+  </definition>
+   
+  <definition name=".search.customer.contact" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_contact_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.newcontact" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/create_new_contact.jsp"/>
+  </definition>
+
+  <definition name=".customer.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/search_customer_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.accountowner" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_user_popup.jsp"/>
+  </definition>
+  <definition name=".state.search.popup" extends=".root.popup">
+    
+  <put name="body" value="/WEB-INF/views/country/search_state_popup.jsp"/>
+  </definition>
+  
+  <definition name=".towingcompany.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/towingcompany/search_towingcompany_popup.jsp"/>
+  </definition>
+
+  
+
+  <definition name=".shippingagent.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/shippingagent/search_shippingagent_popup.jsp"/>
+  </definition>
+
+  
+
+  <definition name=".serviceLocation.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/servicelocation/search_servicelocation_popup.jsp"/>
+  </definition>
+
+
+  <definition name=".newtowingcompany.create.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/towingcompany/create_new_towingcompany.jsp"/>
+  </definition>
+
+  <definition name=".newservicelocation.create.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/servicelocation/create_new_servicelocation.jsp"/>
+  </definition>
+
+  <definition name=".timezone.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_timezone_popup.jsp"/>
+  </definition>
+  
+  <definition name=".search.project.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/project/search_project_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.entry.insp"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_insp.jsp"/>
+  </definition>
+<definition name=".view.job.entry.insp"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_entry_insp.jsp"/>
+  </definition>
+
+  <definition name=".view.job.entry.marine"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_entry_marine.jsp"/>
+  </definition>
+
+
+<definition name=".view.job.entry.analytical.service"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_entry_analytical_services.jsp"/>
+  </definition>
+
+<definition name=".view.job.entry.outsourcing"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/view_job_entry_outsourcing.jsp"/>
+  </definition>
+
+  <definition name=".create.job.entry.marine"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_entry_marine.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.entry.marine"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_marine.jsp"/>
+  </definition>
+
+
+  
+
+  <definition name=".create.job.entry.analytical.service"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_entry_analytical_service.jsp"/>
+  </definition>
+
+  <definition name=".create.job.entry.outsourcing"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_entry_outsourcing.jsp"/>
+  </definition>
+
+
+  <definition name=".edit.job.entry.analytical.service"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_analytical_service.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.entry.outsourcing"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_outsourcing.jsp"/>
+  </definition>
+
+  
+ 
+  <definition name=".newshippingagent.create.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/shippingagent/create_new_shippingagent.jsp"/>
+  </definition>
+   
+  <definition name=".country.search" extends=".root">
+    <put name="body" value="/WEB-INF/views/country/search_country.jsp"/>
+  </definition>
+
+  <definition name=".vessel.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_vessel_popup.jsp"/>
+  </definition>
+  <definition name=".create.job.entry.insp"  extends=".root">    
+    <put name="body" value="/WEB-INF/views/job/create_job_entry_insp.jsp"/>
+  </definition>
+  <definition name=".edit.job.entry.insp"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_insp.jsp"/>
+  </definition>
+  <definition name=".create.job.entry.analytical.service"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/create_job_entry_analytical_service.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.entry.analytical.service"  extends=".root">
+    <put name="body" value="/WEB-INF/views/job/edit_job_entry_analytical_service.jsp"/>
+  </definition>
+
+  <definition name=".slate.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_slate_popup.jsp"/>
+  </definition>
+
+  <definition name=".test.search.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_test_popup.jsp"/>
+  </definition>
+  
+  <definition name=".add.manual.test.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/add_manual_test_popup.jsp"/>
+  </definition>  
+
+  <definition name=".search.job.contract.insp.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_job_contract_insp_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.job.add.customer.addnote.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/create_job_add_customer_addnote_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.job.add.customer.attachfile.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/create_job_add_customer_attachfile_popup.jsp"/>
+  </definition>
+  
+  <definition name=".create.job.add.customer.note.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/create_job_add_customer_note_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.bank.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_bank_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.bank.account.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_bank_account_popup.jsp"/>
+  </definition>
+
+  <definition name=".copy.product.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/copy_product_popup.jsp"/>
+  </definition>
+
+  <definition name=".display.control.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/display_control_popup.jsp"/>
+  </definition>
+
+  <definition name=".refresh.page" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/refresh_page.jsp"/>
+  </definition>
+
+  <definition name="invoice.preview.refresh.page" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/invoice_preview_refresh_page.jsp"/>
+  </definition>
+
+  <definition name=".contract.refresh.page" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/contract_refresh_page.jsp"/>
+  </definition>
+
+  <definition name=".test.slate.refresh.page" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/test_slate_refresh_page.jsp"/>
+  </definition>
+
+  <definition name=".add.test.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/add_test_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.test.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/edit_test_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".add.slate.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/add_slate_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.slate.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/edit_slate_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".add.manual.test.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/add_manual_test_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".add.inspection.service.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/add_inspection_service_popup.jsp"/>
+  </definition>
+
+  <definition name=".add.job.contract.vessel.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/calculator/add_job_contract_vessel_popup.jsp"/>
+  </definition>
+
+
+  <definition name=".view.contract.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/view_contract_popup.jsp"/>
+  </definition>
+
+   <definition name=".view.contact.popup" extends=".root.popup">
+  <put name="body" value="/WEB-INF/views/customer/view_contact_popup.jsp"/>
+  </definition>
+  <definition name=".search.jobid" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_jobid_popup.jsp"/>
+  </definition>
+
+  <definition name=".job.log.mail.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/job_log_mail_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.job.type" extends=".root">
+    <put name="body" value="/WEB-INF/views/jobtype/create_job_type.jsp"/>
+  </definition>
+
+  <definition name=".search.job.type" extends=".root">
+    <put name="body" value="/WEB-INF/views/jobtype/search_job_type.jsp"/>
+  </definition>
+
+  <definition name=".edit.job.type" extends=".root">
+     <put name="body" value="/WEB-INF/views/jobtype/edit_job_type.jsp"/>
+  </definition>
+
+    <definition name=".configure.dropdown" extends=".root">
+    <put name="body" value="/WEB-INF/views/dropdown/configuredropdown.jsp"/>
+  </definition>
+ <definition name=".search.operation.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/jobtype/search_operation_popup.jsp"/>
+  </definition>
+
+<definition name=".search.operations" extends=".root">
+    <put name="body" value="/WEB-INF/views/jobtype/search_operations.jsp"/>
+  </definition>
+
+<definition name=".create.operation.event" extends=".root">
+    <put name="body" value="/WEB-INF/views/jobtype/create_operation_event.jsp"/>
+  </definition>
+
+ <definition name=".search.event.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/jobtype/search_event_popup.jsp"/>
+  </definition>
+
+   <definition name=".create.tax.article" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_tax_article.jsp"/>
+  </definition>
+
+
+   <definition name=".view.job.integration.log.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/ws/view_job_integration_log.jsp"/>
+  </definition>
+
+  <definition name=".search.webservice.log" extends=".root">
+    <put name="body" value="/WEB-INF/views/ws/search_webservice_log.jsp"/>
+  </definition>
+
+  <definition name=".search.bank.account" extends=".root">
+    <put name="body" value="/WEB-INF/views/bank/search_bank_account.jsp"/>
+  </definition>
+
+  <definition name=".edit.bank.account" extends=".root">
+    <put name="body" value="/WEB-INF/views/bank/edit_bank_account.jsp"/>
+  </definition>
+
+  <definition name=".required.fields" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/help/required_fields.jsp"/>
+  </definition>
+
+  <definition name=".search.webservice.log.detail" extends=".root">
+    <put name="body" value="/WEB-INF/views/ws/search_webservice_log_detail.jsp"/>
+  </definition>
+
+  <definition name=".create.consl.inv" extends=".root">
+    <put name="body" value="/WEB-INF/views/conslinv/create_consl_inv.jsp"/>
+  </definition>
+
+  <definition name=".search.consl.inv" extends=".root">
+    <put name="body" value="/WEB-INF/views/conslinv/search_consl_inv.jsp"/>
+  </definition>
+
+  <definition name=".edit.consl.inv" extends=".root">
+     <put name="body" value="/WEB-INF/views/conslinv/edit_consl_inv.jsp"/>
+  </definition>
+
+  <definition name=".search.logo.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/search_logo_popup.jsp"/>
+  </definition>
+
+<definition name=".view.contract.attach.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/view_contract_attach_popup.jsp"/>
+  </definition>
+
+  <definition name=".phx.dashboard" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/phx_dashboard.jsp"/>
+  </definition>
+
+  <definition name=".search.template.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_template_popup.jsp"/>
+  </definition>
+
+  <definition name=".search.monthly.job.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_monthly_job_popup.jsp"/>
+  </definition>
+
+  <definition name=".sam.lims.int" extends=".root">
+     <put name="body" value="/WEB-INF/views/user/sam_lims_int.jsp"/>
+  </definition>
+
+  <definition name=".search.configuration.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_configuration_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.contract.main" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/create_contract_main.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.main" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_main.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.customer" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_customer.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.attachment" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_attachment.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.zone" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_zone.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.inspection" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_inspection.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.service" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_service.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.test" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_test.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.slate" extends=".root">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_slate.jsp"/>
+  </definition>
+
+  <definition name=".copy.pb.test.price.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/copy_pb_test_price_popup.jsp"/>
+  </definition>
+
+  <definition name=".modify.test.price.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/modify_test_price_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.contract.test.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/create_contract_test_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.multilingual.customer.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/create_multilingual_customer_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.multilingual.quickcustomer.addr.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/create_multilingual_quick_customeraddr_popup.jsp"/>
+  </definition>
+
+  <definition name=".copy.pb.slate.price.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/copy_pb_slate_price_popup.jsp"/>
+  </definition>
+
+  <definition name=".modify.slate.price.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/modify_slate_price_popup.jsp"/>
+  </definition>
+
+  <definition name=".create.contract.slate.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/create_contract_slate_popup.jsp"/>
+  </definition>
+
+  <definition name=".webservice.control.switches" extends=".root">
+    <put name="body" value="/WEB-INF/views/ws/webservice_control_switches.jsp"/>
+  </definition>
+
+<definition name=".create.multilingual.branch.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/create_multilingual_branch_popup.jsp"/>
+  </definition>
+
+
+<definition name=".create.multilingual.bunit.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/user/create_multilingual_bunit_popup.jsp"/>
+  </definition>
+
+<definition name=".create.multilingual.customer.address.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/customer/create_multilingual_customer_address_popup.jsp"/>
+  </definition>
+
+<definition name=".create.tax.label" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_tax_label.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.select.services.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_select_services_popup.jsp"/>
+  </definition>
+  
+<definition name=".montly.job.log" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/monthly_job_log.jsp"/>
+  </definition>
+  
+    
+  <definition name=".weekly.report" extends=".root">
+    <put name="body" value="/WEB-INF/views/report/weekly_report.jsp"/>
+  </definition>
+
+  <definition name=".choose.apply.levels.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/choose_apply_levels_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.question.notes.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_question_notes_popup.jsp"/>
+  </definition>
+  
+  <definition name=".message.error" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/common/message_error.jsp"/>
+  </definition>
+
+  <definition name=".current.users.body" path="/WEB-INF/views/common/current_users.jsp">
+  </definition>
+  
+  <definition name=".current.users" extends=".root">
+    <put name="body" value="/WEB-INF/views/common/current_users.jsp"/>
+  </definition>
+  
+  <definition name=".job.locks" extends=".root">
+    <put name="body" value="/WEB-INF/views/job/job_locks.jsp"/>
+  </definition>
+
+  <definition name=".body.unloaded" path="/WEB-INF/views/common/body_unloaded.jsp">
+  </definition>
+    
+  <definition name=".current.users.all" extends=".root">
+    <put name="body" value="/WEB-INF/views/common/current_users_all.jsp"/>
+  </definition>
+    
+ <definition name=".create.business.stream" extends=".root">
+    <put name="body" value="/WEB-INF/views/user/create_business_stream.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.select.branches.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_select_branches_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.select.zone.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_select_zone_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.select.products.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_select_products_popup.jsp"/>
+  </definition>
+
+  <definition name=".edit.contract.update.uom.notes.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/contract/edit_contract_update_uom_notes_popup.jsp"/>
+  </definition>
+  
+  <definition name=".sample.location.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/sample_location_popup.jsp"/>
+  </definition>
+
+   
+  <definition name=".create.purchase.order"  extends=".root">    
+    <put name="body" value="/WEB-INF/views/po/purchase_order.jsp"/>
+  </definition>
+  
+  <definition name=".search.purchase.order"  extends=".root">    
+    <put name="body" value="/WEB-INF/views/po/search_purchase_order.jsp"/>
+  </definition>
+  
+  <definition name=".search.ce.customer.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/search_ce_customer_popup.jsp"/>
+  </definition> 
+
+  <definition name=".job.entry.ce"  extends=".root">    
+    <put name="body" value="/WEB-INF/views/phoenix/job/job_entry_ce.jsp"/>
+  </definition>
+  
+  <definition name=".job.operational.info.ce"  extends=".root">    
+    <put name="body" value="/WEB-INF/views/phoenix/job/job_operational_info_ce.jsp"/>
+  </definition>  
+
+ <definition name=".ce.job.invoice.preview" extends=".root">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview.jsp"/>
+  </definition>
+  
+  <definition name=".ce.job.invoice.preview.tab0" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab0.jsp"/>
+  </definition>
+  
+  <definition name=".ce.job.invoice.preview.tab1" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab1.jsp"/>
+  </definition>
+  
+  <definition name=".ce.job.invoice.preview.tab2" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab2.jsp"/>
+  </definition>  
+  
+  <definition name=".ce.job.invoice.preview.tab3" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab3.jsp"/>
+  </definition>
+
+  <definition name=".ce.job.invoice.preview.tab4" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab4.jsp"/>
+  </definition>
+ <definition name=".apply.deposit.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/apply_deposit_popup.jsp"/>
+  </definition>
+
+  <definition name=".revenue.segregation.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/invoice/revenue_segregation_popup.jsp"/>
+  </definition>
+
+
+	<definition name=".job.view.ce.invoice" extends=".root">
+		<put name="body" value="/WEB-INF/views/phoenix/job/job_view_ce_invoice.jsp"/>
+	</definition>
+  
+    
+<!--  start of job log ce
+  <definition name=".job.log.ce" extends=".root">
+    <put name="body" value="/WEB-INF/views/phoenix/joblog/job_log_ce.jsp"/>
+  </definition>
+
+  <definition name=".job.log.ce.results.main" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/joblog/job_log_ce_results_main.jsp"/>
+  </definition>
+
+  <definition name=".job.log.ce.results.billing" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/joblog/job_log_ce_results_billing.jsp"/>
+  </definition>
+
+  <definition name=".job.log.ce.results.processlog" extends=".root.tab">
+    <put name="body" value="/WEB-INF/views/phoenix/joblog/job_log_ce_results_processlog.jsp"/>
+  </definition>
+  End of the job log CE-->
+  
+  <!-- 
+  <definition name=".job.instruction.attachfile.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/job_instruction_attachfile_popup.jsp"/>
+  </definition>
+  
+  <definition name=".job.instruction.note.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/job/job_instruction_note_popup.jsp"/>
+  </definition>
+  
+  
+  <definition name=".search.purchase.order.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/po/search_purchase_order_popup.jsp"/>
+  </definition>
+  -->
+
+  <definition name=".job.instruction.attachfile.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/job_instruction_attachfile_popup.jsp"/>
+  </definition>
+
+  <definition name=".job.instruction.note.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/job_instruction_note_popup.jsp"/>
+  </definition>
+
+
+ <definition name=".job.instruction.test.attribute.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/job_instruction_test_attribute_popup.jsp"/>
+ </definition>
+  
+  <!--  Start for invoice page
+
+<definition name=".credit.reason.ce.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/credit_reason_ce_popup.jsp"/>
+  </definition>
+
+
+  End of the invoice  page   -->
+
+  <!-- Start of invoice preview page
+
+
+  <definition name=".apply.deposit.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/invoice/apply_deposit_popup.jsp"/>
+  </definition>
+
+  <definition name=".revenue.segregation.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/invoice/revenue_segregation_popup.jsp"/>
+  </definition>
+
+End of the invoice preview page  -->
+ 
+ <definition name=".ce.job.select.charges" extends=".root">
+    <put name="body" value="/WEB-INF/views/phoenix/job/ce_job_select_charges.jsp"/>
+  </definition>
+
+  <definition name=".edit.price.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/edit_price_popup.jsp"/>
+  </definition>
+  
+  <definition name=".travel.expense.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/travel_expense_popup.jsp"/>
+  </definition>
+  
+  <definition name=".search.ce.job.popup" extends=".root.popup">
+    <put name="body" value="/WEB-INF/views/phoenix/job/search_ce_job_popup.jsp"/>
+  </definition> 
+
+</tiles-definitions>
+

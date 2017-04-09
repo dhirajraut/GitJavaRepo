@@ -1,0 +1,9 @@
+
+public class GreetingServiceImpl implements GreetingService {
+
+	public void printGreeting() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

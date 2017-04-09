@@ -1,0 +1,365 @@
+/**  
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ * 
+ * @Date : 4/22/2009
+ * @Author : The Phoenix Team
+ */
+
+package com.intertek.phoenix.entity;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.intertek.phoenix.entity.OrderLineItem.OrderLineItemType;
+
+/**
+ * 
+ * @author richard.qin
+ */
+@Entity
+public class CEInvoiceLineItem {
+    @Id
+    private long id;
+    //TODO do we need an invoiceNumber here since it's not unique?
+    private String invoiceNumber;
+    private long invoiceId;
+    @ManyToOne
+    @JoinColumn(name = "INVOICE_ID")
+    private CEInvoice invoice;
+    private long orderLineItemId;
+    private OrderLineItemType orderLineItemType;
+    @ManyToOne
+    @JoinColumn(name="ORDER_LINE_ITEM_ID")
+    private OrderLineItem orderLineItem;
+    private String accountCode;
+    private double unitPrice;
+    private double quantity;
+    private double netPrice;
+    private String taxCode;
+    private double taxPct;
+    private double tax;
+    private String vatCode;
+    private double vatPct;
+    private double vat;
+    private Double taxAmt;
+    private Double vatAmt;
+    // do we need this?
+    // private double totalAmount;
+    // the portion that has been paid for by deposit invoices
+    private double securedAmount;
+    
+    private String warehouseName;
+    @ManyToOne
+    @JoinColumn(name="WAREHOUSE_NAME")
+    private Warehouse warehouse;
+    private String depId; // part of GL account codes
+    private String account; // part of GL account codes
+    
+    @OneToMany(mappedBy="invoiceLineItem")
+    private Set<DepositInvoiceAmount> depositInvoiceAmounts;
+
+    public CEInvoiceLineItem() {
+        super();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public CEInvoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(CEInvoice invoice) {
+        this.invoiceNumber = invoice.getInvoiceNumber();
+        this.invoice = invoice;
+    }
+
+    public long getOrderLineItemId() {
+        return orderLineItemId;
+    }
+
+    public void setOrderLineItemId(long orderLineItemId) {
+        this.orderLineItemId = orderLineItemId;
+    }
+
+    public OrderLineItem getOrderLineItem() {
+        return orderLineItem;
+    }
+
+    public void setOrderLineItem(OrderLineItem orderLineItem) {
+        this.orderLineItem = orderLineItem;
+        if(orderLineItem != null){
+            this.orderLineItemId = orderLineItem.getId();
+            this.orderLineItemType = orderLineItem.getOrderLineItemType();
+        }
+    }
+
+    public String getAccountCode() {
+        return accountCode;
+    }
+
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getNetPrice() {
+        return netPrice;
+    }
+
+    public void setNetPrice(double netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    public double getTaxPct() {
+        return taxPct;
+    }
+
+    public void setTaxPct(double taxPct) {
+        this.taxPct = taxPct;
+    }
+
+    public Double getTaxAmt() {
+        return taxAmt;
+    }
+
+    public void setTaxAmt(Double taxAmt) {
+        this.taxAmt = taxAmt;
+    }
+
+    public Double getVatAmt() {
+        return vatAmt;
+    }
+
+    public void setVatAmt(Double vatAmt) {
+        this.vatAmt = vatAmt;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public String getVatCode() {
+        return vatCode;
+    }
+
+    public void setVatCode(String vatCode) {
+        this.vatCode = vatCode;
+    }
+
+    public double getVatPct() {
+        return vatPct;
+    }
+
+    public void setVatPct(double vatPct) {
+        this.vatPct = vatPct;
+    }
+
+    public double getVat() {
+        return vat;
+    }
+
+    public void setVat(double vat) {
+        this.vat = vat;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public String getDepId() {
+        return depId;
+    }
+
+    public void setDepId(String depId) {
+        this.depId = depId;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public Set<DepositInvoiceAmount> getDepositInvoiceAmounts() {
+        if (depositInvoiceAmounts == null) {
+            depositInvoiceAmounts = new HashSet<DepositInvoiceAmount>();
+        }
+        return depositInvoiceAmounts;
+    }
+
+    public OrderLineItemType getOrderLineItemType() {
+        return orderLineItemType;
+    }
+
+    public void setOrderLineItemType(OrderLineItemType orderLineItemType) {
+        this.orderLineItemType = orderLineItemType;
+    }
+
+    public double getSecuredAmount() {
+        return securedAmount;
+    }
+
+    public void setSecuredAmount(double securedAmount) {
+        this.securedAmount = securedAmount;
+    }
+
+    public boolean addDepositInvoiceAmount(DepositInvoiceAmount depositInvoiceAmount) {
+        depositInvoiceAmount.setInvoiceLineItemId(this.getId());
+        return getDepositInvoiceAmounts().add(depositInvoiceAmount);
+    }
+
+    public boolean removeDepositInvoiceAmount(DepositInvoiceAmount depositInvoiceAmount) {
+        return getDepositInvoiceAmounts().remove(depositInvoiceAmount);
+    }
+
+    // TODO: check with Rafiq
+    public double getTotalAmount() {
+        return this.netPrice + this.tax + this.vat;
+    }
+	
+    public double getPreTaxAmount() {
+        return this.netPrice;
+    }
+
+    /**
+     * When an InvoiceLineItem is paid (may be partially) by a deposit invoice,
+     * the amount paid is noted as secured amount, which is different from
+     * the amount paid by other means. Every time when a deposit invoice is
+     * used for payment, the method should be called to increase the secured
+     * amount for this InvoiceLineItem.
+     * @param amt
+     */
+    public boolean secureAmount(double amt) {
+        if (this.securedAmount + amt > this.getTotalAmount()) {
+            // you cannot over pay this line item
+            return false;
+        }
+        else {
+            this.securedAmount += amt;
+            return true;
+        }
+    }
+
+    /**
+     * Pay this invoice line item by a deposit invoice.
+     * <p>
+     * This invoice line item may be partially paid. It is up to the caller to decide
+     * if partial payment is allowed. An InvoiceLineItem can be paid by more than
+     * one DepositInoices by calling this method multiple times with different 
+     * DepositInvoices.
+     * <p>
+     * After the payment, the depositInvoice is updated accordingly.
+     * Note, this method could be implemented in DepositInvoice equally effectively.
+     * 
+     * @param depositInvoice
+     * @param amountLimit
+     *            The amount limit of depositInvoice to be used. Allowing One
+     *            depositInvoice to pay more than one invoice line itmes.
+     * @return
+     */
+    public DepositInvoiceAmount payByDepositInvoice(DepositInvoice depositInvoice, double amountLimit) {
+        // figure out exactly how much to pay
+        double amountToPay = this.getTotalAmount();
+        if(amountLimit == 0){ // 0 means to use all available amount
+            amountLimit = depositInvoice.getAvailableAmount();
+        }
+        if(amountToPay > amountLimit){
+            // Partial pay. It is up to the caller to determine if partial 
+            // payment is allowed or not. 
+            amountToPay = amountLimit;
+        }
+        // apply the payment
+        DepositInvoiceAmount dia = new DepositInvoiceAmount(depositInvoice.getId(), this.id);
+        dia.setAmount(amountToPay);
+        // add amount to pay to the sum of secured amount. secured amount the 
+        // amount paid by deposit invoices
+        this.secureAmount(amountToPay);
+        // take the amount paid out of depositInvoice
+        depositInvoice.useFund(amountToPay);
+        // InvoiceLineItem and DepositInvoice has many to many relationship
+        this.addDepositInvoiceAmount(dia);
+        
+        return dia;
+    }
+
+    /**
+     * The unpaid amount is the difference of the totalAmount and the securedAmount
+     * @return
+     */
+    public double getUnsecuredAmount() {
+        return this.getTotalAmount() - this.getSecuredAmount();
+    }
+
+    public long getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(long invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+    
+    
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by ESB (ESB) -->
+<xs:schema xmlns="http://www.intertek.com/ESB/Contact" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/Contact" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishContactRequest" type="ContactType">
+		<xs:annotation>
+			<xs:documentation>Publish Contact ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ContactType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="ContactId" type="xs:string"/>
+			<xs:element name="Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="FirstName" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Title" type="xs:string" minOccurs="0"/>
+			<xs:element name="Salutation" type="xs:string" minOccurs="0"/>
+			<xs:element name="WorkPhone" type="xs:string" minOccurs="0"/>
+			<xs:element name="Fax" type="xs:string" minOccurs="0"/>
+			<xs:element name="PersonalPhone" type="xs:string" minOccurs="0"/>
+			<xs:element name="WorkEmail" type="xs:string" minOccurs="0"/>
+			<xs:element name="CellPhone" type="xs:string" minOccurs="0"/>
+			<xs:element name="PersonalEmail" type="xs:string" minOccurs="0"/>
+			<xs:element name="ContactFlag" type="xs:string" minOccurs="0"/>
+			<xs:element name="PreferredCommunicator" type="xs:string" minOccurs="0"/>
+			<xs:element name="ContactCustomer" type="ContactCustomerType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ContactCustomerType">
+		<xs:sequence>
+			<xs:element name="ContactId" type="xs:string"/>
+			<xs:element name="CustomerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="LocationNumber" type="xs:int" minOccurs="0"/>
+			<xs:element name="Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="contactSequenceNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillTo" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="SoldTo" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ShipTo" type="xs:boolean" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

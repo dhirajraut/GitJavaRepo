@@ -1,0 +1,8 @@
+
+public class GreetingServiceImpl implements GreetingService {
+	String greeting;
+	public void printGreeting() {
+		System.out.println(greeting);
+	}
+
+}

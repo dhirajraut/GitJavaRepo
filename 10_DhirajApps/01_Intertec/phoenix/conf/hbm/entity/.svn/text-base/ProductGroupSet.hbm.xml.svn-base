@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ProductGroupSet" table="PS_ITS_PRD_GRP_SET">
+   <id name="productGroupSetName" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+      <column name="PRODUCT_GROUP_SET" length="45" />
+    </id>
+ <property name="defaultFlag" type="yes_no">
+      <column name="DEFAULT_FLAG" />
+    </property>
+
+  </class>
+</hibernate-mapping>
+

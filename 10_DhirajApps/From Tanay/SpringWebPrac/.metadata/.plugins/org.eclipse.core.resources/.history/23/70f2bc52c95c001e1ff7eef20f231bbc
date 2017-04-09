@@ -1,0 +1,23 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import service.DetailDataService;
+
+public class DetailDataController extends MultiActionController{
+	DetailDataService detailDataService;
+	
+	public ModelAndView showList(HttpServletRequest req,HttpServletResponse res) {
+		
+		
+		return null;
+		
+	}
+	public DetailDataService getDetailDataService() {
+		return detailDataService;
+	}
+}

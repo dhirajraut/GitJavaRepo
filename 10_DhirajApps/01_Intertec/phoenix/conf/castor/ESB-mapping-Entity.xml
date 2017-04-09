@@ -1,0 +1,1180 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+"http://castor.exolab.org/mapping.dtd">
+<mapping>
+    <description>ESB-mapping-Entity</description>
+	<class name="com.intertek.phoenix.externalEntity.ProjectX">
+        <map-to xml="ProjectX" />
+	    <field type="java.lang.String" name="projectNumber">
+			<bind-xml name="projectNumber" />
+	    </field>
+    </class>
+    
+	<class name="com.intertek.phoenix.externalEntity.EmployeeX">
+        <map-to xml="EmployeeX" />
+	    <field type="java.lang.String" name="employeeId">
+			<bind-xml name="employeeId" />
+	    </field>	    
+	    <field type="java.lang.String" name="firstName">
+			<bind-xml name="firstName" />
+	    </field>
+	    <field type="java.lang.String" name="lastName">
+			<bind-xml name="lastName" />
+	    </field>
+	    <field type="java.lang.String" name="samAccount">
+			<bind-xml name="samAccount" />
+	    </field>
+	    <field type="java.lang.String" name="businessUnit">
+			<bind-xml name="businessUnit" />
+	    </field>
+	    <field type="java.lang.String" name="operatingUnit">	    
+			<bind-xml name="operatingUnit" />
+	    </field>
+    </class>
+        
+	<class name="com.intertek.phoenix.externalEntity.CEInvoiceX">
+        <map-to xml="CEInvoiceX" />
+	    <field type="java.lang.String" name="id">
+			<bind-xml name="id" />
+	    </field>
+	    <field type="java.lang.String" name="buName">
+			<bind-xml name="buName" />
+	    </field>
+	    <field type="java.lang.String" name="branchName">
+			<bind-xml name="branchName" />
+	    </field>
+	    <field type="java.util.Date" name="jobFinishDate">
+			<bind-xml name="jobFinishDate" />
+	    </field>
+	    <field type="java.lang.String" name="shipToCustId">
+			<bind-xml name="shipToCustId" />
+	    </field>
+	    <field type="java.lang.String" name="shipToAddrNum">
+			<bind-xml name="shipToAddrNum" />
+	    </field>
+	    <field type="java.lang.String" name="vesselNames">
+			<bind-xml name="vesselNames" />
+	    </field>
+	    <field type="java.lang.String" name="productNames">
+			<bind-xml name="productNames" />
+	    </field>
+	    <field type="java.lang.String" name="receivedByUserName">
+			<bind-xml name="receivedByUserName" />
+	    </field>
+	    <field type="java.lang.String" name="operation">
+			<bind-xml name="operation" />
+	    </field>
+	    <field type="java.lang.String" name="serviceLocationCode">
+			<bind-xml name="serviceLocationCode" />
+	    </field>
+	    <field type="java.lang.String" name="custSentBy">
+			<bind-xml name="custSentBy" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceDescr">
+			<bind-xml name="invoiceDescr" />
+	    </field>
+	    <field type="java.lang.String" name="invoice">
+			<bind-xml name="invoice" />
+	    </field>
+	    <field type="java.lang.String" name="custCode">
+			<bind-xml name="custCode" />
+	    </field>
+	    <field type="java.lang.String" name="jobNumber">
+			<bind-xml name="jobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="custRefNum">
+			<bind-xml name="custRefNum" />
+	    </field>
+	    <field type="java.lang.String" name="billingContactName">
+			<bind-xml name="billingContactName" />
+	    </field>
+	    <field type="java.lang.String" name="bankCode">
+			<bind-xml name="bankCode" />
+	    </field>
+	    <field type="java.lang.String" name="bankAcctCode">
+			<bind-xml name="bankAcctCode" />
+	    </field>
+	    <field type="java.lang.String" name="pymntTermsCd">
+			<bind-xml name="pymntTermsCd" />
+	    </field>
+	    <field type="java.lang.String" name="contractCode">
+			<bind-xml name="contractCode" />
+	    </field>
+	    <field type="java.lang.String" name="contactId">
+			<bind-xml name="contactId" />
+	    </field>
+	    <field type="java.lang.String" name="monthlyFlag">
+			<bind-xml name="monthlyFlag" />
+	    </field>
+	    <field type="java.lang.String" name="monthlyJobNumber">
+			<bind-xml name="monthlyJobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="custLocationNumber">
+			<bind-xml name="custLocationNumber" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceType">
+			<bind-xml name="invoiceType" />
+	    </field>
+	    <field type="java.lang.String" name="transactionCurrencyCd">
+			<bind-xml name="transactionCurrencyCd" />
+	    </field>
+	    <field type="java.lang.String" name="taxVatFlag">
+			<bind-xml name="taxVatFlag" />
+	    </field>
+	    <field type="java.lang.String" name="branchPhoneNumber">
+			<bind-xml name="branchPhoneNumber" />
+	    </field>
+	    <field type="java.lang.String" name="runcntlid">
+			<bind-xml name="runcntlid" />
+	    </field>
+	    <field type="java.util.Date" name="invoiceDate">
+			<bind-xml name="invoiceDate" />
+	    </field>
+	    <field type="java.util.Date" name="accountingDate">
+			<bind-xml name="accountingDate" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceToAdjust">
+			<bind-xml name="invoiceToAdjust" />
+	    </field>
+	    <field type="java.lang.String" name="customerName">
+			<bind-xml name="customerName" />
+	    </field>
+	    <field type="java.lang.String" name="serviceLocationName">
+			<bind-xml name="serviceLocationName" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceLabel1">
+			<bind-xml name="invoiceLabel1" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceLabel2">
+			<bind-xml name="invoiceLabel2" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceLabel3">
+			<bind-xml name="invoiceLabel3" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceLabel4">
+			<bind-xml name="invoiceLabel4" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceLabel5">
+			<bind-xml name="invoiceLabel5" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceValue1">
+			<bind-xml name="invoiceValue1" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceValue2">
+			<bind-xml name="invoiceValue2" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceValue3">
+			<bind-xml name="invoiceValue3" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceValue4">
+			<bind-xml name="invoiceValue4" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceValue5">
+			<bind-xml name="invoiceValue5" />
+	    </field>
+	    <field type="java.lang.String" name="vatRegCountryCode">
+			<bind-xml name="vatRegCountryCode" />
+	    </field>
+	    <field type="java.lang.String" name="billType">
+			<bind-xml name="billType" />
+	    </field>
+        <field type="com.intertek.phoenix.externalEntity.CEInvoiceLineX" name="invoiceLine" collection="collection">
+            <bind-xml name="invoiceLine" />
+        </field>	    
+    </class>
+
+	<class name="com.intertek.phoenix.externalEntity.CEInvoiceLineX">
+        <map-to xml="CEInvoiceLineX" />
+	    <field type="java.lang.String" name="prebillId">
+            <bind-xml name="prebillId" />
+        </field>	        
+	    <field type="java.lang.Double" name="netPrice">
+            <bind-xml name="netPrice" />
+        </field>	        
+	    <field type="java.lang.String" name="lineDescription">
+            <bind-xml name="lineDescription" />
+        </field>	        
+	    <field type="java.lang.Double" name="splitPct">
+            <bind-xml name="splitPct" />
+        </field>	        
+	    <field type="java.lang.Double" name="discountPct">
+            <bind-xml name="discountPct" />
+        </field>	        
+	    <field type="java.lang.Double" name="unitPrice">
+            <bind-xml name="unitPrice" />
+        </field>	        
+	    <field type="java.lang.String" name="level0">
+            <bind-xml name="level0" />
+        </field>	        
+	    <field type="java.lang.String" name="level1">
+            <bind-xml name="level1" />
+        </field>	        
+	    <field type="java.lang.String" name="level2">
+            <bind-xml name="level2" />
+        </field>	        
+	    <field type="java.lang.String" name="busStreamCode">
+            <bind-xml name="busStreamCode" />
+        </field>	        
+	    <field type="java.lang.String" name="account">
+            <bind-xml name="account" />
+        </field>	        
+	    <field type="java.lang.String" name="deptid">
+            <bind-xml name="deptid" />
+        </field>	        
+	    <field type="java.lang.String" name="productGroup">
+            <bind-xml name="productGroup" />
+        </field>	        
+	    <field type="java.lang.String" name="serviceType">
+            <bind-xml name="serviceType" />
+        </field>	        
+	    <field type="java.lang.String" name="taxCode">
+            <bind-xml name="taxCode" />
+        </field>	        
+	    <field type="java.lang.String" name="vatCode">
+            <bind-xml name="vatCode" />
+        </field>	        
+	    <field type="java.lang.String" name="taxArticleCode">
+            <bind-xml name="taxArticleCode" />
+        </field>	        
+        <field type="com.intertek.phoenix.externalEntity.CEInvoiceLineSplitX" name="invoiceLineSplit" collection="collection">
+            <bind-xml name="invoiceLineSplit" />
+        </field>	        
+	</class>
+
+	<class name="com.intertek.phoenix.externalEntity.CEInvoiceLineSplitX">
+        <map-to xml="CEInvoiceLineSplitX" />
+	    <field type="java.lang.Double" name="allocPct">
+            <bind-xml name="allocPct" />
+        </field>	        
+	    <field type="java.lang.String" name="branchName">
+            <bind-xml name="branchName" />
+        </field>	        
+	    <field type="java.lang.Double" name="allocAmt">
+            <bind-xml name="allocAmt" />
+        </field>	        
+	</class>
+		        
+	<class name="com.intertek.phoenix.externalEntity.ProjectContractX">
+        <map-to xml="ProjectContractX" />
+	    <field type="java.lang.String" name="businessUnit">
+			<bind-xml name="businessUnit" />
+	    </field>
+	    <field type="java.lang.String" name="jobNumber">
+			<bind-xml name="jobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="jobDescription">
+			<bind-xml name="jobDescription" />
+	    </field>
+	    <field type="java.lang.String" name="jobDescriptionDetail">
+			<bind-xml name="jobDescriptionDetail" />
+	    </field>
+	    <field type="java.lang.String" name="projectType">
+			<bind-xml name="projectType" />
+	    </field>
+	    <field type="java.lang.String" name="customerId">
+			<bind-xml name="customerId" />
+	    </field>
+	    <field type="java.lang.String" name="projectManager">
+			<bind-xml name="projectManager" />
+	    </field>
+	    <field type="java.util.Date" name="projectManagerEffDt">
+			<bind-xml name="projectManagerEffDt" />
+	    </field>
+	    <field type="java.lang.String" name="operatingUnit">
+			<bind-xml name="operatingUnit" />
+	    </field>
+	    <field type="java.lang.String" name="product">
+			<bind-xml name="product" />
+	    </field>
+	    <field type="java.lang.String" name="serviceOffering">
+			<bind-xml name="serviceOffering" />
+	    </field>
+	    <field type="java.util.Date" name="charfieldtEffDt">
+			<bind-xml name="charfieldtEffDt" />
+	    </field>
+	    <field type="java.lang.String" name="jobStatus">
+			<bind-xml name="jobStatus" />
+	    </field>
+	    <field type="java.util.Date" name="jobStatusEffDt">
+			<bind-xml name="jobStatusEffDt" />
+	    </field>
+	    <field type="java.lang.String" name="msgAction">        
+			<bind-xml name="msgAction" />
+	    </field>
+        <field type="com.intertek.phoenix.externalEntity.ProjectActivityX" name="projectActivities" collection="collection">
+            <bind-xml name="projectActivities" />
+        </field>	    
+	</class>    
+    
+	<class name="com.intertek.phoenix.externalEntity.ProjectActivityX">
+        <map-to xml="ProjectActivityX" />
+	    <field type="java.lang.Long" name="jobTestId">
+			<bind-xml name="jobTestId" />
+	    </field>        
+	    <field type="java.lang.String" name="businessUnit">
+			<bind-xml name="businessUnit" />
+	    </field>
+	    <field type="java.lang.String" name="jobNumber">
+			<bind-xml name="jobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="jobLineNumber">
+			<bind-xml name="jobLineNumber" />
+	    </field>
+	    <field type="java.lang.String" name="jobLineDescription">
+			<bind-xml name="jobLineDescription" />
+	    </field>
+	    <field type="java.lang.String" name="jobLineDetailDescription">
+			<bind-xml name="jobLineDetailDescription" />
+	    </field>
+	    <field type="java.lang.String" name="jobLineStatus">
+			<bind-xml name="jobLineStatus" />
+	    </field>
+	    <field type="java.util.Date" name="jobLineStatusEffDt">
+			<bind-xml name="jobLineStatusEffDt" />
+	    </field>
+	    <field type="java.lang.String" name="operatingUnit">
+			<bind-xml name="operatingUnit" />
+	    </field>
+	    <field type="java.lang.String" name="departmentId">
+			<bind-xml name="departmentId" />
+	    </field>
+	    <field type="java.lang.String" name="product">
+			<bind-xml name="product" />
+	    </field>
+	    <field type="java.lang.String" name="serviceOffering">
+			<bind-xml name="serviceOffering" />
+	    </field>
+	    <field type="java.util.Date" name="chartfieldEffDt">
+			<bind-xml name="chartfieldEffDt" />
+	    </field>
+	    <field type="java.lang.String" name="msgAction">        
+			<bind-xml name="msgAction" />
+	    </field>
+	</class>    
+    
+	<class name="com.intertek.phoenix.externalEntity.DCAppJobOrderX">
+        <map-to xml="DCAppJobOrderX" />
+	    <field type="java.lang.String" name="projectNumber">
+			<bind-xml name="projectNumber" />
+	    </field>
+	    <field type="java.util.Date" name="projectDate">
+			<bind-xml name="projectDate" />
+	    </field>
+	    <field type="java.lang.String" name="customerId">
+			<bind-xml name="customerId" />
+	    </field>
+	    <field type="java.lang.String" name="contactId">
+			<bind-xml name="contactId" />
+	    </field>
+    	<field type="java.lang.String" name="contractId">
+			<bind-xml name="contractId" />
+	    </field>	    	    
+	    <field type="java.lang.Double" name="orderAmount">
+			<bind-xml name="orderAmount" />
+	    </field>
+	    <field type="java.lang.String" name="currencyCode">
+			<bind-xml name="currencyCode" />
+	    </field>
+	    <field type="java.lang.String" name="paymentTerms">
+			<bind-xml name="paymentTerms" />
+	    </field>
+	    <field type="java.lang.String" name="modelNumber">
+			<bind-xml name="modelNumber" />
+	    </field>
+	    <field type="java.lang.String" name="productionEvaluationDescription">
+			<bind-xml name="productionEvaluationDescription" />
+	    </field>
+	    <field type="java.lang.String" name="billToCustomerId">
+			<bind-xml name="billToCustomerId" />
+	    </field>
+	    <field type="java.lang.String" name="billToContactId">
+			<bind-xml name="billToContactId" />
+	    </field>
+	    <field type="java.lang.String" name="shipToCustomerId">
+			<bind-xml name="shipToCustomerId" />
+	    </field>
+	    <field type="java.lang.String" name="shipToContactId">
+			<bind-xml name="shipToContactId" />
+	    </field>
+	    <field type="com.intertek.phoenix.externalEntity.BusinessStreamX" name="businessStream">
+			<bind-xml name="businessStream" />
+	    </field>
+	    <field type="com.intertek.phoenix.externalEntity.WarehouseX" name="warehouse">
+			<bind-xml name="warehouse" />
+	    </field>
+	    <field type="java.lang.String" name="primarySalePersonId">
+			<bind-xml name="primarySalePersonId" />
+	    </field>
+	    <field type="java.lang.String" name="secondarySalePersonId">
+			<bind-xml name="secondarySalePersonId" />
+	    </field>
+	    <field type="java.lang.String" name="projectManagerId">
+			<bind-xml name="projectManagerId" />
+	    </field>
+	    <field type="java.util.Date" name="customerReadyDate">
+			<bind-xml name="customerReadyDate" />
+	    </field>
+	    <field type="java.util.Date" name="promiseCompletionDate">
+			<bind-xml name="promiseCompletionDate" />
+	    </field>
+		<field type="com.intertek.phoenix.externalEntity.DCAppJobOrderLineItemX" collection="collection" name="lineItems">
+			<bind-xml name="lineItems" />
+	    </field>
+    </class>
+        
+	<class name="com.intertek.phoenix.externalEntity.DCAppJobOrderLineItemX">
+        <map-to xml="DCAppJobOrderLineItemX" />
+	    <field type="java.lang.String" name="lineItemNumber">
+			<bind-xml name="lineItemNumber" />
+	    </field>
+	    <field type="java.lang.String" name="itemStandardId">
+			<bind-xml name="itemStandardId" />
+	    </field>
+	    <field type="java.lang.String" name="itemStandardDescription">
+			<bind-xml name="itemStandardDescription" />
+	    </field>
+	    <field type="java.lang.Double" name="quotedValue">
+			<bind-xml name="quotedValue" />
+	    </field>
+	    <field type="java.lang.String" name="taskOwnerId">
+			<bind-xml name="taskOwnerId" />
+	    </field>
+	    <field type="com.intertek.phoenix.externalEntity.ServiceOfferingX" name="serviceOffering">
+			<bind-xml name="serviceOffering" />
+	    </field>
+	    <field type="java.util.Date" name="startDate">
+			<bind-xml name="startDate" />
+	    </field>
+	    <field type="java.util.Date" name="completionDate">
+			<bind-xml name="completionDate" />
+	    </field>
+	    <field type="java.lang.String" name="jobTitle">
+			<bind-xml name="jobTitle" />
+	    </field>
+	    <field type="java.lang.Integer" name="billableHours">
+			<bind-xml name="billableHours" />
+	    </field>
+	    <field type="java.lang.String" name="operationalStatus">
+			<bind-xml name="operationalStatus" />
+	    </field>
+    </class>
+    
+	<class name="com.intertek.phoenix.externalEntity.DCAppBillableItemX">
+        <map-to xml="DCAppBillableItemX" />
+	    <field type="java.lang.String" name="projectNumber">
+			<bind-xml name="projectNumber" />
+	    </field>
+	    <field type="java.lang.String" name="orderNumber">
+			<bind-xml name="orderNumber" />
+	    </field>
+		<field type="com.intertek.phoenix.externalEntity.DCAppBillableLineItemX" collection="collection" name="lineItems">
+			<bind-xml name="lineItems" />
+		</field>
+	</class>
+	
+	<class name="com.intertek.phoenix.externalEntity.DCAppBillableLineItemX">
+        <map-to xml="DCAppBillableLineItemX" />
+	    <field type="java.lang.String" name="lineItemNumber">
+			<bind-xml name="lineItemNumber" />
+	    </field>
+	    <field type="java.lang.String" name="lineItemDescription">
+			<bind-xml name="lineItemDescription" />
+	    </field>
+	    <field type="java.lang.Integer" name="billableItemQuantity">
+			<bind-xml name="billableItemQuantity" />
+	    </field>
+	    <field type="java.lang.Double" name="invoiceAmount">
+			<bind-xml name="invoiceAmount" />
+	    </field>
+    </class>
+        
+	<class name="com.intertek.phoenix.externalEntity.ECSJobOrderX">
+        <map-to xml="ECSJobOrderX" />
+		<field type="java.lang.Boolean" name="followUpServices">
+			<bind-xml name="followUpServices" />
+	    </field>
+    	<field type="java.lang.String" name="quoteNumber">
+			<bind-xml name="quoteNumber" />
+	    </field>
+    	<field type="java.util.Date" name="quoteDate">
+			<bind-xml name="quoteDate" />
+	    </field>
+    	<field type="java.lang.String" name="orderNumber">
+			<bind-xml name="orderNumber" />
+	    </field>
+    	<field type="java.util.Date" name="orderDate">
+			<bind-xml name="orderDate" />
+	    </field>
+    	<field type="java.lang.String" name="customerId">
+			<bind-xml name="customerId" />
+	    </field>
+    	<field type="java.lang.String" name="contactId">
+			<bind-xml name="contactId" />
+	    </field>
+    	<field type="java.lang.String" name="contractId">
+			<bind-xml name="contractId" />
+	    </field>	    	    
+    	<field type="java.lang.Double" name="orderAmount">
+			<bind-xml name="orderAmount" />
+	    </field>
+    	<field type="java.lang.String" name="agreementPONumber">
+			<bind-xml name="agreementPONumber" />
+	    </field>
+    	<field type="java.lang.String" name="currencyCode">
+			<bind-xml name="currencyCode" />
+	    </field>
+    	<field type="java.lang.String" name="modelNumber">
+			<bind-xml name="modelNumber" />
+	    </field>
+    	<field type="java.lang.String" name="productionEvaluationDescription">
+			<bind-xml name="productionEvaluationDescription" />
+	    </field>
+    	<field type="java.lang.String" name="billToCustomerId">
+			<bind-xml name="billToCustomerId" />
+	    </field>
+    	<field type="java.lang.String" name="billToContactId">
+			<bind-xml name="billToContactId" />
+	    </field>
+    	<field type="java.lang.String" name="shipToCustomerId">
+			<bind-xml name="shipToCustomerId" />
+	    </field>
+    	<field type="java.lang.String" name="shipToContactId">
+			<bind-xml name="shipToContactId" />
+	    </field>
+    	<field type="com.intertek.phoenix.externalEntity.BusinessStreamX" name="businessStream">
+			<bind-xml name="businessStream" />
+	    </field>
+    	<field type="com.intertek.phoenix.externalEntity.WarehouseX" name="warehouse">
+			<bind-xml name="warehouse" />
+	    </field>
+    	<field type="java.lang.String" name="primarySalePersonId">
+			<bind-xml name="primarySalePersonId" />
+	    </field>
+    	<field type="java.lang.String" name="secondarySalePersonId">
+			<bind-xml name="secondarySalePersonId" />
+	    </field>
+    	<field type="java.lang.String" name="projectManagerId">
+			<bind-xml name="projectManagerId" />
+	    </field>
+    	<field type="java.util.Date" name="customerReadyDate">
+			<bind-xml name="customerReadyDate" />
+	    </field>
+    	<field type="java.util.Date" name="promiseCompletionDate">
+			<bind-xml name="promiseCompletionDate" />
+	    </field>
+        <field type="com.intertek.phoenix.externalEntity.ECSLineItemX" collection="collection" name="lineItems">
+            <bind-xml name="lineItems" />
+        </field>	    
+	</class>	    
+	    
+	<class name="com.intertek.phoenix.externalEntity.ECSLineItemX">
+        <map-to xml="ECSLineItemX" />
+    	<field type="java.lang.String" name="lineItemNumber">
+			<bind-xml name="lineItemNumber" />
+	    </field>
+    	<field type="java.lang.String" name="itemStandardId">
+			<bind-xml name="itemStandardId" />
+	    </field>
+    	<field type="java.lang.String" name="itemStandardDescription">
+			<bind-xml name="itemStandardDescription" />
+	    </field>
+    	<field type="java.lang.Double" name="quotedValue">
+			<bind-xml name="quotedValue" />
+	    </field>
+    	<field type="java.lang.String" name="taskOwnerId">
+			<bind-xml name="taskOwnerId" />
+	    </field>
+    	<field type="com.intertek.phoenix.externalEntity.ServiceOfferingX" name="serviceOffering">
+			<bind-xml name="serviceOffering" />
+	    </field>
+    	<field type="java.util.Date" name="startDate">
+			<bind-xml name="startDate" />
+	    </field>
+    	<field type="java.util.Date" name="completionDate">
+			<bind-xml name="completionDate" />
+	    </field>
+    	<field type="java.lang.String" name="jobTitle">
+			<bind-xml name="jobTitle" />
+	    </field>
+    	<field type="java.lang.Integer" name="billableHours">        
+			<bind-xml name="billableHours" />
+	    </field>
+	</class>
+	
+	<class name="com.intertek.phoenix.externalEntity.PSBillableItemX">
+        <map-to xml="PSBillableItemX" />
+	    <field type="java.lang.String" name="businessUnit">
+			<bind-xml name="businessUnit" />
+	    </field>
+	    <field type="java.lang.String" name="temporaryInvoiceNumber">
+			<bind-xml name="temporaryInvoiceNumber" />
+	    </field>
+	    <field type="java.lang.Integer" name="lineSequenceNumber">
+			<bind-xml name="lineSequenceNumber" />
+	    </field>
+	    <field type="java.lang.String" name="lineDescription">
+			<bind-xml name="lineDescription" />
+	    </field>
+	    <field type="java.lang.String" name="jobNumber">
+			<bind-xml name="jobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="jobLineNumber">
+			<bind-xml name="jobLineNumber" />
+	    </field>
+	    <field type="java.lang.Double" name="invoiceAmt">
+			<bind-xml name="invoiceAmt" />
+	    </field>
+	    <field type="java.lang.Double" name="quantity">
+			<bind-xml name="quantity" />
+	    </field>
+	    <field type="java.lang.Double" name="unitAmt">
+			<bind-xml name="unitAmt" />
+	    </field>
+	    <field type="java.lang.Double" name="totalLineAmt">
+			<bind-xml name="totalLineAmt" />
+	    </field>
+	    <field type="java.lang.String" name="billingCurrencyCd">
+			<bind-xml name="billingCurrencyCd" />
+	    </field>
+        <field type="com.intertek.phoenix.externalEntity.BillingLineDistributionX" name="billingLineDistribution" collection="collection">
+            <bind-xml name="billingLineDistribution" />
+        </field>	    
+	</class>
+	
+	<class name="com.intertek.phoenix.externalEntity.BillingLineDistributionX">
+        <map-to xml="BillingLineDistributionX" />
+	    <field type="java.lang.String" name="businessUnit">
+			<bind-xml name="businessUnit" />
+	    </field>
+	    <field type="java.lang.String" name="invoiceNumber">
+			<bind-xml name="invoiceNumber" />
+	    </field>
+	    <field type="java.lang.Integer" name="lineSeqNumber">
+			<bind-xml name="lineSeqNumber" />
+	    </field>
+	    <field type="java.lang.Integer" name="lineDistSeqNumber">
+			<bind-xml name="lineDistSeqNumber" />
+	    </field>
+	    <field type="java.lang.String" name="jobNumber">
+			<bind-xml name="jobNumber" />
+	    </field>
+	    <field type="java.lang.String" name="account">
+			<bind-xml name="account" />
+	    </field>
+	    <field type="java.lang.String" name="warehouseId">
+			<bind-xml name="warehouseId" />
+	    </field>
+	    <field type="java.lang.String" name="departmentId">
+			<bind-xml name="departmentId" />
+	    </field>
+	    <field type="java.lang.String" name="businessStream">
+			<bind-xml name="businessStream" />
+	    </field>
+	    <field type="java.lang.String" name="serviceOffering">
+			<bind-xml name="serviceOffering" />
+	    </field>
+	    <field type="java.lang.Double" name="distributionAmt">        
+			<bind-xml name="distributionAmt" />
+	    </field>
+	</class>
+
+	<class name="com.intertek.phoenix.externalEntity.ProjectValidationX">
+        <map-to xml="ProjectValidationX" />
+		<field type="java.lang.String" name="projectNumber">
+			<bind-xml name="projectNumber" />
+	    </field>
+	    <field type="java.lang.String" name="customerId">
+		    <bind-xml name="customerId" />
+	    </field>	    
+	</class>
+
+	<class name="com.intertek.phoenix.externalEntity.CreditHoldX">
+        <map-to xml="CreditHoldX" />
+    	<field type="java.lang.String" name="customerId">
+		    <bind-xml name="customerId" />
+	    </field>
+    	<field type="java.lang.String" name="customerName">
+		    <bind-xml name="customerName" />
+	    </field>
+    	<field type="java.lang.String" name="creditHoldFlag">
+		    <bind-xml name="creditHoldFlag" />
+	    </field>
+    	<field type="java.util.Date" name="dateTime">
+		    <bind-xml name="dateTime" />
+	    </field>
+    	<field type="java.lang.String" name="operatorId">
+		    <bind-xml name="operatorId" />
+	    </field>
+	</class>
+
+	<class name="com.intertek.phoenix.externalEntity.TestMethodologyX">
+        <map-to xml="TestMethodologyX" />
+	    <field type="java.lang.String" name="id">
+		    <bind-xml name="id" />
+	    </field>
+	    <field type="java.lang.String" name="priceId">
+		    <bind-xml name="priceId" />
+	    </field>
+	    <field type="java.lang.String" name="description">
+		    <bind-xml name="description" />
+	    </field>
+	    <field type="java.lang.Double" name="price">
+		    <bind-xml name="price" />
+	    </field>
+	    <field type="java.util.Date" name="beginDate">
+		    <bind-xml name="beginDate" />
+	    </field>
+	    <field type="java.util.Date" name="endDate">
+		    <bind-xml name="endDate" />
+	    </field>
+        <field name="serviceOffering" type="com.intertek.phoenix.externalEntity.ServiceOfferingX" collection="collection">
+            <bind-xml name="serviceOffering" />
+        </field>
+	</class>
+	
+	<class name="com.intertek.phoenix.externalEntity.ServiceOfferingX">
+        <map-to xml="ServiceOfferingX" />
+    	<field type="java.lang.String" name="id">
+            <bind-xml name="id" />
+        </field>
+    	<field type="java.lang.String" name="parentId">
+            <bind-xml name="parentId" />
+        </field>
+    	<field type="java.lang.String" name="description">        
+            <bind-xml name="description" />
+        </field>
+    </class>
+    
+	<class name="com.intertek.phoenix.externalEntity.ContactX">
+        <map-to xml="ContactX" />
+		<field type="java.lang.String" name="contactId">
+	    	<bind-xml name="contactId" />
+		</field>
+	    <field type="java.lang.Character" name="status">
+	    	<bind-xml name="status" />
+		</field>
+	    <field type="java.lang.String" name="firstName">
+	    	<bind-xml name="firstName" />
+		</field>
+	    <field type="java.lang.String" name="lastName">
+	    	<bind-xml name="lastName" />
+		</field>
+	    <field type="java.lang.String" name="title">
+	    	<bind-xml name="title" />
+		</field>
+	    <field type="java.lang.String" name="salutation">
+	    	<bind-xml name="salutation" />
+		</field>
+	    <field type="java.lang.String" name="workPhone">
+	    	<bind-xml name="workPhone" />
+		</field>
+	    <field type="java.lang.String" name="fax">
+	    	<bind-xml name="fax" />
+		</field>
+	    <field type="java.lang.String" name="personalPhone">
+	    	<bind-xml name="personalPhone" />
+		</field>
+	    <field type="java.lang.String" name="workEmail">
+	    	<bind-xml name="workEmail" />
+		</field>
+	    <field type="java.lang.String" name="cellPhone">
+	    	<bind-xml name="cellPhone" />
+		</field>
+	    <field type="java.lang.String" name="personalEmail">
+	    	<bind-xml name="personalEmail" />
+		</field>
+	    <field type="java.lang.String" name="contactFlag">
+	    	<bind-xml name="contactFlag" />
+		</field>
+	    <field type="java.lang.String" name="preferredCommunicator">
+	    	<bind-xml name="preferredCommunicator" />
+		</field>
+        <field name="contactCustomer" type="com.intertek.phoenix.externalEntity.ContactCustomerX" collection="collection">
+            <bind-xml name="contactCustomer" />
+        </field>
+	</class>
+    
+    <class name="com.intertek.phoenix.externalEntity.ContactCustomerX">
+        <map-to xml="ContactCustomerX" />
+	    <field type="java.lang.String" name="contactId">
+	    	<bind-xml name="contactId" />
+		</field>	
+	    <field type="java.lang.String" name="customerCode">
+	    	<bind-xml name="customerCode" />
+		</field>	
+	    <field type="java.lang.Integer" name="locationNumber">
+	    	<bind-xml name="locationNumber" />
+		</field>	
+	    <field type="java.lang.String" name="status">
+	    	<bind-xml name="status" />
+		</field>	
+	    <field type="java.lang.String" name="contactSequenceNumber">
+	    	<bind-xml name="contactSequenceNumber" />
+		</field>	
+	    <field type="java.lang.Boolean" name="billTo">
+	    	<bind-xml name="billTo" />
+		</field>	
+	    <field type="java.lang.Boolean" name="soldTo">
+	    	<bind-xml name="soldTo" />
+		</field>	
+	    <field type="java.lang.Boolean" name="shipTo">        
+	    	<bind-xml name="shipTo" />
+		</field>	
+	</class>
+	
+	<class name="com.intertek.phoenix.externalEntity.CustomerX">
+        <map-to xml="CustomerX" />
+	    <field type="java.lang.String" name="customerCode">
+	    	<bind-xml name="customerCode" />
+		</field>	        
+	    <field type="java.lang.String" name="customerName">
+	    	<bind-xml name="customerName" />
+		</field>	
+	    <field type="char" name="customerStatus">
+	    	<bind-xml name="customerStatus" />
+		</field>	
+	    <field type="java.util.Date" name="statusDate">
+	    	<bind-xml name="statusDate" />
+		</field>	
+	    <field type="java.lang.String" name="alternateName">
+	    	<bind-xml name="alternateName" />
+		</field>	
+	    <field type="java.util.Date" name="sinceDate">
+	    	<bind-xml name="sinceDate" />
+		</field>	
+	    <field type="java.util.Date" name="addDate">
+	    	<bind-xml name="addDate" />
+		</field>	
+	    <field type="java.lang.String" name="industry">
+	    	<bind-xml name="industry" />
+		</field>	
+	    <field type="java.lang.String" name="currencyCd">
+	    	<bind-xml name="currencyCd" />
+		</field>	
+	    <field type="java.lang.String" name="customerType">
+	    	<bind-xml name="customerType" />
+		</field>	
+	    <field type="java.lang.String" name="locationType">
+	    	<bind-xml name="locationType" />
+		</field>	
+	    <field type="java.lang.String" name="parentCustomerCode">
+	    	<bind-xml name="parentCustomerCode" />
+		</field>	
+	    <field type="java.lang.String" name="creditAnalystName">
+	    	<bind-xml name="creditAnalystName" />
+		</field>	
+	    <field type="java.lang.String" name="collector">
+	    	<bind-xml name="collector" />
+		</field>	
+	    <field type="java.lang.Boolean" name="creditApplication">
+	    	<bind-xml name="creditApplication" />
+		</field>	
+	    <field type="java.lang.Boolean" name="creditHold">
+	    	<bind-xml name="creditHold" />
+		</field>	
+	    <field type="java.lang.Double" name="creditLimit">
+	    	<bind-xml name="creditLimit" />
+		</field>	
+	    <field type="java.lang.Boolean" name="interUnit">
+	    	<bind-xml name="interUnit" />
+		</field>	
+	    <field type="java.lang.String" name="interUnitBusinessUnitName">
+	    	<bind-xml name="interUnitBusinessUnitName" />
+		</field>	
+	    <field type="java.lang.String" name="interUnitBusinessUnit">
+	    	<bind-xml name="interUnitBusinessUnit" />
+		</field>	
+	    <field type="java.lang.Boolean" name="interUnitPending">
+	    	<bind-xml name="interUnitPending" />
+		</field>	
+	    <field type="java.lang.String" name="accountOwner">
+	    	<bind-xml name="accountOwner" />
+		</field>	
+	    <field type="java.lang.String" name="paymentType">
+	    	<bind-xml name="paymentType" />
+		</field>	
+	    <field type="java.lang.String" name="paymentTerms">
+	    	<bind-xml name="paymentTerms" />
+		</field>	
+	    <field type="java.lang.String" name="primaryIndustry">
+	    	<bind-xml name="primaryIndustry" />
+		</field>	
+	    <field type="java.lang.String" name="vip">
+	    	<bind-xml name="vip" />
+		</field>	
+	    <field type="java.lang.String" name="customerStatusComment">
+	    	<bind-xml name="customerStatusComment" />
+		</field>	
+	    <field type="java.lang.String" name="dunsNumber">
+	    	<bind-xml name="dunsNumber" />
+		</field>	
+	    <field type="java.lang.String" name="internalOriginDivision">
+	    	<bind-xml name="internalOriginDivision" />
+		</field>	
+	    <field type="java.lang.String" name="internalOriginBusStrm">
+	    	<bind-xml name="internalOriginBusStrm" />
+		</field>	
+	    <field type="java.lang.String" name="internalOrigin">
+	    	<bind-xml name="internalOrigin" />
+		</field>	
+	    <field type="java.lang.String" name="invoiceType">
+	    	<bind-xml name="invoiceType" />
+		</field>	
+	    <field type="java.util.Date" name="lastServiceDate">
+	    	<bind-xml name="lastServiceDate" />
+		</field>	
+	    <field type="java.lang.String" name="lastServiceLocation">
+	    	<bind-xml name="lastServiceLocation" />
+		</field>	
+	    <field type="java.lang.Boolean" name="legalEntitySubsidiary">
+	    	<bind-xml name="legalEntitySubsidiary" />
+		</field>	
+	    <field type="java.lang.Boolean" name="referral">
+	    	<bind-xml name="referral" />
+		</field>	
+	    <field type="java.lang.String" name="referralParentCust">
+	    	<bind-xml name="referralParentCust" />
+		</field>	
+	    <field type="java.lang.String" name="referralChildCust">
+	    	<bind-xml name="referralChildCust" />
+		</field>	
+	    <field type="java.lang.String" name="referralNotes">
+	    	<bind-xml name="referralNotes" />
+		</field>	
+	    <field type="java.lang.String" name="secondaryIndustry">
+	    	<bind-xml name="secondaryIndustry" />
+		</field>	
+	    <field type="java.lang.String" name="taxpayerIdNumber">
+	    	<bind-xml name="taxpayerIdNumber" />
+		</field>	
+	    <field type="java.lang.String" name="custType">        
+	    	<bind-xml name="custType" />
+		</field>	
+
+        <field name="customerAddressSequence" type="com.intertek.phoenix.externalEntity.CustomerAddressSequenceX" collection="collection">
+            <bind-xml name="customerAddressSequence" />
+        </field>
+    </class>
+    
+    <class name="com.intertek.phoenix.externalEntity.CustomerAddressSequenceX">
+        <map-to xml="CustomerAddressSequenceX" />
+	    <field type="java.lang.String" name="customerCode">
+		    	<bind-xml name="customerCode" />
+		</field>    
+	    <field type="java.lang.String" name="addressSequenceNumber">
+		    	<bind-xml name="addressSequenceNumber" />
+		</field>    
+	    <field type="java.lang.String" name="addressDescription">
+		    	<bind-xml name="addressDescription" />
+		</field>    
+	    <field type="java.lang.Boolean" name="correspondenceAddress">
+		    	<bind-xml name="correspondenceAddress" />
+		</field>    
+	    <field type="java.lang.Integer" name="location">
+		    	<bind-xml name="location" />
+		</field>    
+	    <field type="java.lang.Boolean" name="shipTo">
+		    	<bind-xml name="shipTo" />
+		</field>    
+	    <field type="java.lang.Boolean" name="billTo">
+		    	<bind-xml name="billTo" />
+		</field>    
+	    <field type="java.lang.Boolean" name="soldTo">
+		    	<bind-xml name="soldTo" />
+		</field>    
+	    <field type="java.lang.Boolean" name="billToPrimary">
+		    	<bind-xml name="billToPrimary" />
+		</field>    
+	    <field type="java.lang.Boolean" name="soldToPrimary">
+		    	<bind-xml name="soldToPrimary" />
+		</field>
+		<field name="customerAddresses" type="com.intertek.phoenix.externalEntity.CustomerAddressX" collection="collection">
+            <bind-xml name="customerAddresses" />
+        </field>
+	</class>
+
+    <class name="com.intertek.phoenix.externalEntity.CustomerAddressX">
+        <map-to xml="CustomerAddressX" />
+	    <field type="java.lang.String" name="id">
+    		<bind-xml name="id" />
+    	</field>        
+	    <field type="java.lang.String" name="customerCode">
+    		<bind-xml name="customerCode" />
+    	</field>
+	    <field type="java.lang.Integer" name="locationNumber">
+    		<bind-xml name="locationNumber" />
+    	</field>
+	    <field type="java.lang.Character" name="status">
+    		<bind-xml name="status" />
+    	</field>
+	    <field type="java.util.Date" name="effectiveDate">
+    		<bind-xml name="effectiveDate" />
+    	</field>
+	    <field type="java.lang.String" name="taxCode">
+    		<bind-xml name="taxCode" />
+    	</field>
+		<field type="com.intertek.phoenix.externalEntity.AddressX" name="address">
+            <bind-xml name="address" />
+        </field>    
+	</class>
+		    
+    <class name="com.intertek.phoenix.externalEntity.MarketRateX">
+        <map-to xml="MarketRateX" />
+    	<field name="rateIndex" type="java.lang.String">
+    		<bind-xml name="rateIndex" />
+    	</field>
+	    <field name="term" type="java.lang.Integer">
+	    	<bind-xml name="term" />
+	    </field>
+	    <field name="fromCurrencyCode" type="java.lang.String">
+	    	<bind-xml name="fromCurrencyCode" />
+	    </field>
+	    <field name="toCurrencyCode" type="java.lang.String">
+	    	<bind-xml name="toCurrencyCode" />
+	    </field>
+	    <field name="rateType" type="java.lang.String">
+	    	<bind-xml name="rateType" />
+	    </field>
+	    <field name="effectiveDate" type="java.util.Date">
+	    	<bind-xml name="effectiveDate" />
+	    </field>
+	    <field name="rateMultiplier" type="java.lang.Double">
+	    	<bind-xml name="rateMultiplier" />
+	    </field>
+	    <field name="rateDivisor" type="java.lang.Double">
+	    	<bind-xml name="rateDivisor" />
+	    </field>
+	    <field name="synchronizationID" type="java.lang.Integer">
+	    	<bind-xml name="synchronizationID" />
+	    </field>
+	    <field name="lastUpdateTime" type="java.util.Date">
+	    	<bind-xml name="lastUpdateTime" />
+	    </field>
+    </class>
+    
+    <class name="com.intertek.phoenix.externalEntity.BusinessStreamX">
+        <map-to xml="BusinessStreamX" />
+	    <field type="java.lang.String" name="productGroupSet">
+			<bind-xml name="productGroupSet" />
+		</field>        
+	    <field type="java.lang.String" name="productGroupId">
+			<bind-xml name="productGroupId" />
+		</field>
+	    <field type="java.lang.String" name="description">
+			<bind-xml name="description" />
+		</field>
+	    <field type="java.util.Date" name="beginDate">
+			<bind-xml name="beginDate" />
+		</field>
+	    <field type="java.util.Date" name="endDate">
+			<bind-xml name="endDate" />
+		</field>
+    </class>
+    
+    <class name="com.intertek.phoenix.externalEntity.WarehouseX">
+        <map-to xml="WarehouseX" />
+		<field name="id" type="java.lang.String">
+			<bind-xml name="id" />
+		</field>
+		<field name="bu" type="java.lang.String">
+			<bind-xml name="businessUnit" />
+		</field>
+        <field name="address" type="com.intertek.phoenix.externalEntity.AddressX">
+            <bind-xml name="address" />
+        </field>		
+        <field name="contactPhone" type="java.lang.String">
+            <bind-xml name="contactPhone" />
+        </field>
+        <field name="faxNumber" type="java.lang.String">
+            <bind-xml name="faxNumber" />
+        </field>  
+        <field name="status" type="java.lang.Character">
+            <bind-xml name="status" />
+        </field> 
+    </class>
+        
+    <class name="com.intertek.phoenix.externalEntity.AddressX">
+        <map-to xml="AddressX" />
+		<field name="address1" type="java.lang.String">
+			<bind-xml name="address1" />
+		</field>
+		<field name="address2" type="java.lang.String">
+			<bind-xml name="address2" />
+		</field>
+		<field name="address3" type="java.lang.String">
+			<bind-xml name="address3" />
+		</field>
+		<field name="address4" type="java.lang.String">
+			<bind-xml name="address4" />
+		</field>
+		<field name="city" type="java.lang.String">
+			<bind-xml name="city" />
+		</field>
+		<field name="postal" type="java.lang.String">
+			<bind-xml name="postal" />
+		</field>
+		<field name="county" type="java.lang.String">
+			<bind-xml name="county" />
+		</field>
+		<field name="state" type="java.lang.String">
+			<bind-xml name="state" />
+		</field>
+		<field name="country" type="java.lang.String">
+			<bind-xml name="country" />
+		</field>
+        <field name="inCityLimit" type="java.lang.Boolean">
+            <bind-xml name="inCityLimit" />
+        </field>
+    </class>
+        
+    <class name="com.intertek.phoenix.externalEntity.AcknowledgementResponseX">
+        <map-to xml="AcknowledgementResponseX"/>
+
+        <field name="messageId" type="java.lang.String">
+            <bind-xml name="messageId" />
+        </field>
+    </class>    
+
+    <class name="com.intertek.phoenix.externalEntity.response.OrderResultX">
+        <map-to xml="OrderResultX" />
+		<field name="jobNumber" type="java.lang.String">
+			<bind-xml name="jobNumber" />
+		</field>             	
+    </class>
+    <class name="com.intertek.phoenix.externalEntity.response.BillableItemsResultX">
+        <map-to xml="BillableItemsResultX" />
+		<field name="statusCode" type="java.lang.String">
+			<bind-xml name="statusCode" />
+		</field>             	
+    </class>
+    <class name="com.intertek.phoenix.externalEntity.response.AcknowledgementX">
+        <map-to xml="AcknowledgementX" />
+		<field name="statusCode" type="java.lang.String">
+			<bind-xml name="statusCode" />
+		</field>             	
+    </class>
+    <class name="com.intertek.phoenix.externalEntity.response.CustomerProjectValidationResultX">
+        <map-to xml="CustomerProjectValidationResultX" />
+		<field name="jobNumber" type="java.lang.String">
+			<bind-xml name="jobNumber" />
+		</field>
+		<field name="jobDescription" type="java.lang.String">
+			<bind-xml name="jobDescription" />
+		</field> 
+		<field name="tests" type="com.intertek.phoenix.externalEntity.response.CustomerProjectValidationResultDetailX" collection="collection">
+			<bind-xml name="tests" />
+		</field> 
+    </class>
+    <class name="com.intertek.phoenix.externalEntity.response.CustomerProjectValidationResultDetailX">
+        <map-to xml="CustomerProjectValidationResultDetailX" />
+		<field name="lineNumber" type="java.lang.String">
+			<bind-xml name="lineNumber" />
+		</field>
+		<field name="testStandardId" type="java.lang.String">
+			<bind-xml name="testStandardId" />
+		</field> 
+		<field name="testStandardDescription" type="java.lang.String">
+			<bind-xml name="testStandardDescription" />
+		</field> 
+    </class> 
+</mapping>
+

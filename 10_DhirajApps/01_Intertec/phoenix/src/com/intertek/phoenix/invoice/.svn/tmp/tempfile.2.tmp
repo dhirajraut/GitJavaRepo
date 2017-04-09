@@ -1,0 +1,565 @@
+/**
+ * @Company: Intertek
+ * @Project : Phoenix 2.0 for Commercial and Electronics
+ * @Copyright: Intertek 2009
+ */
+package com.intertek.phoenix.invoice;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.intertek.entity.User;
+import com.intertek.phoenix.BaseServiceImpl;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoException;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.BillingEvent;
+import com.intertek.entity.Customer;
+import com.intertek.phoenix.entity.CEInvoice;
+import com.intertek.phoenix.entity.CEInvoiceLineItem;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.CreditInvoice;
+import com.intertek.phoenix.entity.CreditRequest;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.DepositInvoiceAmount;
+import com.intertek.phoenix.entity.Invoice;
+import com.intertek.phoenix.entity.InvoiceFile;
+import com.intertek.phoenix.entity.InvoiceStatus;
+import com.intertek.phoenix.entity.InvoiceType;
+import com.intertek.phoenix.entity.Note;
+import com.intertek.phoenix.entity.NoteType;
+import com.intertek.phoenix.entity.OrderStatus;
+import com.intertek.phoenix.report.PDF;
+import com.intertek.phoenix.report.ReportService;
+import com.intertek.phoenix.util.CommonUtil;
+
+/**
+ * This class implements the InvoiceService interface for Phoenix.
+ * 
+ * @author richard.qin
+ */
+public class InvoiceServiceImpl extends BaseServiceImpl implements InvoiceService {
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#applyDepositInvoice(com.intertek.phoenix.entity.CEInvoice,
+     *      com.intertek.phoenix.entity.DepositInvoice[])
+     */
+    @Override
+    public CEInvoice applyDepositInvoice(CEInvoice invoice, DepositInvoice... depositInvoices) throws InvalidInvoiceOperationException {
+        List<CEInvoiceLineItem> ilis = new ArrayList<CEInvoiceLineItem>();
+        ilis.addAll(invoice.getInvoiceLineItems());
+        applyDepositInvoice(ilis, depositInvoices);
+        return invoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#applyDepositInvoice(java.util.List,
+     *      com.intertek.phoenix.entity.DepositInvoice[])
+     */
+    @Override
+    public void applyDepositInvoice(List<CEInvoiceLineItem> ilis, DepositInvoice... depositInvoices) throws InvalidInvoiceOperationException {
+        // check that there is enough fund for all the ilis
+        double totalFundNeeded = 0;
+        for (CEInvoiceLineItem ili : ilis) {
+            totalFundNeeded += ili.getUnsecuredAmount();
+        }
+        double totalAvailable = 0;
+        for (DepositInvoice depositInvoice : depositInvoices) {
+            totalAvailable += depositInvoice.getAvailableAmount();
+        }
+        if (totalFundNeeded > totalAvailable) {
+            throw new InvalidInvoiceOperationException("Not enough fund.");
+        }
+        // pay each invoice line one by one
+        // the deposit invoice has been used so far
+        for (int idxInvoice = 0, idxIli = 0; idxIli < ilis.size() && idxInvoice < depositInvoices.length;) {
+            CEInvoiceLineItem ili = ilis.get(idxIli);
+            // use the current deposit invoice to pay for this invoice line item
+            ili.payByDepositInvoice(depositInvoices[idxInvoice], 0);
+            // has we used up the current deposit invoice?
+            if (depositInvoices[idxInvoice].getAvailableAmount() == 0) {
+                // have enough fund for this invoice line item and ready for the
+                // next
+                idxInvoice++;
+            }
+            if (ili.getUnsecuredAmount() > 0) {
+                // not enough fund for this invoice, but more is available in
+                // the next deposit invoice
+                idxIli++;
+            }
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#applyDepositInvoice(java.util.List,
+     *      com.intertek.phoenix.entity.DepositInvoice, double)
+     */
+    @Override
+    public void applyDepositInvoice(List<CEInvoiceLineItem> ilis, DepositInvoice depositInvoice, double amount) throws InvalidInvoiceOperationException {
+        // check that there is enough fund for all the ilis
+        double totalNeeded = 0;
+        for (CEInvoiceLineItem ili : ilis) {
+            totalNeeded += ili.getUnsecuredAmount();
+        }
+        if (totalNeeded > amount) {
+            // Note, this behavior can be changed, let's discuss
+            throw new InvalidInvoiceOperationException("Not enough fund.");
+        }
+        // "pay off" each invoice line items
+        for (CEInvoiceLineItem ili : ilis) {
+            DepositInvoiceAmount dia = ili.payByDepositInvoice(depositInvoice, amount);
+            amount -= dia.getAmount();
+        }
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#applyDepositInvoice(com.intertek.phoenix.entity.CEInvoiceLineItem,
+     *      com.intertek.phoenix.entity.DepositInvoice, double)
+     */
+    @Override
+    public void applyDepositInvoice(CEInvoiceLineItem ili, DepositInvoice depositInvoice, double amount) throws InvalidInvoiceOperationException {
+        if (amount == 0) {
+            amount = depositInvoice.getAvailableAmount();
+        }
+        if (ili.getTotalAmount() > amount) {
+            throw new InvalidInvoiceOperationException("Not enough fund");
+        }
+        // pay it off
+        ili.payByDepositInvoice(depositInvoice, amount);
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#creditDepositInvoice(com.intertek.phoenix.entity.DepositInvoice,
+     *      String)
+     */
+    @Override
+    public CreditInvoice creditDepositInvoice(DepositInvoice depositInvoice, String noteString) throws InvalidInvoiceOperationException {
+        // Note, I could just delegate it go creditInvoice(CEInvoice, String),
+        // if CreditInvoice remains to extend from CEInvoice
+        if (depositInvoice.canCredit() == false) {
+            throw new InvalidInvoiceOperationException("Cannot credit a used depositInvoice.");
+        }
+
+        CreditInvoice creditInvoice = null;
+        try {
+            Note note = null;
+            if (noteString != null) {
+                note = new Note(noteString, NoteType.COMMENT); // which note
+                                                               // type?
+            }
+            creditInvoice = depositInvoice.creditInvoice(note);
+            DaoManager.getDao(Note.class).saveOrUpdate(note);
+            DaoManager.getDao(CreditInvoice.class).saveOrUpdate(creditInvoice);
+        }
+        catch (DaoException ex) {
+            throw new InvalidInvoiceOperationException("Unable to generate a deposit invoice.", ex);
+        }
+        return creditInvoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#creditInvoice(com.intertek.phoenix.entity.CreditRequest)
+     */
+    @Override
+    public CreditInvoice creditInvoice(User user, CreditRequest creditRequest, String noteString) throws InvalidInvoiceOperationException {
+        CEInvoice invoice = creditRequest.getInvoice();
+        return creditInvoice(user, invoice, noteString);
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#creditInvoice(com.intertek.phoenix.entity.CEInvoice)
+     */
+    @Override
+    public CreditInvoice creditInvoice(User user, CEInvoice invoice, String noteString) throws InvalidInvoiceOperationException {
+        if (invoice.canCredit() == false) {
+            throw new InvalidInvoiceOperationException("Cannot credit a used depositInvoice or an invoice that has not been paid.");
+        }
+
+        CreditInvoice creditInvoice = null;
+        try {
+            Note note = null;
+            if (noteString != null) {
+                note = new Note(noteString, NoteType.COMMENT); // which note
+                                                               // type?
+                note.setAddedUserId(user.getLoginName());
+            }
+            creditInvoice = invoice.creditInvoice(note);
+            creditInvoice.setInvoiceNumber(invoice.getInvoiceNumber()+"CR");
+            creditInvoice.setGeneratedBy(user.getLoginName());
+            creditInvoice.setGeneratedOn(new Timestamp(new Date().getTime()));
+            // need to populate additional details here
+            // TODO
+            
+            DaoManager.getDao(Note.class).saveOrUpdate(note);
+            DaoManager.getDao(CreditInvoice.class).saveOrUpdate(creditInvoice);
+        }
+        catch (DaoException ex) {
+            throw new InvalidInvoiceOperationException("Unable to generate a deposit invoice.", ex);
+        }
+        return creditInvoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#creditInvoice(com.intertek.phoenix.entity.BillingEvent)
+     */
+    @Override
+    public CreditInvoice creditInvoice(BillingEvent billingEvent, String noteString) throws InvalidInvoiceOperationException {
+        // So far, there is no lead from BillingEvent to an Invoice,
+        // reexamine if this method is really needed.
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return
+     */
+    public String generateInvoiceId(CEJobOrder jobOrder) {
+        // TODO shall provice a meaningful implementation
+        return CommonUtil.generateIdCode();
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#createInvoice(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public CEInvoice createInvoice(CEJobOrder jobOrder) throws InvalidInvoiceOperationException {
+        return createInvoice(jobOrder, jobOrder.getCustomerDetail().getCustomer());
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#createInvoice(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+    @Override
+    public CEInvoice createInvoice(CEJobOrder jobOrder, Customer customer) throws InvalidInvoiceOperationException {
+        // check if the jobOrder has at least one billable item at this time.
+        List<CEJobOrderLineItem> billableJolis = jobOrder.getBillableJobOrderLineItems();
+        if (billableJolis.size() == 0) {
+            throw new InvalidInvoiceOperationException("This JobOrder does not have any billable line items.");
+        }
+        return createInvoice(jobOrder, billableJolis, customer);
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#createInvoice(java.util.List,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+    @Override
+    public CEInvoice createInvoice(CEJobOrder jobOrder, List<CEJobOrderLineItem> billables, Customer customer) throws InvalidInvoiceOperationException {
+        // check if the jobOrder is in a state that can be invoiced.
+        OrderStatus status = jobOrder.getStatus();
+        if (status != OrderStatus.OPEN && status != OrderStatus.REOPENED) {
+            throw new InvalidInvoiceOperationException("This JobOrder's status does not allow it be invoiced: " + status.description());
+        }
+
+        // is there an invoice that has not been paid in full?
+        Dao<CEInvoice> dao = DaoManager.getDao(CEInvoice.class);
+        
+        // TODO rethink the status control when generating invoices
+        
+        CEInvoice example = new CEInvoice();
+//        example.setOrderNumber(jobOrder.getJobNumber());
+//        example.setStatus(InvoiceStatus.INVOICED); // invoiced but not paid
+//        try {
+//            List<CEInvoice> unpaidInvoices = dao.search(example);
+//            if (unpaidInvoices.size() > 0) {
+//                // we have some unfinished business, must not continue.
+//                throw new InvalidInvoiceOperationException("There are exsting existing invoices that have not been paid.");
+//            }
+//        }
+//        catch (DaoException e) {
+//            throw new InvalidInvoiceOperationException("Operation Failed", e);
+//        }
+
+        // check if there is at least one billable item to bill
+        if (billables.size() == 0) {
+            throw new InvalidInvoiceOperationException("There is no billable Job Order line items.");
+        }
+
+        CEInvoice invoice = null;
+        // if there is a new invoice that has not been invoiced, delete it's
+        // invoice lines and recycle the invoice object.
+        // This is to cater for the situation when a user wants to make a
+        // change to an new invoice that has not been sent to the customer.
+        example.setStatus(InvoiceStatus.NEW);
+        example.setOrderNumber(jobOrder.getJobNumber());
+        try {
+            invoice = dao.searchUnique(example);
+            if (invoice != null) {
+                // this is safe to remove invoice lines here, as the invoice
+                // has the NEW status.
+                // TODO does Hibernate automatically remove these objects?
+                invoice.removeInvoiceLines();
+                // after the invoice lines are removed, this invoice can
+                // be recycled.
+            }
+            else {
+                invoice = new CEInvoice();
+                invoice.setType(InvoiceType.NORMAL);
+                invoice.setInvoiceNumber(generateInvoiceId(jobOrder));
+                // save the invoice before continue, hibernate will write it to
+                // the database at the end of session.
+                dao.saveOrUpdate(invoice);
+            }
+            buildInvoice(invoice, jobOrder, billables, customer);
+            return invoice;
+        }
+        catch (DaoException e) {
+            throw new InvalidInvoiceOperationException("Operation Failed", e);
+        }
+    }
+
+    // I have a feeling that the entity DraftInvoice is unnecessary, as the new
+    // invoice
+    // that has not been issues is automatically a DraftInvoice. TODO review and
+    // remove.
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#previewInvoice(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public CEInvoice previewInvoice(CEJobOrder jobOrder) throws InvalidInvoiceOperationException {
+        return previewInvoice(jobOrder, jobOrder.getCustomerDetail().getCustomer());
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#previewInvoice(com.intertek.phoenix.entity.CEJobOrder,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+    @Override
+    public CEInvoice previewInvoice(CEJobOrder jobOrder, Customer customer) throws InvalidInvoiceOperationException {
+        CEInvoice invoice = createInvoice(jobOrder, customer);
+        invoice.setType(InvoiceType.DRAFT);
+        return invoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#previewInvoice(java.util.List,
+     *      com.intertek.phoenix.entity.Customer)
+     */
+    @Override
+    public CEInvoice previewInvoice(CEJobOrder jobOrder, List<CEJobOrderLineItem> billables, Customer customer) throws InvalidInvoiceOperationException {
+        CEInvoice invoice = createInvoice(jobOrder, billables, customer);
+        invoice.setType(InvoiceType.DRAFT);
+        return invoice;
+    }
+
+    private CEInvoice buildInvoice(CEInvoice invoice, CEJobOrder jobOrder, List<CEJobOrderLineItem> billables, Customer customer) throws DaoException {
+        // build an invoice, and for each billable item, create a new invoice
+        // line. the billing amount is the billable amount of a billable job
+        // order line item. after an invoice line is created, the billing
+        // amount should be substracted from the billable amount
+        Dao<CEInvoiceLineItem> dao = DaoManager.getDao(CEInvoiceLineItem.class);
+        for (CEJobOrderLineItem joli : billables) {
+            CEInvoiceLineItem ili = new CEInvoiceLineItem();
+//            ili.setInvoiceNumber(invoice.getInvoiceNumber());
+//            ili.setOrderLineItemId(joli.getId());
+            // set account code or GL code
+            ili.setUnitPrice(joli.getListPrice()); // TODO is list price unit
+                                                   // price?
+            ili.setQuantity(joli.getQuantity()); // TODO all quantity in the
+                                                 // joli?
+            // net price will be calculated automatically, or not?
+
+            // make it a part of the invoice
+            invoice.addInvoiceLineItem(ili);
+            ili.setInvoice(invoice);
+            ili.setOrderLineItem(joli);
+            // make the dao be aware of the new entity
+            dao.saveOrUpdate(ili);
+        }
+        invoice.setBalance(0);
+        invoice.setCustomer(customer);
+        invoice.setGeneratedBy(CommonUtil.getCurrentUser());
+        invoice.setGeneratedOn(new Timestamp(new Date().getTime()));
+        // invoice.setInvoiceDate(invoiceDate); // what's the difference between
+        // On and Date?
+        // invoice.setInvoicePeriod(invoicePeriod); // where do I get this?
+        invoice.setJobOrder(jobOrder);
+        invoice.setOrderNumber(jobOrder.getJobNumber());
+        //invoice.setProject(jobOrder.getProject());
+        invoice.setStatus(InvoiceStatus.NEW);
+        // invoice.setTotalAmount(totalAmount);
+        // invoice.setTotalTax(totalTax);
+        // invoice.setTotalVat(totalVat);
+        return invoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#getCreditedInvoice(com.intertek.phoenix.entity.CreditInvoice)
+     */
+    @Override
+    public CEInvoice getCreditedInvoice(CreditInvoice creditInvoice) throws InvalidInvoiceOperationException, InvoiceNotFoundException {
+        if ( ! (creditInvoice.getRelatedInvoice() instanceof CEInvoice)) {
+            throw new InvalidInvoiceOperationException("Incorrect invoice type, a Normal Invoice is expected.");
+        }
+
+        String invoiceNumber = creditInvoice.getRelatedInvoiceNumber();
+        CEInvoice invoice = new CEInvoice();
+        invoice.setInvoiceNumber(invoiceNumber);
+        Dao<CEInvoice> dao = DaoManager.getDao(CEInvoice.class);
+        try {
+            invoice = dao.searchUnique(invoice);
+        }
+        catch (DaoException e) {
+            throw new InvoiceNotFoundException("Cannot find the Invoice related to the CreditInvoice.", e);
+        }
+        return invoice;
+    }
+
+    @Override
+    public CreditInvoice getCreditInvoice(CEInvoice invoice) throws InvalidInvoiceOperationException {
+        if(invoice == null){
+            throw new InvalidInvoiceOperationException("Invoice must not be null.");
+        }
+        CreditInvoice creditInvoice = new CreditInvoice();
+        creditInvoice.setRelatedInvoiceNumber(invoice.getInvoiceNumber());
+        Dao<CreditInvoice> dao = DaoManager.getDao(CreditInvoice.class);
+        try {
+            creditInvoice = dao.searchUnique(creditInvoice);
+        }
+        catch (DaoException e) {
+            // this should be expected, so just return null
+            invoice = null;
+        }
+        return creditInvoice;
+    }
+    
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#getCreditedDepositInvoice(com.intertek.phoenix.entity.CreditInvoice)
+     */
+    @Override
+    public DepositInvoice getCreditedDepositInvoice(CreditInvoice creditInvoice) throws InvalidInvoiceOperationException, InvoiceNotFoundException {
+        if (! (creditInvoice.getRelatedInvoice() instanceof DepositInvoice)) {
+            throw new InvalidInvoiceOperationException("Incorrect invoice type, a Deposit Invoice is expected");
+        }
+
+        String invoiceNumber = creditInvoice.getRelatedInvoiceNumber();
+        DepositInvoice invoice = new DepositInvoice();
+        invoice.setInvoiceNumber(invoiceNumber);
+        Dao<DepositInvoice> dao = DaoManager.getDao(DepositInvoice.class);
+        try {
+            invoice = dao.searchUnique(invoice);
+        }
+        catch (DaoException e) {
+            throw new InvoiceNotFoundException("Cannot find the DepositInvoice related to the CreditInvoice.", e);
+        }
+        return invoice;
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#createDepositInvoice(com.intertek.phoenix.entity.CEJobOrder)
+     */
+    @Override
+    public DepositInvoice createDepositInvoice(CEJobOrder jobOrder) throws InvalidInvoiceOperationException {
+        DepositInvoice depositInvoice = new DepositInvoice();
+        depositInvoice.setId(CommonUtil.generateId());
+        depositInvoice.setStatus(InvoiceStatus.NEW);
+        // TODO setup other deposit invoice information, such as GL code details
+
+        // this new deposit invoice needs to be "filled out" by the user for
+        // details like amount, payment type, etc.
+
+        jobOrder.addDepositInvoice(depositInvoice);
+        return depositInvoice;
+    }
+
+    /**
+     * @throws DaoException
+     * @see com.intertek.phoenix.invoice.InvoiceService#generateInvoice(com.intertek.phoenix.entity.CEInvoice)
+     */
+    @Override
+    public InvoiceFile generateInvoice(CEInvoice invoice) throws InvalidInvoiceOperationException, DaoException {
+        ReportService reportService = ServiceManager.getReportService();
+        InvoiceFile invoiceFile = null;
+        // check the invoice type, if it is a draft invoice, generate a preview
+        if (invoice.getType() == InvoiceType.DRAFT) {
+            PDF pdf = reportService.generateInvoicePreviewPdf(invoice);
+            invoiceFile = new InvoiceFile();
+            invoiceFile.setInvoice(invoice);
+            invoiceFile.setInvoiceFileName(pdf.getFileName());
+            // this invoice file is transient and will not be persisted, which
+            // means that a preview can be repeatedly generated for a draft
+            // invoice.
+        }
+        else if (invoice.getType() == InvoiceType.NORMAL) {
+            // check the status of this invoice, if the invoice is already
+            // generated
+            // throw an exception
+            // TODO do we need to support the regenerate flag?
+            InvoiceStatus status = invoice.getStatus();
+            if (status != InvoiceStatus.NEW) {
+                throw new InvalidInvoiceOperationException("Cannot generate an invoice that is already generated.");
+            }
+
+            // remove invoice lines that have not been selected.
+            List<CEInvoiceLineItem> toRemove = invoice.removeUnselectedLineItems();
+            // delete the unselected line items from datastore
+            Dao<CEInvoiceLineItem> daoLineItem = DaoManager.getDao(CEInvoiceLineItem.class);
+            daoLineItem.remove(toRemove);
+            
+            // adjust jobOrderLineItem billedAmount to accrued amount
+            for (CEInvoiceLineItem li : invoice.getInvoiceLineItems()){
+                li.getOrderLineItem().adjustBilledAmount();
+            }
+            
+            // let the report service do the work
+            PDF pdf = reportService.generateInvoicePdf(invoice);
+            invoiceFile = new InvoiceFile();
+            invoiceFile.setId(CommonUtil.generateId());
+            invoiceFile.setInvoice(invoice);
+            invoiceFile.setInvoiceFileName(pdf.getFileName());
+            // persist this object
+            Dao<InvoiceFile> dao = DaoManager.getDao(InvoiceFile.class);
+            dao.saveOrUpdate(invoiceFile);
+            // update the invoice status
+            updateInvoiceStatusToInvoiced(invoice, invoiceFile);
+        }
+        else {
+            throw new InvalidInvoiceOperationException("Cannot generate invoice, invalid invoice status.");
+        }
+        return invoiceFile;
+    }
+
+    /**
+     * @param invoice
+     */
+    private void updateInvoiceStatusToInvoiced(Invoice invoice, InvoiceFile invoiceFile) {
+        invoice.setStatus(InvoiceStatus.INVOICED);
+        invoice.setGeneratedBy(CommonUtil.getCurrentUser());
+        invoice.setGeneratedOn(new Timestamp(new Date().getTime()));
+        invoice.setInvoiceFile(invoiceFile);
+        // TODO more to come
+    }
+
+    /**
+     * @see com.intertek.phoenix.invoice.InvoiceService#generateDepositInvoice(com.intertek.phoenix.entity.DepositInvoice)
+     */
+    @Override
+    public InvoiceFile generateDepositInvoice(DepositInvoice invoice) throws InvalidInvoiceOperationException, DaoException {
+        ReportService reportService = ServiceManager.getReportService();
+        InvoiceFile invoiceFile = null;
+        // check the status of this invoice, if the invoice is already generated
+        // throw an exception
+        // TODO do we need to support the regenerate flag?
+        InvoiceStatus status = invoice.getStatus();
+        if (status != InvoiceStatus.NEW) {
+            throw new InvalidInvoiceOperationException("Cannot generate an invoice that is already generated.");
+        }
+        // let the report service do the work
+        PDF pdf = reportService.generateDepositInvoicePdf(invoice);
+        invoiceFile = new InvoiceFile();
+        invoiceFile.setId(CommonUtil.generateId());
+        invoiceFile.setInvoice(invoice);
+        invoiceFile.setInvoiceFileName(pdf.getFileName());
+        // persist this object
+        Dao<InvoiceFile> dao = DaoManager.getDao(InvoiceFile.class);
+        dao.saveOrUpdate(invoiceFile);
+        // update the invoice status
+        updateInvoiceStatusToInvoiced(invoice, invoiceFile);
+        return invoiceFile;
+    }
+}

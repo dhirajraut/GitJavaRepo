@@ -1,0 +1,111 @@
+SQL> CONNECT SYSTEM/MANAGER@PRODDB;
+Connected.
+
+
+********* To grant previledges
+SQL> GRANT CREATE PROCEDURE TO SCOTT IDENTIFIED BY TIGER;
+
+Grant succeeded.
+
+SQL> CONNECT SCOTT/TIGER@PRODDB;
+Connected.
+
+
+************* Procedure 1
+SQL>  create or replace procedure abd(eno out number) as
+  2   begin
+  3    select empno into eno from emp;
+  4   end;
+  5   /
+
+Procedure created.
+
+
+************* Procedure 2
+SQL> CREATE OR REPLACE PROCEDURE ABC(ENO OUT NUMBER) AS
+  2  BEGIN
+  3   SELECT MAX(EMPNO) INTO ENO FROM EMP;
+  4  END;
+  5  /
+
+Procedure created.
+
+
+************* Procedure 3
+  1  create or replace procedure aa1 is
+  2  begin
+  3  dbms_output.put_line('Hello World');
+  4* end;
+SQL> /
+
+Procedure created.
+
+
+************* Executing Procedure
+SQL> exec aa1;
+Hello World
+
+PL/SQL procedure successfully completed.
+
+
+
+************* Viewing errors in procedure
+SQL> show errors procedure abd;
+Errors for PROCEDURE ABD:
+
+LINE/COL ERROR
+-------- -----------------------------------------------------------------
+2/1      PLS-00103: Encountered the symbol "SELECT" when expecting one of
+         the following:
+         begin function package pragma procedure subtype type use
+         <an identifier> <a double-quoted delimited-identifier> form
+         current cursor external language
+         The symbol "begin" was substituted for "SELECT" to continue.
+
+3/2      PLS-00103: Encountered the symbol "end-of-file" when expecting
+         one of the following:
+         , ; for group having intersect minus order start union where
+         connect
+
+LINE/COL ERROR
+-------- -----------------------------------------------------------------
+
+
+*************** Droping a procedure from data base
+SQL> drop procedure Get_emp_rec;
+
+Procedure dropped.
+
+
+************** Procedure 5
+
+SQL>  create PROCEDURE Get_emp_rec (Emp_number  IN  Emp.Empno%TYPE,
+  2                          Emp_ret     OUT Emp%ROWTYPE) IS
+  3   BEGIN
+  4      SELECT Empno, Ename, Job, Mgr, Hiredate, Sal, Comm, Deptno
+  5         INTO Emp_ret
+  6         FROM Emp
+  7         WHERE Empno = Emp_number;
+  8   END;
+  9  /
+
+Procedure created.
+
+
+*************** Procedure 6
+  1  DECLARE
+  2     Emp_row      Emp%ROWTYPE;
+  3  BEGIN
+  4     Get_emp_rec(7499, Emp_row);
+  5     DBMS_OUTPUT.PUT(Emp_row.Ename || ' '                || Emp_row.Empno);
+  6     DBMS_OUTPUT.PUT(' '           || Emp_row.Job || ' ' || Emp_row.Mgr);
+  7     DBMS_OUTPUT.PUT(' '           || Emp_row.Hiredate   || ' ' || Emp_row.Sal);
+  8     DBMS_OUTPUT.PUT(' '           || Emp_row.Comm || ' '|| Emp_row.Deptno);
+  9     DBMS_OUTPUT.NEW_LINE;
+ 10* END;
+ 11  /
+ALLEN 7499 SALESMAN 7698 20-FEB-81 1600 300 30
+
+PL/SQL procedure successfully completed.
+
+SQL> 

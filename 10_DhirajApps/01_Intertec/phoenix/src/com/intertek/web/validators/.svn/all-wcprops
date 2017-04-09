@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators
+END
+SlatePriceExtValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators/SlatePriceExtValidator.java
+END
+EditInspectionRateValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators/EditInspectionRateValidator.java
+END
+AddContractZoneValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators/AddContractZoneValidator.java
+END
+TestPriceExtValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators/TestPriceExtValidator.java
+END
+AddContractServiceValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/web/validators/AddContractServiceValidator.java
+END

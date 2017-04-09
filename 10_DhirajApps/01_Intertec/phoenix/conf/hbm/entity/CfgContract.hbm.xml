@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="CfgContract" table="PS_ITSC_CONTRACT">
+    <composite-id name="cfgContractId" class="CfgContractId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="contractStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="ITS_CONTR_STATUS" length="12" />
+    </property>
+    <property name="statusDate" type="timestamp">
+      <column name="ITS_STATUS_DTTM" sql-type="date" />
+    </property>
+    <property name="statusUser" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=90) private</meta>
+      <column name="ITS_STATUS_USER" length="90" />
+    </property>
+    <property name="currencyCD" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="CURRENCY_CD" length="9" />
+    </property>
+    <property name="qualityDiscount" type="java.lang.Double">
+      <column name="ITS_QUALITY_DSCNT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="quantityDiscount" type="java.lang.Double">
+      <column name="ITS_QUANTITY_DSCNT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="slateDiscount" type="java.lang.Double">
+      <column name="ITS_SLATE_DSCNT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="testDiscount" type="java.lang.Double">
+      <column name="ITS_TEST_DSCNT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="inspectionDiscountPercent" type="java.lang.Double">
+      <column name="ITS_INSP_DSCNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="labDiscountPercent" type="java.lang.Double">
+      <column name="ITS_LAB_DSCNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="opsDiscountPercent" type="java.lang.Double">
+      <column name="ITS_OPS_DSCNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="annualEscalator" type="java.lang.Double">
+      <column name="ITS_ANNUAL_ESC" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="escalatorDate" type="date">
+      <column name="ITS_ESCALATOR_DT" sql-type="date" />
+    </property>
+    <property name="priceBookId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="PRICEBOOK_ID" length="45" />
+    </property>
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="UOM" length="45" />
+    </property>
+    <property name="cfgDiscountPercent" type="java.lang.Double">
+      <column name="CFG_DISCOUNT_PCT" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="productGroupSet" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="PRODUCT_GROUP_SET" length="45" />
+    </property>
+    <property name="vesselSet" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="ITS_VESSEL_SET" length="45" />
+    </property>
+    <property name="zoneAssoc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="ITS_ZONE_ASSOC" length="3" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+    <property name="editPB" type="yes_no">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="ITS_EDIT_PB" length="9" />
+    </property>
+    <property name="hideTestDiscount" type="yes_no">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="ITS_HIDE_TST_DSCNT" length="3" />
+    </property>
+    <property name="pbSeries" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="ITS_PB_SERIES" length="45" />
+    </property>
+    <property name="overridable" type="yes_no">
+      <column name="OVERRIDABLE" length="1" />
+    </property>
+    <many-to-one name="contract" column="CFG_CONTRACT_ID" class="Contract" insert="false" update="false" index="CFGCONTRACTS_index_1" />
+  </class>
+</hibernate-mapping>
+

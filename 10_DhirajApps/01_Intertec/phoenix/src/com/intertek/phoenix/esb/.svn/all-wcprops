@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/7035/branches/phx2.1/src/com/intertek/phoenix/esb
+END
+ESBService.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6932/branches/phx2.1/src/com/intertek/phoenix/esb/ESBService.java
+END
+EntityPublisher.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/7035/branches/phx2.1/src/com/intertek/phoenix/esb/EntityPublisher.java
+END
+ESBSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6796/branches/phx2.1/src/com/intertek/phoenix/esb/ESBSender.java
+END
+WebServiceMsCallback.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6709/branches/phx2.1/src/com/intertek/phoenix/esb/WebServiceMsCallback.java
+END
+ESBServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6932/branches/phx2.1/src/com/intertek/phoenix/esb/ESBServiceImpl.java
+END

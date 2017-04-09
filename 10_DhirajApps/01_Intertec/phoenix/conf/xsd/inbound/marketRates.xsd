@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/MarketRates" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/MarketRates" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishMarketRatesRequest" type="MarketRatesType">
+		<xs:annotation>
+			<xs:documentation>Publish MarketRate ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="MarketRatesType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<!--xs:element name="RateTable" type="RateTableType"/-->
+			<xs:element name="RateIndex" type="xs:string"/>
+			<xs:element name="Term" type="xs:int"/>
+			<xs:element name="FromCurrencyCode" type="xs:string"/>
+			<xs:element name="ToCurrencyCode" type="xs:string"/>
+			<!--Rate Type defines a category of market rates for currency conversion.  Some examples of rate types are commercial, average, floating, and historical.-->
+				<xs:element name="RateType" type="xs:string"/>
+			<xs:element name="EffectiveDate" type="xs:date"/>
+			<xs:element name="RateMultiplier" type="xs:decimal"/>
+			<xs:element name="RateDivisor " type="xs:decimal"/>
+			<xs:element name="SynchronizationID" type="xs:integer"/>
+			<xs:element name="LastUpdateTime " type="xs:dateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

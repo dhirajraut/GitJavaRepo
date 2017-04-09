@@ -1,0 +1,10 @@
+rmic RemoteImpl
+rmiregistry
+
+On other console -
+java RemoteImpl
+
+
+Problem - Gives 
+java.lang.ClassCastException: remote.RemoteImpl_Stub
+	at client.RemoteClient.main(RemoteClient.java:10)

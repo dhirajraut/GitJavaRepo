@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ProductCode" table="PS_ITSC_PRD_CODE">
+    <composite-id name="productCodeId" class="ProductCodeId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="JOB_CODE" length="105" />
+      </key-property>
+      <key-property name="noProdCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="NOPROD_CODE" length="45" />
+      </key-property>
+    </composite-id>
+    <property name="jobTypeNoProductCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="JOBTYPE_NOPRD_CODE" length="45" />
+    </property>
+  </class>
+</hibernate-mapping>
+

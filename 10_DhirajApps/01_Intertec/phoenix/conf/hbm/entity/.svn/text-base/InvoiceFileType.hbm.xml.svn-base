@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="InvoiceFileType" table="INVOICE_FILE_TYPES">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="INVOICE_FILE_TYPE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">INVOICE_FILE_TYPE_SEQ</param>
+      </generator>
+    </id>
+    <property name="invoiceFileType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="INVOICE_FILE_TYPE" length="3"  not-null="true" unique-key="INVOICE_FILE_TYPE_UK1"/>
+    </property>
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" not-null="true" unique-key="INVOICE_FILE_TYPE_UK1"/>
+    </property>
+    <many-to-one name="businessUnit" column="BU_NAME" class="BusinessUnit" insert="false" update="false" index="INVOICE_FILE_TYPE_index_1" />
+   
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="INVOICE_TYPE" length="3" unique-key="INVOICE_FILE_TYPE_UK1" />
+    </property>
+    <property name="Description" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="DESCRIPTION" length="60" />
+    </property>
+  </class>
+</hibernate-mapping>
+

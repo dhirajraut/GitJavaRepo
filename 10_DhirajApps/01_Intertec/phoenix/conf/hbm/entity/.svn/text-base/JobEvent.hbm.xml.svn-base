@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobEvent" table="JOB_EVENTS">
+    <composite-id name="jobEventId" class="JobEventId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="jobEventId" type="java.lang.Integer">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta>
+        <column name="JOB_EVENT_ID" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="prodSeqNum" type="java.lang.Integer">
+        <column name="ITS_PROD_SEQ_NUM" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="jobNumber" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+        <column name="JOB_NUMBER" length="128" />
+      </key-property>
+      <key-property name="linkedVslRow" type="java.lang.Integer">
+        <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="event" class="Event">
+      <column name="EVENT_CODE" index="JOB_EVENTS_index_0" />
+    </many-to-one>
+    <many-to-one name="jobProd" class="JobProd" insert="false" update="false">
+      <column name="ITS_PROD_SEQ_NUM" index="JOB_EVENTS_index_1" />
+      <column name="JOB_NUMBER" index="JOB_EVENTS_index_1" />
+      <column name="ITS_LINKED_VSL_ROW" index="JOB_EVENTS_index_1" />
+    </many-to-one>
+    <property name="sortOrder" type="int">
+      <column name="SORT_ORDER" sql-type="NUMBER" />
+    </property>
+    <property name="eventInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=200) private</meta>
+      <column name="EVENT_INSTRUCTIONS" length="200" />
+    </property>
+  </class>
+</hibernate-mapping>
+

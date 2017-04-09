@@ -1,0 +1,14 @@
+package beanpack;
+
+public class Current extends Account {
+	private double minBal;
+
+	public double getMinBal() {
+		return minBal;
+	}
+
+	public void setMinBal(double minBal) {
+		this.minBal = minBal;
+	}
+	
+}

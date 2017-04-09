@@ -1,0 +1,10 @@
+package dao;
+
+import model.StudentList;
+
+public class DetailDataDaoImpl implements DetailDataDao {
+	StudentList showDetail(int id)
+	{
+		return null;
+	}
+}

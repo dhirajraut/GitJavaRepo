@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/phoenix/!svn/ver/6956/branches/phx2.1/src/com/intertek/entity
+END
+Service.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6413/branches/phx2.1/src/com/intertek/entity/Service.java
+END
+Customer.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/Customer.java
+END
+RevisionNoteId.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/RevisionNoteId.java
+END
+ServiceType.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/ServiceType.java
+END
+Country.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/Country.java
+END
+BankAccountId.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/BankAccountId.java
+END
+JobOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/JobOrder.java
+END
+RevisionNotes.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/RevisionNotes.java
+END
+ContactCustId.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/ContactCustId.java
+END
+WebServiceEntityInbound.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6494/branches/phx2.1/src/com/intertek/entity/WebServiceEntityInbound.java
+END
+Bank.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/Bank.java
+END
+ContractCust.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/ContractCust.java
+END
+Contract.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/Contract.java
+END
+WebServiceInbound.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6494/branches/phx2.1/src/com/intertek/entity/WebServiceInbound.java
+END
+ExpressionGLCode.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6585/branches/phx2.1/src/com/intertek/entity/ExpressionGLCode.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/User.java
+END
+Control.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6874/branches/phx2.1/src/com/intertek/entity/Control.java
+END
+CustAddress.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6956/branches/phx2.1/src/com/intertek/entity/CustAddress.java
+END
+JobContractInvoice.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/JobContractInvoice.java
+END
+ContractCustContact.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/ContractCustContact.java
+END
+BankAccount.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/BankAccount.java
+END
+ServiceLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6745/branches/phx2.1/src/com/intertek/entity/ServiceLocation.java
+END
+TimeZone.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/TimeZone.java
+END
+Contact.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/Contact.java
+END
+BusinessUnit.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6739/branches/phx2.1/src/com/intertek/entity/BusinessUnit.java
+END
+WebServiceEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6827/branches/phx2.1/src/com/intertek/entity/WebServiceEntity.java
+END
+ProductGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6217/branches/phx2.1/src/com/intertek/entity/ProductGroup.java
+END
+ContractExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6900/branches/phx2.1/src/com/intertek/entity/ContractExpression.java
+END

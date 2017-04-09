@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="custObj"  class="beanpack.Customer"/>
+	
+	<alias name="custObj" alias="custObj1"/>
+	
+	<bean id="custObj2"  class="beanpack.Customer">
+	 <constructor-arg value="115"/>
+	 <constructor-arg value="cvgdf"/>
+	 </bean>
+	 
+	 <bean id="custObj3"  class="beanpack.Customer">
+	 <constructor-arg value="abcde" index="1"/>
+	 <constructor-arg value="102" index="0"/>
+	 </bean>
+	 
+	 <bean id="custObj4"  class="beanpack.Customer">
+	 	<property name="custId" value="1581"/>
+	 	<property name="custName" value="asrxbd"/>
+	 	
+	 </bean>
+	 
+</beans>

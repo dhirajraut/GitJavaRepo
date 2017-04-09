@@ -1,0 +1,237 @@
+
+
+/****************************************************************************************************************
+                                             MX COMPONENTS                                                      *
+*****************************************************************************************************************
+*/
+Application{
+	
+	/* You will need to overwrite these background settings. 	
+	If you don't specify backgroundGradientColors and do not use an image for background,
+	you will see a white background.
+	
+	backgroundColor:#ffffff;	
+	backgroundGradientColors:#ffffff,#ffffff;
+	 */
+	
+}
+Accordion{}
+ToggleButtonBar{}
+Label{}
+Text{}
+ComboBox{}
+CheckBox{}
+TextInput{}
+Button{}
+TileList{}
+DataGrid{}
+RichTextEditor{}
+ScrollBar{}
+ViewStack{}
+Box{}
+Alert{}
+Panel {
+	 titleStyleName: "panelTitle";
+}
+.panelTitle{}
+
+/****************************************************************************************************************
+                                           CUSTOM COMPONENTS                                                    *
+*****************************************************************************************************************
+*/
+SuperImage{}
+Extra{}
+Rating{}
+
+/****************************************************************************************************************
+                                             VIEWS                                                              *
+*****************************************************************************************************************
+*/
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- MainUI     --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+MainUI{}
+.mainUIExtra{}
+/*Content{}*/
+
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Content    --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Content{}
+.wrapper{}
+.mainWindow{}
+.contentExtra{}
+/* ..................................Content CSS Animate Properties..............................................*/
+.contentThumbUnselectedA{}
+.contentThumbUnselectedB{}
+.contentThumbSelectedA{}
+.contentThumbSelectedB{}
+.contentGridUnselectedA{}
+.contentGridUnselectedB{}
+.contentGridSelectedA{}
+.contentGridSelectedB{}
+.contentParticipateA{}
+.contentParticipateB{}
+.contentAboutA{}
+.contentAboutB{}
+
+
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Header  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+
+Header{}
+.mainTitle{}
+.tagLine{}
+.navigation{}
+.galleryLink{}
+.aboutLink{}
+.participateLink{}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Gallery    --------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Gallery{}
+
+TileList{}
+DataGrid{}
+.bigImage{}
+.designInfo{}
+.designInfoLabelName{}
+.designInfoName{}
+.designInfoLabelAuthor{}
+.designInfoAuthor{}
+.designInfoLabelRating{}
+Rating{}
+.designInfoBtnDownload{}
+.designInfoBtnApply{}
+
+/* ..................................Gallery CSS Animate Properties..............................................*/
+.galleryThumbUnselectedA{}
+.galleryThumbUnselectedB{}
+.galleryThumbSelectedA{}
+.galleryThumbSelectedB{}
+.galleryGridUnselectedA{}
+.galleryGridUnselectedB{}
+.galleryGridSelectedA{}
+.galleryGridSelectedB{}
+
+/* Renderers     -----------------------------------------------------------------------------------------------*/
+Thumbnail{}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Overlay  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+
+Overlay{}
+.viewBar{}
+.filterAndSort{}
+.sortLabel{}
+.sortComboBox{}
+.filterLabel{}
+.filterInput{}
+
+/* ..................................Overlay CSS Animate Properties..............................................*/
+.overlayThumbnailsA{}
+.overlayGridA{}
+.overlayThumbnailsB{}
+.overlayGridB{}
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- About  -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+About{}
+
+/* ..................................TabNavigator page 'This design'..............................................*/
+TabNavigator{}
+.thisDesignPage{}
+.thisDesignNameLabel{}
+.thisDesignNameText{}
+.thisDesignAuthorLabel{}
+.thisDesignAuthorText{}
+.thisDesignRatingLabel{}
+.thisDesignRatingText{}
+.thisDesignCountryLabel{}
+.thisDesignCountryText{}
+.thisDesignDescriptionText{}
+
+/* ..................................TabNavigator page 'Fill Colors'..............................................*/
+.fillColorsPage{}
+.fillColorsText{}
+
+
+/* ----------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------- Participate    ----------------------------------------------------
+------------------------------------------------------------------------------------------------------------------*/
+Participate{}
+
+.participateIntro{}
+
+/* ..................................Accordion page 'Your Information'..............................................*/
+.yourInformation{ }
+
+.yourInfoNameLabel{}
+.yourInfoNameInput{}
+.yourInfoEmailLabel{}
+.yourInfoEmailInput{}
+.yourInfoWebsiteLabel{}
+.yourInfoWebsiteInput{}
+.yourInfoCountryLabel{}
+.yourInfoCountryInput{}
+
+/* ..................................Accordion page 'About Your Design'..............................................*/
+.aboutDesign{}
+
+.aboutDesignTitleLabel{}
+.aboutDesignTitleInput{}
+.aboutDesignDescriptionLabel{}
+RichTextEditor{}
+.aboutDesignDescriptionInfo{}
+
+/* ..................................Accordion page 'Your Design Files'..............................................*/
+.yourDesignFiles{}
+
+.designFilesSwfText{}
+.designFilesSwfLabel{}
+.designFilesSwfInfoLabel{}
+.designFilesSwfButton{}
+
+.designFilesFirstRule{}
+
+.designFilesSourceText{}
+.designFilesSourceLabel{}
+.designFilesSourceInfoLabel{}
+.designFilesSourceButton{}
+
+.designFilesSecondRule{}
+
+.designFilesThumbnailsText{}
+.designFilesThumSmallLabel{}
+.designFilesThumSmallButton{}
+.designFilesThumSmallInfoLabel{}
+
+.designFilesThumLargeLabel{}
+.designFilesThumLargeButton{}
+.designFilesThumLargeInfoLabel{}
+
+/* ..................................Accordion page 'The Fine Print'..............................................*/
+.theFinePrint{}
+CheckBox{}
+.finePrintText{}
+.finePrintButton{}
+.finePrintUploadProgress{}
+.finePrintSubmitProgress{}
+
+
+/****************************************************************************************************************
+                                             FONTS                                                              *
+*****************************************************************************************************************
+*/
+/* If you want to add your own fonts, uncomment the folowing lines and embed your ttf or swf font as described in the Flex docs */
+/*
+@font-face {
+   
+}*/

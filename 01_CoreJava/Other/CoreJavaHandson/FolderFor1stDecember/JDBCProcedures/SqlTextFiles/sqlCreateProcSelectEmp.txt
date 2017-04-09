@@ -1,0 +1,10 @@
+// Creating procedure for displaying emp data on screen
+
+create or replace procedure procSelectEmp is
+empn number;
+empnm varchar2(10);
+begin
+      select empno, ename into empn, empnm from emp where ename='BLAKE';
+      dbms_output.put_line('No:'||empn||'   Name:'||empnm);
+end;
+/

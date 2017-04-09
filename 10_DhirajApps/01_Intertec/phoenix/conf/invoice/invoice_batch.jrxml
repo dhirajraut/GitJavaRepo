@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="invoice_batch"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="595"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Job_Number" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Invoice" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="uid20" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="invoice_id_list" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Batch list of invoice IDs]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+     jc.job_number, jc.uid20, jc.tax_vat_flag, jc.invoice
+FROM
+     job_contracts jc, job_contract_invoice jci
+WHERE
+     jci.job_contract_id = jc.job_contract_id
+and  jci.job_contract_invoice_id in ( $P!{invoice_id_list} )]]></queryString>
+
+	<field name="JOB_NUMBER" class="java.lang.String"/>
+	<field name="UID20" class="java.lang.String"/>
+	<field name="TAX_VAT_FLAG" class="java.lang.String"/>
+	<field name="INVOICE" class="java.lang.String"/>
+
+	<variable name="LastPageReached" class="java.lang.Object" resetType="Report" calculation="System">
+		<initialValueExpression><![CDATA[new java.util.HashMap()]]></initialValueExpression>
+	</variable>
+
+		<group  name="InvoiceGroup" isStartNewPage="true" >
+			<groupExpression><![CDATA[$F{INVOICE}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="1"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="0"
+						height="0"
+						key="line-1">
+							<printWhenExpression><![CDATA[($F{TAX_VAT_FLAG}.contentEquals( "T" ) ? ((java.util.Map)$V{LastPageReached}).put("IS_LAST_PAGE", Boolean.TRUE):
+((java.util.Map)$V{LastPageReached}).put("IS_LAST_PAGE", Boolean.FALSE))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="62"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="595"
+						height="42"
+						key="subreport-1"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "F" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="577"
+						height="56"
+						key="subreport-2"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.contentEquals( "T" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="134"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="86"
+						width="595"
+						height="40"
+						key="subreport-3"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_nontax_footer.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="3"
+						width="595"
+						height="40"
+						key="subreport-6"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[((java.util.Map)$V{LastPageReached}).get("IS_LAST_PAGE")]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax_footer.jasper"]]></subreportExpression>
+				</subreport>
+				<line direction="TopDown">
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="49"
+						width="0"
+						height="0"
+						key="line-2">
+							<printWhenExpression><![CDATA[((java.util.Map)$V{LastPageReached}).put("IS_LAST_PAGE", Boolean.FALSE)]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</line>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

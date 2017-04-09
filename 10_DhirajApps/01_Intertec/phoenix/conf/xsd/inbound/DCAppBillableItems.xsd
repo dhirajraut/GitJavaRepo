@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by ESB (ESB) -->
+<xs:schema xmlns="http://www.intertek.com/ESB/DCBillableItemRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/DCBillableItemRequest" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetBillableItemRequest" type="BillableItemRequestType">
+		<xs:annotation>
+			<xs:documentation>Billable Item ESB Request for DC system</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="BillableItemRequestType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MessageDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageDataType">
+		<xs:sequence>
+			<xs:element name="ProjectNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> MTC Project Number </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OrderNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="LineItem" type="LineItemType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LineItemType">
+		<xs:sequence>
+			<xs:element name="LineItemNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="LineItemDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillableItemQuantity" type="xs:int" minOccurs="0"/>
+			<xs:element name="InvoiceAmount" type="xs:double" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

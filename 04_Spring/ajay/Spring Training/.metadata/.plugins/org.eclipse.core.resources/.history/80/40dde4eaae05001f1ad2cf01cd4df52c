@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="accObjFrom" class="beanpack.AccountPojo">
+	<property name="acctId" value="286731"/>
+	<property name="holderName" value="Jasmin"/>
+	<property name="balance" value="25851456"/>
+	</bean>
+	
+	<bean id="accObjTo" class="beanpack.AccountPojo">
+	<property name="acctId" value="285487"/>
+	<property name="holderName" value="Tanya"/>
+	<property name="balance" value="201112"/>
+	</bean>
+	
+	
+	<bean id="serObj" class="servicepack.IBankService">
+	<property name="acctId" value="285487"/>
+	<property name="holderName" value="Tanya"/>
+	<property name="balance" value="201112"/>
+	</bean>
+</beans>

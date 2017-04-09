@@ -1,0 +1,282 @@
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi=
+  "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=
+  "http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/
+   web-jsptaglibrary_2_0.xsd"
+   version="2.0">
+
+  <tlib-version>1.0</tlib-version>
+  <short-name>icbfn</short-name>
+  <uri>http://www.intertek.com/jsp/jstl/functions</uri>
+
+  <function>
+    <name>objectMeta</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      com.intertek.meta.ObjectMeta getObjectMeta(java.lang.String, java.lang.String, java.lang.Class)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>fieldMeta</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      com.intertek.meta.FieldMeta getFieldMeta(com.intertek.meta.ObjectMeta, java.lang.String)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>getProductFromProductGroup</name>
+    <function-class>
+      com.intertek.phoenix.util.JSPUtil
+    </function-class>
+    <function-signature>
+      java.util.List getProductFromProductGroup(java.lang.Object, java.lang.String)
+    </function-signature>
+  </function>
+
+
+  <function>
+    <name>dropdown</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.util.List getDropDown(java.lang.String, java.util.List)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>getProductGroups</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.util.List getProductGroups(java.lang.String, com.intertek.entity.JobOrder)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>operationDesc</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getOperationDesc(java.lang.String)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>user</name>
+    <function-class>
+      com.intertek.util.SecurityUtil
+    </function-class>
+    <function-signature>
+      com.intertek.entity.User getUser()
+    </function-signature>
+  </function>
+
+  <function>
+    <name>menuTree</name>
+    <function-class>
+      com.intertek.util.SecurityUtil
+    </function-class>
+    <function-signature>
+      java.util.List getMenuTree()
+    </function-signature>
+  </function>
+
+  <function>
+    <name>servicesPopupStr</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getServicesPopupStr(int, int, int, java.lang.String, com.intertek.servicetype.JobServiceType, java.util.Locale)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>urlSuffixByJobType</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getUrlSuffixByJobType(java.lang.String)
+    </function-signature>
+  </function>
+  
+    <function>
+    <name>urlPrefixByJobStatus</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getUrlPrefixByJobStatus(java.lang.String)
+    </function-signature>
+  </function>
+  
+    <function>
+    <name>jobStatusByInvoiceType</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getJobStatusByInvoiceType(java.lang.String)
+    </function-signature>
+  </function>
+  
+    <function>
+    <name>jobContractCount</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getJobContractCount(java.lang.String)
+    </function-signature>
+  </function>
+  
+    <function>
+    <name>invGeneratedFlag</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getInvoiceGeneratedFlag(java.lang.String)
+    </function-signature>
+  </function>    
+  
+  <function>
+    <name>dropdownLabel</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getDropdownLabel(java.lang.String, java.util.List, java.lang.String)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>currentLocale</name>
+    <function-class>
+      com.intertek.util.I18nUtil
+    </function-class>
+    <function-signature>
+      java.util.Locale getLocale(javax.servlet.http.HttpServletRequest)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>operationsByStateMachine</name>
+    <function-class>
+      com.intertek.util.StateMachineUtil
+    </function-class>
+    <function-signature>
+      java.util.List getOperationsByStateMachine(java.lang.String, java.lang.String)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>displayVesselType</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String displayVesselType(java.util.List, java.lang.String)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>displayProductGroup</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String displayProductGroup(java.util.List, java.lang.String)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>activeCurrencyCD</name>
+    <function-class>
+      com.intertek.util.ContractUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getActiveCurrencyCD(com.intertek.domain.AddContract)
+    </function-signature>
+  </function>
+
+  <function>
+    <name>userDateFormat</name>
+    <function-class>
+      com.intertek.util.DateUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getUserDateFormat()
+    </function-signature>
+  </function>
+
+  <function>
+    <name>contains</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      boolean contains(java.util.Collection, java.lang.Object)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>getJobRemainTime</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.lang.String getJobRemainTime(java.util.Date)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>sortServices</name>
+    <function-class>
+      com.intertek.util.CommonUtil
+    </function-class>
+    <function-signature>
+      java.util.List sortServices(java.util.List)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>userRoleNames</name>
+    <function-class>
+      com.intertek.phoenix.util.CommonSearchUtil
+    </function-class>
+    <function-signature>
+      String[] userRoleNames(java.util.Collection)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>permissionLinkNames</name>
+    <function-class>
+      com.intertek.phoenix.util.CommonSearchUtil
+    </function-class>
+    <function-signature>
+      String[] permissionLinkNames(java.util.Collection)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>rolePermissionNames</name>
+    <function-class>
+      com.intertek.phoenix.util.CommonSearchUtil
+    </function-class>
+    <function-signature>
+      String[] rolePermissionNames(java.util.Collection)
+    </function-signature>
+  </function>
+  
+</taglib>

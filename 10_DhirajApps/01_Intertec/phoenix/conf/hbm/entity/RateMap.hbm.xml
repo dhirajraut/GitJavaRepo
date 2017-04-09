@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="RateMap" table="PS_ITS_RATE_MAP">
+    <composite-id name="rateMapId" class="RateMapId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="serviceName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=375) private</meta>
+        <column name="ITSC_SERVICE" length="375" />
+      </key-property>
+      <key-property name="expressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="EXPRESSION_ID" length="105" />
+      </key-property>
+      <key-property name="serviceRateExpressionId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="ITS_SRVC_RT_EXP_ID" length="105" />
+      </key-property>
+    </composite-id>
+    <property name="withInspection" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="WITH_INSPECTION" length="3" not-null="true"/>
+    </property>
+    <property name="serviceLevel" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=12) private</meta>
+      <column name="ITS_SERVICE_LEVEL" length="12" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>
+

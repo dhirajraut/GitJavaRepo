@@ -1,0 +1,14 @@
+package controller;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import sun.net.www.protocol.http.HttpAuthenticator;
+
+public class ListController extends MultiActionController{
+	public ModelAndView showList(HttpRequest req,HttpResponce res)
+	{
+	
+	}
+
+}

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/phoenix/!svn/ver/7335/branches/phx2.1/web/WEB-INF
+END
+applicationContext-acegi-security.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/applicationContext-acegi-security.xml
+END
+applicationContext.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/7214/branches/phx2.1/web/WEB-INF/applicationContext.xml
+END
+tiles-layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/7232/branches/phx2.1/web/WEB-INF/tiles-layout.xml
+END
+ws-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/phoenix/!svn/ver/6959/branches/phx2.1/web/WEB-INF/ws-servlet.xml
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/7300/branches/phx2.1/web/WEB-INF/log4j.properties
+END
+phoenix-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/7232/branches/phx2.1/web/WEB-INF/phoenix-servlet.xml
+END
+dwr.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/dwr.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/phoenix/!svn/ver/7265/branches/phx2.1/web/WEB-INF/web.xml
+END
+applicationContext-ws.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/applicationContext-ws.xml
+END

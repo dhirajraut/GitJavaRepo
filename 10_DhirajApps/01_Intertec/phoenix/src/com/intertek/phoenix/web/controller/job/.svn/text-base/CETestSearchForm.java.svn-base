@@ -1,0 +1,379 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import com.intertek.entity.Test;
+import com.intertek.meta.dropdown.Field;
+import com.intertek.pagination.Pagination;
+import com.intertek.phoenix.common.Form;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.util.CommonUtil;
+
+/**
+ * Form object for 'Add Test' popup  
+ * @author patni
+ * 
+ */
+public class CETestSearchForm extends Form {
+
+    private String productGroup;
+    private String criteria1;
+    private String criteria2;
+    private String testSearchVal;
+    private String searchType;
+    private String searchForm;
+    public Pagination pagination;
+    private String pageNumber;
+    private String inputFieldId;
+    private String rowNum;
+    private String chosenContracts;
+    private String chosenTestIds;
+    private String divName1;
+    private String divName2;
+    private String submitFlag;
+    private String sortFlag;
+    private Date nominationDate;
+    private String contractCode;
+    private String jobContractId;
+    private String operation;
+    private String productId;
+    private Set<CEJobContract> contracts;
+    private CEJobOrder jobOrder;
+
+    private String manualTest;
+    private String description;
+    private Double quantity;
+    private Double unitPrice;
+    
+    private List<HashMap<String,Object> > manualTestList;
+    
+    private List<TestSearchResultRow> results;
+
+    List<TestSearchResultRow> selectedTests = new ArrayList<TestSearchResultRow>();
+    
+    public CETestSearchForm(CEJobOrder jo) {
+        this.jobOrder = jo;
+    }
+
+    public CEJobOrder getJobOrder() {
+        return this.jobOrder;
+    }
+
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
+    }
+
+    public String getInputFieldId() {
+        return inputFieldId;
+    }
+
+    public void setInputFieldId(String inputFieldId) {
+        this.inputFieldId = inputFieldId;
+    }
+
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
+    }
+
+    public String getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(String pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public String getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(String rowNum) {
+        this.rowNum = rowNum;
+    }
+
+    public String getSearchForm() {
+        return searchForm;
+    }
+
+    public void setSearchForm(String searchForm) {
+        this.searchForm = searchForm;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public String getChosenContracts() {
+        return chosenContracts;
+    }
+
+    public void setChosenContracts(String chosenContracts) {
+        this.chosenContracts = chosenContracts;
+    }
+
+    public String getChosenTestIds() {
+        return chosenTestIds;
+    }
+
+    public void setChosenTestIds(String chosenTestIds) {
+        this.chosenTestIds = chosenTestIds;
+    }
+
+    public String getDivName1() {
+        return divName1;
+    }
+
+    public void setDivName1(String divName1) {
+        this.divName1 = divName1;
+    }
+
+    public String getDivName2() {
+        return divName2;
+    }
+
+    public void setDivName2(String divName2) {
+        this.divName2 = divName2;
+    }
+
+    public String getSubmitFlag() {
+        return submitFlag;
+    }
+
+    public void setSubmitFlag(String submitFlag) {
+        this.submitFlag = submitFlag;
+    }
+
+    public Date getNominationDate() {
+        return nominationDate;
+    }
+
+    public void setNominationDate(Date nominationDate) {
+        this.nominationDate = nominationDate;
+    }
+
+    public String getSortFlag() {
+        return sortFlag;
+    }
+
+    public void setSortFlag(String sortFlag) {
+        this.sortFlag = sortFlag;
+    }
+
+    public String getJobContractId() {
+        return jobContractId;
+    }
+
+    public void setJobContractId(String jobContractId) {
+        this.jobContractId = jobContractId;
+    }
+
+    public String getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(String productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public String getTestSearchVal() {
+        return testSearchVal;
+    }
+
+    public void setTestSearchVal(String testSearchVal) {
+        this.testSearchVal = testSearchVal;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Field> getProductGroups() {
+        return (List<Field>) CommonUtil.getDropDown("testProductGroup", null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Field> getJobContracts() {
+        List<String> params = new ArrayList<String>();
+        params.add(getChosenContracts());
+        Field field = new Field();
+        field.setValue(getContract().getId() + "");
+        field.setName(getContract().getContractCode());
+        List<Field> fld = new ArrayList<Field>();
+        fld.add(field);
+        return fld;
+    }
+
+    public Set<CEJobContract> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(Set<CEJobContract> contracts) {
+        this.contracts = contracts;
+    }
+
+    public String getCriteria1() {
+        return criteria1;
+    }
+
+    public void setCriteria1(String criteria1) {
+        this.criteria1 = criteria1;
+    }
+
+    public String getCriteria2() {
+        return criteria2;
+    }
+
+    public void setCriteria2(String criteria2) {
+        this.criteria2 = criteria2;
+    }
+
+    public CEJobContract getContract() {
+        CEJobContract con = null;
+        if (contracts != null) {
+            for (CEJobContract cn : contracts) {
+                con = cn;
+            }
+        }
+        return con;
+    }
+
+    public List<TestSearchResultRow> getResults() {
+        return results;
+    }
+
+    public void setResults(List<TestSearchResultRow> results) {
+        this.results = results;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    /**
+     * Returns list of selected tests
+     * @return selected tests
+     */
+    public List<TestSearchResultRow> getSelectedTests() {
+        //List<TestSearchResultRow> selectedTests = new ArrayList<TestSearchResultRow>();
+//        for (TestSearchResultRow testRow : results) {
+//            if (testRow.getSelected()) {
+//                selectedTests.add(testRow);
+//            }
+//        }
+        return selectedTests;
+    }
+
+    public void addSelectedTest(){
+        if(selectedTests==null){
+            selectedTests = new ArrayList<TestSearchResultRow>();
+        }
+        for (TestSearchResultRow testRow : results) {
+            if (testRow.getSelected()) {
+                if(!isDuplicate(testRow)){
+                    selectedTests.add(testRow);
+                }
+            }
+        }
+    }
+    
+    private boolean isDuplicate(TestSearchResultRow row){
+        boolean flg=false;
+        for(TestSearchResultRow testRow:selectedTests){
+            if(testRow.getTest().getTestId().equals(row.getTest().getTestId())){
+                flg=true;
+                break;
+            }
+        }
+        return flg;
+    }
+    public String getManualTest() {
+        return manualTest;
+    }
+
+    public void setManualTest(String manualTest) {
+        this.manualTest = manualTest;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+
+    public void addManualTest(){
+        if(manualTestList ==null){
+            manualTestList = new ArrayList<HashMap<String,Object> >();            
+        }
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("description", this.description);
+        map.put("quantity", this.quantity);
+        map.put("unitprice", this.unitPrice);
+        manualTestList.add(map);
+        setDefaultValueManualTest();
+    }
+    public void setNullManualTestList(){
+        this.manualTestList=null;
+    }
+    
+    public List<HashMap<String,Object> > getManualTestList(){
+        return manualTestList;
+    }
+    
+    public void setDefaultValueManualTest(){
+        this.description="";
+        this.unitPrice=Double.valueOf(1);
+        this.quantity=Double.valueOf(1);
+        setManualTest("true");
+        setOperation("manualTest");
+    }
+}

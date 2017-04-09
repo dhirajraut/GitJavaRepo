@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="custObj"  class="beanpack.Customer"/>
+	
+	<alias name="custObj" alias="custObj1"/>
+	
+	<bean id="custObj2"  class="beanpack.Customer">
+	 <constructor-arg value="115"/>
+	 <constructor-arg value="cvgdf"/>
+	 	 <constructor-arg ref="addobj1" />
+	 </bean>
+	 
+	 <bean id="custObj3"  class="beanpack.Customer">
+	 <constructor-arg value="abcde" index="1"/>
+	 <constructor-arg value="102" index="0"/>
+	 <constructor-arg ref="addobj1" index="2"/>
+	 </bean>
+	 
+	 <bean id="custObj4"  class="beanpack.Customer">
+	 	<property name="custId" value="1581"/>
+	 	<property name="custName" value="asrxbd"/>
+	 	
+	 </bean>
+	 
+	 <bean id="addobj1"  class="beanpack.Address">
+	 	<property name="streetName" value="asfhwe"/>
+	 	<property name="city" value="asrxbd"/>
+	 	<property name="pin" value="Yoasfjb"/>
+	 	
+	 </bean>
+	 
+	 <bean id="accObj1"  class="beanpack.Account">
+	 	<property name="acctId" value="151"/>
+	 	<property name="cust" ref="custObj4"/>
+	 	<property name="balance" value="252022.02"/>
+	 	
+	 </bean>
+	 
+	 <bean id="accObj2"  class="beanpack.Account">
+	 	<property name="acctId" value="586"/>
+	 	<property name="cust" ref="custObj3"/>
+	 	<property name="balance" value="252022.02"/>
+	 	
+	 </bean>
+	 
+	 <bean id="custObj5"  class="beanpack.Customer">
+	 	<property name="custId" value="1581"/>
+	 	<property name="custName" value="asrxbd"/>
+	 	<property name="accts">
+	 	<list>
+	 		<ref bean="accObj1"/>
+	 		<ref bean="accObj2"/>
+	 	</list>
+	 	</property>
+	 </bean>
+	 <bean id="testCollection"  class="beanpack.TestCollections">
+	 <property name="propObj">
+	 <props>
+	 	<prop key="admin">Administrator</prop>
+	 	<prop key="super">Super</prop>
+	 	<prop key="guest">Guest</prop>
+	 </props>
+	 </property>
+	 
+	 <property name="mapObj">
+	 	<map >
+	 		<entry>
+	 			<key>
+	 				<value>First</value>
+	 			</key>
+	 			<value>First Value</value>
+	 		</entry>
+	 		<entry>
+	 			<key>
+	 				<value>Second</value>
+	 			</key>
+	 			<value>Second Value</value>
+	 		</entry>
+	 	</map>
+	 </property>
+	 
+	 <property name="setObj">
+	 <set>
+	 		
+	 </set>
+	 </property>
+	 	 	
+	 	
+	 </bean>
+</beans>

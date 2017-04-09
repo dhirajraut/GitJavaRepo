@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BranchLanguage" table="BRANCHES_LANG">
+	<composite-id name="branchLanguageId" class="BranchLanguageId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="name" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+        <column name="BRANCH_NAME" length="8"/>
+      </key-property>
+      <key-property name="languageCD" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="LANGUAGE_CD" length="9" />
+      </key-property>
+    </composite-id>
+    <property name="description" type="string">
+      <column name="DESCRIPTION" sql-type="nvarchar2(512)"/>
+    </property>
+    <property name="address1" type="string">
+      <column name="ADDRESS1" sql-type="nvarchar2(55)"/>
+    </property>
+    <property name="address2" type="string">
+      <column name="ADDRESS2" sql-type="nvarchar2(55)"/>
+    </property>
+    <property name="address3" type="string">
+      <column name="ADDRESS3" sql-type="nvarchar2(55)"/>
+    </property>
+    <property name="address4" type="string">
+      <column name="ADDRESS4" sql-type="nvarchar2(55)"/>
+    </property>
+    <property name="city" type="string">
+      <column name="CITY" sql-type="nvarchar2(30)"/>
+    </property>
+    <property name="county" type="string">
+      <column name="COUNTY" sql-type="nvarchar2(30)"/>
+    </property>
+    <property name="postal" type="string">
+      <column name="POSTAL" sql-type="nvarchar2(12)"/>
+    </property>
+    <property name="companyDesc" type="string">
+      <column name="COMPANY_DESC" sql-type="nvarchar2(150)"/>
+    </property>
+    <many-to-one name="branch" class="Branch" insert="false" update="false">
+      <column name="BRANCH_NAME" index="BRANCH_LANGUAGE_index_0" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>
+

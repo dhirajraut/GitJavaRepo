@@ -1,0 +1,26 @@
+what,kind,bundleId,bundleVersion,description,time
+executed,command,org.eclipse.ui.workbench.texteditor,3.5.0.v20090603,"org.eclipse.ui.edit.text.select.lineEnd",1263977183365
+no handler,command,org.eclipse.datatools.sqltools.result.ui,,"org.eclipse.datatools.sqltools.result.removeAllInstances",1263977183897
+executed,command,org.eclipse.ui,3.5.0.I20090604-2000,"org.eclipse.ui.file.save",1263977188209
+activated,view,org.eclipse.ui.console,3.4.0.v20090513,"org.eclipse.ui.console.ConsoleView",1263977192365
+activated,editor,org.eclipse.jdt.ui,3.5.0.v20090604,"org.eclipse.jdt.ui.CompilationUnitEditor",1263977197006
+activated,editor,org.eclipse.wst.xml.ui,1.1.1.v200908242115,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1263977204115
+deactivated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977245209
+activated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977281490
+activated,editor,org.eclipse.jdt.ui,3.5.0.v20090604,"org.eclipse.jdt.ui.CompilationUnitEditor",1263977296506
+activated,editor,org.eclipse.wst.xml.ui,1.1.1.v200908242115,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1263977391319
+activated,view,org.eclipse.ui.console,3.4.0.v20090513,"org.eclipse.ui.console.ConsoleView",1263977402600
+activated,view,org.eclipse.jdt.ui,3.5.0.v20090604,"org.eclipse.jdt.ui.PackageExplorer",1263977441053
+activated,editor,org.eclipse.wst.xml.ui,1.1.1.v200908242115,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1263977453334
+deactivated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977455522
+activated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977455537
+deactivated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977455600
+activated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977537553
+activated,view,org.eclipse.jdt.ui,3.5.0.v20090604,"org.eclipse.jdt.ui.PackageExplorer",1263977652662
+activated,editor,org.eclipse.wst.xml.ui,1.1.1.v200908242115,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1263977658194
+deactivated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977663147
+activated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977663147
+deactivated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977663225
+activated,workbench,org.eclipse.ui.workbench,3.5.0.I20090603-2000,"",1263977676615
+executed,command,org.eclipse.ui,3.5.0.I20090604-2000,"org.eclipse.ui.edit.copy",1263977699709
+executed,command,org.eclipse.ui,3.5.0.I20090604-2000,"org.eclipse.ui.edit.paste",1263977701928

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:views="com.galaxy.forum.views.*"
+	show="currentUserDetailsView.showForm()">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.galaxy.forum.events.LoginEvent;
+			import com.galaxy.forum.utils.Constants;
+			import com.galaxy.forum.events.Dispatcher;
+			private function logout():void {
+				Dispatcher.dispatcher.dispatchEvent(new LoginEvent(
+									LoginEvent.LOGOUT, null));
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:MenuBar width="70%">
+		<mx:LinkButton label="Home" />
+		<mx:LinkButton label="My Queries" />
+		<mx:LinkButton label="My Subscriptions" />
+		<mx:LinkButton label="Search" />
+		<mx:LinkButton label="Logout" click="logout();"/>
+	</mx:MenuBar>
+	
+	<views:CurrentUserDetailsView id="currentUserDetailsView"
+		width="30%"/>
+</mx:HBox>

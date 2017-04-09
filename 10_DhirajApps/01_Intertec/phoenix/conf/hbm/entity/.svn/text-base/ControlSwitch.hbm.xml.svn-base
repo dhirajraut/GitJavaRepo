@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ControlSwitch" table="CONTROL_SWITCHES">
+    <composite-id name="controlSwitchId" class="ControlSwitchId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="controlSwitchName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=100) private</meta>
+        <column name="CONTROL_SWITCH_NAME" length="100" />
+      </key-property>
+      <key-property name="controlSwitchType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=100) private</meta>
+        <column name="CONTROL_SWITCH_TYPE" length="100" />
+      </key-property>
+    </composite-id>
+
+    <property name="flag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=100) private</meta>
+      <column name="flag" length="100" />
+    </property>    
+  </class>
+</hibernate-mapping>
+

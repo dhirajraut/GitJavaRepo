@@ -1,0 +1,61 @@
+ function searchTests() {
+	document.addTestForm.pageNumber.value = "1";
+	document.addTestForm.sortFlag.value = "";
+	document.addTestForm.operation.value = "searchTests"; 
+	document.addTestForm.submit();
+}
+
+function selectAllTests(rowCount) {
+	for(i=0;i<rowCount;i++)	{
+	 var elemName = "chk" + i;
+	 document.getElementById(elemName).checked = true;
+	 }	 
+}
+
+function clearAllTests(rowCount) {
+	for(i=0;i<rowCount;i++) {
+	 var elemName = "chk" + i;
+	 document.getElementById(elemName).checked = false;
+	 }
+}
+
+function addTest() {
+// 	document.addTestForm.pageNumber.value=document.addTestForm.pageNo.value;
+ 	document.addTestForm.operation.value="addTest";
+	document.addTestForm.submit();
+}
+
+function submitform(){			
+ var chosenVal = document.addTestForm.chosenTestIds.value;
+ top.document.forms[0].chosenTestIds.value = chosenVal;
+ top.document.forms[0].submit();			
+}
+
+function refreshParent() {
+	if(document.addTestForm.operation.value == "addTest") {
+		document.addTestForm.operation.value = "";
+		top.document.forms[0].refreshing.value="addTest";
+		top.document.forms[0].submit();
+	}
+}
+<<<<<<< .mine
+
+=======
+ 
+function submitManualTest()
+{
+    document.addManualTestForm.operation.value="saveManualTest";
+	document.addManualTestForm.submit();
+} 
+ 
+function refreshParent1() {
+    
+	if(document.addManualTestForm.operation.value == "saveManualTest") {
+	    document.addManualTestForm.manualTest.value="true";
+		document.addManualTestForm.operation.value = "";
+		top.document.forms[0].refreshing.value="addTest";
+		top.document.forms[0].submit();
+	}
+} 
+ 
+ >>>>>>> .r6538

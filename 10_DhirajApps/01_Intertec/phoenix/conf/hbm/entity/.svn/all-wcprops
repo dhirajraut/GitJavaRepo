@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/phoenix/!svn/ver/7301/branches/phx2.1/conf/hbm/entity
+END
+WebServiceInbound.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6499/branches/phx2.1/conf/hbm/entity/WebServiceInbound.hbm.xml
+END
+Test.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/Test.hbm.xml
+END
+Control.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6874/branches/phx2.1/conf/hbm/entity/Control.hbm.xml
+END
+CustAddrSeq.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/phoenix/!svn/ver/7219/branches/phx2.1/conf/hbm/entity/CustAddrSeq.hbm.xml
+END
+CustAddress.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/phoenix/!svn/ver/7219/branches/phx2.1/conf/hbm/entity/CustAddress.hbm.xml
+END
+JobContractInvoice.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/JobContractInvoice.hbm.xml
+END
+ContractCustContact.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/ContractCustContact.hbm.xml
+END
+Contact.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/Contact.hbm.xml
+END
+WebServiceEntity.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6827/branches/phx2.1/conf/hbm/entity/WebServiceEntity.hbm.xml
+END
+ContractExpression.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/phoenix/!svn/ver/6900/branches/phx2.1/conf/hbm/entity/ContractExpression.hbm.xml
+END
+ProductGroup.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/7301/branches/phx2.1/conf/hbm/entity/ProductGroup.hbm.xml
+END
+Branch.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/phoenix/!svn/ver/7094/branches/phx2.1/conf/hbm/entity/Branch.hbm.xml
+END
+Service.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6524/branches/phx2.1/conf/hbm/entity/Service.hbm.xml
+END
+Customer.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7219/branches/phx2.1/conf/hbm/entity/Customer.hbm.xml
+END
+ServiceType.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/ServiceType.hbm.xml
+END
+TestPrice.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/phoenix/!svn/ver/7269/branches/phx2.1/conf/hbm/entity/TestPrice.hbm.xml
+END
+Country.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/Country.hbm.xml
+END
+NamedSql.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7301/branches/phx2.1/conf/hbm/entity/NamedSql.hbm.xml
+END
+JobOrder.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/conf/hbm/entity/JobOrder.hbm.xml
+END
+RevisionNotes.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/hbm/entity/RevisionNotes.hbm.xml
+END
+Sequence.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7211/branches/phx2.1/conf/hbm/entity/Sequence.hbm.xml
+END
+WebServiceEntityInbound.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6499/branches/phx2.1/conf/hbm/entity/WebServiceEntityInbound.hbm.xml
+END

@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	
+  <bean id="outboundWebServiceManager" class="com.intertek.webservice.outbound.OutboundWebServiceManagerImpl">
+    <property name="outboundWebServices">
+      <list>
+		<ref bean="entityPublisher"/>
+
+        <!-- ref bean="consolidatedInvoiceOutboundWebService"/>
+        <ref bean="invoiceOutboundWebService"/>
+        <ref bean="branchOutboundWebService"/>
+        <ref bean="contactOutboundWebService"/ -->
+        <ref bean="customerOutboundWebService"/>
+        <!-- ref bean="limsContactOutboundWebService"/>
+        <ref bean="limsCustomerOutboundWebService"/ -->
+      </list>
+    </property>
+  </bean>
+
+  <bean id="oxmManager" class="com.intertek.tool.oxm.castor.CastorOxmManager">
+    <property name="mappingLocation" value="classpath:castor/castor-mapping-Entity.xml"/>
+  </bean>
+
+  <bean id="invoiceDataCollector" class="com.intertek.tool.collector.impl.InvoiceDataCollector">
+    <property name="numInPage" value="10"/>
+    <!-- property name="businessUnits">
+      <list>
+        <value>USA01</value>
+        <value>USA02</value>
+      </list>
+    </property -->
+  </bean>
+
+  <bean id="consolidatedInvoiceDataCollector" class="com.intertek.tool.collector.impl.ConsolidatedInvoiceDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="contactDataCollector" class="com.intertek.tool.collector.impl.ContactDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="customerDataCollector" class="com.intertek.tool.collector.impl.CustomerDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="branchDataCollector" class="com.intertek.tool.collector.impl.BranchDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="limsContactDataCollector" class="com.intertek.tool.collector.impl.LimsContactDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="limsCustomerDataCollector" class="com.intertek.tool.collector.impl.LimsCustomerDataCollector">
+    <property name="numInPage" value="10"/>
+  </bean>
+
+  <bean id="samDataCollector" class="com.intertek.tool.collector.impl.JobOrderDataCollector" />
+
+
+
+  <bean id="invoiceEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/invoice.xsl"/>
+  </bean>
+
+  <bean id="consolidatedInvoiceEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/consolidated_invoice.xsl"/>
+  </bean>
+
+  <bean id="contactEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/contact.xsl"/>
+  </bean>
+
+  <bean id="customerEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/customer.xsl"/>
+  </bean>
+
+  <bean id="branchEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/branch.xsl"/>
+  </bean>
+
+  <bean id="limsContactEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/lims_contact.xsl"/>
+  </bean>
+
+  <bean id="limsCustomerEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/lims_customer.xsl"/>
+  </bean>
+
+  <bean id="limsJobOrderEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/lims_job_order.xsl"/>
+  </bean>
+
+  <bean id="samEntityTransformer" class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+    <property name="stylesheet" value="classpath:xsl/sam.xsl"/>
+  </bean>
+
+
+
+  <bean id="invoiceOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>INVOICE</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.invoice.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://peoplesoft.com/ITS_INVOICE_GENERATION/ITS_PHNX_NODE/phoenix!123/PSFT_CBTFSGBT</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="invoiceDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="invoiceEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.InvoiceResultParser"/>
+    </property>        
+  </bean>
+
+  <bean id="consolidatedInvoiceOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>CONSOL_INVOICE</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.consolidated_invoice.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://peoplesoft.com/ITS_CONS_INVOICE/ITS_PHNX_NODE/phoenix!123/PSFT_CBTFSGBT</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="consolidatedInvoiceDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="consolidatedInvoiceEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.CONSOLInvoiceResultParser"/>
+    </property>
+  </bean>
+
+  <bean id="contactOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>CONTACT</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.contact.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://peoplesoft.com/CONTACT_SYNC/ITS_PHNX_NODE/phoenix!123/PSFT_CBTFSGBT</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="contactDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="contactEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.ContactResultParser"/>
+    </property>        
+  </bean>
+
+  <bean id="customerOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>CUSTOMER</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.customer.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://peoplesoft.com/CUSTOMER_SYNC/ITS_PHNX_NODE/phoenix!123/PSFT_CBTFSGBT</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="customerDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="customerEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.CustomerResultParser"/>
+    </property>        
+  </bean>
+
+  <bean id="branchOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>BRANCH</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.invoice.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://peoplesoft.com/ITS_LOC_OPUNIT_SYNC/ITS_PHNX_NODE/phoenix!123/PSFT_CBTFSGBT</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="branchDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="branchEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.BranchResultParser"/>
+    </property>        
+  </bean>
+
+  <bean id="limsContactOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>LIMS_CONTACT</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.lims_contact.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://tempuri.org/UpdateTable</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="limsContactDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="limsContactEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.LIMSContactResultParser"/>
+    </property>        
+  </bean>
+
+  <bean id="limsCustomerOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>LIMS_CUSTOMER</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.lims_customer.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://tempuri.org/UpdateTable</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="limsCustomerDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="limsCustomerEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.LIMSCustomerResultParser"/>
+    </property>    
+  </bean>
+
+  <bean id="limsJobOrderOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>LIMS</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.lims_job_order.url}</value>
+        </property>
+        <property name="soapAction">
+          <value>http://tempuri.org/ProcessDS</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="samDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="limsJobOrderEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.LIMSResultParser"/>
+    </property>
+  </bean>
+  
+  <bean id="samOutboundWebService" class="com.intertek.webservice.outbound.service.DefaultOutboundWebService">
+    <property name="type">
+      <value>SAM</value>
+    </property>
+    <property name="webServiceSender">
+      <bean class="com.intertek.webservice.outbound.spring.SpringWebServiceSender">
+        <property name="url">
+          <value>${outbound.web.service.sam.url}</value>
+        </property>
+      </bean>
+    </property>
+    <property name="dataCollector">
+      <ref bean="samDataCollector"/>
+    </property>
+    <property name="dataTransformer">
+      <ref bean="samEntityTransformer"/>
+    </property>
+    <property name="resultParser">
+      <bean class="com.intertek.webservice.outbound.resultParser.SAMResultParser"/>
+    </property>        
+  </bean>
+  
+  
+	<bean id="entityPublisher" class="com.intertek.phoenix.esb.EntityPublisher">
+		<property name="numInPage" value="20"/>
+		<property name="esbService"><ref bean="esbService"/></property>	
+		<property name="wsService"><ref bean="wsService"/></property>
+ 		<property name="dataCollectors">
+			<map>
+		    	<entry key="BusinessStream">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.BusinessStreamDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>
+		    	<entry key="Warehouse">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.WarehouseDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>
+		    	<entry key="Customer">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.CustomerDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>
+				<entry key="Contact">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.ContactDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>
+				<entry key="TestMethodology">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.TestMethodologyDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="jobOrderService"><ref bean="jobOrderService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>
+				<entry key="CEInvoice">
+		    		<bean class="com.intertek.phoenix.esb.dataCollector.CEInvoiceDataCollector">
+		    			<property name="searchService"><ref bean="searchService"/></property>
+		    			<property name="esbService"><ref bean="esbService"/></property>
+		    		</bean>
+				</entry>				
+		    </map>
+		</property>
+	</bean>
+  
+ 	<bean id="esbService" class="com.intertek.phoenix.esb.ESBServiceImpl">
+ 		<property name="senders">
+			<map>
+		    	<entry key="com.intertek.phoenix.externalEntity.BusinessStreamX"><ref bean="businessStreamSender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.WarehouseX"><ref bean="warehouseSender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.CustomerX"><ref bean="customerSender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.ContactX"><ref bean="contactSender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.TestMethodologyX"><ref bean="testMethodologySender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.ProjectContractX"><ref bean="projectContractSender"/></entry>
+		    	<entry key="com.intertek.phoenix.externalEntity.CEInvoiceX"><ref bean="ceInvoiceSender"/></entry>
+		    </map>
+		</property>	 	
+ 	</bean>
+       
+	<bean id="webServiceSender" class="com.intertek.phoenix.esb.WebServiceSender">
+	   	<property name="wsTemplate">
+			<bean class="org.springframework.ws.client.core.WebServiceTemplate">
+			   	<property name="messageSender">
+			       	<bean class="org.springframework.ws.transport.http.CommonsHttpMessageSender"/>
+			   	</property>
+			</bean>
+		</property>
+		
+		<property name="callBack">
+			<bean class="com.intertek.phoenix.esb.WebServiceMsCallback">
+				<property name="xwssConfig" value="classpath:wss-client-config.xml"/>
+			</bean>
+		</property>		
+		
+		<property name="oxmManager">
+			<ref bean="ESBOxmManager"/>
+		</property>		
+	</bean>
+
+	<bean id="ESBOxmManager" class="com.intertek.tool.oxm.castor.CastorOxmManager">
+		<property name="mappingLocation" value="classpath:castor/ESB-mapping-Entity.xml"/>
+	</bean>
+			
+	<bean id="businessStreamSender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>Business Stream</value></property>
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.business.stream.url}"/>		
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/businessStream.xsl"/>
+			</bean>
+		</property>
+    </bean>
+	<bean id="warehouseSender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>Warehouse</value></property>
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.warehouse.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/warehouse.xsl"/>
+			</bean>
+		</property>
+    </bean>
+	<bean id="customerSender" class="com.intertek.phoenix.esb.ESBSender">  
+		<property name="type"><value>Customer</value></property>  
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.customer.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/customer.xsl"/>
+			</bean>
+		</property>
+    </bean>
+	<bean id="contactSender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>Contact</value></property>    
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.contact.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/contact.xsl"/>
+			</bean>
+		</property>
+    </bean>  
+	<bean id="testMethodologySender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>Test/Methodology</value></property>    
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.test.methodology.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/testMethodology.xsl"/>
+			</bean>
+		</property>
+    </bean>
+	<bean id="projectContractSender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>ProjectContract</value></property>    
+		<property name="sender">
+			<ref bean="webServiceSender"/>
+		</property>
+		<property name="uri" value="${outbound.esb.service.project.contract.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/projectContract.xsl"/>
+			</bean>
+		</property>
+    </bean>            
+	<bean id="ceInvoiceSender" class="com.intertek.phoenix.esb.ESBSender">
+		<property name="type"><value>CE Invoice</value></property>    
+		<property name="sender">
+			<bean class="com.intertek.phoenix.esb.WebServiceSender">
+			   	<property name="wsTemplate">
+					<bean class="org.springframework.ws.client.core.WebServiceTemplate">
+					   	<property name="messageSender">
+					       	<bean class="org.springframework.ws.transport.http.CommonsHttpMessageSender"/>
+					   	</property>
+					</bean>
+				</property>
+				
+				<property name="callBack">
+					<bean class="com.intertek.phoenix.esb.WebServiceMsCallback">
+						<property name="soapAction">
+				          <value>${outbound.service.ceInvoice.soapAction}</value>
+				        </property>
+					</bean>
+				</property>
+				<property name="oxmManager">
+					<ref bean="ESBOxmManager"/>
+				</property>
+			</bean>
+		</property>
+		<property name="uri" value="${outbound.service.ceInvoice.url}"/>
+		<property name="dataTransformer">
+			<bean class="com.intertek.tool.transformer.xsl.XSLDataTransformer">
+				<property name="stylesheet" value="classpath:xsl/outbound/ceInvoice.xsl"/>
+			</bean>
+		</property>
+    </bean>
+</beans>

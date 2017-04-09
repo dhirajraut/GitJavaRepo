@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory name="EmpApp">
+		<property name="show_sql">true</property>
+		
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="hibernate.connection.driver_class">sun.jdbc.odbc.JdbcOdbcDriver</property>
+		<property name="hibernate.connection.username">sa</property>
+		<property name="hibernate.connection.password">sa</property>
+		<property name="hibernate.connection.url">jdbc:odbc:JAVADSN</property>
+		
+        <mapping resource="deptpackage/Department.hbm.xml"/>
+        <mapping resource="emppackage/Employee.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>

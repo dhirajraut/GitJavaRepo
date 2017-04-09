@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="AntBuild" default="help" basedir=".">
+	<description>
+	    TRC build file.  This is used to package up your project as a war,
+	    if you want to distribute it.
+	</description>
+	<taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar" />
+	<target name="help">
+		<echo>Compile	->	ant compile</echo>
+
+		<echo>Package	->	ant create-war</echo>
+
+		<echo>Deploy	->	ant deploy</echo>
+
+		<echo>Be sure to set the deploy.dir property in trc-build.properties</echo>
+	</target>
+
+	<target name="init">
+		<property file="trc-build.properties" />
+		<property name="lib" value="lib" />
+		<property name="src" value="src/java" />
+
+		<property name="test" value="test" />
+		<property name="build" value="build" />
+		<property name="build.webinf" value="${build}/WEB-INF" />
+		<property name="build.lib" value="${build.webinf}/lib" />
+		<property name="build.classes" value="${build.webinf}/classes" />
+		<property name="build.classes.config" value="${build.classes}/com/lehman/trc/config" />
+		<property name="www" value="www" />
+		<property name="gwt-compile-out" value="${www}/com.lehman.trc.gui.TRCApp" />
+		<property name="gwt-cache" value=".gwt-cache" />
+		<!--  <property name="build.ui" value="${build}/ui"/> -->
+
+		<taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar" />
+		<!-- 
+			<property name="FLEX_HOME" value="C:\Development\flex development\flex_sdk_3\"/>
+		-->
+		<property name="FLEX_HOME" value="${basedir}/flex-sdk/" />
+		<property name="APP_ROOT" value="src/flex" />
+		<property name="build.flex" value="${build}/flex" />
+		<!-- <property name="build.intflex" value="${build}/intflex"/> -->
+
+	</target>
+
+	<!-- Prepare -->
+	<target name="prepare" depends="init">
+		<echo>"${FLEX_HOME}"</echo>
+
+		<mkdir dir="${build.webinf}" />
+		<mkdir dir="${build.classes}" />
+		<mkdir dir="${build.lib}" />
+		<mkdir dir="${build.flex}" />
+		<!--  <mkdir dir="${build.ui}"/> -->
+
+		<!-- Set up java.class.path -->
+		<path id="project.class.path">
+			<pathelement path="${java.class.path}/" />
+			<fileset dir="${lib}">
+				<include name="gwt-user.jar" />
+				<include name="gwtext.jar" />
+				<include name="etg-framework-7.0.0-alpha.jar" />
+				<include name="etg-framework-extension.jar" />
+				<include name="etg-admin-7.0.0-alpha.jar" />
+				<include name="gwt-dev-windows.jar" />
+				<include name="servlet-api.jar" />
+				<include name="itext-0.99.jar" />
+				<include name="jxl.jar" />
+				<include name="jconn2.jar" />
+				<include name="gwt2swf.jar" />
+				<include name="gwt-fabridge.jar" />
+				<include name="commons-math-1.1.jar" />
+			</fileset>
+		</path>
+		<echo>"${java.class.path}"</echo>
+
+
+	</target>
+
+	<!-- compile clientside  src code and copy into build directory -->
+	<target name="compile-server" depends="prepare" description="Compile src to build">
+
+		<javac srcdir="${src}" destdir="${build.classes}" includes="**" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path" />
+
+
+
+		</javac>
+		<copy todir="${build.lib}">
+			<fileset dir="${lib}">
+				<include name="etg-framework-7.0.0-alpha.jar" />
+				<include name="etg-framework-extension.jar" />
+				<include name="etg-admin-7.0.0-alpha.jar" />				
+				<include name="javax.servlet.jar" />
+				<include name="itext-0.99.jar" />
+				<include name="jxl.jar" />
+				<include name="jconn2.jar" />
+				<include name="commons-math-1.1.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.webinf}">
+			<fileset dir="${basedir}" includes="web.xml" />
+		</copy>
+		<copy todir="${build.classes.config}">
+			<fileset dir="${src}/com/lehman/trc/config" includes="*.properties" />
+		</copy>
+	</target>
+
+	<target name="compile-client" depends="prepare" description="Compile src client to  build">
+
+		<exec executable="TRCApp-compile.cmd" output="trcapp-gwt-compile.log" />
+		<copy todir="${build}">
+			<fileset dir="${gwt-compile-out}" includes="**/*.*" />
+		</copy>
+
+		<jar destfile="${build.lib}/gwt-user-deploy.jar">
+			<zipfileset src="${lib}/gwt-user.jar">
+				<exclude name="javax/**" />
+				<exclude name="META-INF/**" />
+				<exclude name="**/*.java" />
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="compile-flex" depends="prepare" description="Compiling flex src code to build folder ">
+		<mxmlc file="${APP_ROOT}/TradeBrowser.mxml" output="${build.flex}/TradeBrowser.swf" keep-generated-actionscript="false">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+			<source-path path-element="${FLEX_HOME}/frameworks" />
+		</mxmlc>
+		<mxmlc file="${APP_ROOT}/Realtimeview.mxml" output="${build.flex}/Realtimeview.swf" keep-generated-actionscript="false">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+			<source-path path-element="${FLEX_HOME}/frameworks" />
+		</mxmlc>
+		<mxmlc file="${APP_ROOT}/SavedSearch.mxml" output="${build.flex}/SavedSearch.swf" keep-generated-actionscript="false">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+			<source-path path-element="${FLEX_HOME}/frameworks" />
+		</mxmlc>
+		<mxmlc file="${APP_ROOT}/NewSearch.mxml" output="${build.flex}/NewSearch.swf" keep-generated-actionscript="false">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+			<source-path path-element="${FLEX_HOME}/frameworks" />
+		</mxmlc>
+		
+		<copy todir="${build.flex}">
+			<fileset dir="${APP_ROOT}" excludes="**/*.mxml">
+				<exclude name="generated/**" />
+			</fileset >
+
+		</copy>
+
+	</target>
+
+
+	<target name="create-war" depends="compile-flex,compile-server,compile-client" description="Package up the project as a web application">
+
+		<zip destfile="${project.name}.war" basedir="${build}" />
+	</target>
+	<target name="create-war-only" depends="prepare" description="Package up the project as a web application">
+
+		<zip destfile="${project.name}.war" basedir="${build}" />
+	</target>
+	<target name="clean" depends="init">
+		<!-- Delete the bin directory tree -->
+		<delete file="${project.name}.war" />
+		<delete dir="${build}" />
+		<delete dir="${www}" />
+		<delete dir="${www}" />
+		<delete dir="${gwt-cache}" />
+		<!--	<delete dir="${src}/com/lehman/trc/gui/public/flex"/>-->
+	</target>
+
+	<target name="all" depends="create-war" />
+
+	<target name="deploy" depends="undeploy" description="Deploy the application on JBoss">
+		<copy todir="." file="${project.name}.war" />
+	</target>
+
+	<target name="undeploy" depends="init" description="Undeploy the application">
+		<delete file="${deploy.dir}/${project.name}.war" />
+	</target>
+
+
+	<!-- do a clean and full build -->
+	<!--<target name="clean-build-deploy" depends="clean,create-war,deploy"/> -->
+
+	<target name="build-deploy" depends="create-war,deploy" />
+</project>

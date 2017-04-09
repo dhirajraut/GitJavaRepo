@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="invoice_tax_footer"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="575"
+		 pageHeight="140"
+		 columnWidth="575"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false"
+		 resourceBundle="jasperRes">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<style 
+		name="Arial_Bold"
+		isDefault="false"
+		fontName="Arial"
+		fontSize="12"
+		isBold="true"
+		isItalic="false"
+		isUnderline="false"
+		isStrikeThrough="false"
+		pdfFontName="Helvetica-Bold"
+		pdfEncoding="Cp1252"
+		isPdfEmbedded="false"
+	/>
+
+	<parameter name="Job_Number" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Job Number]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Invoice" isForPrompting="true" class="java.lang.String">
+		<parameterDescription><![CDATA[Invoice]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="uid20" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT  
+        jc.JOB_NUMBER,
+        jci.INVOICE,
+        jc.UID20,
+	jci.CREDIT_IND,
+	jci.INVOICE_TYPE,
+        jci.CUSTOMERS_NAME,
+	jo.BU_NAME,
+        jci.BUSINESS_UNITS_DESCRIPTION,
+        jci.BUSINESS_UNITS_COMPANY_DESC,
+        jci.BUSINESS_UNITS_ADDRESS1,
+        jci.BUSINESS_UNITS_CITY,
+        jci.BUSINESS_UNITS_POSTAL,
+        jci.BUSINESS_UNITS_PHONE_PREFIX,
+        jci.BUSINESS_UNITS_PHONE_NUMBER,
+        jci.BUSINESS_UNITS_PHONE_EXTENSION,
+        jci.BUSINESS_UNITS_ADDRESS2,
+        jci.BUSINESS_UNITS_ADDRESS3,
+        jci.BUSINESS_UNITS_ADDRESS4,
+        jci.BUSINESS_UNITS_COUNTRY_CODE,
+        jci.BUSINESS_UNITS_STATE_CODE,
+        jci.BUSINESS_UNITS_COUNTRY_NAME NAME,
+	ca.COUNTRY AS "SHIP TO COUNTRY",
+        ca.STATE AS "SHIP TO STATE",
+        il.LINE_DESCRIPTION,    
+        il.SPLIT_PCT,       
+        il.DISCOUNT_PCT, 
+        il.UNIT_PRICE,
+        il.TAX_CODE,
+        il.TAX_PCT,
+        il.TAX_AMT,
+        il.VAT_CODE,
+        il.VAT_PCT,
+        il.VAT_AMT,
+        il.NET_PRICE,   
+        il.TAX_ARTICLE_CODE,
+	ta.tax_article_description,    
+        il.ACCOUNT,       
+        il.PRODUCT_GROUP, 
+        il.DEPTID,
+        il.PRIMARY_BRANCH_CD,
+        il.LEVEL0,        
+        il.VESSEL_SORT_NUM,   
+        il.LEVEL1,    
+        il.LOT_SORT_NUM, 
+        il.LEVEL2,      
+        il.CHARGE_SORT_NUM,   
+        jci.JOB_DESCRIPTION,
+        jci.VAT_LABEL,
+        jci.SALES_TAX_LABEL,
+        jci.VAT_REG_LABEL,
+        jci.VAT_REGISTRATION_ID,
+	jci.VAT_PROVINCE,
+	(select co.country2 from PHOENIX.country co, PHOENIX.job_contracts jc where jc.VAT_REGISTRATION_COUNTRY = co.COUNTRY_CODE
+         AND jc.JOB_NUMBER = $P{Job_Number}
+        AND jc.UID20 = $P{uid20}
+        AND jci.INVOICE = $P{Invoice}) as "buyers_country",
+        (select co.country2 from PHOENIX.country co, PHOENIX.job_contracts jc, PHOENIX.job_contract_invoice jci where jc.JOB_CONTRACT_ID = jci.JOB_CONTRACT_ID and
+        jci.BUSINESS_UNITS_COUNTRY_CODE = co.COUNTRY_CODE
+         AND jc.JOB_NUMBER = $P{Job_Number}
+        AND jc.UID20 = $P{uid20}
+        AND jci.INVOICE = $P{Invoice}) as "sellers_country", 
+        jci.TRANSACT_CURRENCY_CD, 
+        jci.BANK_ACCT_DESC,     
+        jci.DFI_ID_NUM,     
+        jci.BANK_CODE,    
+        jci.BANK_ACCT_CODE,     
+        jci.BANKS_BANK_DESC,
+        jci.BANKS_ADDRESS1,
+        jci.BANKS_ADDRESS2,
+        jci.BANKS_ADDRESS3,
+        jci.BANKS_BANK_ID_NBR,
+        jo.BRANCH_NAME,
+        jci.BRANCHES_COMPANY_DESC,
+        jci.BRANCHES_PHONE_PREFIX,
+        jci.BRANCHES_PHONE_NUMBER,
+        jci.BRANCHES_PHONE_EXTENSION,
+        bu.CURRENCY_BASE AS "TO_CURRENCY",
+        rt.RATE_MULT,
+        rt.RATE_DIV,
+	jc.OVERRIDE_CURR_RATE,
+	cur.DECIMAL_DIGITS,
+	jci.BU_VAT_REGISTRATION_ID,
+	(select buvl.LOCAL_VAT_ID 
+        from PHOENIX.BUS_UNIT_VAT_LOC buvl, PHOENIX.job_contracts jc, PHOENIX.job_contract_invoice jci,PHOENIX.JOB_ORDERS jo 
+        where jc.JOB_CONTRACT_ID = jci.JOB_CONTRACT_ID
+        AND jc.JOB_NUMBER = jo.JOB_NUMBER
+	AND jci.BU_VAT_REGISTRATION_ID = buvl.VAT_REGISTRATION_ID
+	AND jo.BU_NAME = buvl.BU_NAME
+	AND jc.JOB_NUMBER = $P{Job_Number}
+        AND jc.UID20 = $P{uid20}
+        AND jci.INVOICE = $P{Invoice}) as "LOCAL_VAT_ID",
+	jci.INV_AMT_PRE_TAX,
+	jci.INV_AMT_POST_TAX
+      FROM PHOENIX.JOB_CONTRACTS jc, PHOENIX.JOB_CONTRACT_INVOICE jci, PHOENIX.INVOICE_LINES il, 
+		PHOENIX.tax_articles ta, PHOENIX.JOB_ORDERS jo,
+                PHOENIX.BUSINESS_UNITS bu, PHOENIX.PS_RT_RATE_TBL rt, PHOENIX.CUST_ADDRESSES ca,
+		PHOENIX.CURRENCY cur
+      WHERE jc.JOB_CONTRACT_ID = jci.JOB_CONTRACT_ID
+        AND jci.JOB_CONTRACT_INVOICE_ID = il.JOB_CONTRACT_INVOICE_ID
+	and il.tax_article_code = ta.tax_article_code (+)
+	AND jc.JOB_NUMBER = jo.JOB_NUMBER
+        AND jo.BU_NAME = bu.BU_NAME
+        AND jci.TRANSACT_CURRENCY_CD = rt.FROM_CUR
+        AND bu.CURRENCY_BASE = rt.TO_CUR
+        AND rt.RT_TYPE = 'CRRNT'
+        AND rt.EFFDT = (SELECT MAX(RT_ED.EFFDT) FROM PHOENIX.PS_RT_RATE_TBL RT_ED
+                        WHERE RT.RT_RATE_INDEX = RT_ED.RT_RATE_INDEX
+                          AND RT.TERM = RT_ED.TERM
+                          AND RT.FROM_CUR = RT_ED.FROM_CUR
+                          AND RT.TO_CUR = RT_ED.TO_CUR
+                          AND RT.RT_TYPE = RT_ED.RT_TYPE
+                          AND RT_ED.EFFDT <=  jci.JOB_FINISH_DATE)
+	AND jo.SHIP_TO_CUST_CODE = ca.CUST_CODE
+        AND jo.SHIP_TO_ADDR_NUM = ca.LOCATION_NUMBER
+	AND bu.CURRENCY_BASE = cur.CURRENCY_CD
+	AND jc.JOB_NUMBER = $P{Job_Number}
+        AND jc.UID20 = $P{uid20}
+        AND jci.INVOICE = $P{Invoice}
+ORDER BY
+        VESSEL_SORT_NUM ASC,
+        LOT_SORT_NUM ASC,
+        CHARGE_SORT_NUM ASC]]></queryString>
+
+	<field name="JOB_NUMBER" class="java.lang.String"/>
+	<field name="INVOICE" class="java.lang.String"/>
+	<field name="UID20" class="java.lang.String"/>
+	<field name="CREDIT_IND" class="java.lang.String"/>
+	<field name="INVOICE_TYPE" class="java.lang.String"/>
+	<field name="CUSTOMERS_NAME" class="java.lang.String"/>
+	<field name="BU_NAME" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_DESCRIPTION" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_COMPANY_DESC" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS1" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_CITY" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_POSTAL" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_PREFIX" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_NUMBER" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_EXTENSION" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS2" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS3" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS4" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_COUNTRY_CODE" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_STATE_CODE" class="java.lang.String"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="SHIP TO COUNTRY" class="java.lang.String"/>
+	<field name="SHIP TO STATE" class="java.lang.String"/>
+	<field name="LINE_DESCRIPTION" class="java.lang.String"/>
+	<field name="SPLIT_PCT" class="java.math.BigDecimal"/>
+	<field name="DISCOUNT_PCT" class="java.math.BigDecimal"/>
+	<field name="UNIT_PRICE" class="java.math.BigDecimal"/>
+	<field name="TAX_CODE" class="java.lang.String"/>
+	<field name="TAX_PCT" class="java.math.BigDecimal"/>
+	<field name="TAX_AMT" class="java.math.BigDecimal"/>
+	<field name="VAT_CODE" class="java.lang.String"/>
+	<field name="VAT_PCT" class="java.math.BigDecimal"/>
+	<field name="VAT_AMT" class="java.math.BigDecimal"/>
+	<field name="NET_PRICE" class="java.math.BigDecimal"/>
+	<field name="TAX_ARTICLE_CODE" class="java.lang.String"/>
+	<field name="TAX_ARTICLE_DESCRIPTION" class="java.lang.String"/>
+	<field name="ACCOUNT" class="java.lang.String"/>
+	<field name="PRODUCT_GROUP" class="java.lang.String"/>
+	<field name="DEPTID" class="java.lang.String"/>
+	<field name="PRIMARY_BRANCH_CD" class="java.lang.String"/>
+	<field name="LEVEL0" class="java.lang.String"/>
+	<field name="VESSEL_SORT_NUM" class="java.math.BigDecimal"/>
+	<field name="LEVEL1" class="java.lang.String"/>
+	<field name="LOT_SORT_NUM" class="java.math.BigDecimal"/>
+	<field name="LEVEL2" class="java.lang.String"/>
+	<field name="CHARGE_SORT_NUM" class="java.math.BigDecimal"/>
+	<field name="JOB_DESCRIPTION" class="java.lang.String"/>
+	<field name="VAT_LABEL" class="java.lang.String"/>
+	<field name="SALES_TAX_LABEL" class="java.lang.String"/>
+	<field name="VAT_REG_LABEL" class="java.lang.String"/>
+	<field name="VAT_REGISTRATION_ID" class="java.lang.String"/>
+	<field name="VAT_PROVINCE" class="java.lang.String"/>
+	<field name="buyers_country" class="java.lang.String"/>
+	<field name="sellers_country" class="java.lang.String"/>
+	<field name="TRANSACT_CURRENCY_CD" class="java.lang.String"/>
+	<field name="BANK_ACCT_DESC" class="java.lang.String"/>
+	<field name="DFI_ID_NUM" class="java.lang.String"/>
+	<field name="BANK_CODE" class="java.lang.String"/>
+	<field name="BANK_ACCT_CODE" class="java.lang.String"/>
+	<field name="BANKS_BANK_DESC" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS1" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS2" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS3" class="java.lang.String"/>
+	<field name="BANKS_BANK_ID_NBR" class="java.lang.String"/>
+	<field name="BRANCH_NAME" class="java.lang.String"/>
+	<field name="BRANCHES_COMPANY_DESC" class="java.lang.String"/>
+	<field name="BRANCHES_PHONE_PREFIX" class="java.lang.String"/>
+	<field name="BRANCHES_PHONE_NUMBER" class="java.lang.String"/>
+	<field name="BRANCHES_PHONE_EXTENSION" class="java.lang.String"/>
+	<field name="TO_CURRENCY" class="java.lang.String"/>
+	<field name="RATE_MULT" class="java.math.BigDecimal"/>
+	<field name="RATE_DIV" class="java.math.BigDecimal"/>
+	<field name="OVERRIDE_CURR_RATE" class="java.math.BigDecimal"/>
+	<field name="DECIMAL_DIGITS" class="java.math.BigDecimal"/>
+	<field name="BU_VAT_REGISTRATION_ID" class="java.lang.String"/>
+	<field name="LOCAL_VAT_ID" class="java.lang.String"/>
+	<field name="INV_AMT_PRE_TAX" class="java.math.BigDecimal"/>
+	<field name="INV_AMT_POST_TAX" class="java.math.BigDecimal"/>
+
+	<variable name="subTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{NET_PRICE}]]></variableExpression>
+	</variable>
+	<variable name="VAT_subtotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{VAT_AMT}]]></variableExpression>
+	</variable>
+	<variable name="sales_tax_subtotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{TAX_AMT}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[$V{sales_tax_subtotal}.add($V{VAT_subtotal}.add($V{subTotal}))]]></variableExpression>
+	</variable>
+	<variable name="TAX_state_cd" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[/*The TAX_state_code is defined as: If the BU’s COUNTRY_CODE 
+is equal to “CAN” and the Ship To Country Code is equal to the BU’s COUNTRY_CODE then
+If true: TAX_state_code will equal Ship To State Code
+Else if false: TAX_state_code will be left blank.
+The TAX_country_code & the TAX_state_code are used 
+in the invoice_tax_vatlabelcalc to query the PHOENIX.TAX_LABELS table 
+where COUNTRY_CODE = TAX_country_code and STATE = TAX_state_code*/
+( $F{BUSINESS_UNITS_COUNTRY_CODE}.equals( "CAN" ) && $F{BUSINESS_UNITS_COUNTRY_CODE}.equals( $F{SHIP TO COUNTRY} )? 
+"'"+$F{SHIP TO STATE}+"'" : "' '" )]]></variableExpression>
+	</variable>
+	<variable name="TAX_country_cd" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[/*The TAX_country_code is defined as the BU’s Country Code.
+The TAX_country_code & the TAX_state_code are used 
+in the invoice_tax_vatlabelcalc to query the PHOENIX.TAX_LABELS table 
+where COUNTRY_CODE = TAX_country_code and STATE = TAX_state_code*/
+"'"+$F{BUSINESS_UNITS_COUNTRY_CODE}+"'"]]></variableExpression>
+	</variable>
+	<variable name="Vat_Label" class="java.lang.String" resetType="Report" calculation="Nothing">
+	</variable>
+	<variable name="Vat_Reg_Label" class="java.lang.String" resetType="Report" calculation="Nothing">
+	</variable>
+	<variable name="Sales_Tax_Label" class="java.lang.String" resetType="Report" calculation="Nothing">
+	</variable>
+	<variable name="Sum_Tax_Pct" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{TAX_PCT}]]></variableExpression>
+	</variable>
+	<variable name="Bu_Name" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA["'"+$F{BU_NAME}+"'"]]></variableExpression>
+	</variable>
+	<variable name="Bu Country Code" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA["'"+$F{BUSINESS_UNITS_COUNTRY_CODE}+"'"]]></variableExpression>
+	</variable>
+	<variable name="Vat_Province_Code" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{VAT_PROVINCE} == null ? "' '" : "'"+$F{VAT_PROVINCE}+"'")]]></variableExpression>
+	</variable>
+	<variable name="LOCAL_VAT_ID" class="java.lang.String" resetType="Report" calculation="Nothing">
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="false" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="126"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="494"
+						y="78"
+						width="81"
+						height="12"
+						key="textField-52"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() != 0) && 
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? 
+$F{INV_AMT_POST_TAX} :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+(new BigDecimal(($V{VAT_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(2,4).add(
+new BigDecimal($F{INV_AMT_PRE_TAX}.doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(2,4).add(
+new BigDecimal(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(2,4)))) : 
+(new BigDecimal($F{INV_AMT_PRE_TAX}.doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).add(
+new BigDecimal(($V{VAT_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).add(
+new BigDecimal(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue())))))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="494"
+						y="78"
+						width="81"
+						height="12"
+						key="textField-63"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() == 0) &&
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? 
+$F{INV_AMT_POST_TAX} :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+(new BigDecimal(($V{VAT_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4).add(
+new BigDecimal($F{INV_AMT_PRE_TAX}.doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4).add(
+new BigDecimal(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()).setScale(0,4)))) : 
+(new BigDecimal($F{INV_AMT_PRE_TAX}.doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4).add(
+new BigDecimal(($V{VAT_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4).add(
+new BigDecimal(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()).setScale(0,4)))))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="45"
+						width="70"
+						height="12"
+						key="textField-50"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() != 0) && 
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($F{INV_AMT_PRE_TAX}.doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double($F{INV_AMT_PRE_TAX}.doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double($F{INV_AMT_PRE_TAX}.doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="45"
+						width="70"
+						height="12"
+						key="textField-60"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() == 0) &&
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($F{INV_AMT_PRE_TAX}.doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double($F{INV_AMT_PRE_TAX}.doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double($F{INV_AMT_PRE_TAX}.doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="56"
+						width="70"
+						height="12"
+						key="textField-49"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() != 0) && 
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($V{VAT_subtotal}.setScale(2,4).doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double(($V{VAT_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double(($V{VAT_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="56"
+						width="70"
+						height="12"
+						key="textField-61"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(($F{DECIMAL_DIGITS}.intValue() == 0) &&
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($V{VAT_subtotal}.setScale(0,1).doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double(($V{VAT_subtotal}.setScale(0,1)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double(($V{VAT_subtotal}.setScale(0,1)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="67"
+						width="70"
+						height="12"
+						key="textField-51"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($V{Sum_Tax_Pct}.intValue() != 0  && $F{DECIMAL_DIGITS}.intValue() != 0 && 
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($V{sales_tax_subtotal}.setScale(2,4).doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="505"
+						y="67"
+						width="70"
+						height="12"
+						key="textField-62"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($V{Sum_Tax_Pct}.intValue() != 0  && $F{DECIMAL_DIGITS}.intValue() == 0 &&
+(!$F{BU_NAME}.equals( "KOR01" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[( $F{TRANSACT_CURRENCY_CD}.equals( $F{TO_CURRENCY} ) ? new Double($V{sales_tax_subtotal}.setScale(2,4).doubleValue()) :  
+($F{OVERRIDE_CURR_RATE} == null) ? 
+new Double(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()*$F{RATE_MULT}.doubleValue()/$F{RATE_DIV}.doubleValue()) : 
+new Double(($V{sales_tax_subtotal}.setScale(2,4)).doubleValue()/$F{OVERRIDE_CURR_RATE}.doubleValue()))]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="20"
+						width="575"
+						height="1"
+						key="line-5"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="91"
+						width="575"
+						height="0"
+						key="line-6"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="450"
+						y="33"
+						width="125"
+						height="12"
+						key="staticText-12"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(!$F{BU_NAME}.equals( "KOR01" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TO_CURRENCY} + " " +$R{equivalent}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="267"
+						y="33"
+						width="59"
+						height="12"
+						key="staticText-13"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{tax_rates}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="267"
+						y="21"
+						width="30"
+						height="12"
+						key="staticText-14"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Vat_Label}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="21"
+						width="75"
+						height="12"
+						key="staticText-15"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{registration_ids}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="325"
+						y="33"
+						width="58"
+						height="12"
+						key="staticText-16"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{goods_servs}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="383"
+						y="33"
+						width="24"
+						height="12"
+						key="staticText-17"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Vat_Label}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="450"
+						y="45"
+						width="55"
+						height="12"
+						key="staticText-18"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(!$F{BU_NAME}.equals( "KOR01" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{goods_servs}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="450"
+						y="56"
+						width="55"
+						height="12"
+						key="staticText-19"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(!$F{BU_NAME}.equals( "KOR01" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Vat_Label}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="450"
+						y="67"
+						width="55"
+						height="12"
+						key="staticText-20"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(!$F{BU_NAME}.equals( "KOR01" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sales_Tax_Label}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="450"
+						y="78"
+						width="44"
+						height="12"
+						key="staticText-21"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean(!$F{BU_NAME}.equals( "KOR01" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{total} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="93"
+						width="575"
+						height="13"
+						key="staticText-22"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($F{BRANCHES_COMPANY_DESC} == null ? $F{BUSINESS_UNITS_COMPANY_DESC} : $F{BRANCHES_COMPANY_DESC})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="106"
+						width="575"
+						height="15"
+						key="staticText-23"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[( (($F{BUSINESS_UNITS_ADDRESS1} == null) || ($F{BUSINESS_UNITS_ADDRESS1}.trim()).isEmpty()) ? "" : $F{BUSINESS_UNITS_ADDRESS1}+", ")
++ ( (($F{BUSINESS_UNITS_ADDRESS2} == null) || ($F{BUSINESS_UNITS_ADDRESS2}.trim()).isEmpty()) ? "" : $F{BUSINESS_UNITS_ADDRESS2}+", ") 
++ ( (($F{BUSINESS_UNITS_ADDRESS3} == null) || ($F{BUSINESS_UNITS_ADDRESS3}.trim()).isEmpty()) ? "" : $F{BUSINESS_UNITS_ADDRESS3}+", ")
++ ( (($F{BUSINESS_UNITS_CITY} == null) || ($F{BUSINESS_UNITS_CITY}.trim()).isEmpty()) ? "" : $F{BUSINESS_UNITS_CITY}+", ") 
++ ( (($F{BUSINESS_UNITS_STATE_CODE} == null) || ($F{BUSINESS_UNITS_STATE_CODE}.trim()).isEmpty() || $F{BU_NAME}.equalsIgnoreCase( "KOR01" )) ? "" : $F{BUSINESS_UNITS_STATE_CODE}+", ")
++ ( (($F{BUSINESS_UNITS_POSTAL} == null) || ($F{BUSINESS_UNITS_POSTAL}.trim()).isEmpty()) ? "" : $F{BUSINESS_UNITS_POSTAL})
++ ( (($F{NAME} == null) || ($F{NAME}.trim()).isEmpty()) ? "" : 
+    ( $F{NAME}.equals( $F{BUSINESS_UNITS_CITY} )? "" : $F{NAME}))+ "."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="35"
+						width="113"
+						height="12"
+						key="staticText-24"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{buyers} + " " + $V{Vat_Reg_Label} + " " + $R{registration_id} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="59"
+						width="113"
+						height="12"
+						key="staticText-26"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("BEL") ? "Company Registration:" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("TZA") ? "TIN Number:" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("KEN") ? "PIN Number:" : 
+($V{Sales_Tax_Label}.equalsIgnoreCase( "QST" ) ? ($R{sellers} + " " + $V{Sales_Tax_Label} + " " + $R{registration_id} + ":"): ""))))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="35"
+						width="14"
+						height="12"
+						key="textField-54"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{buyers_country}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="129"
+						y="35"
+						width="67"
+						height="12"
+						key="textField-55"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VAT_REGISTRATION_ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="197"
+						y="47"
+						width="69"
+						height="12"
+						key="textField-59"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_ARTICLE_CODE} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="arial.ttf" size="8" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TAX_ARTICLE_DESCRIPTION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="7"
+						width="575"
+						height="12"
+						key="staticText-27"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{sellers_country}.contentEquals( "BE" ) && ($F{CREDIT_IND}.contentEquals( "C" ) || $F{CREDIT_IND}.contentEquals( "Y" )))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["BTW TERUG TE STORTEN AAN DE STAAT IN DE MATE DAT HIJ OORSPRONKELIJK IN AFTREK WERD GEBRACHT"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="348"
+						y="7"
+						width="227"
+						height="12"
+						key="staticText-28"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{sellers_country}.contentEquals( "MZ" ))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="Times-Roman" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["PROCESSED BY COMPUTER"]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="267"
+						y="45"
+						width="182"
+						height="44"
+						key="subreport-1"/>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$P{Job_Number}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$P{Invoice}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$P{uid20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax_footer_TAX_RATES.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="59"
+						width="83"
+						height="12"
+						key="staticText-29"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("BEL") ? $F{LOCAL_VAT_ID} : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("TZA") ? $F{LOCAL_VAT_ID}.substring( 4, $F{LOCAL_VAT_ID}.length() ) : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("KEN") ? $F{LOCAL_VAT_ID}.substring( 4, $F{LOCAL_VAT_ID}.length() ) : 
+($V{Sales_Tax_Label}.equalsIgnoreCase( "QST" ) ? $F{LOCAL_VAT_ID} : ""))))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="71"
+						width="113"
+						height="12"
+						key="staticText-30"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($F{BU_NAME}.equalsIgnoreCase("UK002") ? "Registration:" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("AUS") ? "ABN:" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("SGP") ? "Company Reg. No.:" : "")))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="71"
+						width="83"
+						height="12"
+						key="staticText-31"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($F{BU_NAME}.equalsIgnoreCase("UK002") ? "NO-SC176680" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("AUS") ? "56 001 722 854" : 
+($F{BUSINESS_UNITS_COUNTRY_CODE}.equalsIgnoreCase("SGP") ? "197401138D" : "")))]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="1"
+						height="1"
+						key="subreport-2"/>
+					<subreportParameter  name="Country_Code">
+						<subreportParameterExpression><![CDATA[$V{TAX_country_cd}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="State">
+						<subreportParameterExpression><![CDATA[$V{TAX_state_cd}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<returnValue subreportVariable="Vat_Label" toVariable="Vat_Label"/>
+					<returnValue subreportVariable="Vat_Reg_Label" toVariable="Vat_Reg_Label"/>
+					<returnValue subreportVariable="Sales_Tax_Label" toVariable="Sales_Tax_Label"/>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax_vatlabelcalc.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="47"
+						width="113"
+						height="12"
+						key="staticText-32"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{BU_VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{sellers} + " " + $V{Vat_Reg_Label} + " " + $R{registration_id} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="47"
+						width="14"
+						height="12"
+						key="textField-64"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{BU_VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{sellers_country}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="129"
+						y="47"
+						width="67"
+						height="12"
+						key="textField-65"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{BU_VAT_REGISTRATION_ID} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BU_VAT_REGISTRATION_ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="297"
+						y="21"
+						width="149"
+						height="12"
+						key="staticText-33"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{analysis}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Band" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="407"
+						y="33"
+						width="39"
+						height="12"
+						key="staticText-34"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Arial" pdfFontName="arial.ttf" size="9" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{amount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</summary>
+</jasperReport>

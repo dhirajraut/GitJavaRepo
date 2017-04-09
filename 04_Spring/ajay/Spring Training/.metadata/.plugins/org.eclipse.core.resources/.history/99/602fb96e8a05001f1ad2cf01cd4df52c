@@ -1,0 +1,19 @@
+package beanpack;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.FileSystemResource;
+
+public class TestIOC {
+
+	public static void main(String[] args) {
+		BeanFactory factory=new XmlBeanFactory(new FileSystemResource("src/services.xml"));
+		Customer cObj=(Customer) factory.getBean("custObj");
+		System.out.println(cObj.getCustId());
+		System.out.println(cObj.getCustName());
+		Customer cObj3=(Customer) factory.getBean("custObj2");
+		System.out.println(cObj2.getCustId());
+		System.out.println(cObj2.getCustName());
+		
+	}
+}

@@ -1,0 +1,5 @@
+"account","accountCode","depId","id","invoiceId","invoiceNumber","netPrice","orderLineItemId","orderLineItemType","quantity","securedAmount","tax","taxAmt","taxCode","taxPct","unitPrice","vat","vatAmt","vatCode","vatPct","warehouseName"
+"","","","0","0","728692928","0.0","3","","2.0","0.0","0.0","","","0.0","200.0","0.0","","","0.0",""
+"","","","1","0","","0.0","3","","0.0","0.0","100.0","","TAXCODE1","0.0","0.0","100.0","","VATCODE1","0.0",""
+"","","","2","0","","1002.0","1","","0.0","0.0","102.0","","TAXCODE2","0.0","0.0","102.0","","VATCODE2","0.0",""
+"","","","3","0","","0.0","2","","0.0","0.0","103.0","","TAXCODE3","0.0","0.0","103.0","","VATCODE3","0.0",""

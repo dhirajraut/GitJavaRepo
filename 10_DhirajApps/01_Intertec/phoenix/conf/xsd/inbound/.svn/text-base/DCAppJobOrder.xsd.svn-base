@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by ESB (ESB) -->
+<xs:schema xmlns="http://www.intertek.com/ESB/DCJobOrderRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/DCJobOrderRequest" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetJobOrderRequest" type="JobOrderRequestType">
+		<xs:annotation>
+			<xs:documentation>DC Job Order ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="JobOrderRequestType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MessageDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageDataType">
+		<xs:sequence>
+			<xs:element name="ProjectNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProjectDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ContactId" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderAmount" type="xs:double" minOccurs="0"/>
+			<xs:element name="CurrencyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentTerms" type="xs:string" minOccurs="0"/>
+			<xs:element name="ModelNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProductionEvaluationDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillToCustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillToContactId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ShipToCustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ShipToContactId" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessStream" type="BusinessStreamType" minOccurs="0"/>
+			<xs:element name="Warehouse" type="WarehouseType" minOccurs="0"/>
+			<xs:element name="PrimarySalePersonId" type="xs:string" minOccurs="0"/>
+			<xs:element name="SecondarySalePersonId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProjectManagerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerReadyDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="PromiseCompletionDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="LineItem" type="LineItemType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ContractId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BusinessStreamType">
+		<xs:sequence>
+			<xs:element name="ProductGroupId" type="xs:string"/>
+			<xs:element name="ProductGroupSet" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeginDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WarehouseType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string"/>
+			<xs:element name="BusinessUnit" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address" type="AddressType" minOccurs="0"/>
+			<xs:element name="ContactPhone" type="xs:string" minOccurs="0"/>
+			<xs:element name="FaxNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="Status" type="StatusType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="StatusType">
+		<xs:annotation>
+			<xs:documentation>Status is a character of length 1. Allows A or I</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="I"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AddressType">
+		<xs:sequence>
+			<xs:element name="Address1" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address2" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address3" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address4" type="xs:string" minOccurs="0"/>
+			<xs:element name="City" type="xs:string" minOccurs="0"/>
+			<xs:element name="Postal" type="xs:string" minOccurs="0"/>
+			<xs:element name="State" type="xs:string" minOccurs="0"/>
+			<xs:element name="Country" type="xs:string" minOccurs="0"/>
+			<xs:element name="County" type="xs:string" minOccurs="0"/>
+			<xs:element name="InCityLimit" type="xs:boolean" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceOfferingType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ParentId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LineItemType">
+		<xs:sequence>
+			<xs:element name="LineItemNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="ItemStandardId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ItemStandardDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="QuotedValue" type="xs:double" minOccurs="0"/>
+			<xs:element name="TaskOwnerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ServiceOffering" type="ServiceOfferingType" minOccurs="0"/>
+			<xs:element name="StartDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="CompletionDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="JobTitle" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillableHours" type="xs:string" minOccurs="0"/>
+			<xs:element name="OperationalStatus" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+    width="200"
+    height="170"
+    backgroundAlpha="0.0"
+    creationComplete="init()">
+    <mx:Script>
+        <![CDATA[
+            
+            import com.adobe.viewsource.ViewSource;
+            import mx.effects.easing.Linear;            
+            
+            private function init():void
+            {
+                moveTicker();
+                ViewSource.addMenuItem(this, "http://www.needlz.nl/flex/ticker/srcview/index.html");
+            }
+            
+            /* Moving the ticker */
+            /* A few values for making the tickermessage move */
+            private function moveTicker():void
+            {
+                textMover.end();
+                textMover.duration = 10000; /* How long the effect will take */
+                textMover.yTo = -(tickerMessage.height); /* Where will the effect end */
+                textMover.play();
+            }
+            
+            /* Resetting the ticker */
+            /* The tickermessage will be stopped and moved to the rightside of the container */
+            private function resetTicker():void
+            {
+                textMover.end();
+  //              tickerMessage.x = tickerMessageContainer.width;
+                tickerMessage.x = 0;
+                tickerMessage.y = tickerMessageContainer.height;
+                moveTicker(); /* See moveTicker function */
+            }
+            
+        ]]>
+    </mx:Script> 
+    
+<!-- Move Effect -->
+<!-- We use the move effect for moving the text -->
+    <mx:Move id="textMover" 
+        target="{tickerMessage}" 
+        effectEnd="{resetTicker()}" 
+        easingFunction="{Linear.easeNone}"/>
+
+<!-- Tickermessage container -->
+<!-- I used a Canvas so that I can give a X-value, which isn&apos;t possible in either Hbox or Vbox -->
+    <mx:Canvas id="tickerMessageContainer" 
+        width="100%" height="100%" 
+        horizontalScrollPolicy="off" verticalScrollPolicy="off">
+
+<!-- Tickermessage -->
+<!-- I made use of htmlText so I could make use of hyperlinks -->
+<!-- When you move your mouse-cursor over the ticker, it will be paused. 
+     And resumed when you take your mouse-curser off -->
+        <mx:Text id="tickerMessage" 
+            x="0" y="{tickerMessageContainer.height}"
+            mouseOver="{textMover.pause()}" mouseOut="{textMover.resume()}">
+            <mx:htmlText>
+                <![CDATA[Dhiraj Raut<br/>Dhiraj Raut<br/>Dhiraj Raut<br/>Dhiraj Raut<br/>]]>
+                
+<!--                <![CDATA[
+                Indian national anthem 'disrespected' at South Asian Games<br/>
+                I never compared Modi to Gandhi: Gadkari</br>
+                Unfortunate that Lok Sabha has failed to produce PM, says P A Sangma</br>
+                ]]>
+-->            </mx:htmlText>
+        </mx:Text>
+        
+    </mx:Canvas>
+    
+</mx:Application>
+

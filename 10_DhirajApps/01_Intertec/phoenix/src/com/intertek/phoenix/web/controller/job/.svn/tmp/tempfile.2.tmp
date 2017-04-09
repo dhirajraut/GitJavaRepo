@@ -1,0 +1,320 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.web.controller.job;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+
+import com.intertek.exception.ServiceException;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.meta.dropdown.Field;
+import com.intertek.phoenix.common.Form;
+import com.intertek.phoenix.common.ReferenceDataService;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.Estimation;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * The Class JobOperationalInstrCEFormController.
+ * 
+ * @author eric.nguyen/patni
+ */
+public class JobInstructionTestAttributePopupFormController extends SimpleFormController {
+
+    private static Log log = LogFactory.getLog(JobInstructionTestAttributePopupFormController.class);
+
+    /**
+     * Instantiates a new job operational instruction Other Pop-up form
+     * controller.
+     */
+    public JobInstructionTestAttributePopupFormController() {
+        super();
+        setSessionForm(true);
+        setCommandClass(CEJobInstructionOthersPopupForm.class);
+    }
+
+    /**
+     * On submit.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param command
+     *            the command
+     * @param errors
+     *            the errors
+     * 
+     * @return the model and view
+     * 
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("unchecked")
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        CEJobInstructionOthersPopupForm ceJobInstructionOthersPopupForm = (CEJobInstructionOthersPopupForm) command;
+        String workerFlag = request.getParameter("workertimeFlag");
+        String workingIndex = request.getParameter("rowNum");
+        int workerIndex = Integer.parseInt(workingIndex);
+        if ((workerFlag != null) && ("add".equals(workerFlag) || "delete".equals(workerFlag))) {
+            if ("add".equals(workerFlag)) {
+                Estimation[] est = addEstimation(ceJobInstructionOthersPopupForm.getEstimation());
+                ceJobInstructionOthersPopupForm.setEstimation(est);
+                // ceJobInstructionOthersPopupForm.setEst((addWorkerTime(ceJobInstructionOthersPopupForm.getEstimation())));
+            }
+            else {
+                ceJobInstructionOthersPopupForm.setEstimation(deleteEstimation(ceJobInstructionOthersPopupForm.getEstimation(), workerIndex));
+            }
+            ceJobInstructionOthersPopupForm.setWorkertimeFlag("none");
+            return showForm(request, response, errors);
+        }
+        if (workerFlag != null && "save".equals(workerFlag)) {
+            Estimation[] est = ceJobInstructionOthersPopupForm.getEstimation();
+            Set<Estimation> set = new HashSet<Estimation>();
+            for (Estimation e : est) {
+                set.add(e);
+            }
+
+            String key = ceJobInstructionOthersPopupForm.getTestIndex() + "," + ceJobInstructionOthersPopupForm.getSplitIndex();
+            CEJobOrderLineItem ceJobOrderLineItem = ceJobInstructionOthersPopupForm.getCeJobOrderLineItem();
+            HashMap<String, CEJobOrderLineItem> orderItemMap = (HashMap<String, CEJobOrderLineItem>) request.getSession().getAttribute("TestAttribute");
+            ceJobOrderLineItem.setEstimations(set);
+            if (orderItemMap == null) {
+                orderItemMap = new HashMap<String, CEJobOrderLineItem>();
+            }
+            orderItemMap.put(key, ceJobOrderLineItem);
+            request.getSession().setAttribute("TestAttribute", orderItemMap);
+            ceJobInstructionOthersPopupForm.setWorkertimeFlag("close");
+        }
+        return showForm(request, response, errors);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        log.debug("inside init binder");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Form.getCurrentUserFormat());
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, null, new CustomDateEditor(dateFormat, true));
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#suppressValidation(javax.servlet.http.HttpServletRequest,
+     *      java.lang.Object)
+     */
+    @SuppressWarnings("deprecation")
+    protected boolean suppressValidation(HttpServletRequest request, Object command) {
+
+        String workerFlag = request.getParameter("workertimeFlag");
+        if ((workerFlag != null) && "add".equalsIgnoreCase(workerFlag) || "delete".equalsIgnoreCase(workerFlag)) {
+            return true;
+        }
+        return super.suppressValidation(request);
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    @SuppressWarnings("unchecked")
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        try {
+            String testIndex = request.getParameter("testIndex");
+            String splitIndex = request.getParameter("splitIndex");            
+            CEJobInstructionOthersPopupForm ceJobInstructionOthersPopupForm = new CEJobInstructionOthersPopupForm();
+            ceJobInstructionOthersPopupForm.setSplitIndex(splitIndex);
+            ceJobInstructionOthersPopupForm.setTestIndex(testIndex);
+            setDropDownValues(ceJobInstructionOthersPopupForm);
+            HashMap<String, CEJobOrderLineItem> orderItemMap = (HashMap<String, CEJobOrderLineItem>) request.getSession().getAttribute("TestAttribute");
+            if (orderItemMap == null) {
+                orderItemMap = new HashMap<String, CEJobOrderLineItem>();
+
+            }
+            CEJobOrderLineItem ceJobOrderLineItem = null;
+
+            CEJobOrderForm ceJobOrderForm = (CEJobOrderForm) request.getSession()
+                    .getAttribute("com.intertek.phoenix.web.controller.job.JobOperationalInstrCEFormController.FORM.command");
+            int linIndex = Integer.parseInt(testIndex);
+            int spIndex = Integer.parseInt(splitIndex);
+            ceJobOrderLineItem = updateCEJobLineItem(linIndex, spIndex, ceJobOrderForm);
+           
+            String key = testIndex + "," + splitIndex;
+
+            if (ceJobOrderLineItem == null) {
+                ceJobOrderLineItem = new CEJobOrderLineItem();
+            }
+            orderItemMap.put(key, ceJobOrderLineItem);
+            request.getSession().setAttribute("TestAttribute", orderItemMap);
+            String divName = request.getParameter("div1");
+            String divNameBody = request.getParameter("div2");
+            ceJobInstructionOthersPopupForm.setDivName(divName);
+            ceJobInstructionOthersPopupForm.setDivNameBody(divNameBody);
+            ceJobInstructionOthersPopupForm.setCeJobOrderLineItem(ceJobOrderLineItem);
+            ceJobInstructionOthersPopupForm.setBuName(ceJobOrderForm.getBuName());
+            if (ceJobOrderLineItem.getEstimations() != null && ceJobOrderLineItem.getEstimations().size() > 0) {
+                int size = ceJobOrderLineItem.getEstimations().size();
+                ceJobInstructionOthersPopupForm.setEstimation(ceJobOrderLineItem.getEstimations().toArray(new Estimation[size]));
+            }
+            else {
+                ceJobInstructionOthersPopupForm.setEstimation(addEstimation(null));
+            }
+            return ceJobInstructionOthersPopupForm;
+        }
+        catch (ServiceException e) {
+            System.out.println("inside catch block" + e.getMessage());
+            log.error("error in formBackingObject" + e);
+            throw e;
+        }
+
+    }
+
+    /**
+     * Name :set CEJobLineItem from Operational Instruction page Date :May 25,
+     * 2009 purpose :convert the results to entity object and save the entity
+     * 
+     * @param line
+     *            index , split index
+     * @param CEJobOrderLineItem
+     * @return
+     */
+    private CEJobOrderLineItem updateCEJobLineItem(int txtIndex, int splitIndex, CEJobOrderForm ceJobOrderForm) {
+
+        CEJobOrderLineItem lineItem = new CEJobOrderLineItem();
+        CEJobOrderLineItem joli = null;
+        CEJobOrderLineItem[] tmpItems = ceJobOrderForm.getCejobOrderLineItems();
+        joli = tmpItems[txtIndex];
+        if (splitIndex >= 0 && joli != null) {
+            joli = joli.getSplitLineItem()[splitIndex];
+        }
+        if (joli != null) {
+            lineItem.setStartDate(joli.getStartDate());
+            lineItem.setEndDate(joli.getEndDate());
+            lineItem.setTaskReadyDate(joli.getTaskReadyDate());
+            lineItem.setServiceType(joli.getServiceType());
+            lineItem.setBranchName(joli.getBranchName());
+            lineItem.setSampleDescription(joli.getSampleDescription());
+            lineItem.setServiceLocationCode(joli.getServiceLocationCode());
+            lineItem.setPurchaseOrderNumber(joli.getPurchaseOrderNumber());
+            lineItem.setCommittedAmount(joli.getCommittedAmount());
+            lineItem.setBillingstatus(joli.getBillingstatus());
+            lineItem.setOperationalStatus(joli.getOperationalStatus());
+            lineItem.setTaskManagerId(joli.getTaskManagerId());
+            lineItem.setEstimations(joli.getEstimations());
+            lineItem.setCreditOverrideById(joli.getCreditOverrideById());
+        }
+        return lineItem;
+    }
+
+    /**
+     * Name :addEstimation Date :May 25, 2009 purpose :add new estimation
+     * objects in the array
+     * 
+     * @param Estimation[]
+     * @return
+     */
+
+    private Estimation[] addEstimation(Estimation[] wTime) {
+        Estimation workerTime = new Estimation();
+
+        Estimation[] results = null;
+        if (wTime == null) {
+            results = new Estimation[1];
+        }
+        else {
+            results = new Estimation[wTime.length + 1];
+        }
+
+        if (wTime != null) {
+            for (int i = 0; i < wTime.length; i++) {
+                results[i] = wTime[i];
+            }
+        }
+        results[results.length - 1] = workerTime;
+
+        return results;
+
+    }
+
+    /**
+     * Name :deleteEstimation Date :May 25, 2009 purpose :delete estimation
+     * object from array
+     * 
+     * @param Estimation[]
+     * @return
+     */
+    private Estimation[] deleteEstimation(Estimation[] wTime, int workerIndex) {
+        if (wTime == null)
+            return null;
+        if (wTime.length <= 1)
+            return wTime;
+        Estimation[] results = new Estimation[wTime.length - 1];
+        int count = 0;
+        for (int i = 0; i < wTime.length; i++) {
+            if (i == workerIndex)
+                continue;
+            results[count] = wTime[i];
+            count++;
+        }
+        return results;
+    }
+
+    /**
+     * Name :setDropDownValues Date :May 25, 2009 purpose :to set all the static
+     * drop-down data from Reference Data service
+     * 
+     * @return
+     */
+    private void setDropDownValues(CEJobInstructionOthersPopupForm ceJobInstructionOthersPopupForm) {
+        ReferenceDataService refService = (ReferenceDataService) ServiceLocator.getInstance().getBean("referenceDataService");      
+        
+        ceJobInstructionOthersPopupForm.setOperationalStatusList(refService.getOperationalStatusFields());
+
+        ceJobInstructionOthersPopupForm.setUserTypeList(refService.getUserTypeFields());
+
+        // Service Type List -
+        List<Field> params = new ArrayList<Field>();
+        Field field = new Field();
+        field.setName("SAF-LOW VOLTAGE DIRECTIVE");
+        field.setValue("SAF-LOW VOLTAGE DIRECTIVE");
+        params.add(field);
+        field = new Field();
+        field.setName("SAF-ATEX/EX Directive");
+        field.setValue("SAF-ATEX/EX Directive");
+        params.add(field);
+        field = new Field();
+        field.setName("SAF-Prod Safety");
+        field.setValue("SAF-Prod Safety");
+        params.add(field);
+        // end of Service Type
+        ceJobInstructionOthersPopupForm.setServiceTypeList(params);
+
+    }
+
+}

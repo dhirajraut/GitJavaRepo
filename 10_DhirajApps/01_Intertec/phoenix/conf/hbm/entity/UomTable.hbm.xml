@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="UomTable" table="PS_ITS_UOM_TBL">
+    <id name="uom" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+      <column name="UOM" length="45" />
+    </id>
+    <property name="intData4" type="java.lang.Integer">
+      <column name="INT_DATA_4" sql-type="NUMBER" />
+    </property>
+    <property name="rbKey" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=450) private</meta>
+      <column name="RB_KEY" length="450" />
+    </property>
+    <property name="useOnHeader" type="yes_no">
+      <column name="ITS_USE_ON_HEADER" length="3" />
+    </property>
+  </class>
+</hibernate-mapping>
+

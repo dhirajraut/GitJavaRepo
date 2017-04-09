@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<!-- Basic properties of the application. -->
+   	<display-name>RMS</display-name>
+	<description>Resource Management System</description>
+
+	<welcome-file-list>
+		<welcome-file>jsp/loginpage.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!-- Fetch ApplicationContext from WEB-INF. -->
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            WEB-INF/ApplicationContext.xml
+        </param-value>
+    </context-param>
+
+	<!-- Spring Listener. -->
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<!-- Servlet Initialization. -->
+	<servlet>
+		<servlet-name>RMSServlet</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- Servlet Mapping. -->
+	<servlet-mapping>
+		<servlet-name>RMSServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+</web-app>

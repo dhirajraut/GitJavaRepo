@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="CountryLanguage" table="COUNTRY_LANG">
+	<composite-id name="countryLanguageId" class="CountryLanguageId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="countryCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="COUNTRY_CODE" length="3"/>
+      </key-property>
+      <key-property name="languageCD" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=9) private</meta>
+        <column name="LANGUAGE_CD" length="9" />
+      </key-property>
+    </composite-id>
+    <property name="name" type="string">
+      <column name="NAME" sql-type="nvarchar2(30)"/>
+    </property>
+  </class>
+</hibernate-mapping>
+

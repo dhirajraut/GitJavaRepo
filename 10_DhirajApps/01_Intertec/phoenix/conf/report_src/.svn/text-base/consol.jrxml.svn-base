@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="consol"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="575"
+		 columnSpacing="0"
+		 leftMargin="10"
+		 rightMargin="10"
+		 topMargin="28"
+		 bottomMargin="10"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="com.intertek.report.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="dirName" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BuName" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CustCode" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ConsolInvoice" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+    <!-- The following parameter is required for constructing data source for the sub reports -->
+    <parameter name="JdbcConnection" isForPrompting="false" class="java.sql.Connection"/>
+
+	<field name="CONSL_INV_BU_NAME" class="java.lang.String"/>
+	<field name="CONSOL_INVOICE" class="java.lang.String"/>
+	<field name="CUST_CODE" class="java.lang.String"/>
+	<field name="INVOICE_DT" class="java.sql.Timestamp"/>
+	<field name="CUST_NAME" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_DESCRIPTION" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_COMPANY_DESC" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS1" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_CITY" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_POSTAL" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_PREFIX" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_NUMBER" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_PHONE_EXTENSION" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS2" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS3" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_ADDRESS4" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_COUNTRY_CODE" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_STATE_CODE" class="java.lang.String"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="BUSINESS_UNITS_COUNTRY2_CODE" class="java.lang.String"/>
+	<field name="BANK_ACCT_DESC" class="java.lang.String"/>
+	<field name="DFI_ID_NUM" class="java.lang.String"/>
+	<field name="BANK_CODE" class="java.lang.String"/>
+	<field name="BANK_ACCT_CODE" class="java.lang.String"/>
+	<field name="BANK_ACCONT_NUM" class="java.lang.String"/>
+	<field name="IBAN_CHECK_DIGIT" class="java.lang.String"/>
+	<field name="CHECK_DIGIT" class="java.lang.String"/>
+	<field name="DEPOSIT_TYPE" class="java.lang.String"/>
+	<field name="BANK_ACCT_ADDRESS1" class="java.lang.String"/>
+	<field name="BANK_ACCT_ADDRESS2" class="java.lang.String"/>
+	<field name="BANK_ACCT_ADDRESS3" class="java.lang.String"/>
+	<field name="BANK_ACCT_ADDRESS4" class="java.lang.String"/>
+	<field name="BANK_ACCT_CITY" class="java.lang.String"/>
+	<field name="BANK_ACCT_STATE_CODE" class="java.lang.String"/>
+	<field name="BANK_ACCT_POSTAL" class="java.lang.String"/>
+	<field name="BANK_ACCT_COUNTRY_CODE" class="java.lang.String"/>
+	<field name="BANKS_BANK_DESC" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS1" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS2" class="java.lang.String"/>
+	<field name="BANKS_ADDRESS3" class="java.lang.String"/>
+	<field name="BANKS_CITY" class="java.lang.String"/>
+	<field name="BANKS_STATE_CODE" class="java.lang.String"/>
+	<field name="BANKS_POSTAL" class="java.lang.String"/>
+	<field name="BANKS_COUNTRY_CODE" class="java.lang.String"/>
+	<field name="BANKS_BANK_ID_NBR" class="java.lang.String"/>
+	<field name="BU_NAME" class="java.lang.String"/>
+	<field name="JOB_NUMBER" class="java.lang.String"/>
+	<field name="INVOICE" class="java.lang.String"/>
+	<field name="INVOICE_DATE" class="java.sql.Timestamp"/>
+	<field name="CUST_REF_NUM" class="java.lang.String"/>
+	<field name="INVOICE_LABEL5" class="java.lang.String"/>
+	<field name="INVOICE_VALUE5" class="java.lang.String"/>
+	<field name="INVOICE_DESCR" class="java.lang.String"/>
+	<field name="TRANSACT_CURRENCY_CD" class="java.lang.String"/>
+	<field name="INV_AMT" class="java.math.BigDecimal"/>
+	<field name="UID20" class="java.lang.String"/>
+	<field name="TAX_VAT_FLAG" class="java.lang.String"/>
+	<field name="BRANCH_NAME" class="java.lang.String"/>
+	<field name="INV_BU_NAME" class="java.lang.String"/>
+	<field name="LOGO_NAME" class="java.lang.String"/>
+
+
+		<group  name="invoice" isStartNewPage="true" minHeightToStartNewPage="500" >
+			<groupExpression><![CDATA[$F{INVOICE}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="48"  isSplitAllowed="false" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="565"
+						height="40"
+						key="subreport-2"
+						positionType="Float"
+						printWhenGroupChanges="invoice"
+						isPrintWhenDetailOverflows="true">
+						<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.equals( "F" ))]]></printWhenExpression>
+					</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "invoice", 
+                                new String[]{"Job_Number", "uid20", "Invoice", "dirName"},
+                                new Object[]{$F{JOB_NUMBER}, $F{UID20}, $F{INVOICE},$P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="40"
+						key="subreport-3"
+						positionType="Float"
+						printWhenGroupChanges="invoice"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean ($F{TAX_VAT_FLAG}.equals( "T" ))]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "invoice_tax", 
+                                new String[]{"Job_Number", "uid20", "Invoice", "dirName"},
+                                new Object[]{$F{JOB_NUMBER}, $F{UID20}, $F{INVOICE},$P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_tax.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="51"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="43"
+						key="subreport-1"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<subreportParameter  name="BuName">
+						<subreportParameterExpression><![CDATA[$F{CONSL_INV_BU_NAME}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="CustCode">
+						<subreportParameterExpression><![CDATA[$F{CUST_CODE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="ConsolInvoice">
+						<subreportParameterExpression><![CDATA[$F{CONSOL_INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "consol_invoice", 
+                                new String[]{"BuName", "CustCode", "ConsolInvoice", "dirName"},
+                                new Object[]{$F{CONSL_INV_BU_NAME}, $F{CUST_CODE}, $F{CONSOL_INVOICE}, $P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "consol_invoice.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="45"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="575"
+						height="45"
+						key="subreport-4"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<subreportParameter  name="Job_Number">
+						<subreportParameterExpression><![CDATA[$F{JOB_NUMBER}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="Invoice">
+						<subreportParameterExpression><![CDATA[$F{INVOICE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="dirName">
+						<subreportParameterExpression><![CDATA[$P{dirName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="uid20">
+						<subreportParameterExpression><![CDATA[$F{UID20}]]></subreportParameterExpression>
+					</subreportParameter>
+                    <subreportParameter  name="JdbcConnection">
+                        <subreportParameterExpression><![CDATA[$P{JdbcConnection}]]></subreportParameterExpression>
+                    </subreportParameter>
+                    <dataSourceExpression>
+                        <![CDATA[
+                            DataSourceManager.getReportDataSource(
+                                "invoice_nontax_footer", 
+                                new String[]{"Job_Number", "uid20", "Invoice", "dirName"},
+                                new Object[]{$F{JOB_NUMBER}, $F{UID20}, $F{INVOICE},$P{dirName}}, 
+                                $P{JdbcConnection}
+                            )
+                        ]]>
+                    </dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{dirName} + "invoice_nontax_footer.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

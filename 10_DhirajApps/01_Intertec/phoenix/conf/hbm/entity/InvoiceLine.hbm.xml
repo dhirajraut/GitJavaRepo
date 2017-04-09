@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="InvoiceLine" table="INVOICE_LINES">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="INVOICE_LINE_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">INVOICE_LINE_SEQ</param>
+      </generator>
+    </id>
+    <property name="prebillId" type="java.lang.Long">
+      <column name="PREBILL_ID" sql-type="NUMBER" />
+    </property>
+     <property name="buName" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" />
+    </property>
+    <property name="invoice" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=22) private</meta>
+      <column name="INVOICE" length="22" />
+    </property>
+    <property name="lineNumber" type="java.lang.Integer">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="LINE_NUMBER" length="5" sql-type="NUMBER" />
+    </property>
+    <property name="lineDescription" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3048) private</meta>
+      <column name="LINE_DESCRIPTION" length="3048" />
+    </property>
+    <property name="unitPrice" type="double">
+      <column name="UNIT_PRICE" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="splitPct" type="double">
+      <column name="SPLIT_PCT" sql-type="NUMBER(38,3)" />
+    </property>
+    <property name="discountPct" type="double">
+      <column name="DISCOUNT_PCT" sql-type="NUMBER(38,2)" />
+    </property>
+    <property name="netPrice" type="double">
+      <column name="NET_PRICE" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="currencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="CURRENCY_CD" length="3" />
+    </property>
+    <property name="primaryBranchCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta>
+      <column name="PRIMARY_BRANCH_CD" length="10" />
+    </property>
+    <property name="level0" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="LEVEL0" length="256" />
+    </property>
+    <property name="level1" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="LEVEL1" length="256" />
+    </property>
+    <property name="level2" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta>
+      <column name="LEVEL2" length="50" />
+    </property>
+    <property name="configuredInd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="CONFIGURED_IND" length="1" />
+    </property>
+    <property name="auditFlag" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="AUDIT_FLAG" length="1" />
+    </property>
+    <property name="productGroup" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=6) private</meta>
+      <column name="PRODUCT_GROUP" length="6" />
+    </property>
+    <property name="deptid" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=10) private</meta>
+      <column name="DEPTID" length="10" />
+    </property>
+    <property name="busStreamCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=35) private</meta>
+      <column name="BUS_STREAM_CODE" length="35" />
+    </property>
+    <property name="serviceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="SERVICE_TYPE" length="4" />
+    </property>
+    <property name="taxCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="TAX_CODE" length="8" />
+    </property>
+    <property name="vatCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="VAT_CODE" length="8" />
+    </property>
+    <property name="taxPct" type="java.lang.Double">
+      <column name="TAX_PCT" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="vatPct" type="java.lang.Double">
+      <column name="VAT_PCT" sql-type="NUMBER(38,4)" />
+    </property>
+    <property name="taxAmt" type="java.lang.Double">
+      <column name="TAX_AMT" sql-type="NUMBER(38,5)" />
+    </property>
+    <property name="vatAmt" type="java.lang.Double">
+      <column name="VAT_AMT" sql-type="NUMBER(38,5)" />
+    </property>
+    <property name="account" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="ACCOUNT" length="45" />
+    </property>
+    <property name="vesselSortNum" type="java.lang.Integer">
+      <column name="VESSEL_SORT_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="lotSortNum" type="java.lang.Integer">
+      <column name="LOT_SORT_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="chargeSortNum" type="java.lang.Integer">
+      <column name="CHARGE_SORT_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="uid20" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="UID20" length="20" />
+    </property>
+    <property name="rateType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="RATE_TYPE" length="20" />
+    </property>
+    <property name="rateMult" type="java.lang.Double">
+      <column name="RATE_MULT" sql-type="NUMBER(12,6)" />
+    </property>
+    <property name="rateDiv" type="java.lang.Double">
+      <column name="RATE_DIV" sql-type="NUMBER(12,6)" />
+    </property>
+    <property name="baseCurrencyCd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="BASE_CURRENCY_CD" length="3" />
+    </property>
+    <property name="baseUnitPrice" type="java.lang.Double">
+      <column name="BASE_UNIT_PRICE" sql-type="NUMBER(38,3)" />
+    </property>
+    <property name="baseNetPrice" type="java.lang.Double">
+      <column name="BASE_NET_PRICE" sql-type="NUMBER(38,3)" />
+    </property>
+    <property name="baseTaxAmt" type="java.lang.Double">
+      <column name="BASE_TAX_AMT" sql-type="NUMBER(38,3)" />
+    </property>
+    <property name="baseVatAmt" type="java.lang.Double">
+      <column name="BASE_VAT_AMT" sql-type="NUMBER(38,3)" />
+    </property>
+    <property name="taxArticleCode" type="string">
+      <column name="TAX_ARTICLE_CODE" length="10" />
+    </property>
+    <property name="comments" type="string">
+      <column name="COMMENTS"  sql-type="nvarchar2(1024)"/>
+    </property>    
+    <property name="quantity" type="java.lang.Double">
+      <column name="QUANTITY" sql-type="NUMBER(8, 2)" />
+    </property>
+    <many-to-one name="jobContractInvoice" class="JobContractInvoice">
+      <column name="JOB_CONTRACT_INVOICE_ID" index="INVOICE_LINES_index_0" />
+    </many-to-one>
+    <set name="invoiceLineSplits" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="INVOICE_LINE_ID" />
+      <one-to-many class="InvoiceLineSplit" />
+    </set>
+  </class>
+</hibernate-mapping>
+

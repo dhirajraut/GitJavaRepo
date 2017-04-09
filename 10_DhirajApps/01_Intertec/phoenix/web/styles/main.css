@@ -1,0 +1,403 @@
+BODY {
+  margin:0 1% 0 1%;
+  padding:0;
+  font: bold 11px/1.5em Verdana;
+  min-width: 800px;
+}
+
+h2 {
+  font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+  color: #000;
+  margin: 0px;
+  padding: 0px 0px 0px 15px;
+}
+
+img {
+  border: none;
+}
+
+.backgroundHelper {
+  border:1px solid #6B78A9;
+}
+
+BODY1 {
+  font-size: 11px;
+  font-family: Arial;
+  text-align: center; 
+  min-width: 800px;
+  vertical-align: middle;
+}
+
+TD {
+  font-size: 11px;
+  font-family: Arial;
+}
+
+TH {
+  font-size: 11px;
+  font-family: Arial;
+  border: 1px #000000 solid;
+  background-color: #c0c0c0;
+  font-weight: normal;
+}
+
+.blackBorder {
+  border: 1px #000000 solid;
+}
+
+.pageTitle {
+  font-size: 16px;
+  font-family: Arial;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  border: 1px #000000 solid;
+  background-color: #1C86C2;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-family: Arial;
+  border: 1px #000000 solid;
+  background-color: #707070;
+  color: white;
+  padding: 2px;
+}
+
+.sectionHeader {
+  font-size: 11px;
+  font-family: Arial;
+  font-weight: bold;
+  background-color: #1C86C2;
+  vertical-align: middle;
+  text-align: center;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.sectionFooter {
+  font-size: 11px;
+  font-family: Arial;
+  border: 1px #000000 solid;
+  background-color: #c5c5c5;
+  text-align: right;
+  color: white;
+  padding: 2px;
+}
+
+.addBox {
+  font-size: 11px;
+  font-family: Arial;
+  border: 1px #1C86C2 dashed;
+  color: #1C86C2;
+  padding: 1px;
+  
+}
+
+.addBoxTitle {
+  text-align: center;
+  font-style: italic;
+  font-size: 11px;
+  font-family: Arial;
+  border-bottom: 1px #1C86C2 dashed;
+  color: #1C86C2;
+}
+
+INPUT {
+  font-size: 11px;
+}
+
+SELECT {
+  font-size: 11px;
+}
+
+.setWidthSelect{
+  font-size: 11px;
+  width: 40px;
+}
+
+.redBorder {
+  border-style: solid;
+  border-color: red;
+  border-width: 1px;
+}
+
+A {
+  text-decoration: none;
+  color: white;
+}
+
+HR {
+  color: #1C86C2;
+}
+
+.header {
+  font-size: 16px;
+  font-family: Arial;
+  font-weight: bold;
+  background-color: #1C86C2;
+  vertical-align: middle;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.footer {
+  font-size: 10px;
+  font-family: Arial;
+  background-color: #1C86C2;
+  vertical-align: middle;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.blackBorder {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.btnav { 
+  background-color: #1C86C2;
+  border: 1px #000000 solid;
+  vertical-align: middle;
+  text-align: center;
+  color: white;
+  font-size: 11px;
+  font-family: Arial;
+}
+
+.textnav {
+  font-size: 11px;
+  font-family: Arial;
+  vertical-align: middle;
+  color: white;
+}
+
+.boxTitle {
+  font-size: 11px;
+  font-family: Arial;
+  font-weight: bold;
+  text-align: center;
+}
+
+.headerBG {
+  background-color: #c0c0c0;
+}
+
+
+#wrapper {
+  background-color: #fff;
+  width: 98%; 
+  margin: 0 auto; 
+  text-align: left; 
+  vertical-align: top;
+}
+
+#header {
+  background: #1C86C2 url(../images/logo.gif) no-repeat left center;
+  padding: 20px;
+}
+
+#header ul { margin: 0; padding: 0; list-style: none; float: right;}
+#header ul li { float: left; }
+
+.header {
+  background: #1C86C2 url(../images/logo.gif) no-repeat left center;
+  padding: 20px;
+}
+.header ul { margin: 0; padding: 0; list-style: none; float: right;}
+.header ul li { float: left; }
+
+.menu {
+  background-color:#eee;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  align: left;
+  clear:both;
+}
+
+.mainNav {
+  background-color:#eee;
+  width: 200px; 
+  /* float: left; */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  align: left;
+  clear:both;
+}
+
+.mainNav * * {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.footer {
+  background-color: #1C86C2;
+  vertical-align: middle;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  text-align: center;
+}
+
+.content { 
+  text-align: center;
+  padding: 20px;
+  clear:both;
+  /*float: right; */
+}
+
+.content1 { 
+  text-align: center;
+}
+
+#mainNav {
+  list-style: none;
+  background-color:#eee;
+  width: 200px; 
+  /* float: left; */
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#mainNav * {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#mainNav * * {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+#footer {
+  background-color: #1C86C2;
+  vertical-align: middle;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  clear: both; 
+  text-align: center;
+}
+
+#content { 
+  text-align: center;
+  /*float: right; */
+}
+
+#content1 { 
+  text-align: center;
+  float: center; 
+}
+
+#content * {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#content * * {
+  padding-right: 0;
+}
+
+.error {color:#ee0000;}
+
+.form {background:#f0f0f0;; border:1px #cccccc solid; margin-top:20px; margin-bottom:10px; padding:16px; padding-left:16px; padding-right:16px;}
+
+ .tab {
+    float:left;
+    width:100%;
+    font-size:100%;
+    line-height:normal;
+    border-bottom:1px solid #6B78A9;
+  }
+
+  ul.tab_nav {
+    margin:0;
+    padding:10px 10px 0 10px;
+    list-style:none;
+  }
+  
+  ul.tab_nav li {
+    display:inline;
+    margin:0;
+    padding:0;
+  }
+
+  ul.tab_nav a {
+    float:left;
+    background:url("../images/tableft4.gif") no-repeat left top;
+    margin:0;
+    padding:0 0 0 7px;
+    text-decoration:none;
+  }
+
+  ul.tab_nav a span {
+    float:left;
+    display:block;
+    background:url("../images/tabright4.gif") no-repeat right top;
+    padding:5px 15px 4px 6px;
+    color:#6B78A9;
+  }
+    
+  /* Commented Backslash Hack hides rule from IE5-Mac \*/
+  ul.tab_nav a span {float:none;}
+  
+  /* End IE5-Mac hack */
+  ul.tab_nav a:hover span {
+    color:#6B78A9;
+  }
+  
+  ul.tab_nav a:hover {
+    background-position:0% -42px;
+  }
+  ul.tab_nav a:hover span {
+    background-position:100% -42px;
+  }
+
+  ul.tab_nav li.tab_on a {
+    background-position:0% -42px;
+  }
+  ul.tab_nav li.tab_on a span {
+    background-position:100% -42px;
+    font-size: 110%;
+    font-weight: bold;
+  }
+      
+  ul.tab_nav_secondary {
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 0 10px;
+    list-style:none;
+  }
+  
+  ul.tab_nav_secondary li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", sans-serif;
+  }
+
+  ul.tab_nav_secondary a {
+    float: left;
+    display: block;
+    margin: 0 1px 0 0;
+    padding: 4px 8px;
+    color:#6B78A9;
+  }
+
+  ul.tab_nav_secondary li.tab_on a {
+    font-size: 110%;
+    font-weight: bold;
+  }
+
+</style>

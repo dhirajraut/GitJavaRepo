@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory name="securityagent">
+    <!-- Database connection settings -->
+    <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+
+    <property name="connection.url">jdbc:oracle:thin:@172.19.3.40:1521:PHXDEV1</property>
+    <property name="connection.username">phoenix</property>
+    <property name="connection.password">PHXDEV1</property>
+
+    <!--  
+    <property name="connection.url">jdbc:oracle:thin:@172.19.90.32:1521:DEV</property>
+    <property name="connection.username">PHOENIX1</property>
+    <property name="connection.password">PHOENIX1</property>
+    -->
+
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">1</property>
+
+    <!-- SQL dialect -->
+    <!--  <property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>  -->
+    <property name="dialect">org.hibernate.dialect.OracleDialect</property>
+
+    <!-- Enable Hibernate's automatic session context management -->
+    <property name="current_session_context_class">managed</property>
+
+    <!-- Disable the second-level cache  -->
+    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+    <!-- Echo all executed SQL to stdout -->
+    <property name="show_sql">false</property>
+
+    <!-- Drop and re-create the database schema on startup -->
+    <property name="hbm2ddl.auto">none</property>
+
+    <!-- Disable automatic session close after transaction commit / rollback -->
+    <property name="transaction.auto_close_session">false</property>
+
+  </session-factory>
+</hibernate-configuration>
+

@@ -1,0 +1,36 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.Login;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
+
+public class LoginController extends SimpleFormController {
+
+/*	protected ModelAndView onSubmit(Object command) throws Exception {
+		// TODO Auto-generated method stub
+		Login login = (Login) command;
+		if(login.getName().equals("user")&&(login.getPassword().equals("pass")) )
+			return new ModelAndView(getSuccessView());
+		else
+			return new ModelAndView(getFormView());
+	
+		System.out.println(login.getName()+"  "+login.getPassword());
+		return new ModelAndView(getSuccessView());
+		}*/
+
+	protected ModelAndView onSubmit(HttpServletRequest request,
+			HttpServletResponse response, Object command, BindException errors)
+			throws Exception {
+		System.out.println(request.getParameter("name")+"  "+ request.getParameter("password"));
+		// TODO Auto-generated method stub
+		return new ModelAndView(getSuccessView());
+	}
+
+
+}

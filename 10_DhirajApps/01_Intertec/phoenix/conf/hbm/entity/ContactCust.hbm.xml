@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ContactCust" table="CONTACT_CUSTS">
+    <composite-id name="contactCustId" class="ContactCustId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contactId" type="long">
+        <column name="CONTACT_ID" sql-type="NUMBER" />
+      </key-property>
+      <key-property name="custCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+      <key-property name="locationNumber" type="java.lang.Integer">
+        <column name="LOCATION_NUMBER" sql-type="NUMBER" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="customer" class="Customer" insert="false" update="false">
+      <column name="CUST_CODE" index="CONTACT_CUSTS_index_0" />
+    </many-to-one>
+    <many-to-one name="contact" class="Contact" insert="false" update="false">
+      <column name="CONTACT_ID" index="CONTACT_CUSTS_index_1" />
+    </many-to-one>
+    <many-to-one name="custAddrSeq" class="CustAddrSeq" insert="false" update="false">
+      <column name="LOCATION_NUMBER" index="CONTACT_CUSTS_index_2" />
+      <column name="CUST_CODE" index="CONTACT_CUSTS_index_2" />
+    </many-to-one>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+	<property name="contactSeqNum" type="java.lang.Integer">
+      <column name="CONTACT_SEQ_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="billTo" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="BILL_TO" length="1" />
+    </property>
+    <property name="soldTo" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="SOLD_TO" length="1" />
+    </property>
+    <property name="shipTo" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=1) private</meta>
+      <column name="SHIP_TO" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

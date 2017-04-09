@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="emppackage">
+
+	<class name="Employee" table="EMPLOYEE_ASSOCIATION2">
+		<id name="id" column="ID">
+			<generator class="increment"/>
+		</id>
+		<property name="name" column="NAME" not-null="true"/>
+        <property name="salary" column="SALARY" not-null="true"/>
+        
+        <component name="address">
+	        <property name="street" column="STREET" not-null="true"/>
+	        <property name="city" column="CITY" not-null="true"/>
+	        <property name="pinCode" column="PIN" not-null="true"/>
+        </component>
+        <many-to-one name="department" column="DEPARTMENT" fetch="select" />
+	</class>
+
+</hibernate-mapping>

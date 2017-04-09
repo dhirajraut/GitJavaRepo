@@ -1,0 +1,22 @@
+package com.galaxy.base.logger;
+
+import org.apache.log4j.Logger;
+
+//import com.galaxy.login.controllers.LoginController;
+
+public class GalaxyLogger {
+
+	private static final Logger log = Logger.getLogger("GalaxyLogger");
+	
+	public static void before() {
+		log.info("Before");
+	}
+	
+	public static void after() {
+		log.info("after");
+	}
+	
+	public static void throwsException() {
+		log.info("exception");
+	}	
+}

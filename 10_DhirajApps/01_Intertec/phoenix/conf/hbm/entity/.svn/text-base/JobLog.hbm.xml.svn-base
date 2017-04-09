@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobLog" table="JOB_LOG">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_LOG_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_LOG_SEQ</param>
+      </generator>
+    </id>
+    <property name="coordinator" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="COORDINATOR" length="50" />
+    </property>
+    <property name="inspector" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=50) private</meta>
+      <column name="INSPECTOR" length="50" />
+    </property>
+    <property name="dispatchStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="DISPATCH_STATUS" length="4" />
+    </property>
+    <property name="dispatchTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="DISPATCH_TZ" length="6" />
+    </property>
+    <property name="inspectorNotifyDt" type="date">
+      <column name="INSPECTOR_NOTIFY_DT" sql-type="date" />
+    </property>
+    <property name="inspectorNotifyTime" type="timestamp">
+      <column name="INSPECTOR_NOTIFY_TIME" sql-type="date" />
+    </property>
+    <property name="inspectorArriveDt" type="date">
+      <column name="INSPECTOR_ARRIVE_DT" sql-type="date" />
+    </property>
+    <property name="inspectorArriveTime" type="timestamp">
+      <column name="INSPECTOR_ARRIVE_TIME" sql-type="date" />
+    </property>
+    <property name="arriveDt" type="date">
+      <column name="ARRIVE_DT" sql-type="date" />
+    </property>
+    <property name="arriveTime" type="timestamp">
+      <column name="ARRIVE_TIME" sql-type="date" />
+    </property>
+    <property name="dockDt" type="date">
+      <column name="DOCK_DT" sql-type="date" />
+    </property>
+    <property name="dockTime" type="timestamp">
+      <column name="DOCK_TIME" sql-type="date" />
+    </property>
+    <property name="hoseOnDt" type="date">
+      <column name="HOSE_ON_DT" sql-type="date" />
+    </property>
+    <property name="hoseOnTime" type="timestamp">
+      <column name="HOSE_ON_TIME" sql-type="date" />
+    </property>
+    <property name="estStartDt" type="date">
+      <column name="EST_START_DT" sql-type="date" />
+    </property>
+    <property name="estStartTime" type="timestamp">
+      <column name="EST_START_TIME" sql-type="date" />
+    </property>
+    <property name="commenceDt" type="date">
+      <column name="COMMENCE_DT" sql-type="date" />
+    </property>
+    <property name="commenceTime" type="timestamp">
+      <column name="COMMENCE_TIME" sql-type="date" />
+    </property>
+    <property name="delayDt" type="date">
+      <column name="DELAY_DT" sql-type="date" />
+    </property>
+    <property name="delayTime" type="timestamp">
+      <column name="DELAY_TIME" sql-type="date" />
+    </property>
+    <property name="delayEndDt" type="date">
+      <column name="DELAY_END_DT" sql-type="date" />
+    </property>
+    <property name="delayEndTime" type="timestamp">
+      <column name="DELAY_END_TIME" sql-type="date" />
+    </property>
+    <property name="estCompleteDt" type="date">
+      <column name="EST_COMPLETE_DT" sql-type="date" />
+    </property>
+    <property name="estCompleteTime" type="timestamp">
+      <column name="EST_COMPLETE_TIME" sql-type="date" />
+    </property>
+    <property name="completeDt" type="date">
+      <column name="COMPLETE_DT" sql-type="date" />
+    </property>
+    <property name="completeTime" type="timestamp">
+      <column name="COMPLETE_TIME" sql-type="date" />
+    </property>
+    <property name="hoseOffDt" type="date">
+      <column name="HOSEE_OFF_DT" sql-type="date" />
+    </property>
+    <property name="hoseOffTime" type="timestamp">
+      <column name="HOSE_OFF_TIME" sql-type="date" />
+    </property>
+    <property name="releaseDt" type="date">
+      <column name="RELEASE_DT" sql-type="date" />
+    </property>
+    <property name="releaseTime" type="timestamp">
+      <column name="RELEASE_TIME" sql-type="date" />
+    </property>
+    <property name="summaryDt" type="date">
+      <column name="SUMMARY_DT" sql-type="date" />
+    </property>
+    <property name="processTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="PROCESS_TZ" length="6" />
+    </property>
+    <property name="sampleReceiveDt" type="date">
+      <column name="SAMPLE_RECEIVE_DT" sql-type="date" />
+    </property>
+    <property name="sampleReceiveTime" type="timestamp">
+      <column name="SAMPLE_RECEIVE_TIME" sql-type="date" />
+    </property>
+    <property name="prelimReportDt" type="date">
+      <column name="PRELIM_REPORT_DT" sql-type="date" />
+    </property>
+    <property name="prelimReportTime" type="timestamp">
+      <column name="PRELIM_REPORT_TIME" sql-type="date" />
+    </property>
+    <property name="sampleShipDt" type="date">
+      <column name="SAMPLE_SHIP_DT" sql-type="date" />
+    </property>
+    <property name="sampleShipTime" type="timestamp">
+      <column name="SAMPLE_SHIP_TIME" sql-type="date" />
+    </property>
+    <property name="finalReportDt" type="date">
+      <column name="FINAL_REPORT_DT" sql-type="date" />
+    </property>
+    <property name="finalReportTime" type="timestamp">
+      <column name="FINAL_REPORT_TIME" sql-type="date" />
+    </property>
+    <property name="distributeDt" type="date">
+      <column name="DISTRIBUTE_DT" sql-type="date" />
+    </property>
+    <property name="distributeTime" type="timestamp">
+      <column name="DISTRIBUTE_TIME" sql-type="date" />
+    </property>
+    <property name="uid20" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="UID20" length="20" />
+    </property>
+    <many-to-one name="jobOrder" column="JOB_NUMBER" class="JobOrder" unique-key="JOB_LOG_UK" index="JOB_LOG_index_0" />
+    <many-to-one name="jobContract" column="JOB_CONTRACT_ID" class="JobContract" unique-key="JOB_LOG_UK" index="JOB_LOG_index_1" />
+  </class>
+</hibernate-mapping>
+

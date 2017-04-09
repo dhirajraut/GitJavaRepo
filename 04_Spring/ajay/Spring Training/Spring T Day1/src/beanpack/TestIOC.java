@@ -1,0 +1,58 @@
+package beanpack;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
+
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.FileSystemResource;
+
+public class TestIOC {
+
+	public static void main(String[] args) {
+		BeanFactory factory=new XmlBeanFactory(new FileSystemResource("src/services.xml"));
+		Customer cObj=(Customer) factory.getBean("custObj");
+		System.out.println(cObj.getCustId());
+		System.out.println(cObj.getCustName());
+		Customer cObj2=(Customer) factory.getBean("custObj2");
+		System.out.println(cObj2.getCustId());
+		System.out.println(cObj2.getCustName());
+		System.out.println(cObj2.getAdd().getCity());
+		Customer cObj3=(Customer) factory.getBean("custObj3");
+		System.out.println(cObj3.getCustId());
+		System.out.println(cObj3.getCustName());
+		System.out.println(cObj3.getAdd().getCity());
+		Customer cObj4=(Customer) factory.getBean("custObj4");
+		System.out.println(cObj4.getCustId());
+		System.out.println(cObj4.getCustName());
+		
+		Customer cObj5=(Customer) factory.getBean("custObj5");
+		System.out.println(cObj5.getCustId());
+		System.out.println(cObj5.getCustName());
+		Current act=(Current) cObj5.getAccts().get(0);
+		System.out.println(act.getAcctId());
+		System.out.println(act.getOverDraft());
+
+	   Savings act1=(Savings) cObj5.getAccts().get(1);
+		
+		System.out.println(act1.getAcctId());
+		System.out.println(act1.getMinBal());
+		
+		TestCollections tObj1=(TestCollections) factory.getBean("testCollection");
+		HashMap h1= tObj1.getMapObj();
+		System.out.println("The map value"+h1.get("First"));
+		Set s1= tObj1.getSetObj();
+		for(Iterator it=s1.iterator();it.hasNext();){
+			String object=(String)it.next();
+			System.out.println(object);
+			
+		}
+		
+		
+	}
+	
+}

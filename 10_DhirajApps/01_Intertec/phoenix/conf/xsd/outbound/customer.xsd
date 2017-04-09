@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by ESB (ESB) -->
+<xs:schema xmlns="http://www.intertek.com/ESB/Customer" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/Customer" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishCustomerRequest" type="CustomerType">
+		<xs:annotation>
+			<xs:documentation>Publish Customer ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="CustomerType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="CustomerCode" type="xs:string"/>
+			<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="StatusDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="AlternateName" type="xs:string" minOccurs="0"/>
+			<xs:element name="SinceDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="AddDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="Industry" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyCd" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerType" type="xs:string" minOccurs="0"/>
+			<xs:element name="LocationType" type="xs:string" minOccurs="0"/>
+			<xs:element name="ParentCustomerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAnalystName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Collector" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditApplication" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditHold" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="CreditLimit" type="xs:double" minOccurs="0"/>
+			<xs:element name="InterUnit" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="InterUnitBusinessUnitName" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterUnitBusinessUnit" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterUnitPending" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="AccountOwner" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentType" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentTerms" type="xs:string" minOccurs="0"/>
+			<xs:element name="PrimaryIndustry" type="xs:string" minOccurs="0"/>
+			<xs:element name="Contact" type="xs:string" minOccurs="0"/>
+			<xs:element name="Vip" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerStatusComment" type="xs:string" minOccurs="0"/>
+			<xs:element name="DunsNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="InternalOriginDivision" type="xs:string" minOccurs="0"/>
+			<xs:element name="InternalOriginBusStrm" type="xs:string" minOccurs="0"/>
+			<xs:element name="InternalOrigin" type="xs:string" minOccurs="0"/>
+			<xs:element name="InvoiceType" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastServiceDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="LastServiceLocation" type="xs:string" minOccurs="0"/>
+			<xs:element name="LegalEntitySubsidiary" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="Referral" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ReferralParentCust" type="xs:string" minOccurs="0"/>
+			<xs:element name="ReferralChildCust" type="xs:string" minOccurs="0"/>
+			<xs:element name="ReferralNotes" type="xs:string" minOccurs="0"/>
+			<xs:element name="SecondaryIndustry" type="xs:string" minOccurs="0"/>
+			<xs:element name="TaxpayerIdNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustType" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerAddressSequence" type="CustomerAddressSequenceType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAddressSequenceType">
+		<xs:sequence>
+			<xs:element name="CustomerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="AddressSequenceNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="AddressDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="CorrespondenceAddress" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="Location" type="xs:int" minOccurs="0"/>
+			<xs:element name="ShipTo" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="BillTo" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="SoldTo" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="BillToPrimary" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="SoldToPrimary" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="CustomerAddress" type="CustomerAddressType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAddressType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string"/>
+			<xs:element name="CustomerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="LocationNumber" type="xs:int" minOccurs="0"/>
+			<xs:element name="Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="EffectiveDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="TaxCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address" type="AddressType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AddressType">
+		<xs:sequence>
+			<xs:element name="Address1" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address2" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address3" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address4" type="xs:string" minOccurs="0"/>
+			<xs:element name="City" type="xs:string" minOccurs="0"/>
+			<xs:element name="Postal" type="xs:string" minOccurs="0"/>
+			<xs:element name="State" type="xs:string" minOccurs="0"/>
+			<xs:element name="Country" type="xs:string" minOccurs="0"/>
+			<xs:element name="County" type="xs:string" minOccurs="0"/>
+			<xs:element name="InCityLimit" type="xs:boolean" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

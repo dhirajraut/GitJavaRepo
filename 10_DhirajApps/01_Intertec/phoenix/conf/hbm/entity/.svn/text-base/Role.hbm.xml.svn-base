@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Role" table="ROLES">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="ROLE_NAME" length="128" />
+    </id>
+    <property name="roleDesc" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=25) private</meta>
+      <column name="ROLE_DESC" length="25" />
+    </property>
+    <set name="users" table="USER_ROLE_MAP" cascade="save-update" lazy="true">
+      <key column="ROLE_NAME" />
+      <many-to-many class="User" column="LOGIN_NAME" />
+    </set>
+    <set name="permissions" table="ROLE_PERM_MAP" cascade="save-update" lazy="true">
+      <key column="ROLE_NAME" />
+      <many-to-many class="Permission" column="PERM_NAME" />
+    </set>
+    <set name="solutions" table="SOLUTION_ROLE_MAP" cascade="save-update" lazy="true">
+      <key column="ROLE_NAME" />
+      <many-to-many class="Solution" column="SOLUTION_NAME" />
+    </set>
+  </class>
+</hibernate-mapping>
+

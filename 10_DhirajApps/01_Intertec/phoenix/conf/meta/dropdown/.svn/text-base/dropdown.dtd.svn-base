@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT dropdowns ( dropdown* ) >
+
+<!ELEMENT dropdown ( field* ) >
+<!ATTLIST dropdown id CDATA #REQUIRED >
+<!ATTLIST dropdown class CDATA #IMPLIED >
+
+<!ELEMENT field ( #PCDATA ) >
+<!ATTLIST field name CDATA #REQUIRED >
+<!ATTLIST field value CDATA #REQUIRED >

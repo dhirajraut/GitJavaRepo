@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application layout="absolute" height="100%" width="100%"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:views="com.galaxy.forum.views.*"
+	creationComplete="createApplication();">
+
+	<mx:Style source="../styles/carbon/carbon.css" />
+	<mx:Script source="main.as" />	
+
+	<mx:VBox  height="100%" width="75%" horizontalCenter="0">
+		<!-- Application Header. -->
+		<views:ApplicationHeader height="10%" width="100%" verticalAlign="top"/>
+
+		<!-- Application MenuBar. Initially Invisible. -->
+		<views:ForumMenuBar id="menubar" height="5%" width="100%" visible="false"/>
+		
+		<!-- Application Body. -->
+		<views:CurrentView id="currentView"/>
+		
+		<!-- Application Footer. -->
+		<views:ApplicationFooter height="20%" width="100%" verticalAlign="bottom"/>
+	</mx:VBox>
+</mx:Application>

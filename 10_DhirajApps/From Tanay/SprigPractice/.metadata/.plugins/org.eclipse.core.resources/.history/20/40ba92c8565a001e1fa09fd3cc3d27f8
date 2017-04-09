@@ -1,0 +1,15 @@
+package com;
+
+public class StudentMain {
+void displayData(StudentData sd)
+{
+	System.out.println("Name:-" + sd.getFName()+" "+sd.getLName() );
+	System.out.println("Age:-" + sd.getAge() );
+	System.out.println("Address:- " + sd.getAdd());
+}
+	public static void main(String[] args) {
+		
+
+	}
+
+}

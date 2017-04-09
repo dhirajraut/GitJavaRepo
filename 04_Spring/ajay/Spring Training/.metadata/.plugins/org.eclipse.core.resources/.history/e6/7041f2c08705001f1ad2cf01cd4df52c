@@ -1,0 +1,8 @@
+package beanpack;
+
+public class TestIOC {
+
+	public static void main(String[] args) {
+		
+	}
+}

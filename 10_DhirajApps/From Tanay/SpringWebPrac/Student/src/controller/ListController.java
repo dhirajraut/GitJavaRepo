@@ -1,0 +1,42 @@
+package controller;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.StudentList;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import service.ListService;
+
+
+
+public class ListController extends MultiActionController{
+	ListService listService;
+	
+	public ModelAndView showList(HttpServletRequest req,HttpServletResponse res)
+	{
+		System.out.println("starting show list");
+		ArrayList stuList=new ArrayList();
+		try{
+			stuList = listService.showList();	
+		}
+		catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("List aa gayi hai....");
+	return new ModelAndView("student_list","studentList",stuList);
+	}
+
+	public void setListService(ListService listService) {
+		this.listService = listService;
+	}
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="VesselType" table="PS_ITSC_VESSL_TYPE">
+    <composite-id name="vesselTypeId" class="VesselTypeId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="vesselSet" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="ITS_VESSEL_SET" length="45" />
+      </key-property>
+      <key-property name="vesselType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="VESSEL_TYPE" length="45" />
+      </key-property>
+      <key-property name="beginDate" type="date">
+        <column name="BEGIN_DATE" sql-type="date" />
+      </key-property>
+    </composite-id>
+    <property name="rbKey" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=450) private</meta>
+      <column name="RB_KEY" length="450" />
+    </property>
+    <property name="rbValue" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=450) private</meta>
+      <column name="RB_VALUE" length="450" />
+    </property>
+    <property name="vesselFlag" type="java.lang.Integer">
+      <column name="VESSEL_FLAG" sql-type="NUMBER" />
+    </property>
+    <property name="endDate" type="date">
+      <column name="END_DATE" sql-type="date" />
+    </property>
+  </class>
+</hibernate-mapping>
+

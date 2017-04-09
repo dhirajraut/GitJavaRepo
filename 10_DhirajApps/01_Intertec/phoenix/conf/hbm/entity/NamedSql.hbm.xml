@@ -1,0 +1,520 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <sql-query name="getServiceRate_FN" callable="true">
+    <return alias="serviceRate" class="com.intertek.entity.ServiceRate">
+      <return-property name="serviceRateId"> 
+        <return-column name="CFG_CONTRACT_ID"/>
+        <return-column name="EXPRESSION_ID"/>
+        <return-column name="CFG_LOCATION"/>
+        <return-column name="GROUP_ID"/>
+        <return-column name="VESSEL_TYPE"/>
+        <return-column name="BEGIN_DATE"/>
+        <return-column name="WITH_INSPECTION"/>
+        <return-column name="ITS_SERVICE_LEVEL"/>
+        <return-column name="INT_DATA_2"/>
+        <return-column name="FLOAT_DATA_2"/>
+      </return-property>
+      <return-property name="rateId" column="RATE_ID"/>
+      <return-property name="currencyCD" column="CURRENCY_CD"/>     
+      <return-property name="basePrice" column="CFG_BASE_PRICE"/>
+      <return-property name="unitPrice" column="CFG_UNIT_PRICE"/>
+      <return-property name="minimumPrice" column="MINIMUM_PRICE"/>
+      <return-property name="maximumPrice" column="MAXIMUM_PRICE"/>
+      <return-property name="unitsIncluded" column="UNITS_INCLUDED"/>
+      <return-property name="intData0" column="INT_DATA_0"/>
+      <return-property name="intData1" column="INT_DATA_1"/>
+      <return-property name="intData3" column="INT_DATA_3"/>
+      <return-property name="intData4" column="INT_DATA_4"/>
+      <return-property name="floatData0" column="FLOAT_DATA_0"/>
+      <return-property name="floatData1" column="FLOAT_DATA_1"/>
+      <return-property name="floatData3" column="FLOAT_DATA_3"/>
+      <return-property name="floatData4" column="FLOAT_DATA_4"/>
+      <return-property name="contractRef" column="CONTRACT_REF"/>
+      <return-property name="endDate" column="END_DATE"/>
+    </return>
+    {? = call Ps_Itsc_Service_Rate_Pkg.Itsc_Service_Rate_Fn(?, ?, ?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getControlRBs_FN" callable="true">
+    <return alias="controlRb" class="com.intertek.entity.Control">
+    </return>
+    {? = call Ps_Itsc_Control_Rb_Pkg.ITSC_CONTROL_RB_FN(?, ?, ?, ?, ?) }
+  </sql-query>  
+  
+  <sql-query name="getContractExpressions_FN" callable="true">
+    <return alias="contractExpression" class="com.intertek.entity.ContractExpression">
+    </return>
+    {? = call Ps_Itsc_Contr_Expn_Pkg.ITSC_CONTR_EXPN_FN(?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getInspectRate_FN" callable="true">
+    <return alias="inspectionRate" class="com.intertek.entity.InspectionRate">
+    </return>
+    {? = call Ps_Itsc_Inspect_Rate_Pkg.ITSC_INSPECT_RATE_FN(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getProductGroup_FN" callable="true">
+    <return alias="productGroup" class="com.intertek.entity.ProductGroup">
+    </return>
+    {? = call Ps_Itsc_Product_Grp_Pkg.ITSC_PRODUCT_GRP_FN(?, ?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getServices_FN" callable="true">
+    <return alias="service" class="com.intertek.entity.Service">
+    </return>
+    {? = call Ps_Itsc_Service_Pkg.ITSC_SERVICE_FN(?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getSlate_FN" callable="true">
+    {? = call Ps_Itsc_Slate_Search_Pkg.ITSC_SLATE_SEARCH_FN(?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getSlatePrice_FN" callable="true">
+    <return alias="slatePrice" class="com.intertek.entity.SlatePrice" />
+    {? = call Ps_Itsc_Slate_Price_Pkg.Itsc_Slate_Price_Fn(?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getTest_FN" callable="true">
+    {? = call Ps_Itsc_Test_Search_Pkg.ITSC_TEST_SEARCH_FN(?, ?, ?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getTestPrice_FN" callable="true">
+    <return alias="testPrice" class="com.intertek.entity.TestPrice" />
+    {? = call Ps_Itsc_Test_Price_Pkg.Itsc_Test_Price_Fn(?, ?, ?, ?, ?, ?) }
+  </sql-query>  
+
+  <sql-query name="getVesselType_FN" callable="true">
+    <return alias="vesselType" class="com.intertek.entity.VesselType">
+    </return>
+    {? = call Ps_Itsc_Vessel_Type_Pkg.ITSC_VESSEL_TYPE_FN(?, ?, ?, ?, ?, ?) }
+  </sql-query>   
+
+  <sql-query name="getInspectionRate_FN" callable="true">
+    <return alias="vesselType" class="com.intertek.entity.InspectionRate">
+    </return>
+    {? = call Ps_Itsc_Inspect_Rate_Pkg.ITSC_INSPECT_RATE_FN(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }
+  </sql-query>   
+
+
+
+  <sql-query name="getCustomersForLims">
+    <![CDATA[
+      SELECT c.CUST_CODE, c.NAME, ca.country, ca.ADDRESS1, ca.ADDRESS2, ca.ADDRESS3, ca.ADDRESS4, ca.CITY, ca.STATE, ca.POSTAL, ca.PHONE_NUMBER, c.STATUS_DATE
+      FROM CUSTOMERS c, CUST_ADDRESSES ca
+      WHERE c.PRIMARY_BILL_ADDR = ca.LOCATION_NUMBER
+            AND c.CUST_CODE = ca.CUST_CODE
+            AND ca.EFF_STATUS = 'A'
+            AND c.UPDATE_LIMS_FLAG = 'NEW'
+            AND ca.EFF_DATE = (SELECT MAX(cae.EFF_DATE) FROM CUST_ADDRESSES cae
+                               WHERE cae.CUST_CODE = ca.CUST_CODE
+                               AND cae.LOCATION_NUMBER = ca.LOCATION_NUMBER
+                               AND cae.EFF_STATUS = 'A'
+                               AND cae.EFF_DATE <= SYSDATE)
+    ]]>
+  </sql-query>  
+  
+  <sql-query name="getContactsForLims">
+    <![CDATA[
+      SELECT c.CONTACT_ID, cc.CUST_CODE, c.FIN_CONTACT_ID, 
+      c.FIRST_NAME, c.LAST_NAME, c.WORK_PHONE, c.WORK_EMAIL,
+      ca.ADDRESS1, ca.ADDRESS2, ca.ADDRESS3, ca.ADDRESS4, 
+      ca.CITY, ca.COUNTRY, ca.STATE, ca.POSTAL  
+      FROM CONTACT_CUSTS cc, CONTACTS c, CUST_ADDRESSES ca 
+      WHERE cc.CONTACT_ID = c.CONTACT_ID
+      AND cc.CUST_CODE = ca.CUST_CODE
+      AND cc.LOCATION_NUMBER = ca.LOCATION_NUMBER
+      AND c.UPDATE_LIMS_FLAG = 'NEW'
+      AND ca.EFF_DATE = (SELECT MAX(cae.EFF_DATE) FROM CUST_ADDRESSES cae
+                         WHERE cae.CUST_CODE = ca.CUST_CODE
+                         AND cae.LOCATION_NUMBER = ca.LOCATION_NUMBER
+                         AND cae.EFF_STATUS = 'A'
+                       AND cae.EFF_DATE <= SYSDATE)
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getCurrencyTransByCurrency">
+    <![CDATA[
+     SELECT * FROM (SELECT DISTINCT cr.TO_CUR, max(cr.RATE_MULT) as RATE_MULT, max(cr.RATE_DIV) as RATE_DIV FROM ( 
+       SELECT cr0.FROM_CUR, cr0.TO_CUR, MAX(cr0.EFFDT) AS maxDate 
+       FROM PS_RT_RATE_TBL cr0 
+       WHERE cr0.EFFDT <= ? AND cr0.FROM_CUR = ?
+       GROUP BY cr0.FROM_CUR, cr0.TO_CUR
+       ) cr1 inner join PS_RT_RATE_TBL cr
+       ON cr1.FROM_CUR = cr.FROM_CUR 
+         AND cr1.TO_CUR = cr.TO_CUR 
+         AND cr1.maxDate = cr.EFFDT 
+        GROUP BY cr.TO_CUR  ORDER BY cr.TO_CUR )
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getZoneIdsForContract">
+    <![CDATA[
+      SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_BRNCH_LOC 
+      WHERE CFG_CONTRACT_ID = ?
+      order by CFG_LOCATION
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookZoneIds">
+    <![CDATA[
+      SELECT DISTINCT CFG_LOCATION FROM (
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_LOC_DSCNT 
+          WHERE (CFG_CONTRACT_ID IN (SELECT PRICEBOOK_ID FROM PS_ITSC_PBOOK)) 
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_BRNCH_LOC 
+          WHERE (CFG_CONTRACT_ID IN (SELECT PRICEBOOK_ID FROM PS_ITSC_PBOOK)) 
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_PORT_LOC 
+          WHERE (CFG_CONTRACT_ID IN (SELECT PRICEBOOK_ID FROM PS_ITSC_PBOOK)) 
+      ) ORDER BY CFG_LOCATION
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookZoneIdsForPriceBookId">
+    <![CDATA[
+      SELECT DISTINCT CFG_LOCATION FROM (
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_LOC_DSCNT 
+          WHERE CFG_CONTRACT_ID = ?
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_BRNCH_LOC 
+          WHERE CFG_CONTRACT_ID = ?
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_PORT_LOC 
+          WHERE CFG_CONTRACT_ID = ?
+      ) ORDER BY CFG_LOCATION
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getActiveZoneIdsForContractPriceBookIdWithDate">
+    <![CDATA[
+      SELECT DISTINCT CFG_LOCATION FROM (
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_LOC_DSCNT 
+          WHERE CFG_CONTRACT_ID in (?, ?) AND ? between BEGIN_DATE and END_DATE
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_BRNCH_LOC 
+          WHERE CFG_CONTRACT_ID in (?, ?) AND ? between BEGIN_DATE and END_DATE
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_PORT_LOC 
+          WHERE CFG_CONTRACT_ID in (?, ?) AND ? between BEGIN_DATE and END_DATE
+      ) ORDER BY CFG_LOCATION
+    ]]>
+  </sql-query>  
+  
+  <sql-query name="getPriceBookZoneIdsForPriceBookIdWithDate">
+    <![CDATA[
+      SELECT DISTINCT CFG_LOCATION FROM (
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_LOC_DSCNT 
+          WHERE CFG_CONTRACT_ID = ? AND ? between BEGIN_DATE and END_DATE
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_BRNCH_LOC 
+          WHERE CFG_CONTRACT_ID = ? AND ? between BEGIN_DATE and END_DATE
+        UNION
+        SELECT DISTINCT CFG_LOCATION FROM PS_ITSC_PORT_LOC 
+          WHERE CFG_CONTRACT_ID = ? AND ? between BEGIN_DATE and END_DATE
+      ) ORDER BY CFG_LOCATION
+    ]]>
+  </sql-query>
+  
+  <sql-query name="getWebServiceLog">
+    <![CDATA[
+    select 
+      type, nvl(max(success),0) success, nvl(max(failed), 0) failed 
+    from(
+      select 
+          type, decode(status, 1, c) success, decode(status, 0, c) failed
+      from(
+        select type, nvl(status, 0) status, count(*) c
+        from web_service_entity
+        where
+          create_time between ? and ?
+        group by type, status
+      )
+    )
+    group by type
+    order by type
+    ]]>
+  </sql-query>                     
+
+  <sql-query name="getWebServiceLogByKey">
+    <![CDATA[
+    select 
+      type, nvl(max(success),0) success, nvl(max(failed), 0) failed 
+    from(
+      select 
+          type, decode(status, 1, c) success, decode(status, 0, c) failed
+      from(
+        select type, nvl(status, 0) status, count(*) c
+        from web_service_entity
+        where
+          entity_key like ?
+        group by type, status
+      )
+    )
+    group by type
+    order by type
+    ]]>
+  </sql-query> 
+  
+  <sql-query name="getWebServiceInboundLog">
+    <![CDATA[
+    select 
+      type, nvl(max(success),0) success, nvl(max(failed), 0) failed 
+    from(
+      select 
+          type, decode(status, 1, c) success, decode(status, 0, c) failed
+      from(
+        select type, nvl(status, 0) status, count(*) c
+        from web_service_entity_inbound
+        where
+          create_time between ? and ?
+        group by type, status
+      )
+    )
+    group by type
+    order by type
+    ]]>
+  </sql-query>  
+  
+  <sql-query name="getWebServiceInboundLogByKey">
+    <![CDATA[
+    select 
+      type, nvl(max(success),0) success, nvl(max(failed), 0) failed 
+    from(
+      select 
+          type, decode(status, 1, c) success, decode(status, 0, c) failed
+      from(
+        select type, nvl(status, 0) status, count(*) c
+        from web_service_entity_inbound
+        where
+          entity_key like ?
+        group by type, status
+      )
+    )
+    group by type
+    order by type
+    ]]>
+  </sql-query>  
+  
+  <sql-query name="getTotalRecordOfPriceBookTestIdsByPriceBookIdAndContractCode">
+    <![CDATA[
+      SELECT count(*) FROM (
+        SELECT DISTINCT tpr.TEST_ID FROM PS_ITSC_TEST_PRICE tpr, PS_ITS_TEST_PB tpb
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND tpr.TEST_ID = tpb.TEST_ID
+          AND tpr.CFG_CONTRACT_ID = ?     
+      )
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookTestIdsByPriceBookIdAndContractCode">
+    <![CDATA[
+        SELECT DISTINCT tpr.TEST_ID FROM PS_ITSC_TEST_PRICE tpr, PS_ITS_TEST_PB tpb
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND tpr.TEST_ID = tpb.TEST_ID
+          AND tpr.CFG_CONTRACT_ID = ?     
+        ORDER BY tpr.TEST_ID
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getTotalRecordOfContractTestIdsByContractCode">
+    <![CDATA[
+      SELECT count(*) FROM (
+        SELECT DISTINCT ct.TEST_ID FROM PS_ITSC_TEST_PRICE tpr, PS_ITSC_CONTR_TEST ct
+        WHERE ct.TEST_ID = tpr.TEST_ID (+)
+          AND ct.CFG_CONTRACT_ID = ?      
+      )
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getContractTestIdsByContractCode">
+    <![CDATA[
+      SELECT DISTINCT ct.TEST_ID FROM PS_ITSC_TEST_PRICE tpr, PS_ITSC_CONTR_TEST ct
+      WHERE ct.TEST_ID = tpr.TEST_ID (+)
+        AND ct.CFG_CONTRACT_ID = ?      
+      ORDER BY ct.TEST_ID
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookTestIdAndDescriptionsByPriceBookIdAndContractCode">
+    <![CDATA[
+        SELECT DISTINCT t.TEST_ID, t.ITS_TEST_DESCR FROM PS_ITS_TEST_PB tpb, PS_ITSC_TEST t
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND t.TEST_ID = tpb.TEST_ID
+          AND t.TEST_ID NOT IN (
+            SELECT tpr.TEST_ID FROM PS_ITSC_TEST_PRICE tpr
+            WHERE tpr.CFG_CONTRACT_ID = ? 
+          )
+        ORDER BY t.TEST_ID
+    ]]>
+  </sql-query>  
+
+
+
+  <sql-query name="getTotalRecordOfPriceBookSlateIdsByPriceBookIdAndContractCode">
+    <![CDATA[
+      SELECT count(*) FROM (
+        SELECT DISTINCT tpr.SLATE_ID FROM PS_ITSC_SLTE_PRICE tpr, PS_ITS_SLTE_PB tpb
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND tpr.SLATE_ID = tpb.SLATE_ID
+          AND tpr.CFG_CONTRACT_ID = ?     
+      )
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookSlateIdsByPriceBookIdAndContractCode">
+    <![CDATA[
+        SELECT DISTINCT tpr.SLATE_ID FROM PS_ITSC_SLTE_PRICE tpr, PS_ITS_SLTE_PB tpb
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND tpr.SLATE_ID = tpb.SLATE_ID
+          AND tpr.CFG_CONTRACT_ID = ?     
+        ORDER BY tpr.SLATE_ID
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getTotalRecordOfContractSlateIdsByContractCode">
+    <![CDATA[
+      SELECT count(*) FROM (
+        SELECT DISTINCT ct.SLATE_ID FROM PS_ITSC_SLTE_PRICE tpr, PS_ITSC_CONTR_SLTE ct
+        WHERE ct.SLATE_ID = tpr.SLATE_ID (+)
+          AND ct.CFG_CONTRACT_ID = ?      
+      )
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getContractSlateIdsByContractCode">
+    <![CDATA[
+      SELECT DISTINCT ct.SLATE_ID FROM PS_ITSC_SLTE_PRICE tpr, PS_ITSC_CONTR_SLTE ct
+      WHERE ct.SLATE_ID = tpr.SLATE_ID (+)
+        AND ct.CFG_CONTRACT_ID = ?      
+      ORDER BY ct.SLATE_ID
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getPriceBookSlateIdAndDescriptionsByPriceBookIdAndContractCode">
+    <![CDATA[
+        SELECT DISTINCT t.SLATE_ID, t.ITS_SLTE_DESC FROM PS_ITS_SLTE_PB tpb, PS_ITSC_SLATE t
+        WHERE tpb.PRICEBOOK_ID = ?
+          AND t.SLATE_ID = tpb.SLATE_ID
+          AND t.SLATE_ID NOT IN (
+            SELECT tpr.SLATE_ID FROM PS_ITSC_SLTE_PRICE tpr
+            WHERE tpr.CFG_CONTRACT_ID = ? 
+          )
+        ORDER BY t.SLATE_ID
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getControlRbKeyListByWorkingPbIdAndMasterAndServiceNameAndExpressionId">
+    <![CDATA[
+        SELECT distinct c.RB_KEY 
+        FROM PS_ITS_CONTROL_MAP cm, PS_ITSC_CONTROL c 
+        WHERE c.CFG_CONTRACT_ID in (?, ?) 
+        AND c.ITSC_SERVICE = cm.ITSC_SERVICE 
+        AND c.OBJECT_NAME = cm.OBJECT_NAME 
+        AND cm.CFG_CONTRACT_ID in (?, ?) 
+        AND cm.ITSC_SERVICE = ? 
+        AND cm.EXPRESSION_ID = ?
+    ]]>
+  </sql-query>  
+ 
+  <sql-query name="getPbControlListByWorkingPbIdAndMasterAndServiceNameAndExpressionId">
+    <![CDATA[
+        SELECT distinct c.CFG_CONTRACT_ID, c.ITSC_SERVICE, c.ITS_QUESTION_ID, c.OBJECT_NAME, 
+        c.BEGIN_DATE, c.RB_KEY, c.ATTRIBUTES, c.CONTROL_TYPE, c.PARAMETERS, 
+        c.SORT_ORDER_NUM, c.HELP_URL, c.ITS_VISIBILITY, c.END_DATE
+        FROM PS_ITS_CONTROL_MAP cm, PS_ITSC_CONTROL c 
+        WHERE c.CFG_CONTRACT_ID in (?, ?) 
+        AND c.ITSC_SERVICE = cm.ITSC_SERVICE 
+        AND c.OBJECT_NAME = cm.OBJECT_NAME 
+        AND cm.CFG_CONTRACT_ID in (?, ?) 
+        AND cm.ITSC_SERVICE = ? 
+        AND cm.EXPRESSION_ID = ?
+    ]]>
+  </sql-query>  
+
+  <sql-query name="getContractControlListByWorkingPbIdAndMasterAndServiceNameAndExpressionIdAndBeginDate">
+    <![CDATA[
+        SELECT distinct c.CFG_CONTRACT_ID, c.ITSC_SERVICE, c.ITS_QUESTION_ID, c.OBJECT_NAME, 
+        c.BEGIN_DATE, c.RB_KEY, c.ATTRIBUTES, c.CONTROL_TYPE, c.PARAMETERS, 
+        c.SORT_ORDER_NUM, c.HELP_URL, c.ITS_VISIBILITY, c.END_DATE
+        FROM PS_ITS_CONTROL_MAP cm, PS_ITSC_CONTROL c 
+        WHERE c.CFG_CONTRACT_ID = ? 
+        AND c.ITSC_SERVICE = cm.ITSC_SERVICE 
+        AND c.OBJECT_NAME = cm.OBJECT_NAME 
+        AND cm.CFG_CONTRACT_ID in (?, ?) 
+        AND cm.ITSC_SERVICE = ? 
+        AND cm.EXPRESSION_ID = ?
+        AND c.BEGIN_DATE = ?
+    ]]>
+  </sql-query>  
+ 
+  <sql-query name="getServiceRateExpressionIdListByContractIdAndSerivceNameAndExpressionId">
+    <![CDATA[
+      SELECT ITS_SRVC_RT_EXP_ID 
+      FROM PS_ITS_CX_RATE_VW 
+      WHERE CFG_CONTRACT_ID = ? 
+      AND ITSC_SERVICE = ?
+      AND EXPRESSION_ID = ?
+    ]]>
+  </sql-query>  
+  <sql-query name="getProductGroupFields">
+    <![CDATA[
+		select 
+		  pg.group_code, rb.rb_value 
+		from PS_ITSC_PRDUCT_GRP pg, product_type_group_map ptgm, PS_ITSC_RB rb
+		where 
+		  pg.rb_key= ptgm.product_group
+		  and pg.rb_key=rb.rb_key
+		  and rb.begin_date<=sysdate and rb.end_date>=sysdate
+		  and rb.cfg_contract_id='NONE'
+		  and pg.product_group_set = 'CE_Pricebook' 
+		  and pg.begin_date <= sysdate  and pg.end_date >= sysdate 
+		  and ptgm.product_type in (
+		    ?
+		  ) 
+		 order by pg.group_id
+    ]]>
+  </sql-query>
+
+  <sql-query name="getDropdownData">
+    <![CDATA[
+		select dropdown_type, field_name, field_value from dropdowns order by dropdown_type
+    ]]>
+  </sql-query>
+
+  <sql-query name="getProducts">
+    <![CDATA[
+		select 
+			p.id, p.name, p.description from phx_productgroup_product pgp, phx_product p
+		where
+			pgp.product_id=p.id
+			and product_group_set=?
+			and group_id=?
+			and begin_date=?
+		order by p.name
+    ]]>
+  </sql-query>
+  
+  <sql-query name="getProductByProdGroup">
+    <![CDATA[
+		select 
+			p.id, p.description || ' (' || p.name || ')'from phx_productgroup_product pgp, phx_product p, ps_itsc_prduct_grp g
+		where
+			pgp.product_id=p.id 
+			and pgp.product_group_set=g.product_group_set
+			and pgp.group_id=g.group_id
+			and pgp.begin_date=g.begin_date
+			and g.group_code=?
+		order by p.name
+    ]]>
+  </sql-query>
+   <sql-query name="getBeginDateFromProdGroup">
+    <![CDATA[
+          select begin_Date from PS_ITSC_PRDUCT_GRP 
+          where product_group_set = ? and group_id =?  and to_char(begin_date, ?) = ?
+    ]]>
+  </sql-query>
+ </hibernate-mapping>

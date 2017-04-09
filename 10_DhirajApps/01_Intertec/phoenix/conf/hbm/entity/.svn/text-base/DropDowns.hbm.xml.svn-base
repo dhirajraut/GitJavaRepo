@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="DropDowns" table="DROPDOWNS">
+    <composite-id name="dropDownId" class="DropDownId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="dropdownType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta>
+        <column name="DROPDOWN_TYPE" length="50" />
+      </key-property>
+      <key-property name="fieldName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=50) private</meta>
+        <column name="FIELD_NAME" length="50" />
+      </key-property>
+    </composite-id>
+    <property name="fieldValue" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="FIELD_VALUE" length="128" />
+    </property>
+ </class>
+</hibernate-mapping>
+

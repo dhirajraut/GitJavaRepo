@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/7041/branches/phx2.1/src/com/intertek/phoenix/search
+END
+SearchFormFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/7041/branches/phx2.1/src/com/intertek/phoenix/search/SearchFormFactory.java
+END
+SearchService.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6950/branches/phx2.1/src/com/intertek/phoenix/search/SearchService.java
+END
+SearchServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/6964/branches/phx2.1/src/com/intertek/phoenix/search/SearchServiceImpl.java
+END
+AbstractRow.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/phoenix/!svn/ver/6211/branches/phx2.1/src/com/intertek/phoenix/search/AbstractRow.java
+END
+JobSearchInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6520/branches/phx2.1/src/com/intertek/phoenix/search/JobSearchInfo.java
+END
+ContactCustSearchInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/6411/branches/phx2.1/src/com/intertek/phoenix/search/ContactCustSearchInfo.java
+END
+SearchFormController.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6227/branches/phx2.1/src/com/intertek/phoenix/search/SearchFormController.java
+END
+BankSearchInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6450/branches/phx2.1/src/com/intertek/phoenix/search/BankSearchInfo.java
+END
+SearchKey.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6506/branches/phx2.1/src/com/intertek/phoenix/search/SearchKey.java
+END

@@ -1,0 +1,60 @@
+package com.intertek.web.servlet;
+
+import java.util.*;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.intertek.entity.*;
+import com.intertek.locator.*;
+import com.intertek.service.*;
+import com.intertek.util.*;
+
+public class ApplicationListener implements ServletContextListener, HttpSessionListener, ServletRequestListener
+{
+  private static final Log logger = LogFactory.getLog(ApplicationListener.class);
+
+  public void contextInitialized(ServletContextEvent event)
+  {
+  }
+
+  public void contextDestroyed(ServletContextEvent event)
+  {
+  }
+
+  public void sessionCreated(HttpSessionEvent se)
+  {
+  }
+
+  public void sessionDestroyed(HttpSessionEvent se)
+  {
+  }
+
+  public void requestInitialized(ServletRequestEvent sre)
+  {
+    logger.info("** : max memory = " + Runtime.getRuntime().maxMemory());
+    logger.info("** : total memory = " + Runtime.getRuntime().totalMemory());
+    logger.info("** : total memory = " + Runtime.getRuntime().freeMemory());
+
+    HttpServletRequest request = (HttpServletRequest)sre.getServletRequest();
+    HttpSession session = request.getSession();
+    if(session != null)
+    {
+      Enumeration<String> e = session.getAttributeNames();
+      while(e.hasMoreElements())
+      {
+        String name = e.nextElement();
+        Object obj = session.getAttribute(name);
+
+        logger.info("**** " + session.getId() + ", " + name + ", " + obj);
+      }
+    }
+  }
+
+  public void requestDestroyed(ServletRequestEvent sre)
+  {
+  }
+}

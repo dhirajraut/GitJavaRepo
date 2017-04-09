@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobCode" table="JOB_CODE">
+    <id name="jobCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="JOB_CODE" length="8" />
+    </id>
+    <property name="jobCodeDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="JOB_CODE_DESC" length="40" not-null="true" unique="true" />
+    </property>
+  </class>
+</hibernate-mapping>
+

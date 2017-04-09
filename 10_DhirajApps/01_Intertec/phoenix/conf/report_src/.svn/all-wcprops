@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/phoenix/!svn/ver/7291/branches/phx2.1/conf/report_src
+END
+invoice_tax_footer.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/phoenix/!svn/ver/6725/branches/phx2.1/conf/report_src/invoice_tax_footer.jrxml
+END
+invoice_preview_rebill.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_preview_rebill.jrxml
+END
+invoice_tax_footer_TAX_RATES.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax_footer_TAX_RATES.jasper
+END
+invoice.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/phoenix/!svn/ver/7089/branches/phx2.1/conf/report_src/invoice.jrxml
+END
+job_order.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_order.jasper
+END
+invoice_preview.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/6703/branches/phx2.1/conf/report_src/invoice_preview.jrxml
+END
+invoice_tax.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax.jasper
+END
+consol_invoice_tax_kor.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/consol_invoice_tax_kor.jrxml
+END
+invoice_tax_footer_TAX_RATES.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax_footer_TAX_RATES.jrxml
+END
+invoice_nontax_footer.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6805/branches/phx2.1/conf/report_src/invoice_nontax_footer.jrxml
+END
+invoice_noprebill.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_noprebill.jrxml
+END
+invoice_master_taxfooter.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6805/branches/phx2.1/conf/report_src/invoice_master_taxfooter.jrxml
+END
+sample_tracking.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/phoenix/!svn/ver/7291/branches/phx2.1/conf/report_src/sample_tracking.jrxml
+END
+invoice_header.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/7012/branches/phx2.1/conf/report_src/invoice_header.jrxml
+END
+job_order.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_order.jrxml
+END
+job_order_header.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_order_header.jasper
+END
+invoice_tax_noprebill.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax_noprebill.jasper
+END
+job_instr_revision_notes.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_instr_revision_notes.jasper
+END
+invoice_tax.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/phoenix/!svn/ver/7089/branches/phx2.1/conf/report_src/invoice_tax.jrxml
+END
+invoice_master_nontaxfooter.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6908/branches/phx2.1/conf/report_src/invoice_master_nontaxfooter.jrxml
+END
+job_order_header.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_order_header.jrxml
+END
+invoice_tax_noprebill.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax_noprebill.jrxml
+END
+invoice_tax_footer.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/invoice_tax_footer.jasper
+END
+job_instr_revision_notes.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/job_instr_revision_notes.jrxml
+END
+weekly_sales_report.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6741/branches/phx2.1/conf/report_src/weekly_sales_report.jrxml
+END

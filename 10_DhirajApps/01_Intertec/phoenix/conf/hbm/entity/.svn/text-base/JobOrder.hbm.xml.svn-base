@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobOrder" table="JOB_ORDERS">
+    <id name="jobNumber" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="JOB_NUMBER" length="128" />
+    </id>
+
+    <property name="phxProjectNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="PHX_PROJECT_NUMBER" length="128" />
+    </property>
+    
+    <property name="phxProjectType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="PHX_PROJECT_TYPE" length="10" />
+    </property>
+        
+    <property name="jobStatus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="JOB_STATUS" length="4" index="JOB_ORDERS_index_11"/>
+    </property>
+    <property name="jobFinishDate" type="date">
+      <column name="JOB_FINISH_DATE" sql-type="date" />
+    </property>
+    <property name="jobType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="JOB_TYPE" length="4" index="JOB_ORDERS_index_10"/>
+    </property>
+    <property name="nominationDate" type="timestamp">
+      <column name="NOMINATION_DT" sql-type="date" />
+    </property>
+    <property name="nominationTime" type="timestamp">
+      <column name="NOMINATION_TIME" sql-type="timestamp" />
+    </property>
+    <property name="nominationTimeTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="NOMINATION_TIME_TZ" length="9" />
+    </property>
+    <property name="receivedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="RECEIVED_BY" length="128" />
+    </property>
+    <many-to-one name="receivedBy" column="RECEIVED_BY" class="User" insert="false" update="false" index="JOB_ORDERS_index_0" />
+    <property name="adminContactUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ADMIN_CONTACT" length="128" />
+    </property>
+    <many-to-one name="adminContact" column="ADMIN_CONTACT" class="User" insert="false" update="false" index="JOB_ORDERS_index_1" />
+    <property name="projectNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="PROJECT_NUMBER" length="128" />
+    </property>
+    <many-to-one name="project" column="PROJECT_NUMBER" class="Project" insert="false" update="false" index="JOB_ORDERS_index_2" />
+    <property name="etaDate" type="timestamp">
+      <column name="ETA_DATE" sql-type="date" />
+    </property>
+    <property name="etaTime" type="timestamp">
+      <column name="ETA_TIME" sql-type="timestamp" />
+    </property>
+    <property name="etaTimeTz" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=9) private</meta>
+      <column name="ETA_TIME_TZ" length="9" />
+    </property>
+    <property name="operation" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="OPERATION" length="10" />
+    </property>
+    <property name="shipToCustId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="SHIP_TO_CUST_CODE" length="15" />
+    </property>
+    <property name="shipToAddrNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="SHIP_TO_ADDR_NUM" length="3" />
+    </property>
+    <property name="vesselNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+      <column name="VESSEL_NAMES" length="4000" />
+    </property>
+    <property name="productNames" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+      <column name="PRODUCT_NAMES" length="4000" />
+    </property>
+    <property name="jobDescription" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1024) private</meta>
+      <column name="JOB_DESCRIPTION" length="1024" />
+    </property>
+    <property name="retainPeriod" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="RETAIN_PERIOD" length="4" />
+    </property>
+    <property name="limsBranchId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="LIMS_BRANCH_ID" length="8" />
+    </property>
+    <property name="labAnalysis" type="yes_no">
+      <column name="LAB_ANALYSIS" length="1" />
+    </property>
+    <property name="otApproved" type="yes_no">
+      <column name="OT_APPROVED" length="1" />
+    </property>
+    <property name="otApprovedby" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=60) private</meta>
+      <column name="OT_APPROVED_BY" length="60" />
+    </property>
+    <property name="inspInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+      <column name="INSP_INSTRUCTIONS" length="4000" />
+    </property>
+    <property name="billInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3048) private</meta>
+      <column name="BILL_INSTRUCTIONS" length="3048" />
+    </property>
+    <property name="sampInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3048) private</meta>
+      <column name="SAMP_INSTRUCTIONS" length="3048" />
+    </property>
+    <property name="otherInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3048) private</meta>
+      <column name="OTHER_INSTRUCTIONS" length="3048" />
+    </property>
+    <property name="labInstructions" type="string">
+  <meta attribute="scope-field">@Length(min=0, max=4000) private</meta>
+  <column name="LAB_INSTRUCTIONS" length="4000" />
+    </property>
+    <property name="shipInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3048) private</meta>
+      <column name="SHIP_INSTRUCTIONS" length="3048" />
+    </property>
+    <property name="reptInstructions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3048) private</meta>
+      <column name="REPT_INSTRUCTIONS" length="3048" />
+    </property>
+    <property name="revisionNumber" type="int">
+      <column name="REVISION_NUMBER" sql-type="number" />
+    </property>
+    <property name="revisionDttm" type="timestamp">
+      <column name="REVISION_DTTM" sql-type="date" />
+    </property>
+    <property name="revisionNotes" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="REVISION_NOTES" length="254" />
+    </property>
+    <property name="turnaroundTime" type="java.lang.Double">
+     <column name="TURNAROUND_TIME" sql-type="NUMBER(5,2)" />
+    </property>
+    <property name="payByCreditCardInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="PAY_BY_CC_IND" length="1" />
+    </property>
+    <property name="payByCreditAppInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="PAY_BY_CREDIT_APP_IND" length="1" />
+    </property>
+    <property name="payByEstablishedAcctInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="PAY_BY_ESTABLISHED_ACCT_IND" length="1" />
+    </property>
+    <property name="firstName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="FIRST_NAME" length="128" />
+    </property>
+    <property name="lastName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="LAST_NAME" length="128" />
+    </property>
+    <property name="tempName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="TEMP_NAME" length="128" />
+    </property>
+  <property name="isTemplate" type="java.lang.Boolean">
+      <column name="IS_TEMPLATE" index="JOB_ORDERS_index_12"/>
+    </property>
+    <property name="isDefault" type="java.lang.Boolean">
+      <column name="IS_DEFAULT" />
+    </property>
+    <property name="createTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="date" />
+    </property>
+    <property name="updateTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="date" />
+    </property>
+	<property name="reOpenDate" type="timestamp">
+      <column name="REOPEN_DATE" sql-type="date" />
+    </property>
+    <property name="pageNumber" type="java.lang.Integer">
+      <column name="PAGE_NUMBER" sql-type="number" />
+    </property>
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+      <column name="BRANCH_NAME" length="8" not-null="true" />
+    </property>
+    <many-to-one name="branch" column="BRANCH_NAME" class="Branch" insert="false" update="false" index="JOB_ORDERS_index_3" />
+    <property name="buName" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+      <column name="BU_NAME" length="5" not-null="true" />
+    </property>
+	
+	<property name="cancelReasonNote" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="CANCEL_REASON_NOTE" length="254" />
+    </property>
+    <property name="cancelReasonUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CANCEL_REASON_USER_NAME" length="128" />
+    </property>
+    <property name="shippingAgentPhone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="SHIPPING_AGENT_PHONE" length="32" />
+    </property>
+    <property name="towingCompanyPhone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="TOWING_COMPANY_PHONE" length="32" />
+    </property>
+    <many-to-one name="businessUnit" column="BU_NAME" class="BusinessUnit" insert="false" update="false" index="JOB_ORDERS_index_4" />
+    <many-to-one name="shippingAgent" column="SHIPPING_AGENT_ID" class="ShippingAgent" index="JOB_ORDERS_index_5" />
+    <many-to-one name="towingCompany" column="TOW_COMP_ID" class="TowingCompany" index="JOB_ORDERS_index_6" />
+    <property name="serviceLocationCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="SERVICE_LOCATION_CODE" length="15" />
+    </property>
+    <many-to-one name="serviceLocation" column="SERVICE_LOCATION_CODE" class="ServiceLocation" insert="false" update="false" index="JOB_ORDERS_index_7" />
+    <property name="createdByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATED_BY" length="128" />
+    </property>
+    <many-to-one name="createdBy" column="CREATED_BY" class="User" insert="false" update="false" index="JOB_ORDERS_index_8" />
+    <property name="updatedByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="UPDATED_BY" length="128" />
+    </property>
+    <many-to-one name="updatedBy" column="UPDATED_BY" class="User" insert="false" update="false" index="JOB_ORDERS_index_9" />
+    <set name="jobVessels" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="ITS_LINKED_VSL_ROW">
+      <key>
+        <column name="JOB_NUMBER" />
+      </key>
+      <one-to-many class="JobVessel" />
+    </set>
+    <set name="jobContracts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key>
+        <column name="JOB_NUMBER" />
+      </key>
+      <one-to-many class="JobContract" />
+    </set>
+  </class>
+</hibernate-mapping>
+

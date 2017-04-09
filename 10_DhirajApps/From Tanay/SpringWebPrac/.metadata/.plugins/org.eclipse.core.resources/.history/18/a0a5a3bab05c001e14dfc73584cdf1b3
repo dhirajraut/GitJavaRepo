@@ -1,0 +1,18 @@
+package model;
+
+public class StudentList {
+	private String Name;
+	private int Class;
+	private String Grade;
+	private int Marks;
+	private String Address;
+	private int Id;
+	
+	public int getId() {
+		return Id;
+	}
+	public void setId(int id) {
+		Id = id;
+	}
+
+}

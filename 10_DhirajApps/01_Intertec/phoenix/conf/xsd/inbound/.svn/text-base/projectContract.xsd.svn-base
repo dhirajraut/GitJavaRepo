@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/ProjectContractResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/ProjectContractResponse" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetProjectContractResponse" type="ProjectContractResponseType">
+		<xs:annotation>
+			<xs:documentation>Project Contract Response From PeopleSoft</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ProjectContractResponseType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="ProjectOutput" type="ProjectOutputType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProjectOutputType">
+		<xs:sequence>
+			<xs:element name="ProjectId" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

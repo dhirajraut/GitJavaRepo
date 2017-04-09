@@ -1,0 +1,1376 @@
+
+function updateJobDescription(dateFormat,jobDescExist)
+  {
+   var w = document.createJobsCEForm.sel5.selectedIndex;
+   var ops_text = document.createJobsCEForm.sel5.options[w].text;
+ 
+  var etaDate=document.getElementById("etadate").value;
+  var finishDate=document.getElementById("finishdate").value;
+  var servLoc=document.getElementById("serviceLoc").value;
+  var date;
+ if(finishDate != "" && finishDate != null)
+   {
+	   date=jobDescDate(finishDate,dateFormat);
+   }
+ else
+   {
+	date = jobDescDate(etaDate,dateFormat);
+   }
+  if(date == null)
+  date="";
+  	var svLoc= new Array();
+	svLoc = servLoc.split(",")
+	var newServLoc="";
+	var i=0;
+	while(i<svLoc.length)
+	{
+		if(i==0)
+	    newServLoc = trimAll(svLoc[i]);
+		else
+		newServLoc = newServLoc+","+" "+trimAll(svLoc[i]);
+	  i++;
+	}
+var desc = ops_text+" "+"of"+" "+" "+"on"+" "+"at"+" "+newServLoc+" "+"on"+" "+date;
+  if(jobDescExist == 'jobdescexist')
+  {
+	 document.getElementById("jobDesc").value=desc;
+     return desc; 
+  }
+   
+    if(document.getElementById("jobDesc").value=="")
+     {
+     document.getElementById("jobDesc").value=desc;
+     return desc; 
+    }
+    else
+    return document.getElementById("jobDesc").value;
+}
+
+
+
+ function updateServiceLocationIframeSrc() 
+ {
+	  var serviceLocationName= document.getElementById("serviceLoc").value;	  
+	  var branchName=document.getElementById("brnch").value;
+	  document.createJobsCEForm.tabName.value = "0";
+	    if(serviceLocationName != "" && serviceLocationName != null) {  
+			 document.getElementById('serv').setAttribute("src","search_serviceLocation_popup.htm?inputFieldId=serviceLocationName&div1=servloc&div2=servlocbody&serviceLcoationName="+serviceLocationName + "&branchName="+branchName+"&reqForm=jobsForm");   
+		   } else { 
+			  document.getElementById('serv').setAttribute("src","search_serviceLocation_popup.htm?inputFieldId=serviceLocationName&div1=servloc&div2=servlocbody&serviceLcoationName="+serviceLocationName +"&branchName="+branchName+"&reqForm=jobsForm");   
+	      }
+   }
+
+   function setServiceLcoationFlag()
+  {        
+    document.createJobsCEForm.serviceLocationFlag.value="servicelocation";
+    document.createJobsCEForm.tabName.value = "0";    
+  }
+
+  function popServiceLocation()
+  {
+	  popup_show('servloc','servloc_drag','servloc_exit', 'screen-corner', 12, 5);
+	  hideIt();
+	  showPopupDiv('servloc','servlocbody');
+	  popupboxenable();
+  }
+
+	 function popUserDetails(){
+	  popup_show('userDetails','userDetails_drag','userDetails_exit', 'screen-corner', 120,  20);
+	  hideIt();
+	  showPopupDiv('userDetails','userDetailsbody');
+	  popupboxenable();
+	 }
+
+
+  function enterButton() {
+  if (event.keyCode == 13) {
+   if(document.getElementById("ccode").value!="") {
+    setform();
+   }
+  }
+}
+
+function showWarehouseSearch(){	
+	var buName=document.getElementById("sel3").value;
+	if(buName == "" || buName == null){
+		confirm("Please select BusinessUnit!");
+		return true;
+  	}
+    if(buName!= "" && buName!= null){
+    	//document.getElementById('jobbu').setAttribute("src", src="search.htm?searchType=warehouse&targetFieldId=warehouseName&div1=jobbranchcode&div2=jobbranchcodebody&buName="+buName+"&formName=createJobsCEForm");
+    	document.getElementById('jobbu').setAttribute("src",src="search.htm?searchType=warehouse&targetFieldId=warehouseName&div1=jobbranchcode&div2=jobbranchcodebody&buName="+buName+"&formName=createJobsCEForm");    	
+        popup_show('jobbranchcode', 'jobbranchcode_drag', 'jobbranchcode_exit', 'screen-corner', 120, 20);
+  	  	hideIt();
+  	  	showbranchcode('jobbranchcode','jobbranchcodebody');
+  	  	popupboxenable();
+    }
+  }
+  
+function updateBranchIframeSrc()
+{	
+var buName= document.getElementById("sel3").value;
+if(buName == "" || buName == null){
+	confirm("Please select BusinessUnit!");
+	return true;
+	}
+  if(buName!= "" && buName!= null){
+   document.getElementById('jobbu').setAttribute("src",src="search_branch_popup.htm?inputFieldId=warehouseName&div1=jobbranchcode&div2=jobbranchcodebody&buName="+buName+"&formName=createJobsCEForm");
+      popup_show('jobbranchcode', 'jobbranchcode_drag', 'jobbranchcode_exit', 'screen-corner', 120, 20);
+	  hideIt();
+	  showbranchcode('jobbranchcode','jobbranchcodebody');
+	  popupboxenable();
+  }
+}
+
+
+function makeBranchblank()
+{
+  document.getElementById("brnch").value="";
+}
+
+function showRequiredFields(){
+	var myFrame=document.getElementById("requiredFieldsFrame");
+	myFrame.src="required_fields.htm";
+	popup_show('requiredFields', 'requiredFields_drag', 'requiredFields_exit', 'screen-corner', 120, 20);
+	hideIt();
+	popupboxenable();
+}
+
+
+function updateBankAccountIframe(buname,currency){
+var bcode=document.getElementById("remitto").value;
+document.getElementById('saccountframe').setAttribute("src","search_bank_account_popup.htm?inputFieldId=remitToBankAccountNum&buName="+buname+"&currency="+currency+"&bankCode="+bcode);
+}
+
+function updateBankIframe(buname,currency){ 	
+document.getElementById('sremittoframe').setAttribute("src","search_bank_popup.htm?inputFieldId=remitToCode&buName="+buname+"&currency="+currency);
+}
+
+function updateBillingContactIframeSrc(customercode){
+document.getElementById('searchContactFr').setAttribute("src","search_contact_popup.htm?inputFieldId=billingContactId&searchForm=createJobsCEForm&divName=searchcontact&divbody=contactbody&custCode="+customercode);
+}
+
+function updateShippingContactIframeSrc(customercode){
+document.getElementById('searchContactFr').setAttribute("src","search_contact_popup.htm?inputFieldId=shippingContactId&searchForm=createJobsCEForm&divName=searchcontact&divbody=contactbody&custCode="+customercode);
+}
+
+function updateManufacturerContactIframeSrc(customercode){
+document.getElementById('searchContactFr').setAttribute("src","search_contact_popup.htm?inputFieldId=manufacturerContactId&searchForm=createJobsCEForm&divName=searchcontact&divbody=contactbody&custCode="+customercode);
+}
+
+function updateSalesRepIframeSrc(){
+document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId=salesPersonName&div1=userDetails&div2=userDetailsbody");
+}
+
+function updateSecondarySalesRepIframeSrc(){
+document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId=secondarySalesPersonName&div1=userDetails&div2=userDetailsbody");
+}
+
+function updateProjectManagerIframeSrc(){
+document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId=projectManagerName&div1=userDetails&div2=userDetailsbody");
+}
+
+function updateCustomerAddNoteIframeSrc(id){
+	document.getElementById('customerNoteFr').setAttribute("src","create_job_add_customer_note_popup.htm?id="+id+"&divName=note");
+}
+
+function updateCustomerAttachIframeSrc(id){
+document.getElementById('customerAttachFileFr').setAttribute("src","create_job_add_customer_attachfile_popup.htm?id="+id+"&divName=attach&inputFieldId=attachedFileNames");
+}
+
+function updateCustomerIframeSrc(){
+	var ccode = document.getElementById('ccode').value;
+	var fname = document.getElementById('fname').value;
+	var lname = document.getElementById('lname').value;
+	if ((ccode==null || ccode == "")&&(fname==null ||fname=="")&&(lname==null||lname=="")){
+		confirm("Please enter either Customer Code or Contact First Name or Last Name.");
+		return false;
+	}
+	var url = 'search_ce_customer_popup.htm?inputFieldId=inputFieldIdValue&div1=customerSearch&div2=customerSearchbody&searchForm=createJobsCEForm';
+	if (ccode!= null && ccode!=""){
+		url += '&custCode='+ccode;
+	}
+	if (fname != null && fname != ""){
+		url += '&firstName='+fname;
+	}
+	if (lname != null && lname != ""){
+		url += '&lastName='+lname;
+	}
+	document.createJobsCEForm.tabName.value = "1";
+	//confirm("url="+url);
+	document.getElementById('customerFr').setAttribute("src",url);	
+}
+function billingContactAjax()
+{
+  document.createJobsCEForm.jobFlag.value="none";
+  document.createJobsCEForm.deleteFlag.value ="none";
+  document.createJobsCEForm.contactFlag.value="contFlag";
+  document.createJobsCEForm.tabName.value="1";
+  document.createJobsCEForm.submit();
+}
+
+function setbankFlag(index){
+document.createJobsCEForm.bankFlag.value="bankFlag";
+document.createJobsCEForm.tabName.value="1";
+document.createJobsCEForm.bankIndex.value=index;
+document.createJobsCEForm.submit();
+}
+
+function replaceHtmlCode(address){
+	var newAddr;
+	newAddr = address.replace(/&#045;/gi, "-");
+	newAddr = newAddr.replace(/&#035;/gi, "#");
+	return newAddr;
+}
+
+function showError(ecode,sc)
+{
+if(sc!="")
+{	
+ confirm("some or all of the entered criteria resulted in error. Review the errors below.\n No products were find matching the entered criteria "+ ecode +". change the criteria and try again");
+ //document.createJobsCEForm.errorFlag.value="none";
+ //document.createJobsCEForm.uniqueFlag.value="uniqueFlag";
+ document.getElementById("ccode").value=sc;
+ document.createJobsCEForm.submit();
+}
+else{
+confirm("some or all of the entered criteria resulted in error. Review the errors below.\n No products were find matching the entered criteria "+ ecode +". change the criteria and try again");
+//document.createJobsCEForm.errorFlag.value="none";
+document.createJobsCEForm.ccode.focus();
+document.createJobsCEForm.ccode.value="";
+}
+}
+
+
+
+function setform()
+{
+  var code=document.getElementById("ccode");
+  confirm("Searching CECustomer by " + code.value);
+  if(code.value==null || code.value=="")
+  {
+    confirm("Please Enter A customer name or contact name");
+    return false;
+  }
+/*  if(code.value!=null && code.value!="")
+  {
+  if (isAdd(code.value) == false) {
+     confirm("Please Enter Valid Delimiters");
+    document.createJobsCEForm.ccode.focus();
+  document.createJobsCEForm.ccode.value="";
+  return false;
+    }
+  if (isProper(code.value) == false) {
+  confirm("Please Enter Valid Contract Id(s)");
+  document.createJobsCEForm.ccode.focus();
+  document.createJobsCEForm.ccode.value="";
+  return false;
+    }
+  if (isValid(code.value) == false) {
+  confirm("Please Enter Valid Contract Id(s)");
+  document.createJobsCEForm.ccode.focus();
+  document.createJobsCEForm.ccode.value="";
+  return false;
+    }
+  document.createJobsCEForm.uniqueFlag.value="uniqueFlag";
+  */   
+  document.createJobsCEForm.submit();
+   
+}
+
+function setDeleteflag(index)
+{
+if (confirm("Are you sure you want to delete the row?")==true)
+{
+ document.createJobsCEForm.jobFlag.value="none";
+ document.createJobsCEForm.jobIndex.value = index;
+ document.createJobsCEForm.deleteFlag.value ="delval";
+ document.createJobsCEForm.submit();
+}
+}
+function resetJobValFlag()
+{
+ document.createJobsCEForm.contactFlag.value="none";
+ document.createJobsCEForm.jobFlag.value="none";
+ document.createJobsCEForm.popFlag.value="none";
+  document.createJobsCEForm.uniqueFlag.value="none";
+  setpage();
+}
+
+function resetJob(index,ccc)
+{
+if(index>1)
+{
+var cc=ccc;
+if(ccc.charAt("/"))
+{ cc=ccc.replace("/","'");}
+ document.getElementById("ccode").value=cc;
+ //document.createJobsCEForm.uniqueFlag.value="uniqueFlag";
+ document.createJobsCEForm.submit();
+}
+else{
+ //document.createJobsCEForm.contactFlag.value="none";
+ //document.createJobsCEForm.jobFlag.value="none";
+ //document.createJobsCEForm.popFlag.value="none";
+ //document.createJobsCEForm.uniqueFlag.value="none";
+ setpage();
+}	
+}
+
+
+
+function isAdd(string) 
+{
+   if (!string) return false;
+   var iChars = "*|,\":<>[]{}`\()&$#%./!@~?><";
+   for (var i = 0; i < string.length; i++) {
+    if (iChars.indexOf(string.charAt(i)) != -1)
+    return false;
+   }
+   return true;
+}
+
+
+function isProper(string)
+{
+   if (!string) return false;
+   var iChars = ";";
+   var i=string.length-1;
+    if (iChars.lastIndexOf(string.charAt(i)) != -1)
+  {    return false;}
+     return true;
+} 
+
+function isValid(string)
+{
+   if (!string) return false;
+   var iChars = ";";
+   var i=string.length-1;
+    if (iChars.lastIndexOf(string.charAt(0)) != -1)
+  {    return false;}
+     return true;
+}
+
+/*function goToNextPage(dateFormat){
+	var servLoc=document.getElementById("serviceLoc").value;
+	if(servLoc == "" || servLoc == null){
+		confirm("Please select Servicelocation!");
+		return false;
+	}
+	// document.createJobsCEForm.nextPageFlag.value = "1";
+	updateJobDescription(dateFormat);
+	var form=document.createJobsCEForm;
+	form.actionFlag.value="next";
+	form.submit();
+}*/
+
+function goToNextPage(dateFormat,flag){
+	
+	var servLoc=document.getElementById("serviceLoc").value;
+	if(servLoc == "" || servLoc == null){
+		confirm("Please select Servicelocation!");
+		return false;
+	}
+	
+	if(flag=='true'){
+		confirm("Please select customer before you move to next page!");
+		return false;
+	}
+	
+	// document.createJobsCEForm.nextPageFlag.value = "1";
+	updateJobDescription(dateFormat);
+	var form=document.createJobsCEForm;
+	form.actionFlag.value="next";
+	form.submit();
+}
+
+
+function checkSearchField()
+{
+  if(document.getElementById("jobSearch").value=="")
+  {
+  confirm("Please enter a search string");
+  return false;
+  }
+  else{
+	    if (confirm("All the modifications you have done will not be saved. do you want to continue?")==true)
+	    {
+	    
+	    var w = document.getElementById('sel1').selectedIndex;
+        var ops_text = document.getElementById('sel1').options[w].text;	    
+        var svalue=document.getElementById("jobSearch").value;	    
+	    document.getElementById('searchFr').setAttribute("src","search_ce_job_popup.htm?searchString="+ops_text+"&searchValue="+svalue+"&div1=searchDetails&div2=searchDetailsbody");
+	    popSearchDetails();
+	    }
+	    else{
+	      return false;
+	    }  
+	}
+}
+function popSearchDetails(){
+	  popup_show('searchDetails','searchDetails_drag','searchDetails_exit', 'screen-corner', 120,  20);
+	  hideIt();
+	  showPopupDiv('searchDetails','searchDetailsbody');
+	  popupboxenable();
+	 }
+
+function revertToEntry(jobNumber){
+window.parent.location ='job_entry_ce.htm?jobNumber='+jobNumber;
+}
+
+function setsubflag()
+{
+//document.createJobsCEForm.jobValFlag.value="newjobval";
+//document.createJobsCEForm.tabName.value = "1";
+}
+
+function setcontactflag()
+{
+ /* document.createJobsCEForm.jobFlag.value="none";
+  document.createJobsCEForm.deleteFlag.value ="none";
+  document.createJobsCEForm.contactIndex.value=rowIndex;
+  document.createJobsCEForm.contactFlag.value="contFlag";
+  document.createJobsCEForm.tabName.value="1";
+  */
+}
+
+function setAttachFilesFlag()
+{
+  //document.createJobsCEForm.attachFilesFlag.value=rowIndex;
+  //document.createJobsCEForm.tabName.value="1";
+}
+
+function submitform()
+    {
+      top.document.forms[0].submit();  
+    }
+
+
+function setpage()
+{
+document.createJobsCEForm.ccode.value="";
+}
+ 
+function trimAll(sString) 
+{
+while (sString.substring(0,1) == ' ') 
+{ 
+sString = sString.substring(1, sString.length); 
+} 
+while (sString.substring(sString.length-1, sString.length) == ' ') 
+{ 
+sString = sString.substring(0,sString.length-1); 
+} 
+return sString; 
+} 
+
+function updateDescription(index,dateFormat)
+{
+if(document.getElementById("invoiceDescrdetails"+index).value=="")
+  {  
+  var description="General service charge in connection with the"+" "+updateJobDescription(dateFormat)+".";
+  document.getElementById("invoiceDescrdetails"+index).value=description;
+  }
+else
+  {
+  var description=document.getElementById("invoiceDescrdetails"+index).value;
+  document.getElementById("invoiceDescrdetails"+index).value=description
+  }
+}
+
+function changeVisibleStyle(){
+    document.getElementById("serviceLoc").value="";
+}
+
+
+ 
+  function contractAttach(contractCode,index)
+  {
+   document.getElementById('contractFr'+index).setAttribute("src","view_contract_attach_popup.htm?contractCode="+contractCode);
+  }
+ 
+function selectJobDateBoolean(flag)
+ {
+ document.createJobsCEForm.submit();
+ }
+ 
+
+function setBillingAsScheduler(index, contact_id, contact_name, address){
+	var sameBilling = document.getElementById('sameBillingAsScheduler'+index).checked;
+	if (sameBilling){
+		document.getElementById('billingContactId'+index).value=contact_id;
+		document.getElementById('billingContactName'+index).value=contact_name;
+		document.getElementById('billingContactAddress'+index).value=replaceHtmlCode(address);
+	}else{
+		document.getElementById('billingContactId'+index).value=0;
+		document.getElementById('billingContactName'+index).value='';
+		document.getElementById('billingContactAddress'+index).value='';
+	}
+}
+
+function jobDescDate(date,dateFormat)
+{
+	 var dayfield;
+     var monthfield;
+     var yearfield;
+ 
+  if('dd/MM/yyyy'== dateFormat)
+  {
+   dayfield=date.split("/")[0]
+   monthfield=date.split("/")[1]
+   yearfield=date.split("/")[2]
+  }
+   if('MM/dd/yyyy'== dateFormat)
+  {
+   dayfield=date.split("/")[1]
+   monthfield=date.split("/")[0]
+   yearfield=date.split("/")[2]
+  }
+   if('dd/MMM/yyyy'== dateFormat)
+  {
+   dayfield=date.split("/")[0]
+   monthfield=date.split("/")[1]
+   yearfield=date.split("/")[2]
+  }
+  
+     if(monthfield == 01 || monthfield == 1 || monthfield == 'Jan')
+	   {
+		 if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"January"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="January"+" "+dayfield+","+" "+yearfield;
+	   }
+     if(monthfield == 02 || monthfield == 2 || monthfield == 'Feb')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"February"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="February"+" "+dayfield+","+" "+yearfield;
+	   }
+     if(monthfield == 03 || monthfield == 3 || monthfield == 'Mar')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"March"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="March"+" "+dayfield+","+" "+yearfield;
+	   }
+     
+     if(monthfield == 04 || monthfield == 4 || monthfield == 'Apr')
+		{
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"April"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="April"+" "+dayfield+","+" "+yearfield;
+	   }
+       
+     if(monthfield == 05 || monthfield == 5 || monthfield == 'May')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"May"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="May"+" "+dayfield+","+" "+yearfield;
+	   }
+     if(monthfield == 06 || monthfield == 6 || monthfield == 'jun')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"June"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="June"+" "+dayfield+","+" "+yearfield;
+	   }
+     
+     if(monthfield == 07 || monthfield == 7 || monthfield == 'jul')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"July"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="July"+" "+dayfield+","+" "+yearfield;
+	   }
+      
+     if(monthfield == 08 || monthfield == 8 || monthfield == 'Aug')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"August"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="August"+" "+dayfield+","+" "+yearfield;
+	   }
+      
+     if(monthfield == 09 || monthfield == 9 || monthfield == 'Sep')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"September"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="September"+" "+dayfield+","+" "+yearfield;
+	   }
+      
+     if(monthfield == 10 || monthfield == 'Oct')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"October"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="October"+" "+dayfield+","+" "+yearfield;
+	   }
+      
+     if(monthfield == 11 || monthfield == 'Nov')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"November"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="November"+" "+dayfield+","+" "+yearfield;
+	   }
+      
+      
+     if(monthfield == 12 || monthfield == 'Dec')
+	   {
+	     if('dd/MM/yyyy'== dateFormat || 'dd/MMM/yyyy'== dateFormat)
+		 date=dayfield+" "+"December"+","+" "+yearfield;
+		 if('MM/dd/yyyy'== dateFormat)
+		 date="December"+" "+dayfield+","+" "+yearfield;
+	   }
+	
+	   return date;
+}
+
+function setflag(scode,pageNumber)
+{  
+//document.createJobsCEForm.jobFlag.value="jobval";
+//document.createJobsCEForm.tabName.value = "1";
+var buname=document.getElementById("sel3").value;
+var pageN0=pageNumber;
+var code= scode;
+if(scode.charAt("/"))
+{ code=scode.replace("/","'");}
+if(code!= "" && code!= null)
+{
+document.getElementById("pu").setAttribute("src","search_ce_customer_popup.htm?inputFieldId=inputFieldIdValue&searchForm=createJobsCEForm&code="+code+"&pageNumber="+pageN0+"&buName="+buname+"&fromPage=1");
+}
+}
+
+function setCode(scode)
+{  
+var code=scode;
+if(scode.charAt("/"))
+{ code=scode.replace("/","'");}
+document.createJobsCEForm.ccode.value=code;
+//document.createJobsCEForm.uniqueFlag.value="uniqueFlag";
+document.createJobsCEForm.submit();
+}
+
+function setNomCheck(index)
+{
+  document.getElementById("nom").checked = true;
+}
+
+function submitSearch(pageNumber){	 
+//	document.ceCustomerSearchPopUpForm.pageNumber.value = pageNumber;
+//	document.ceCustomerSearchPopUpForm.excel.value="false";
+//	document.ceCustomerSearchPopUpForm.submit();
+	var url = document.location;
+//	confirm('old url=' + url);
+	var urlString = url.toString();
+
+	var pageNoPos = urlString.indexOf("pageNo");
+	if ( pageNoPos != -1){
+		var partOne = urlString.substr(0, pageNoPos);
+		var partTwo = urlString.substr(pageNoPos, urlString.length);
+		url = partOne + "pageNo=" + pageNumber;
+	}else{
+		url += "&pageNo="+pageNumber;
+	}
+//	confirm('new url = ' + url);
+	document.location = url;
+}	
+
+function submitseachform(customerActive){
+
+	var validationCheck = "false";
+	if(customerActive != null && customerActive != 'A' )
+	{
+		confirm("This Customer is InActive. Please contact Regional Billing Center!");
+		validationCheck="true";
+	}
+	if(validationCheck=='true'){
+		return false;
+	}
+	//top.showContract1();
+	//top.popupboxclose();
+	//var name=document.getElementById("searchForm").value;
+	var name=document.ceCustomerSearchPopUpForm.searchForm.value;
+	document.ceCustomerSearchPopUpForm.excel.value="false";
+	top.document.forms[name].submit();
+	}
+
+
+function sortCustomerBycustomerCode(){
+	document.ceCustomerSearchPopUpForm.pageNumber.value = "1";
+	document.ceCustomerSearchPopUpForm.sortFlag.value = "customercode";
+	document.ceCustomerSearchPopUpForm.excel.value="false";
+	document.ceCustomerSearchPopUpForm.submit();
+	}
+function sortCustomerBycontactName(){
+	document.ceCustomerSearchPopUpForm.pageNumber.value = "1";
+	document.ceCustomerSearchPopUpForm.sortFlag.value = "contactName";
+	document.ceCustomerSearchPopUpForm.excel.value="false";
+	document.ceCustomerSearchPopUpForm.submit();
+	}
+
+	function submitxcel(){
+	document.ceCustomerSearchPopUpForm.excel.value="true";
+	document.ceCustomerSearchPopUpForm.sortFlag.value = "";
+	document.ceCustomerSearchPopUpForm.submit();
+	}
+
+function sortCustomerBycustomerName(){
+	document.ceCustomerSearchPopUpForm.pageNumber.value = "1";
+	document.ceCustomerSearchPopUpForm.sortFlag.value = "customername";
+	document.ceCustomerSearchPopUpForm.excel.value="false";
+	document.ceCustomerSearchPopUpForm.submit();
+	}
+
+
+/* for job instructions*/
+
+	function onSaveLines()
+	{
+		document.jobOrderOpInstrCEForm.addOrDeleteTestLines.value="save";	  
+		document.jobOrderOpInstrCEForm.scrollFlag.value="testLine";
+		top.document.forms[0].submit(); 
+	}
+
+	function onSaveLinesAndNext()
+	{
+		document.jobOrderOpInstrCEForm.addOrDeleteTestLines.value="saveandnext";	  
+		document.jobOrderOpInstrCEForm.scrollFlag.value="testLine";
+		top.document.forms[0].submit(); 
+	}
+
+
+	function onAddTestLines()
+	{
+		document.jobOrderOpInstrCEForm.addOrDeleteTestLines.value="add";	  
+		document.jobOrderOpInstrCEForm.scrollFlag.value="testLine";
+		top.document.forms[0].submit(); 
+	}
+
+	function onDelTestLines(index)
+	{
+		document.jobOrderOpInstrCEForm.addOrDeleteTestLines.value="delete";	  
+		document.jobOrderOpInstrCEForm.testIndex.value=index;
+		document.jobOrderOpInstrCEForm.scrollFlag.value="testLine";
+		top.document.forms[0].submit(); 
+	}
+	
+	
+	function onAddDepositLines(){
+	  document.jobOrderOpInstrCEForm.addOrDeleteDepositLines.value="adddep";
+	  top.document.forms[0].submit();
+	}
+	
+	function onDelDepositLines(index)
+	{
+		document.jobOrderOpInstrCEForm.addOrDeleteDepositLines.value="deldep";	  
+		document.jobOrderOpInstrCEForm.depIndex.value=index;
+		top.document.forms[0].submit(); 
+	}
+	
+	
+	function onAddSplitTestLines(index){
+	document.jobOrderOpInstrCEForm.addOrDeleteSplitLines.value="addspl";
+	document.jobOrderOpInstrCEForm.splitIndex.value=index;
+	top.document.forms[0].submit(); 
+	}
+	
+	function onDelSplitTestLines(tIndex,sIndex){
+	document.jobOrderOpInstrCEForm.addOrDeleteSplitLines.value="delspl";
+	document.jobOrderOpInstrCEForm.testIndex.value=tIndex;
+	document.jobOrderOpInstrCEForm.splitIndex.value=sIndex;
+	top.document.forms[0].submit(); 
+	}
+	
+	
+	function onProject()
+	{
+	  if(confirm('Are you sure you want to create the project? Have you verified the line items?')==true){
+             document.jobOrderOpInstrCEForm.projectFlag.value="true";	
+	          submitform();
+      }
+	
+	}
+	
+	function onSendWebService(webServiceType)
+	{
+	document.jobOrderOpInstrCEForm.webServiceFlag.value = webServiceType;
+	submitform();
+	} 
+
+	function updateNoteIframeSrc(index,id){
+	document.getElementById('jobContractNoteFr'+index).setAttribute("src","job_instruction_note_popup.htm?orderId="+id+"&divName=note"+index);
+	}
+
+	function updateAttachIframeSrc(index,id){	
+	document.getElementById('jobContractAttachFileFr'+index).setAttribute("src","job_instruction_attachfile_popup.htm?orderId="+id+"&divName=attach"+index+"&inputFieldId=attachedFileNames");
+	}
+
+
+		function onDelete(noteId){
+			document.getElementById("deleteNoteId").value=noteId;
+			document.NotePopUpForm.submit();
+		}
+
+		function onSelectNote(noteId){
+			document.getElementById("selectedNoteId").value=noteId;
+			document.NotePopUpForm.submit();
+		 }
+
+		function onReset(){
+			document.getElementById("reset").value="reset";
+			document.NotePopUpForm.submit();
+		}
+
+		function confirmDelete(){
+			var yesno = confirm ("Are you sure you want to delete this note?");
+			if (yesno == true)
+				return true;
+				else
+			return false;
+		 }
+
+		function beforesubmit(){
+			if(document.NotePopUpForm.notesummary.value.length==0){
+				confirm("Please fill Summary ");
+				setFocus(document.NotePopUpForm.notesummary);
+				}else{
+			document.NotePopUpForm.submit();
+			}
+		}
+
+		//Set Focus
+		function setFocus(id){
+		try {
+		id.focus();
+		}
+		catch (e){}
+		}
+
+function onDeleteAttach(attachId)
+  {
+    document.getElementById("deleteAttachId").value=attachId;
+    document.attachFilePopUpForm.submit();
+  }
+  
+  function onSaveAttach(attachId, desc, type)
+  {
+    document.getElementById("saveFlag").value='true';
+    document.attachFilePopUpForm.submit();
+  }
+
+
+	function confirmAttachDelete(){
+	    var yesno = confirm ("Are you sure you want to delete this attchment?");
+	    if (yesno == true)
+		  return true;
+	    else
+	      return false;
+	}
+
+	
+	function updateOthersIframeSrc(testIndex,splIndex){		
+		if(splIndex ==-1)
+		{
+		 document.getElementById('othersFr'+testIndex).setAttribute("src","job_instruction_test_attribute_popup.htm?testIndex="+testIndex+"&splitIndex="+splIndex+"&div1=others"+testIndex+"&div2=othersbody"+testIndex);
+		}
+		else
+		{
+		document.getElementById('othersFr'+testIndex).setAttribute("src","job_instruction_test_attribute_popup.htm?testIndex="+testIndex+"&splitIndex="+splIndex+"&div1=others"+testIndex+"&div2=othersbody"+testIndex);
+		}
+	}
+
+	function saveTestAttrib(testIndex,splIndex){		
+		document.jobOrderOpInstrCEForm.addOrDeleteTestLines.value="saveother";
+		document.jobOrderOpInstrCEForm.testIndex.value=testIndex;
+		document.jobOrderOpInstrCEForm.splitIndex.value=splIndex;
+		top.document.jobOrderOpInstrCEForm.submit(); 	
+	}
+
+
+	function searchPopups(entity,inputField)
+   {
+	url="";
+	if(entity=='branchid')
+	{
+	  url="search_branch_popup.htm?inputFieldId="+inputField+"&divName1=jobbranchcode&divName2=jobbranchcodebody&formName=jobInstructionTestAttribForm";
+	}
+	else if(entity=='servicelocation')
+	{
+     url ="search_serviceLocation_popup.htm?inputFieldId="+inputField+"&reqForm=jobInstructionTestAttribForm";
+	} 
+	else if(entity=='ponumber')
+	{
+     url ="search_purchase_order_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	else if(entity=='taskmanage')
+	{
+     url ="search_user_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	//joblogCE window......
+	else if(entity=='projectManager')
+	{
+     url ="search_user_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	else if(entity=='serviceLocation')
+	{
+     url ="search_serviceLocation_popup.htm?inputFieldId="+inputField+"&reqForm=jobInstructionTestAttribForm";
+	} 
+	else if(entity=='taskManager' )
+	{
+     url ="search_user_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	else if(entity=='salesRep' )
+	{
+     url ="search_user_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	else if(entity=='reviewername' )
+	{
+     url ="search_user_popup.htm?inputFieldId="+inputField+"&searchForm=jobInstructionTestAttribForm";
+	}
+	else if(entity=='taskOwningOrg' )
+	{
+     url="search_branch_popup.htm?inputFieldId="+inputField+"&divName1=jobbranchcode&divName2=jobbranchcodebody&formName=jobInstructionTestAttribForm";
+	} 	
+	newwindow=window.open(url,entity,'height=630,width=600,resizable=yes');
+	if (window.focus) {newwindow.focus()}
+	return false;
+}
+
+function showSearchPageinIFrame(iFrameName,html,fieldId,div1name,div2name,formName)
+{
+ url = +"'"+html+"?inputFieldId="+fieldId+"&div1="+div1name+"&div2="+div2name+"&formName="+formName + "'";
+ document.getElementById(iFrameName).setAttribute("src",src=url); 
+}
+
+function doSubmit(flag,index)
+{
+ document.jobInstructionTestAttribForm.workertimeFlag.value=flag;
+ document.jobInstructionTestAttribForm.rowNum.value=index;
+ document.jobInstructionTestAttribForm.submit(); 
+}
+
+
+function submitPOSearch(pageNumber){  
+	document.purchaseOrderPopupForm.pageNumber.value = pageNumber;
+	document.purchaseOrderPopupForm.submitFlag.value="true";
+	document.purchaseOrderPopupForm.submit();
+}	
+
+function submitFunction(){
+	document.purchaseOrderPopupForm.pageNumber.value = "1";
+	document.purchaseOrderPopupForm.sortFlag.value = "";
+	document.purchaseOrderPopupForm.submitFlag.value="true";
+	document.purchaseOrderPopupForm.submit();
+}
+
+function sortPOByNumber(){
+	document.purchaseOrderPopupForm.pageNumber.value = "1";
+	document.purchaseOrderPopupForm.sortFlag.value = "poNumber";
+	document.purchaseOrderPopupForm.submit();
+}
+function sortPOByBalanceAmount(){
+	document.purchaseOrderPopupForm.pageNumber.value = "1";
+	document.purchaseOrderPopupForm.sortFlag.value = "balanceAmount";
+	document.purchaseOrderPopupForm.submit();
+}
+
+function goToNext(){
+	 document.jobOrderOpInstrCEForm.nextPageFlag.value = "2";
+	 document.jobOrderOpInstrCEForm.submit();
+}
+function save()
+{
+  document.jobInstructionTestAttribForm.workertimeFlag.value='save';
+  document.jobInstructionTestAttribForm.submit();
+}
+
+var xmlHttp;
+function initXmlHttp(callback){
+	try{  // Firefox, Opera 8.0+, Safari  
+	  	xmlHttp=new XMLHttpRequest();  
+	}
+	catch (e){  // Internet Explorer  
+		try{    
+			xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");    
+		}
+		catch (e){
+			try{      
+				xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");      
+			}
+			catch (e){
+				alert("Your browser does not support AJAX!");      
+				return false;      
+			}    
+		}  
+	}
+
+	/*
+	0 The request is not initialized 
+	1 The request has been set up 
+	2 The request has been sent 
+	3 The request is in process 
+	4 The request is complete 
+*/	
+	xmlHttp.onreadystatechange=callback;
+}
+
+function fetchContactInfo(custCode, type){
+	//confirm('here ' + contactId + " and " + custCode);
+	initXmlHttp(function(){
+		if(xmlHttp.readyState==4){
+			var result = xmlHttp.responseText;
+			var pos = result.indexOf('|');
+			var fullName = result.substring(0, pos);
+			var address= result.substring(pos, result.length);
+			if ('billing'==type){
+				document.getElementById('billingContactName').value=fullName;
+				document.getElementById('billingContactAddress').value=address;
+			}else if ('shipping'==type){
+				document.getElementById('shippingContactName').value=fullName;
+				document.getElementById('shippingContactAddress').value=address;
+			}else if ('oem'==type){
+				document.getElementById('oemContactName').value=fullName;
+				document.getElementById('oemContactAddress').value=address;
+			}
+		}
+	});
+	var contactid=0;
+	if ('billing'==type){
+		contactId=document.getElementById('billingContactId').value;
+	}else if ('shipping'==type){
+		contactId=document.getElementById('shippingContactId').value;
+	}else if ('oem'==type){
+		contactId=document.getElementById('oemContactId').value;
+	}
+	xmlHttp.open("POST", "fetch_contact_info.htm?contactId="+contactId+"&custCode="+custCode, true);
+	xmlHttp.send("contactId="+contactId+"&custCode="+custCode);
+}
+
+function searchContact(){
+	document.ceContactSearchPopUpForm.submit();
+}
+
+function submitFrameForm(frameName)
+{
+	document.getElementById("requestAction").value="save";
+	window.frames[frameName].document.forms[0].submit();
+}
+
+function searchjob()
+{
+	
+  document.getElementById("requestAction").value="search";
+  document.getElementById("tabNavigationTo").value="main";
+  document.jobCeSearchForm.submit();
+}
+
+function navenable(tabNavigableTo)
+{
+  if(tabNavigableTo!='goto')
+  {
+   if(tabNavigableTo=='new search')
+   {	
+	document.getElementById("requestAction").value="new search";
+	document.jobCeSearchForm.method="GET";
+	tabNavigableTo='searchCriteria';	
+   }
+   else
+   {
+   	document.getElementById("requestAction").value="navigation";
+   }
+   document.getElementById("tabNavigationTo").value=tabNavigableTo;
+   document.jobCeSearchForm.submit();
+  }
+}
+
+function addRow(tableID,inputName)
+{
+            var table = document.getElementById(tableID);   
+  			var rowCount = table.rows.length;
+			fldName= inputName+"["+rowCount+"]";
+			var size=42;
+			if(tableID=='ProjectManagerTable' || tableID=='taskOwingTable' )
+			{
+				size=38
+			}
+
+			if(tableID=='ServiceOfferingTable')
+			{
+			 tmpStr="<INPUT type=text id='"+fldName+"' class='inputBox' name='"+fldName+"' size='"+size+"' maxlength='42'/>";
+			}
+			else
+			{
+			 tmpStr="<INPUT type=text id='"+fldName+"' class='inputBoxblue' name='"+fldName+"' size='"+size+"' maxlength='42'/>";
+			}
+			tmpStr=tmpStr+"&nbsp;<a href='#pm' onClick=\"javascript:lookupFunction('"+fldName+"','"+tableID+"');popup_show('receivedby','receivedby_drag','receivedby_exit', 'screen-corner',	120,20);hideIt();showPopupDiv('receivedby','receivedbybody');popupboxenable();\">";
+			tmpStr=tmpStr+"<img src='images/lookup.gif' alt='lookup Task Manager' width='13' height='13' border='0'></a>";
+			//tmpStr=tmpStr+"<a href='#' id ='"+inputName+" class='"+tableID+"' onclick=addRow('"+tableID+"','"+inputName+"')><img src='images/add.gif' alt='Add' width='13' height='12' hspace='2' border='0' title='Add'/></a> </TD>";
+            var row = table.insertRow(rowCount);     
+            var cell1 = row.insertCell(0);   			
+			cell1.style.padding='0px';
+			cell1.innerHTML =tmpStr;
+			fld = inputName+rowCount;
+			//receivedBy='recivedBy={'+fld+'}';
+			if(tableID!='ServiceOfferingTable')
+			{
+				//includeAjaxObj(tableID,fld);
+				includeAjaxObj(tableID,fldName);
+				
+			}
+}
+
+function includeAjaxObj(tableID,fld)
+{
+		url='';
+				
+		if(	tableID=='TaskTable')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		else 
+		if(	tableID=='ProjectManagerTable')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		else 
+		if(	tableID=='salesRepTable')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		else 
+		if(	tableID=='taskOwingTable')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		else
+		if(	tableID=='ProjectOwning')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		else
+		if(	tableID=='ServiceOfferingTable')
+		{
+			url='joborder.htm';
+			receivedBy='recivedBy={'+fld+'}';
+		}
+		
+		new AjaxJspTag.Autocomplete(url, 
+		{
+		source:fld, 
+		target:fld, 
+		className:'autocomplete', 
+		parameters:receivedBy,  
+		minimumCharacters:'1' 
+		});
+}
+
+function showLookup(arg1,arg2,arg3,arg4)
+{
+	popup_show(arg1, arg2, arg3, arg4, 40, 80); 
+	searchtaskmanagerht(); 
+	hidetaskmanagersearch(); 
+	hideIt();
+	popupboxenable();
+}
+ 
+function lookupFunction(fieldName,lookupName)
+{
+
+	if(lookupName=='TaskTable' || lookupName=='ProjectManagerTable' || lookupName=='salesRepTable')
+	{
+		document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId="+fieldName+"&div1=receivedby&div2=receivedbybody");
+	}
+	else if(lookupName=='taskOwingTable' || lookupName== 'ProjectOwning')
+	{
+		//search_branch_popup.htm
+		document.getElementById('recievedFr').setAttribute("src","search_branch_popup.htm?inputFieldId="+fieldName+"&div1=receivedby&div2=receivedbybody&searchForm=jobInstructionTestAttribForm");
+	}
+/*	else if(lookupName=='ProjectOwning')
+	{
+		document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId="+fieldName+"&div1=receivedby&div2=receivedbybody");
+		
+	}*/
+	else if(lookupName=='stream')
+	{
+		document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId="+fieldName+"&div1=receivedby&div2=receivedbybody");
+	}
+	else if(lookupTable=='ServiceOfferingTable')
+	{
+		document.getElementById('recievedFr').setAttribute("src","search_user_popup.htm?inputFieldId="+fieldName+"&div1=receivedby&div2=receivedbybody");
+	}
+} 
+ 
+function gotoPage(pageNumber)
+{
+	document.getElementById("requestAction").value="page";
+	document.jobCeSearchForm.pageNumber.value = pageNumber;
+	document.jobCeSearchForm.submit();
+}
+
+function sortByPage(fieldName)
+{
+	document.getElementById("requestAction").value="sortBy";
+	document.getElemenntById("sortField").value=fieldName;
+	document.jobCeSearchForm.pageNumber.value = 1;
+	document.jobCeSearchForm.submit();
+}
+
+function lastSearch(totalRecords,numInPages)
+{
+	var pageNumber;
+	var quotient=totalRecords/numInPages;
+	var remainder=totalRecords%numInPages;	
+	if(remainder==0)
+	pageNumber=quotient;
+	else
+	pageNumber=Math.floor(quotient)+1;
+	gotoPage(pageNumber);
+}
+
+function shortByField(fieldName)
+{
+  document.getElementById("requestAction").value="sort";
+  document.getElementById("sortField").value=fieldName;
+  //document.getElementById("tabNavigationTo").value="main";
+  document.jobCeSearchForm.submit();
+}
+
+function popCreditReason(index, invoiceId, viewFlag)
+{  
+  document.jobOrderEditViewCEInvoiceForm.index.value=index;
+  popup_show('creditreason_' + index, 'creditreason_drag_' + index, 'creditreason_exit_' + index, 'screen-corner', 120, 20);
+  hideIt();
+  popupboxenable();
+  document.getElementById("creditreasonbox_" + index).src="credit_reason_ce_popup.htm?invoiceId=" + invoiceId +"&viewFlag=" +viewFlag +"&contractIndex="+index;              
+  document.getElementById("creditreasonbox_" + index).height = "250px";
+}
+
+function onSave()
+{
+//document.jobOrderEditViewCEInvoiceForm.contractIndex.value=myIndex;
+document.jobOrderEditViewCEInvoiceForm.submit();
+}
+
+function popCreditFlag(){
+ document.jobOrderEditViewCEInvoiceForm.creditFlag.value="credit";
+}
+ function submitceform()
+  {
+  	top.document.forms[0].creditFlag.value = "credit";
+  	top.document.forms[0].creditReasonNote.value = document.getElementById("note").value;
+  	top.document.forms[0].creditReasonUser.value = document.getElementById("user").value;
+	top.document.forms[0].submit();
+  }
+  
+  function validateFields(div1,div2,viewFlag)
+  {
+  
+  	if(viewFlag != '' && viewFlag == 'readonly')
+  	{
+  			  	top.hidePopupDiv(div1,div2);
+	  			top.popupboxclose();
+	  			
+  	}
+  	else
+  	{
+	  	if(document.getElementById("note").value == '')
+	  	{
+	  		confirm("Please enter the credit reason note");
+	  		return false;
+	  	}
+	  	  	if(document.getElementById("user").value == '')
+	  	{
+	  		confirm("Please enter the credit reason approval manager");
+	  		return false;
+	  	}
+	  	
+	  	submitceform();
+	  	top.hidePopupDiv(div1,div2);
+	  	popupboxclose();
+	  	
+  	}
+  	
+  }
+
+
+   function formfocus() {
+       document.getElementById('note').focus();
+   }
+
+   
+   var xmlHttp;
+   function initXmlHttp(callback){
+   	try{  // Firefox, Opera 8.0+, Safari  
+   	  	xmlHttp=new XMLHttpRequest();  
+   	}
+   	catch (e){  // Internet Explorer  
+   		try{    
+   			xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");    
+   		}
+   		catch (e){
+   			try{      
+   				xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");      
+   			}
+   			catch (e){
+   				alert("Your browser does not support AJAX!");      
+   				return false;      
+   			}    
+   		}  
+   	}
+
+   	/*
+   	0 The request is not initialized 
+   	1 The request has been set up 
+   	2 The request has been sent 
+   	3 The request is in process 
+   	4 The request is complete 
+   */	
+   	xmlHttp.onreadystatechange=callback;
+   }
+
+   function createProject(form){
+   	if(confirm('Are you sure you want to create the project? Have you verified the line items?')){
+   		var projectTypeIndex=form.projectType.selectedIndex;
+
+   		initXmlHttp(function(){
+   			if(xmlHttp.readyState==4){
+   				form.projectId.value=xmlHttp.responseText;
+   			}
+   		});
+   		xmlHttp.open("POST", "create_project.htm", true);
+   		xmlHttp.send(getQueryString(form));
+   		
+   	}
+   }
+   
+   /*
+    * return the query string for the given form
+    */
+   function getQueryString(form){
+	   return "hello=1&x=true";
+   }
+
+function updateEditPriceIframeSrc(lineItemNumber) {
+   document.getElementById('editPriceFrId').setAttribute("src", "edit_price_popup.htm?lineItemNumber="+lineItemNumber);
+}
+   
+function showEditPrice() {
+	document.getElementById("editprice").style.display = "block";
+}
+
+function hideEditPrice() {
+	document.getElementById("editprice").style.visibility="hidden";
+	document.getElementById("editprice").style.display = "none";
+	showIt();
+}
+  

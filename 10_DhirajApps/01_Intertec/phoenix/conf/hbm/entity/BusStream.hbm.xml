@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BusStream" table="PS_ITSC_BUS_STREAM">
+    <composite-id name="busStreamId" class="BusStreamId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="branchCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="BRANCH_CODE" length="45" />
+      </key-property>
+      <key-property name="busStreamCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=105) private</meta>
+        <column name="BSTRM_CODE" length="105" />
+      </key-property>
+    </composite-id>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+	   <many-to-one name="branch" column="BRANCH_CODE" class="Branch" insert="false" update="false" unique="false" optimistic-lock="true" not-found="exception" embed-xml="true" /> 
+    </class>
+</hibernate-mapping>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+    <mx:Script>
+        <![CDATA[
+            import mx.rpc.events.ResultEvent;
+            import mx.controls.Alert;
+            
+            public function handleResult(e:ResultEvent):void {
+                Alert.show (e.result + "");
+            }
+        ]]>
+    </mx:Script>
+   <mx:RemoteObject id="javaObject" destination="forum" result="handleResult(event);" />
+
+    <mx:HBox>
+        <mx:Button label="Click" width="20" click="javaObject.sayHello();" />
+    </mx:HBox>
+</mx:Application>

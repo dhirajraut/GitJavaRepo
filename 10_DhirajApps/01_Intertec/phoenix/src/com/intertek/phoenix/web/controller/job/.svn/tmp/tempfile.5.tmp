@@ -1,0 +1,404 @@
+package com.intertek.phoenix.web.controller.job;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+
+import com.intertek.entity.Branch;
+import com.intertek.entity.BusinessUnit;
+import com.intertek.entity.CfgContract;
+import com.intertek.entity.Contact;
+import com.intertek.entity.Contract;
+import com.intertek.entity.Country;
+import com.intertek.entity.CustAddress;
+import com.intertek.entity.Customer;
+import com.intertek.phoenix.entity.Project;
+import com.intertek.exception.ServiceException;
+import com.intertek.locator.ServiceLocator;
+import com.intertek.phoenix.ServiceManager;
+import com.intertek.phoenix.dao.Dao;
+import com.intertek.phoenix.dao.DaoManager;
+import com.intertek.phoenix.entity.BillingStatus;
+import com.intertek.phoenix.entity.BusinessStream;
+import com.intertek.phoenix.entity.CEJobContract;
+import com.intertek.phoenix.entity.CEJobOrder;
+import com.intertek.phoenix.entity.CEJobOrderLineItem;
+import com.intertek.phoenix.entity.ContractServiceLevel;
+import com.intertek.phoenix.entity.DepositInvoice;
+import com.intertek.phoenix.entity.InvoiceStatus;
+import com.intertek.phoenix.entity.JobContractTest;
+import com.intertek.phoenix.entity.OrderStatus;
+import com.intertek.phoenix.entity.PaymentType;
+import com.intertek.phoenix.entity.ProjectType;
+import com.intertek.phoenix.entity.PurchaseOrder;
+import com.intertek.phoenix.entity.RevenueSegregation;
+import com.intertek.phoenix.entity.UOM;
+import com.intertek.service.CalculatorService;
+import com.intertek.service.ContractService;
+import com.intertek.util.Constants;
+import com.intertek.entity.Test;
+import com.intertek.phoenix.job.JobSrvc;
+import com.intertek.phoenix.job.JobSrvcException;
+import com.intertek.phoenix.job.ServiceLevel.ServiceLevelType;
+
+/**
+ * @author patni
+ * 
+ */
+public class AddTestController extends SimpleFormController {
+
+    public AddTestController() {
+        super();
+        setCommandClass(CETestSearchForm.class);
+        setSessionForm(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        String pageNumberStr = request.getParameter("pageNumber");
+        String searchForm = request.getParameter("searchForm");
+        String operation = request.getParameter("operation");
+        CETestSearchForm search = (CETestSearchForm) command;
+        
+        try {
+            search.setSearchForm(searchForm);
+            search.setPageNo(pageNumberStr);
+
+            if (operation != null && operation.equals("searchTests")) {
+                searchTests(search);
+                return showForm(request, response, errors);
+            }            
+            request.getSession().setAttribute("CETestSearchForm", search);
+            else if (operation != null && operation.equals("addTest")) {
+                addTests(search);
+                return showForm(request, response, errors);
+            }
+        }
+        catch (Throwable t) {
+            t.printStackTrace();
+            errors.reject("generic.error", new Object[] { t.getMessage() }, null);
+        }
+
+        return showForm(request, response, errors);
+    }
+
+    private void addTests(CETestSearchForm search) throws JobSrvcException{
+/*        List<TestSearchResultRow> testRows = search.getResults();
+        JobSrvc jobSrvc = ServiceManager.getJobService();
+        CEJobContract c = search.getJobOrder().getJobContract();
+        for(TestSearchResultRow testRow : testRows) {
+            if(testRow.getSelected()) {
+                Test test = testRow.getTest();
+                jobSrvc.createJobContractTest(c.getRootServiceLevel(), test);
+            }
+        }
+*/        
+    }
+
+    private void searchTests(CETestSearchForm search) throws JobSrvcException {
+        CalculatorService calculatorService = (CalculatorService) ServiceLocator.getInstance().getBean("calculatorService");
+        JobSrvc jobSrvc = ServiceManager.getJobService();
+        CEJobContract jobContract = search.getContract();
+        CEJobOrder jobOrder = jobContract.getJobOrder();
+        Date jobFinishDate = jobOrder.getJobFinishDate();
+
+        if (jobFinishDate == null) {
+            jobFinishDate = new Date(); // set it to current system date
+        }
+
+        // TODO need to change to use the phoenix2 service
+        CfgContract contract = calculatorService.getContractByContractId(jobContract.getContractCode(), jobFinishDate);
+
+        String location = null;
+        String language = null;
+        if (contract != null) {
+            location = jobContract.getZoneId();
+            language = jobContract.getInvoiceLanguage();
+        }
+        else {
+            location = "*";
+            language = "ENG";
+        }
+
+        List<Test> searchTests = jobSrvc.getTests(contract, search.getProductGroup(), search.getCriteria1(), search.getTestSearchVal(), search.getCriteria2(),
+                                                  location, jobFinishDate, language);
+        List<TestSearchResultRow> resultRows = new ArrayList<TestSearchResultRow>();
+
+        for (Test test : searchTests) {
+            TestSearchResultRow row = new TestSearchResultRow(test);
+            resultRows.add(row);
+        }
+
+        search.setResults(resultRows);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.BaseCommandController#initBinder(javax.servlet.http.HttpServletRequest,
+     *      org.springframework.web.bind.ServletRequestDataBinder)
+     */
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        Dao<CEJobOrder> jobDao = DaoManager.getDao(CEJobOrder.class);
+        CEJobOrder jo = null;
+        String jobNumber = request.getParameter("jobNumber");
+        if (jobNumber != null && !"".equals(jobNumber)) {
+            // jo = jobDao.find(jobNumber);
+            jo = createDummyJobOrder();
+        }
+        if (jo == null) {
+            throw new ServiceException("record.not.exist.error", new Object[] { jobNumber }, null);
+        }
+
+        Set<CEJobContract> contract = jo.getJobContracts();
+        String rowNum = request.getParameter("rowNum");
+        String divName1 = request.getParameter("div1");
+        String divName2 = request.getParameter("div2");
+        CETestSearchForm testSearch = new CETestSearchForm(jo);
+        testSearch.setRowNum(rowNum);
+        testSearch.setChosenContracts(String.valueOf(jo.getJobContract().getId()));
+        testSearch.setDivName1(divName1);
+        testSearch.setDivName2(divName2);
+        testSearch.setContracts(contract);
+        testSearch.setCriteria1(Constants.BOTH);
+        testSearch.setCriteria2(Constants.BOTH);
+        return testSearch;
+    }
+
+    private CEJobOrder createDummyJobOrder() {
+        CEJobOrder jo = new CEJobOrder();
+
+        PurchaseOrder po = new PurchaseOrder();
+
+        CEJobOrderLineItem joLineItem = new CEJobOrderLineItem();
+        CEJobOrderLineItem joLineItem1 = new CEJobOrderLineItem();
+        CEJobOrderLineItem joLineItem2 = new CEJobOrderLineItem();
+
+        // PurchaseOrder
+        // po.setID(1);
+        po.setBuName("BU");
+        po.setPoName("Electrolux PO");
+        po.setPoNumber("111");
+        // po.setCustomer(customer);
+        po.setCurrency("INR");
+        Branch branch = new Branch();
+        branch.setName("US120");
+        po.setBranch(branch);
+
+        BusinessUnit bu = new BusinessUnit("USA01");
+        bu.setCountry(new Country("USA"));
+        bu.setCountryCode("USA");
+        // CEJobOrder
+        jo.setJobNumber("1");
+        jo.setProjectNumber("1");
+        Project p = new Project();
+        p.setProjectNumber("1");
+        p.setType(ProjectType.TYPE_1);
+        jo.setProject(p);
+
+        jo.setBuName("USA01");
+        jo.setBu(bu);
+
+        CEJobContract contract = new CEJobContract();
+        contract.setId(new Long(1));
+        contract.setContractCode("GE1112222");
+        contract.setJobOrder(jo);
+        contract.setJobOrderNumber(jo.getJobNumber());
+        jo.setJobContract(contract);
+        // contract.setServiceLevelType(ServiceLevel);
+
+        ContractService contractService = (ContractService) ServiceLocator.getInstance().getBean("contractService");
+
+        Contract baseContract = contractService.getContractByContractCode("GE1112222");
+        contract.setContract(baseContract);
+
+        ContractServiceLevel rootServiceLevel = new ContractServiceLevel();
+        rootServiceLevel.setServiceLevelName("JobContract");
+        rootServiceLevel.setServiceLevelType(ServiceLevelType.PRODUCT);// TODO check this
+        contract.setRootServiceLevel(rootServiceLevel);
+
+        contract.setPaymentTerms("In 30 Days");
+        contract.setCustomerCode("2922");
+
+        Customer c = new Customer();
+        c.setCustCode("2922");
+        c.setName("Customer");
+
+        contract.setVatRegId("VatRegId001");
+        Contact billingContact = new Contact();
+        billingContact.setFirstName("Mark");
+        billingContact.setLastName("Volz");
+        contract.setBillingContactId(new Long(2401));
+        contract.setBillingContact(billingContact);
+        contract.setCustomer(c);
+
+        jo.setJobContract(contract);
+        jo.setServiceLocationCode("USR0001341");
+        jo.setStatus(OrderStatus.OPEN);
+
+        CustAddress addr = new CustAddress();
+        addr.setAddress1("2829 Lakeland Drive");
+        addr.setAddress2("Tom Holliman");
+        addr.setCity("Jaksson");
+        addr.setState("MS");
+        addr.setCountry("USA");
+        contract.setBillingAddress(addr);
+
+        // CEJobOrderLineItem Data
+        joLineItem.setId(new Long(1));
+        joLineItem.setLineNumber(1);
+        joLineItem.setDescription("CEJobOrderLineItem Description 1");
+        joLineItem.setOrigin(null);
+        joLineItem.setJobContract(contract);
+        joLineItem.setJobOrderContractId(contract.getId());
+        joLineItem.setQuoteLineId(new Long(1));
+        joLineItem.setActivityId("1");
+        joLineItem.setUom(UOM.PER_DAY);
+        joLineItem.setQuantity(1);
+        joLineItem.setBillingStatus(BillingStatus.OPEN);
+        joLineItem.setAccruedAmount(10000);
+        joLineItem.setBilledAmount(1000);
+        joLineItem.setQuantity(2);
+        joLineItem.setQuotedPrice(2000);
+        joLineItem.setComment("Line Item 1");
+        Branch branch1 = new Branch();
+        branch1.setName("US001");
+
+        // CEJobOrderLineItem Data
+        joLineItem1.setId(new Long(2));
+        joLineItem1.setLineNumber(2);
+        joLineItem1.setDescription("CEJobOrderLineItem Description 2");
+        joLineItem1.setOrigin(null);
+        joLineItem.setJobContract(contract);
+        joLineItem.setJobOrderContractId(contract.getId());
+        joLineItem1.setQuoteLineId(new Long(1));
+        joLineItem1.setActivityId("1");
+        joLineItem1.setQuantity(3);
+        joLineItem1.setComment("Line Item 2");
+        joLineItem1.setBillingStatus(BillingStatus.OPEN);
+        joLineItem1.setAccruedAmount(10000);
+        joLineItem1.setBilledAmount(1000);
+        joLineItem1.setQuantity(2);
+        joLineItem1.setQuotedPrice(2000);
+        Branch branch2 = new Branch();
+        branch2.setName("US002");
+
+        // CEJobOrderLineItem Data
+        joLineItem2.setId(new Long(3));
+        joLineItem2.setLineNumber(3);
+        joLineItem2.setDescription("CEJobOrderLineItem Description 3");
+        joLineItem2.setOrigin(null);
+        joLineItem.setJobContract(contract);
+        joLineItem.setJobOrderContractId(contract.getId());
+        joLineItem2.setQuoteLineId(new Long(1));
+        joLineItem2.setActivityId("1");
+        joLineItem2.setQuantity(2);
+        joLineItem2.setComment("Line Item 3");
+        joLineItem2.setBillingStatus(BillingStatus.OPEN);
+        joLineItem2.setAccruedAmount(10000);
+        joLineItem2.setBilledAmount(1000);
+        joLineItem2.setQuantity(2);
+        joLineItem2.setQuotedPrice(2000);
+        Branch branch3 = new Branch();
+        branch3.setName("US003");
+
+        // job Order
+        jo.setBusinessStreamCode("BUStream001");
+        BusinessStream buStream = new BusinessStream();
+        buStream.setCode("BUStream001");
+        jo.setBusinessStream(buStream);
+
+        RevenueSegregation revenue1 = new RevenueSegregation();
+        revenue1.setAccount("Account1");
+        revenue1.setAmount(10000);
+        revenue1.setDeptId("Dept1");
+        revenue1.setDescription("Pass through travel charges");
+
+        RevenueSegregation revenue2 = new RevenueSegregation();
+        revenue2.setAccount("Account1");
+        revenue2.setAmount(10000);
+        revenue2.setDeptId("Dept1");
+        revenue2.setDescription("Pass through freight charges");
+
+        RevenueSegregation revenue3 = new RevenueSegregation();
+        revenue3.setAccount("Account1");
+        revenue3.setAmount(10000);
+        revenue3.setDeptId("Dept1");
+        revenue3.setDescription("Pass through materials/samples");
+
+        joLineItem.addRevenueSegregation(revenue1);
+        joLineItem.addRevenueSegregation(revenue2);
+        joLineItem.addRevenueSegregation(revenue3);
+
+        joLineItem1.addRevenueSegregation(revenue1);
+        joLineItem1.addRevenueSegregation(revenue2);
+        joLineItem1.addRevenueSegregation(revenue3);
+
+        joLineItem2.addRevenueSegregation(revenue1);
+        joLineItem2.addRevenueSegregation(revenue2);
+        joLineItem2.addRevenueSegregation(revenue3);
+        ArrayList<CEJobOrderLineItem> lineItems = new ArrayList<CEJobOrderLineItem>();
+        lineItems.add(joLineItem);
+        lineItems.add(joLineItem1);
+        lineItems.add(joLineItem2);
+        contract.addLineItems(lineItems);
+        contract.setPoNumber(po.getPoNumber());
+
+        // ////////Deposit Invoices
+        DepositInvoice depInvoice1 = new DepositInvoice();
+        depInvoice1.setId(new Long(1));
+        depInvoice1.setInvoiceNumber("D1");
+        depInvoice1.setDepositAmount(1000);
+        depInvoice1.setDepositReference("ABCD");
+        depInvoice1.setStatus(InvoiceStatus.NEW);
+        depInvoice1.setPaymentType(PaymentType.CASH);
+        depInvoice1.setAvailableAmount(1000);
+
+        DepositInvoice depInvoice2 = new DepositInvoice();
+        depInvoice2.setId(new Long(2));
+        depInvoice2.setInvoiceNumber("D2");
+        depInvoice2.setDepositAmount(1000);
+        depInvoice2.setDepositReference("ABCD");
+        depInvoice2.setStatus(InvoiceStatus.NEW);
+        depInvoice2.setPaymentType(PaymentType.CASH);
+        depInvoice2.setAvailableAmount(1000);
+
+        DepositInvoice depInvoice3 = new DepositInvoice();
+        depInvoice3.setId(new Long(3));
+        depInvoice3.setInvoiceNumber("D3");
+        depInvoice3.setDepositAmount(1000);
+        depInvoice3.setDepositReference("ABCD");
+        depInvoice3.setStatus(InvoiceStatus.NEW);
+        depInvoice3.setPaymentType(PaymentType.CASH);
+        depInvoice3.setAvailableAmount(1000);
+
+        jo.addDepositInvoice(depInvoice1);
+        jo.addDepositInvoice(depInvoice2);
+        jo.addDepositInvoice(depInvoice3);
+
+        return jo;
+    }
+}

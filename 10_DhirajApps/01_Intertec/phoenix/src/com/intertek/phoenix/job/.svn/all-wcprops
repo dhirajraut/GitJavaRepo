@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/job
+END
+ContractJobOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6585/branches/phx2.1/src/com/intertek/phoenix/job/ContractJobOrder.java
+END
+JobOrderService.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/job/JobOrderService.java
+END
+JobSrvcException.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/job/JobSrvcException.java
+END
+JobOrderServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/7051/branches/phx2.1/src/com/intertek/phoenix/job/JobOrderServiceImpl.java
+END
+Order.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6561/branches/phx2.1/src/com/intertek/phoenix/job/Order.java
+END
+InvalidJobOrderOperationException.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/phoenix/!svn/ver/6253/branches/phx2.1/src/com/intertek/phoenix/job/InvalidJobOrderOperationException.java
+END
+JobServiceLevelInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6253/branches/phx2.1/src/com/intertek/phoenix/job/JobServiceLevelInt.java
+END

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TaxLabel" table="TAX_LABELS">
+      
+	  
+	 <composite-id name="taxLabelId" class="TaxLabelId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="countryCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="COUNTRY_CODE " length="3" />
+      </key-property>
+
+      <key-property name="state" type="string">
+        <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+        <column name="STATE " length="6" />
+      </key-property>
+    </composite-id>
+      <property name="vatLabel" type="string">
+        <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+        <column name="VAT_LABEL" length="10" />
+      </property>
+
+      <property name="salesTaxLabel" type="string">
+        <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+        <column name="SALES_TAX_LABEL " length="10" />
+      </property>
+    
+     <property name="vatRegLabel" type="string">
+        <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+        <column name="VAT_REG_LABEL " length="10" />
+      </property>
+  </class>
+</hibernate-mapping>
+

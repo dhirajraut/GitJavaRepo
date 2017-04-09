@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ServiceLocation" table="SERVICE_LOCATION">
+    <id name="serviceLocationCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="SERVICE_LOCATION_CODE" length="15" />
+    </id>
+    <property name="name" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="NAME" length="254" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS1" length="55" />
+    </property>
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CITY" length="30" />
+    </property>
+    <property name="num1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="NUM1" length="6" />
+    </property>
+    <property name="num2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="NUM2" length="4" />
+    </property>
+    <property name="houseType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="HOUSE_TYPE" length="2" />
+    </property>
+    <property name="addrField1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="ADDR_FIELD1" length="2" />
+    </property>
+    <property name="addrField2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="ADDR_FIELD2" length="4" />
+    </property>
+    <property name="addrField3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="ADDR_FIELD3" length="4" />
+    </property>
+    <property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="POSTAL" length="12" />
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="EMAIL" length="70" />
+    </property>
+    <property name="phone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="PHONE" length="32" />
+    </property>
+    <property name="stateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE_CODE" length="6" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3" not-null="true" />
+    </property>
+    <many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="SERVICE_LOCATION_index_0" />
+    <many-to-one name="state" class="State" insert="false" update="false">
+      <column name="STATE_CODE" index="SERVICE_LOCATION_index_1" />
+      <column name="COUNTRY_CODE" index="SERVICE_LOCATION_index_1" />
+    </many-to-one>
+    <property name="branchName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="BRANCH_NAME" length="8" />
+    </property>
+    <many-to-one name="branch" column="BRANCH_NAME" class="Branch" insert="false" update="false" index="SERVICE_LOCATION_index_2" />
+    <many-to-one name="shipToCustomer" column="SHIP_TO_CUST_CODE" class="Customer" insert="false" update="false" index="SERVICE_LOCATION_index_3" />
+    <property name="custCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="SHIP_TO_CUST_CODE" length="15" />
+    </property>
+    <property name="locationNumber" type="java.lang.Integer">
+      <column name="LOCATION_NUMBER" sql-type="NUMBER" />
+    </property>
+    <many-to-one name="shipToCustAddress" class="CustAddrSeq" insert="false" update="false">
+      <column name="LOCATION_NUMBER" index="SERVICE_LOCATION_index_4" />
+      <column name="SHIP_TO_CUST_CODE" index="SERVICE_LOCATION_index_4" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>
+

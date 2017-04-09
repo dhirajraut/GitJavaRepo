@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/CreditHold" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/CreditHold" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="PublishCreditHoldRequest" type="CreditHoldType">
+		<xs:annotation>
+			<xs:documentation>Publish Credit Hold ESB Request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="CreditHoldType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MsgDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgDataType">
+		<xs:sequence>
+			<xs:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="CustomerId" type="xs:string"/>
+			<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditHoldFlag" type="xs:string" minOccurs="0"/>
+			<xs:element name="DateTime" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="OperatorId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

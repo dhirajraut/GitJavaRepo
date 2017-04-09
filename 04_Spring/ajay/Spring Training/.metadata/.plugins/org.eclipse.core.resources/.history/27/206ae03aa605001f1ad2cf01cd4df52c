@@ -1,0 +1,15 @@
+package com.assignment;
+
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.FileSystemResource;
+
+public class TestMe {
+public static void main(String[] args) {
+	
+	ApplicationContext context=(ApplicationContext) new XmlBeanFactory(new FileSystemResource("src/services.xml"));
+	Department dept=(Department) context.getBean("deptObj");
+	System.out.println(dept.getDeptId());
+	
+}
+}

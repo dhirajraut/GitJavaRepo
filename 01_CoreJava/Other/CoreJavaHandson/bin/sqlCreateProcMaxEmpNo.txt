@@ -1,0 +1,23 @@
+// Create proceduer procMaxEmpno with out parameter
+
+// connect scott/tiger@orcl;
+// set serveroutput on
+
+create or replace procedure procMaxEmpNo(MaxENo out number) is
+meno number;
+begin
+  select max(empno) into meno from emp;
+  dbms_output.put_line('Maximum empno :'||meno);
+  MaxEno:=meno;
+end;
+/
+
+// Testing procedure for above procedure
+create or replace procedure TestProcMaxEmpNo is
+meno number;
+   begin
+      dbms_output.put_line('Display before call');
+      procMaxEmpNo(meno);
+      dbms_output.put_line('Maximum emp no:'||meno);
+end;
+/

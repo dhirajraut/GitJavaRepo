@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="entities">
+
+	<class name="OrderDetails" table="[Order Details]">
+	   <cache usage="read-only" />
+		<composite-id>
+			<key-property name="orderid" column="OrderID" />
+			<key-property name="productid" column="ProductID" />
+		</composite-id>
+		<property name="unitprice" column="UnitPrice" not-null="true" />
+		<property name="quantity" column="Quantity" not-null="true" />
+	</class>
+
+</hibernate-mapping>

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/phoenix/!svn/ver/6866/branches/phx2.1/web/WEB-INF/views/common
+END
+requiredFields.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6866/branches/phx2.1/web/WEB-INF/views/common/requiredFields.jsp
+END
+error.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/6807/branches/phx2.1/web/WEB-INF/views/common/error.jsp
+END
+pagination.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/common/pagination.jsp
+END
+test_slate_refresh_page.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/common/test_slate_refresh_page.jsp
+END

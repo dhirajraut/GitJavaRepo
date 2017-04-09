@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/tax
+END
+TaxCodeInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6393/branches/phx2.1/src/com/intertek/phoenix/tax/TaxCodeInfo.java
+END
+CETaxRateAjaxController.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/6987/branches/phx2.1/src/com/intertek/phoenix/tax/CETaxRateAjaxController.java
+END
+PhxTaxUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6904/branches/phx2.1/src/com/intertek/phoenix/tax/PhxTaxUtil.java
+END
+TaxSrvc.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/phoenix/!svn/ver/6904/branches/phx2.1/src/com/intertek/phoenix/tax/TaxSrvc.java
+END
+TaxCodeField.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6396/branches/phx2.1/src/com/intertek/phoenix/tax/TaxCodeField.java
+END
+TaxSrvcImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/6969/branches/phx2.1/src/com/intertek/phoenix/tax/TaxSrvcImpl.java
+END

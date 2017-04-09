@@ -1,0 +1,5 @@
+package dao;
+
+public class ListDaoImpl implements ListDao {
+
+}

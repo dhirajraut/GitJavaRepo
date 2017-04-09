@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Menu" table="MENUS">
+    <id name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=256) private</meta>
+      <column name="MENU_NAME" length="256" />
+    </id>
+    <property name="description" type="string">
+      <column name="DESCRIPTION" length="512" />
+    </property>
+    <property name="seqNumber" type="int">
+      <column name="SEQ_NUMBER" sql-type="NUMBER" />
+    </property>
+    <set name="solutions" table="SOLUTION_MENU_MAP" lazy="true" cascade="save-update">
+      <key column="MENU_NAME" />
+      <many-to-many class="Solution" column="SOLUTION_NAME" />
+    </set>
+    <property name="parentMenuName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="PARENT_MENU_NAME" length="256" />
+    </property>
+    <many-to-one name="parentMenu" column="PARENT_MENU_NAME" class="Menu" insert="false" update="false" index="MENUS_index_0" />
+    <set name="childMenus" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SEQ_NUMBER">
+      <key column="PARENT_MENU_NAME" />
+      <one-to-many class="Menu" />
+    </set>
+    <property name="url" type="string">
+      <column name="URL" length="512" />
+    </property>
+    <property name="displaySize" type="java.lang.Integer">
+      <column name="DISP_SIZE" sql-type="NUMBER" />
+    </property>
+    <property name="permName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="PERM_NAME" length="256" />
+    </property>
+    <many-to-one name="permisson" column="PERM_NAME" class="Permission" insert="false" update="false" index="MENUS_index_1" />
+  </class>
+</hibernate-mapping>
+

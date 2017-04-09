@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT meta ( (view | object)* ) >
+
+<!ELEMENT view ( keys, object_ref* ) >
+
+<!ELEMENT keys ( key+ ) >
+
+<!ELEMENT key ( #PCDATA ) >
+
+<!ELEMENT object ( field* ) >
+<!ATTLIST object name CDATA #REQUIRED >
+<!ATTLIST object key CDATA #REQUIRED >
+
+<!ELEMENT field ( #PCDATA ) >
+<!ATTLIST field name CDATA #REQUIRED >
+<!ATTLIST field label CDATA #IMPLIED >
+<!ATTLIST field field_type (hidden|text|dropdown) "text" >
+<!ATTLIST field dropdown CDATA #IMPLIED >
+<!ATTLIST field editable (true|false) "true" >
+
+<!ELEMENT object_ref ( field* ) >
+<!ATTLIST object_ref key CDATA #REQUIRED >

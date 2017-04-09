@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="TowingCompany" table="TOWING_COMPANY">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="TOW_COMP_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">TOW_COMP_SEQ</param>
+      </generator>
+    </id>
+    <property name="name" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=128) private</meta>
+      <column name="TOW_COMP_NAME" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="CITY" length="64" />
+    </property>
+    <property name="phone" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=32) private</meta>
+      <column name="TOWING_COMPANY_PHONE" length="32" />
+    </property>
+    <property name="email" type="string">
+      <meta attribute="scope-field">@Email @Length(min=0, max=70) private</meta>
+      <column name="TOWN_COMP_EMAIL" length="70" />
+    </property>
+    <property name="stateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE_CODE" length="6" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3" not-null="true" />
+    </property>
+    <many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="TOWING_COMPANY_index_0" />
+    <many-to-one name="state" class="State" insert="false" update="false">
+      <column name="STATE_CODE" index="TOWING_COMPANY_index_1" />
+      <column name="COUNTRY_CODE" index="TOWING_COMPANY_index_1" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="PriceBookSlateMod" table="PS_ITS_PB_SLTE_MOD">
+    <composite-id name="priceBookSlateMod" class="PriceBookSlateModId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="contractId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="CFG_CONTRACT_ID" length="45" />
+      </key-property>
+      <key-property name="slateType" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="ITS_SLATE_TYPE" length="3" />
+      </key-property>
+      <key-property name="slateId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="SLATE_ID" length="45" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="slate" column="SLATE_ID" class="Slate" insert="false" update="false" index="PS_ITS_PB_SLTE_MOD_index_0" />
+  </class>
+</hibernate-mapping>
+

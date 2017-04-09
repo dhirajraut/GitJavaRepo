@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas creationComplete="_targetsAvailable = [filterInput, filterAndSort, filterLabel , sortLabel, sortComboBox]" mouseEnabled="false" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:css="com.fillcolors.css.*"
+	xmlns:mate="http://mate.asfusion.com/03">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ItemClickEvent;
+			import com.fillcolors.events.*;
+			
+			[Bindable] private var _targetsAvailable:Array;
+		]]>
+	</mx:Script>
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::LISTENERS  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:Dispatcher id="displayDispatcher" generator="{GalleryEvent}" 		type="{GalleryEvent.VIEW_CHANGE}"/>
+	<mate:Dispatcher id="filterDispatcher" 	generator="{DesignsListEvent}" 	type="{DesignsListEvent.FILTER}" />
+	<mate:Dispatcher id="sortDispatcher" 	generator="{DesignsListEvent}" 	type="{DesignsListEvent.SORT}" />
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::GUI ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->	
+	<mx:ToggleButtonBar id="viewBar" styleName="viewButtonBar" dataProvider="['Thumbnails','Grid']" x="610" y="4"
+		itemClick="displayDispatcher.createAndDispatchEvent({view:event.index}); currentState = event.label" />
+	
+	<mx:Canvas y="243" id="filterAndSort" styleName="filterAndSort" width="100%" mouseEnabled="false">
+		
+		<mx:Label x="320" id="sortLabel" text="Sort" styleName="sortLabel"/>
+		<mx:ComboBox id="sortComboBox" x="350" styleName="sortComboBox" dataProvider="['Date Added', 'Rating', 'Name']" 
+					change="sortDispatcher.createAndDispatchEvent({sortBy:sortComboBox.selectedItem})" />
+		<mx:Label x="15" id="filterLabel"  text="Filter" styleName="filterLabel"/>
+		<mx:TextInput id="filterInput" x="50"  width="250" styleName="filterInput" 
+					change="filterDispatcher.createAndDispatchEvent({filterBy:filterInput.text})"/>
+	</mx:Canvas>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::CSS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<css:CSSAnimateProperty id="animatePropertyA" targetsAvailable="{_targetsAvailable}" />
+	<css:CSSAnimateProperty id="animatePropertyB" targetsAvailable="{_targetsAvailable}" />
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::STATES::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:states>
+		<mx:State name="Thumbnails" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="overlayThumbnailsA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="overlayThumbnailsB"/>
+		</mx:State>
+		<mx:State name="Grid" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:RemoveChild target="{sortComboBox}"/>
+			<mx:RemoveChild target="{sortLabel}"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="overlayGridA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="overlayGridB"/>
+		</mx:State>
+	</mx:states>	
+	
+</mx:Canvas>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE meta PUBLIC "meta/meta.dtd" "http://www.intertek.com/meta/meta.dtd">
+<meta>
+  <object name="JobOrder" key="jobOrder1">
+    <field name="jobNumber" field_type="text" label="JobNumber"/>
+    <field name="jobStatus" field_type="dropdown" dropdown="status" label="status1"/>
+    <field name="branch.businessUnit.name" field_type="text" label="businessUnitName1"/>
+    <field name="branch.name" field_type="text" label="branchName1"/>
+    <field name="jobType" field_type="text" label="jobType" />
+    <field name="jobFinishDate" field_type="text" label="jobFinishDate" />
+    <field name="nominationDateTime" field_type="text" label="nominationDateTime" />
+    <field name="receivedBy" field_type="text" label="receivedBy" />
+    <field name="shipAgent.agentName" field_type="text" label="shipAgent" />
+    <field name="shipAgent.phone" field_type="text" label="phone" />
+    <field name="towingCompany.name" field_type="text" label="towingCompany" />
+    <field name="towingCompany.phone" field_type="text" label="phone" />
+    <field name="etaDate" field_type="text" label="ETADate" />
+    <field name="etaTime" field_type="text" label="ETATime" />
+    <field name="operation" field_type="text" label="operation" />
+    <field name="serviceLocation" field_type="text" label="serviceLocation" />
+    <field name="vesselNames" field_type="text" label="vesselNames" />
+    <field name="productNames" field_type="text" label="productNames" />
+    <field name="jobDescription" field_type="text" label="jobDescription" />
+  </object>
+
+  <object name="JobOrder" key="jobOrder2">
+    <field name="jobNumber" field_type="text" label="JobNumber"/>
+    <field name="jobStatus" field_type="dropdown" dropdown="status" label="status1"/>
+    <field name="branch.businessUnit.name" field_type="text" label="businessUnitName1"/>
+    <field name="branch.name" field_type="text" label="branchName1"/>
+    <field name="jobType" field_type="text" label="jobType" />
+    <field name="jobFinishDate" field_type="text" label="jobFinishDate" />
+    <field name="nominationDateTime" field_type="text" label="nominationDateTime" />
+    <field name="receivedBy" field_type="text" label="receivedBy" />
+    <field name="shipAgent.agentName" field_type="text" label="shipAgent" />
+    <field name="shipAgent.phone" field_type="text" label="phone" />
+    <field name="towingCompany.name" field_type="text" label="towingCompany" />
+    <field name="towingCompany.phone" field_type="text" label="phone" />
+    <field name="etaDate" field_type="text" label="ETADate" />
+    <field name="etaTime" field_type="text" label="ETATime" />
+    <field name="operation" field_type="text" label="operation" />
+    <field name="serviceLocation" field_type="text" label="serviceLocation" />
+    <field name="vesselNames" field_type="text" label="vesselNames" />
+    <field name="productNames" field_type="text" label="productNames" />
+    <field name="jobDescription" field_type="text" label="jobDescription" />
+  </object>
+
+  <view>    
+    <keys>
+      <key>Division1</key>
+      <key>INSP</key>
+    </keys>
+    <object_ref key="jobOrder1" />
+  </view>   
+
+  <view>    
+    <keys>
+      <key>Division1</key>
+      <key>FST</key>
+    </keys>
+    <object_ref key="jobOrder1" />
+  </view>   
+
+  <view>    
+    <keys>
+      <key>Division1</key>
+      <key>LT</key>
+    </keys>
+    <object_ref key="jobOrder1" />
+  </view>   
+
+  <view>    
+    <keys>
+      <key>Division1</key>
+      <key>ETL</key>
+    </keys>
+    <object_ref key="jobOrder1" />
+  </view>   
+  
+  <view>
+    <keys>
+      <key>Division2</key>
+      <key>INSP</key>
+    </keys>
+    <object_ref key="jobOrder2" />
+  </view>
+
+  <view>    
+    <keys>
+      <key>Division2</key>
+      <key>FST</key>
+    </keys>
+    <object_ref key="jobOrder2" />
+  </view>   
+
+  <view>    
+    <keys>
+      <key>Division2</key>
+      <key>LT</key>
+    </keys>
+    <object_ref key="jobOrder2" />
+  </view>   
+
+  <view>    
+    <keys>
+      <key>Division2</key>
+      <key>ETL</key>
+    </keys>
+    <object_ref key="jobOrder2" />
+  </view>   
+  
+</meta>

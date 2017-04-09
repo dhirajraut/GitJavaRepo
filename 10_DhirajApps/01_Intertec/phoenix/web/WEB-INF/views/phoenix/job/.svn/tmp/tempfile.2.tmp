@@ -1,0 +1,311 @@
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="icbfn" uri="http://www.intertek.com/jsp/jstl/functions" %>
+<%@ taglib prefix="icb" uri="http://www.intertek.com/jsp/jstl/tags" %>
+<%@ taglib uri="http://ajaxtags.org/tags/ajax" prefix="ajax"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@taglib uri="http://acegisecurity.org/authz" prefix="authz" %>
+<script type="text/javascript" src="js/ce/common.js"></script>
+<script type="text/JavaScript" src="js/mm_menu.js"></script>
+<script type="text/javascript" src="js/ce/ce_select_charges.js"></script>
+
+<form:form name="ceJobSelectChargesForm" method="POST" action="phx_ce_job_select_charges.htm">
+
+<form:hidden path="refreshing" />      
+<form:hidden path="rowindex" />      
+
+<div class="redtext"><form:errors cssClass="error" /></div>
+<table width="97%" height="80%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td valign="top">
+<!------------------------------------------------------- BREADCRUMB TRAIL  -------------------------------------->
+      <div id="breadcrumbContainer" >
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" background="images/intopbluetrailbg.jpg">
+          <tr>
+            <td width="25"><img src="images/inlfttrailcorner.gif" width="8" height="22"></td>
+              <td><jsp:include page="ce_job_bread_crumb.jsp">
+						<jsp:param name="jobNumber"
+							value="${command.jobContract.jobOrder.jobNumber}" />
+						<jsp:param name="pageNumber"
+							value="${command.jobContract.jobOrder.pageNumber}" />
+					</jsp:include></td>
+          </tr>
+        </table>
+      </div>
+ <!---------------------------------------------------- BREADCRUMB TRAIL END ---------------------------------------------------------->
+      <!---------------------------------------------- MAIN CONTAINER -------------------------------------------------------------->
+      <div id="MainContentContainer">
+        <!-------------------------------------------------------- TABS CONTENTS ------------------------------------------------------->
+        <div id="tabcontainer">
+           <div id="tabnav">
+            <ul>             
+			  <li><a href="#" rel="tab2"><span><f:message key="ceGlobal"/></span></a></li>             
+               </ul>
+                 <label>
+                   <select name="sel5" id="sel5" class="selectionBoxrt" onChange="MM_jumpMenu('parent',this,1)">
+                    <option selected>Go to ... &gt;</option>
+                      <option value="phx_job_entry_ce.htm?jobNumber=${command.jobNumber}"> <f:message key="entry"/></option>
+                         <option value="phx_job_operational_info_ce.htm?jobNumber=${command.jobNumber}"><f:message key="jobInstructions"/></option>
+                </select>
+             </label>
+           </div>
+          <!--------------------------------- Sub Menus container. Do not remove ----------------------------------------------------->
+          <div id="tab_inner">
+
+			<!-- ------------------------- TAB 2 CONTAINER ----------------------------------------- -->
+            <div id="tab2" class="innercontent" >
+              <table class="mainApplTable" cellspacing="0" cellpadding="0" style="width:100%" >
+                <tbody>
+                  <tr>
+                    <th width="76%">
+                    	<f:message key="selectCharges"/>&nbsp;&nbsp;
+                    	<img src="images/separator2.gif" width="2" height="27"  align="absmiddle"/>
+                    	&nbsp;&nbsp;<f:message key="jobId"/>: ${command.jobNumber}&nbsp;&nbsp;
+                    	<img src="images/separator2.gif" width="2" height="27"  align="absmiddle"/>&nbsp;&nbsp;
+                    	<f:message key="jobStatus"/>: ${command.jobStatus}</th>
+					<th>&nbsp;</th>
+                    <th class="thr">
+                        <a href="#"
+							style="cursor: hand; text-decoration: none;"
+							onMouseOver="doTooltip(event, '<a href=# onClick=onAddProduct()>Add New Product</a>')"
+							onMouseOut="hideTip()"><img src="images/icoadddoc.gif"
+							alt="Add Line Items" hspace="2" border="0" /></a>
+		                
+		                <a href="#">
+		                	<img src="images/savennextbluarrow.gif" onClick="saveNextSelectCharges()" alt="Save and Go to Next Page" width="14" height="14" hspace="4" border="0" align="absmiddle" title="Save and Go to Next Page">
+	              		</a>
+	                    <a href="#">
+	                    	<img src="images/icosave.gif" onClick="saveSelectCharges()" alt="Save" width="14" height="14" border="0" align="absmiddle" />
+	                    </a>
+                    </th>
+                  </tr>
+                  
+				  <tr>
+				  <td colspan="3" class="nopadding">
+
+		<div id="divdata">
+		
+			
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+   			  <c:forEach items="${command.products}" var="product" varStatus="prodCounter">
+											  	
+									<tr>
+										<th width="13" class="TDShadeGrey">
+										<div id="bluarrowrightv1p1s1"
+											style="visibility: hidden; position: absolute; z-index: 2; margin-left: 4px">
+										<a href="#" onClick="javascript:showv1p1sample1Table();">
+										<img src="images/bluarrowrightsml.gif" width="7"
+											height="13" border="0" vspace="6" /></a></div>
+										<div id="bluarrowdownv1p1s1"
+											style="visibility: visible; position: relative; z-index: 1; margin-top: 6px">
+										<a href="#" onClick="javascript:hidev1p1sample1Table();">
+										<img src="images/bluarrowdownsml.gif" width="13" height="7"
+											border="0" vspace="6" /></a></div>
+										</th>
+										<th nowrap>Product ${prodCounter.index}:<span
+											class="redstar">*</span> <a name="addProd01"></a> 
+											<form:input
+											cssClass="inputBox"
+											path="products[${prodCounter.index}].description"
+											id="products[${prodCounter.index}].description" size="10"
+											maxlength="256" />
+											<form:errors path="products[${prodCounter.index}].description" cssClass="redstar"/>
+											</th>
+										<th nowrap><strong>Product Group:<span
+											class="redstar">*</span></strong> <form:select
+											id="products[${prodCounter.index}].productGroup"
+											path="products[${prodCounter.index}].productGroup"
+											cssClass="selectionBox"
+											items="${command.productGroupList}" itemLabel="name"
+											itemValue="value"/>
+											<form:errors path="products[${prodCounter.index}].productGroup" cssClass="redstar"/>
+											</th>
+										<th nowrap><strong>Product:<span
+											class="redstar">*</span></strong> <form:select
+											id="products[${prodCounter.index}].productName"
+											path="products[${prodCounter.index}].productName"
+											cssClass="selectionBox"
+											items="${command.productList}" itemLabel="name"
+											itemValue="value" />
+											<form:errors path="products[${prodCounter.index}].productName" cssClass="redstar"/>
+											</th>	
+										<th colspan="10" class="thr" nowrap><div id="div22" style="width: 120px; text-align: right;">
+
+
+										<a href="#" onMouseOver="doTooltip(event, '<a href=# onClick=updateAddTestIframeSrc(\'${command.jobNumber}\',\'${product.id}\');popAddTest();>Add Tests</a><br><a href=# onClick=updateJobServicesIframeSrc(\'${command.jobNumber}\',\'${product.id}\'); popJobServices();>Add Job Services</a>')" onMouseOut="hideTip()" >
+						                    <img src="images/icoadddocgreen.gif" width="12" height="14" border="0" align="absmiddle"/>
+		                				</a>
+										
+										&nbsp; 
+										
+										<a href="#"	onclick="onDeleteProduct('${prodCounter.index}');">
+											<img src="images/delete.gif" alt="Delete Product" width="13" height="12" hspace="1px" border="0" align="absmiddle" />
+									    </a>
+										<a href="#"
+											onClick="javascript:copyProduct('${prodCounter.index}','');"><img
+											src="images/add.gif" alt="Copy Product" width="13"
+											height="12" hspace="1px" border="0" align="absmiddle" /></a>
+										</div></th>
+									</tr>
+			
+			
+				<tr>
+				
+				<table width="100%" cellpadding="0" cellspacing="0" class="InnerApplTable">
+				  <tr>
+					<th width="50%" class="dottedline"><f:message key="description"/></th>
+					<th width="10%" class="dottedline"><a href="#"><f:message key="sort"/></a></th>
+					<th width="18%" class="dottedline"><f:message key="baseCurrency"/>${command.transactionCurrency}</th>
+					<th width="18%" class="dottedline"><f:message key="billingCurrency"/>${command.transactionCurrency}</th>
+					<th width="8%" class="dottedline"><f:message key="Discount"/></th>
+					<th width="18%" class="dottedline" nowrap><f:message key="extendedPrice"/>${command.transactionCurrency}</th>					
+					<th width="5%">&nbsp;</th>
+				  </tr>
+   				<c:forEach items="${product.joliForms}" var="joliForm" varStatus="counter">
+    				<tr>
+    				<td>${joliForm.testDescription} ${joliForm.description}</td>
+					<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px;"><input name="sort" class="inputBox" style="width:40px;" type="text" value="0"/></td>
+					<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">${joliForm.baseCurrencyAmount}</td>
+					<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">${joliForm.billingCurrencyAmount}</td>
+					<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">${joliForm.discount}</td>
+					<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">${joliForm.extendedPrice}</td>
+					<td nowrap class="TDShadeBlue" >
+					<c:if test="${joliForm.showEditPriceIcon}">
+						<div id="tablefunction" class="editpricediv"> 
+							<a href="#" onclick="javascript:updateEditPriceIframeSrc(${counter.index}, 'jobOrderLineItem');popup_show('editprice', 'editprice_drag', 'editprice_exit', 'screen-corner', 40, 80);showEditPrice();hideIt();popupboxenable();">							
+								<img src="images/icoeditsmall.gif" alt="Edit Price" hspace="1px" border="0"/>
+							</a>
+						</div>
+						</c:if>
+					</td>
+    				</tr>
+    			</c:forEach>
+    				
+				</table>
+
+  			    <table class="mainApplTable" cellspacing="0" cellpadding="0" style="width:100%">
+                  <tbody>
+                    <tr>
+                      <th width="55%">&nbsp;</th>
+                      <th nowrap="yes" width="9%">&nbsp;</th>
+                      <th class="thr" width="16%">&nbsp;</th>
+                      <th class="thr">
+						<f:message key="total"/> : ${command.extendedPriceTotal}                      
+                      </th>
+					  <th class="thr" width="3%">&nbsp;</th>
+                    </tr>                  
+                  </tbody>
+                </table>
+               
+              </tr>
+             </c:forEach>
+          </table>
+                
+                
+                
+                <table class="mainApplTable" cellspacing="0" cellpadding="0" style="width:100%">
+	                <c:forEach items="${command.depositInvoiceForms}" var="depInvForm" varStatus="counter">
+	    			 <tr>
+	    				<td>${depInvForm.depInvoiceNumber}</td>
+						<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px;"><input name="sort" class="inputBox" style="width:40px;" type="text" value="0"/></td>
+						<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">&nbsp;&nbsp;</td>
+						<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">&nbsp;&nbsp;</td>
+						<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">&nbsp;&nbsp;</td>
+						<td align="center" class="TDShadeBlue" style="border-right:#7c92be dashed 1px; text-align:right;">&nbsp;&nbsp;</td>
+						<td nowrap class="TDShadeBlue" >&nbsp;</td>
+	    			 </tr>
+	    			</c:forEach>
+    			</table>    				
+                
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="applTableBot">
+                <tr>
+                  <td>&nbsp;</td>
+                  <td class="tdr">
+                  
+                  	<a href="#"  onMouseOver="doTooltip(event, '<a href=# onClick=updateTavelExpenseIframeSrc();popTravelExpenses();>Add Travel Expenses</a>')" onMouseOut="hideTip()">
+                  		<img src="images/icoadddocgreen.gif" width="12" height="14" border="0" align="absmiddle"/>
+               		</a>
+               		<a href="#">
+                 		<img src="images/savennextbluarrow.gif"  onClick="saveNextSelectCharges()" alt="Save and Go to Next Page" width="14" height="14" hspace="4" border="0" align="absmiddle" title="Save and Go to Next Page">
+                  	</a>
+                  	<a href="#">
+                  		<img src="images/icosave.gif" onClick="saveSelectCharges()" alt="Save" width="14" height="14" border="0" align="absmiddle" />
+                  	</a>
+                  </td>
+                </tr>
+              </table>
+				</div>
+				</td>
+				</tr>
+                </tbody>
+              </table>
+
+            </div>
+		
+          </div>
+        </div>
+        
+        
+        <script type="text/javascript">
+		dolphintabs.init("tabnav", 0)
+		</script>
+        <!-------------------------------------------------------- TAB CONTENT END -------------------------------------------------------------->
+        <table width="100%" cellspacing="0">
+          <tr>
+            <td height="24" class="tdr"><select name="sel5" id="sel5" class="SelectionBox" onChange="MM_jumpMenu('parent',this,1)">
+                <option selected>Go to ... &gt;</option>
+                 <option value="phx_job_entry_ce.htm"> <f:message key="entry"/></option>
+                         <option value="phx_job_operational_info_ce.htm"><f:message key="jobInstructions"/></option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!--------------------------------------------------- MAIN CONTAINER END -------------------------------------------------------------------->
+    </td>
+  </tr>
+</table>
+</form:form>
+<!-------------------------------------------------------------- Edit Price Lookup ---------------------------------------------------------------->
+<div class="sample_popup" id="editprice">
+  <div class="menu_form_header" id="editprice_drag" style="width:450px; "> 
+  	<img class="menu_form_exit"   id="editprice_exit" src="images/form_exit.png" /> &nbsp;&nbsp;&nbsp;Edit Price  
+  </div>
+  <div class="menu_form_body" id="editpricebody"   style="width:450px; height:150px;">
+  	<iframe align="left" frameborder="0" class="nopadding" width="100%" src="blank.htm" scrolling="no" id="editPriceFrId" name="editPriceFr" allowtransparency="yes" ></iframe>
+  </div>
+</div>
+
+<!----------------------------------- Edit Price Lookup END ----------------------------------------- -->
+
+<!-- ----------------------------------- Add Tests Lookup ------------------------------------------------- -->
+<div class="sample_popup" id="addTest">
+    <div class="menu_form_header" id="addTest_drag" style="width:850px;"> 
+      <img class="menu_form_exit"   id="addTest_exit" src="images/form_exit.png" /> &nbsp;&nbsp;&nbsp;<f:message key="tests"/></div>                                                           
+        <div class="menu_form_body" id="testbody" style="width:850px; height:auto;" align="center">
+      <iframe id="addTestId"  width="98%" height="1px" scrolling="auto" frameborder="0"
+       allowtransparency="yes" style="border:0px; background:none" src="blank.html"></iframe>
+     </div>
+  </div>
+
+
+
+<!-- --------------------------------- Add Tests Lookup END ----------------------------------------- -->
+
+<!-- ----------------------------------- Add Job Services Lookup ------------------------------------------------- -->
+<div class="sample_popup" id="addJS">
+  <div class="menu_form_header" id="addJS_drag" style="width:800px; "> 
+  	<img class="menu_form_exit"   id="addJS_exit" src="images/form_exit.png" /> 
+  	&nbsp;&nbsp;&nbsp;<f:message key="addJobServices"/>
+  </div>
+  <div class="menu_form_body" id="addJSbody"   style="width:800px; height:auto">
+  	<iframe align="left" frameborder="0" class="nopadding" width="100%" src="blank.htm" scrolling="no" id="addJSId" name="addJSFr" allowtransparency="yes" ></iframe>
+  </div>
+</div>
+
+<!-- --------------------------------- Add Job Services Lookup END ----------------------------------------- -->
+
+
+<div id="faderPane" class="faderStyle"><img src="images/fake-alpha-999.gif"></div>
+

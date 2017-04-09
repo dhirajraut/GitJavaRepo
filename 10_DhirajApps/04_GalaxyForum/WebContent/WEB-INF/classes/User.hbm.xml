@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping package="com.galaxy.login.domain">
+	<class name="User" table="USER">
+		<id name="index" type="int">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=8) private</meta>
+			<column name="INDEX" />
+		</id>
+		<property name="userId" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=20) private</meta>
+			<column name="USER_ID" length="20" />
+		</property>
+		<property name="password" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=20) private</meta>
+			<column name="PASSWORD" length="20" />
+		</property>
+		<property name="firstName" type="string">
+			<meta attribute="scope-field">@NotBlank @Length(min=0, max=20) private</meta>
+			<column name="FIRST_NAME" length="20" />
+		</property>
+		<property name="lastName" type="string">
+			<meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+			<column name="LAST_NAME" length="20" />
+		</property>
+	</class>
+</hibernate-mapping>

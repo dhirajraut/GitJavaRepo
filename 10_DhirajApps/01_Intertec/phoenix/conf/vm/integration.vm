@@ -1,0 +1,43 @@
+There is a problem to send out Web Service from Phoenix. Here are the details:
+
+<br />
+<br />
+<br />
+
+Type: $wsEntity.type
+<br />
+<br />
+<br />
+  
+Status: $wsEntity.status
+<br />
+<br />
+<br />
+
+Entity Key: $wsEntity.entityKey
+<br />
+<br />
+<br />
+
+Create User: $wsEntity.createUser
+<br />
+<br />
+<br />
+
+Create Time: $wsEntity.createTime
+<br />
+<br />
+<br />
+
+  
+Error Message:
+  $wsEntity.message
+<br />
+<br />
+<br />
+  
+
+Please contact Phoenix System Administrator!
+<br />
+<br />
+<br />

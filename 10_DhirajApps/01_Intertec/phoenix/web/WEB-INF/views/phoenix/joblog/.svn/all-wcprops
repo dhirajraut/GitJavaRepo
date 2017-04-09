@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7315/branches/phx2.1/web/WEB-INF/views/phoenix/joblog
+END
+job_log_ce_results_main.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/7186/branches/phx2.1/web/WEB-INF/views/phoenix/joblog/job_log_ce_results_main.jsp
+END
+job_log_ce.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/7315/branches/phx2.1/web/WEB-INF/views/phoenix/joblog/job_log_ce.jsp
+END
+job_log_ce_results_billing.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/7186/branches/phx2.1/web/WEB-INF/views/phoenix/joblog/job_log_ce_results_billing.jsp
+END
+job_log_ce_results_processlog.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/phoenix/!svn/ver/7186/branches/phx2.1/web/WEB-INF/views/phoenix/joblog/job_log_ce_results_processlog.jsp
+END

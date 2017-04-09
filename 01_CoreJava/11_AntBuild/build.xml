@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="AntBuildProject" basedir=".">
+	<description>This is the build file for project AntBuild</description>
+	
+	<!-- This is initialisation of the build process -->
+	<target name="init">
+		<property name="buildDir" value="bin" />
+		<property name="sourceDir" value="src" />
+		<property name="classpath" value="src" />
+		<mkdir dir="${buildDir}"/>
+	</target>
+
+	<!-- This is cleaning process -->
+	<target name="clean" depends="init">
+		<delete dir="${buildDir}" />
+	</target>
+
+	<!-- This is compilation process -->
+	<target name="build" depends="init">
+		<javac srcdir="${sourceDir}" destdir="${buildDir}" />
+		<java classname="Aplication" classpath="${classpath}" />
+	</target>
+</project>

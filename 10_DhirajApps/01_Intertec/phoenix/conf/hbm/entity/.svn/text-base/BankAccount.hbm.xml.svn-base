@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BankAccount" table="BANK_ACCOUNTS">
+    <composite-id name="bankAccountId" class="BankAccountId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="businessUnitName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=45) private</meta>
+        <column name="BUSINESS_UNIT_NAME" length="45" />
+      </key-property>
+      <key-property name="bankCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+        <column name="BANK_CODE" length="5" />
+      </key-property>
+      <key-property name="bankAcctCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=4) private</meta>
+        <column name="BANK_ACCT_CODE" length="4" />
+      </key-property>
+    </composite-id>
+    <property name="bankAcctDesc" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=30) private</meta> 
+      <column name="BANK_ACCT_DESC" length="30" not-null="true" unique="true" />
+    </property>
+    <property name="dfIdNum" type="string">
+      <meta attribute="scope-field"> @Length(min=0, max=12) private</meta> 
+      <column name="DFI_ID_NUM " length="12" />
+    </property>
+    <property name="dfIdQual" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta> 
+      <column name="DFI_ID_QUAL" length="2" />
+    </property>
+
+    <property name="address1" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS1" length="55" />
+    </property>
+    <property name="address2" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS2" length="55" />
+    </property>
+    <property name="address3" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS3" length="55" />
+    </property>
+    <property name="address4" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=55) private</meta>
+      <column name="ADDRESS4" length="55" />
+    </property>
+    <property name="city" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="CITY" length="30" />
+    </property>
+    <property name="stateCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE_CODE" length="6" />
+    </property>
+    <property name="countryCode" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="COUNTRY_CODE" length="3"/>
+    </property>
+	<many-to-one name="country" column="COUNTRY_CODE" class="Country" insert="false" update="false" index="BANK_ACCOUNTS_index_0" />
+    <many-to-one name="state" class="State" insert="false" update="false">
+      <column name="STATE_CODE" index="BANK_ACCOUNTS_index_1" />
+      <column name="COUNTRY_CODE" index="BANK_ACCOUNTS_index_1" />
+    </many-to-one>
+	<property name="postal" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=12) private</meta>
+      <column name="POSTAL" length="12" />
+    </property>
+	<property name="ibanCheckDigit" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="IBAN_CHECK_DIGIT" length="2" />
+    </property>
+	<property name="checkDigit" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=2) private</meta>
+      <column name="CHECK_DIGIT" length="2" />
+    </property>
+	<property name="branchName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="BRANCH_NAME" length="10" />
+    </property>
+	<property name="bankAccountNum" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=17) private</meta>
+      <column name="BANK_ACCONT_NUM" length="17" />
+    </property>
+	<property name="depositType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="DEPOSIT_TYPE" length="1" />
+    </property>
+	<property name="bankBranchId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="BANK_BRANCH_ID" length="10" />
+    </property>
+    <property name="bi" type="yes_no">
+      <column name="BI" length="1" default="Y"/>
+    </property>
+  </class>
+</hibernate-mapping>
+

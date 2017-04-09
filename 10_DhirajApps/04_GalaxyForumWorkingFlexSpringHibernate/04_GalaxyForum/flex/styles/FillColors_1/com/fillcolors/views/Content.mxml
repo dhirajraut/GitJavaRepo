@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"  
+	xmlns:views="com.fillcolors.views.*" 
+	xmlns:mate="http://mate.asfusion.com/03" 
+	xmlns:css="com.fillcolors.css.*"
+	mouseEnabled="false"
+	initialize="_targetsAvailable = [wrapper, mainWindow,panelOverlay , gallery,participate, about]">
+	<mx:Script>
+		<![CDATA[
+			import com.fillcolors.events.*;
+			import com.fillcolors.model.ModelLocator;
+			import com.fillcolors.views.states.*;
+			
+			[Bindable] private var _targetsAvailable:Array;
+			
+			private function testEvent(event:NavigationEvent):void
+			{
+				currentState = event.navigateTo;
+			}
+		]]>
+	</mx:Script>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::LISTENERS  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mate:Listener type="{NavigationEvent.CHANGE}" 		eventFire="currentState = NavigationEvent(event).navigateTo;"/>
+	<mate:Listener type="{GalleryEvent.STATE_CHANGE}" 	eventFire="currentState = GalleryEvent(event).state;"/>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::GUI ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:Canvas id="wrapper" styleName="wrapper"  width="{Number(wrapperWidth.value)}" height="{Number(wrapperHeight.value)}"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off"  x="50">
+		
+		<mx:Panel title="Gallery" height="100%" width="100%" id="mainWindow" styleName="mainWindow" >
+			<mx:ViewStack id="stack" width="100%" height="100%">
+			
+				<views:Gallery id="gallery" showEffect="{fadeIn}"
+								curentSkin="{ModelLocator.getInstance().currentSkin}"
+								designs="{ModelLocator.getInstance().designs}" 
+								selectedDesign="{ModelLocator.getInstance().selectedDesign}" />
+				<views:Participate id="participate" showEffect="{fadeIn}" countries="{ModelLocator.getInstance().countries}"/>
+				<views:About id="about" showEffect="{fadeIn}" 
+					aboutFillColorsText="{ModelLocator.getInstance().textualContent.aboutFillColors}"
+					currentSkin="{ModelLocator.getInstance().currentSkin}" />
+					
+			</mx:ViewStack>
+		</mx:Panel>
+		
+		 <views:Overlay id="panelOverlay" width="100%" height="100%" />
+		 <views:Extra styleName="contentExtra" />
+		 
+	</mx:Canvas>
+	
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::CSS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<css:CSSProperty defaultValue="760" property="width" 	styleName="wrapper" id="wrapperWidth" />
+	<css:CSSProperty defaultValue="500" property="height" 	styleName="wrapper" id="wrapperHeight" />
+	
+	<css:CSSAnimateProperty id="animatePropertyA" targetsAvailable="{_targetsAvailable}" />
+	<css:CSSAnimateProperty id="animatePropertyB" targetsAvailable="{_targetsAvailable}" />
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::TRANSITION EFFECTS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
+	
+	<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!--::STATES :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<mx:states>
+	
+		<!--GALLERY....................................................................... -->
+		<mx:State name="{GalleryState.THUMBNAIL_UNSELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentThumbUnselectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentThumbUnselectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.THUMBNAIL_SELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentThumbSelectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentThumbSelectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.GRID_UNSELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentGridUnselectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentGridUnselectedB"/>
+		</mx:State>
+		<mx:State name="{GalleryState.GRID_SELECTED}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentGridSelectedA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentGridSelectedB"/>
+		</mx:State>
+		
+		<!--PARTICIPATE....................................................................... -->
+		<mx:State name="{ContentState.PARTICIPATE}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:RemoveChild target="{panelOverlay}"/>
+			<mx:SetProperty target="{mainWindow}" name="title" value="Participate"/>
+			<mx:SetProperty target="{stack}" name="selectedIndex" value="1"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentParticipateA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentParticipateB"/>
+		</mx:State>
+		
+		<!--ABOUT....................................................................... -->
+		<mx:State name="{ContentState.ABOUT}" enterState="animatePropertyA.play(); animatePropertyB.play();">
+			<mx:RemoveChild target="{panelOverlay}"/>
+			<mx:SetProperty target="{mainWindow}" name="title" value="About"/>
+			<mx:SetProperty target="{stack}" name="selectedIndex" value="2"/>
+			<mx:SetProperty target="{animatePropertyA}" name="styleName" value="contentAboutA"/>
+			<mx:SetProperty target="{animatePropertyB}" name="styleName" value="contentAboutB"/>
+		</mx:State>
+		
+		
+	</mx:states>
+			
+</mx:Canvas>

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/phoenix/!svn/ver/7263/branches/phx2.1/web/WEB-INF/views/phoenix/invoice
+END
+ce_invoice_preview.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/7232/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview.jsp
+END
+ce_invoice_preview_tab0.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6847/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab0.jsp
+END
+ce_invoice_preview_tab1.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/7263/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab1.jsp
+END
+ce_invoice_preview_tab2.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/7098/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab2.jsp
+END
+ce_invoice_preview_tab3.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/7254/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab3.jsp
+END
+ce_invoice_preview_tab4.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/6969/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/ce_invoice_preview_tab4.jsp
+END
+apply_deposit_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/phoenix/!svn/ver/7224/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/apply_deposit_popup.jsp
+END
+revenue_segregation_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/phoenix/!svn/ver/6904/branches/phx2.1/web/WEB-INF/views/phoenix/invoice/revenue_segregation_popup.jsp
+END

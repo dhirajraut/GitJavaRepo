@@ -1,0 +1,245 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/phoenix/!svn/ver/7242/branches/phx2.1/web/WEB-INF/views/job
+END
+batch_reprint.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/batch_reprint.jsp
+END
+edit_job_view_invoice.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_view_invoice.jsp
+END
+view_job_entry_outsourcing.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_entry_outsourcing.jsp
+END
+edit_job_operational_info.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/edit_job_operational_info.jsp
+END
+edit_job_entry_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/edit_job_entry_insp.jsp
+END
+view_job_select_charges.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/view_job_select_charges.jsp
+END
+search_bank_account_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_bank_account_popup.jsp
+END
+search_job.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_job.jsp
+END
+create_job_entry_analytical_service.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_entry_analytical_service.jsp
+END
+cancelled_job_report.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/cancelled_job_report.jsp
+END
+edit_job_entry_outsourcing.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/edit_job_entry_outsourcing.jsp
+END
+search_timezone_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_timezone_popup.jsp
+END
+edit_job_invoice_preview_tab2.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_invoice_preview_tab2.jsp
+END
+create_job_operational_info.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_operational_info.jsp
+END
+edit_job_invoice_preview_tab3.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_invoice_preview_tab3.jsp
+END
+view_job_operational_info_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_operational_info_insp.jsp
+END
+edit_job_invoice_preview_tab4.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_invoice_preview_tab4.jsp
+END
+create_job_entry_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_entry_insp.jsp
+END
+view_job_operational_info.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_operational_info.jsp
+END
+view_job_entry_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_entry_insp.jsp
+END
+create_job_entry_outsourcing.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_entry_outsourcing.jsp
+END
+edit_job_operational_info_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/7242/branches/phx2.1/web/WEB-INF/views/job/edit_job_operational_info_insp.jsp
+END
+search_job_results.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_job_results.jsp
+END
+search_bank_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_bank_popup.jsp
+END
+search_test_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_test_popup.jsp
+END
+view_job_entry_analytical_services.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_entry_analytical_services.jsp
+END
+branch_alloc_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/branch_alloc_popup.jsp
+END
+edit_job_entry_marine.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/edit_job_entry_marine.jsp
+END
+edit_job_invoice_preview.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_invoice_preview.jsp
+END
+search_monthly_job_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_monthly_job_popup.jsp
+END
+create_job_operational_info_insp.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_operational_info_insp.jsp
+END
+search_jobid_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_jobid_popup.jsp
+END
+add_manual_test_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/add_manual_test_popup.jsp
+END
+search_job_contract_insp_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_job_contract_insp_popup.jsp
+END
+create_job_entry_marine.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/create_job_entry_marine.jsp
+END
+edit_job_select_charges.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/edit_job_select_charges.jsp
+END
+search_configuration_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_configuration_popup.jsp
+END
+view_job_entry_marine.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/view_job_entry_marine.jsp
+END
+edit_job_entry_analytical_service.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/phoenix/!svn/ver/7113/branches/phx2.1/web/WEB-INF/views/job/edit_job_entry_analytical_service.jsp
+END
+search_template_popup.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/phoenix/!svn/ver/6740/branches/phx2.1/web/WEB-INF/views/job/search_template_popup.jsp
+END

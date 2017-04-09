@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="Customer" table="CUSTOMERS">
+    <id name="custCode" type="string">
+      <meta attribute="use-in-equals">true</meta>
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+      <column name="CUST_CODE" length="15" />
+    </id>
+    <property name="name" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=60) private</meta>
+      <column name="Name" length="60" />
+    </property>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+    <property name="statusDate" type="date">
+      <column name="STATUS_DATE" sql-type="date" />
+    </property>
+    <property name="sinceDate" type="date">
+      <column name="SINCE_DATE" sql-type="date" />
+    </property>
+    <property name="addDate" type="date">
+      <column name="ADD_DATE" sql-type="date" />
+    </property>
+    <property name="industry" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="INDUSTRY" length="30" />
+    </property>
+    <property name="type" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="TYPE" length="1" />
+    </property>
+
+   <property name="creditApproved" type="yes_no">
+    <column name="CREDIT_APPROVED" length="1" />
+    </property>
+
+    <property name="invoiceType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=3) private</meta>
+      <column name="INVOICE_TYPE" length="3" />
+    </property>
+    <property name="locationType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="LOCATION_TYPE" length="4" />
+    </property>
+
+    <property name="paymentType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="PAYMENT_TYPE" length="4" />
+    </property>
+
+    <property name="accountOwnerName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ACCOUNT_OWNER_NAME" length="128" />
+    </property>
+    <many-to-one name="accountOwner" column="ACCOUNT_OWNER_NAME" class="User" insert="false" update="false" index="CUSTOMERS_index_0" />
+    <property name="creditHoldInd" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="CREDIT_HOLD_IND" length="1" />
+    </property>
+    <property name="parentCustCode" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="PARENT_CUST_CODE" length="15" />
+    </property>
+    <many-to-one name="parentCustomer" column="PARENT_CUST_CODE" class="Customer" insert="false" update="false" index="CUSTOMERS_index_1" />
+    <property name="creditLimit" type="double">
+      <column name="CREDIT_LIMIT" sql-type="NUMBER(12,4)" />
+    </property>
+    <property name="currencyCd" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+      <column name="CURRENCY_CD" length="3" />
+    </property>
+    <property name="creditAnalystName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREDIT_ANALYST_NAME" length="128" />
+    </property>
+    <many-to-one name="creditAnalyst" column="CREDIT_ANALYST_NAME" class="CreditAnalyst" insert="false" update="false" index="CUSTOMERS_index_2" />
+    <property name="collectorName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="COLLECTOR_NAME" length="128" />
+    </property>
+    <many-to-one name="collector" column="COLLECTOR_NAME" class="Collector" insert="false" update="false" index="CUSTOMERS_index_3" />
+    <property name="interunitInd" type="yes_no">
+      <column name="INTERUNIT_IND" length="1" default="N"/>
+    </property>
+    <property name="interunitPendingInd" type="yes_no">
+      <column name="INTERUNIT_PENDING_IND" length="1" default="N"/>
+    </property>
+    <property name="interunitBusUnitName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="INTERUNIT_BU_NAME" length="5" />
+    </property>
+    <many-to-one name="interunitBusUnit" column="INTERUNIT_BU_NAME" class="BusinessUnit" insert="false" update="false" index="CUSTOMERS_index_4" />
+    <property name="shipTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="SHIP_TO" length="1" />
+    </property>
+    <property name="billTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="BILL_TO" length="1" />
+    </property>
+    <property name="soldTo" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="SOLD_TO" length="1" />
+    </property>
+    <property name="primaryBillToAddress" type="int">
+      <column name="PRIMARY_BILL_ADDR" sql-type="NUMBER" />
+    </property>
+    <property name="primarySoldToAddress" type="int">
+      <column name="PRIMARY_SOLD_ADDR" sql-type="NUMBER" />
+    </property>
+    <property name="primaryShipToAddress" type="int">
+      <column name="PRIMARY_SHIP_ADDR" sql-type="NUMBER" />
+    </property>
+    <property name="newFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="NEW_FLAG" length="8" />
+    </property>
+    <property name="updateFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="UPDATE_FLAG" length="8" />
+    </property>
+    <property name="updateLimsFlag" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=8) private</meta>
+      <column name="UPDATE_LIMS_FLAG" length="8" />
+    </property>
+	<property name="isMultilingual" type="java.lang.Boolean">
+      <column name="IS_MULTILINGUAL" />
+    </property>
+    <property name="createdTime" type="timestamp">
+      <column name="CREATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="creByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CREATED_BY" length="128" />
+    </property>
+    <property name="updatedTime" type="timestamp">
+      <column name="UPDATE_TIME" sql-type="timestamp" />
+    </property>
+    <property name="modByUserName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="UPDATED_BY" length="128" />
+    </property>
+    <property name="alternateName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=60) private</meta>
+      <column name="ALTERNATE_NAME" length="60" />
+    </property>
+    <property name="customerType" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="CUSTOMER_TYPE" length="128" />
+    </property> 
+	<property name="businessDivisions" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="BUSINESS_DIVISIONS" length="128" />
+    </property>
+	<property name="businessStreams" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="BUSINESS_STREAMS" length="128" />
+    </property>
+	<property name="originSource" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=128) private</meta>
+      <column name="ORIGIN_SOURCE" length="128" />
+    </property>
+    <property name="primaryIndustry" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=30) private</meta>
+      <column name="PRIMARY_INDUSTRY" length="30" />
+    </property>    
+    <property name="secondaryIndustry" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="SECONDARY_INDUSTRY" length="45" />
+    </property>
+     <property name="parentCustomerName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=90) private</meta>
+      <column name="PARENT_CUSTOMER_NAME" length="90" />
+    </property>
+	<property name="childCustomerName" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=90) private</meta>
+      <column name="CHILD_CUSTOMER_NAME" length="90" />
+    </property>
+	<property name="notes" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="NOTES" length="60" />
+    </property>
+    <property name="lastServiceDate" type="timestamp">
+      <column name="LAST_SERVICE_DATE" sql-type="timestamp" />
+    </property>
+      <property name="lastServiceLocation" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=254) private</meta>
+      <column name="LAST_SERVICE_LOCATION" length="254" />
+    </property>   
+    <property name="taxpayerIDNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="TAXPAYER_ID_NUMBER" length="20" />
+    </property>
+	<property name="vipPlatinumPreferred" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=10) private</meta>
+      <column name="VIP_PLATINUM_PREFERRED" length="10" />
+    </property> 
+	<property name="paymentTerms" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="PAYMENT_TERMS" length="5" />
+    </property>
+	<property name="isChildCustomer" type="java.lang.Boolean">
+      <column name="IS_CHILD_CUSTOMER"/>
+    </property>
+	<property name="dunnAndBradstreetNumber" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=20) private</meta>
+      <column name="DB_No" length="20"/>
+    </property>
+    <many-to-one name="creByUser" column="CREATED_BY" class="User" insert="false" update="false" index="CUSTOMERS_index_10" />
+    <many-to-one name="upByUser" column="UPDATED_BY" class="User" insert="false" update="false" index="CUSTOMERS_index_11" />
+    
+    <set name="contractCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="ContractCust" />
+    </set>
+    <set name="contactCusts" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="ContactCust" />
+    </set>
+    <set name="custAddrSeqs" lazy="false" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="CustAddrSeq" />
+    </set>
+    <set name="custVatRegistrations" lazy="true" inverse="true" cascade="all-delete-orphan">
+      <key column="CUST_CODE" />
+      <one-to-many class="CustVatRegistration" />
+    </set>
+  </class>
+</hibernate-mapping>
+

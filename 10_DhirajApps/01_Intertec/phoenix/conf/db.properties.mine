@@ -1,0 +1,15 @@
+# db properties
+
+#db.url=jdbc:oracle:thin:@172.19.90.73:1521:PHXSTG1
+
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:DEV
+#db.url=jdbc\:oracle\:thin\:@172.19.90.32\:1521\:DEV
+db.url=jdbc:oracle:thin:@pc-p46896:1521:PHXDEV
+
+#db.url=jdbc:oracle:thin:@172.19.90.32:1521:PHXDEV
+
+#db.user=PHOENIX1
+#db.password=PHOENIX1
+
+db.user=phoenixdev
+db.password=phoenixdev

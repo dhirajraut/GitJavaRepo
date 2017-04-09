@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="BusUnitVatLoc" table="BUS_UNIT_VAT_LOC">
+    <composite-id name="busUnitVatLocId" class="BusUnitVatLocId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="countryCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=3) private</meta>
+        <column name="COUNTRY_CODE" length="3" />
+      </key-property>
+      <key-property name="buName" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=5) private</meta>
+        <column name="BU_NAME" length="5" />
+      </key-property>
+      <key-property name="vatRegistrationId" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=12) private</meta>
+        <column name="VAT_REGISTRATION_ID" length="12" />
+      </key-property>
+    </composite-id>
+    <property name="defaultLocInd" type="java.lang.Boolean">
+      <column name="DEFAULT_LOC_IND" />
+    </property>
+    <property name="localVatId" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=15) private</meta>
+      <column name="LOCAL_VAT_ID" length="15" />
+    </property>
+	<property name="outOfScope" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=5) private</meta>
+      <column name="OUT_OF_SCOPE" length="5" />
+    </property>
+    <many-to-one name="country" class="Country" column="COUNTRY_CODE" insert="false" update="false" index="BUS_UNIT_VAT_LOC_index_0" />
+    <many-to-one name="businessUnit" class="BusinessUnit" column="BU_NAME" insert="false" update="false" index="BUS_UNIT_VAT_LOC_index_1" />
+  
+    <property name="state" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=6) private</meta>
+      <column name="STATE" length="6" />
+    </property>
+  </class>
+</hibernate-mapping>
+

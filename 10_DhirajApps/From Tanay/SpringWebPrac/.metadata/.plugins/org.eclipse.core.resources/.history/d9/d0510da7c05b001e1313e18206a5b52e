@@ -1,0 +1,21 @@
+package controller;
+
+import model.Login;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
+
+public class LoginController extends SimpleFormController {
+
+	protected ModelAndView onSubmit(Object command) throws Exception {
+		// TODO Auto-generated method stub
+		Login login = (Login) command;
+		if(login.getName().equals("user")&&(login.getPassword().equals("pass")) )
+			return new ModelAndView(getSuccessView());
+		
+		return super.onSubmit(command);
+	}
+
+
+}

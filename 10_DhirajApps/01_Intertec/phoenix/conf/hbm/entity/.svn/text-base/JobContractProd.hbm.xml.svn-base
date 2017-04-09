@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="JobContractProd" table="JOB_CTR_PRODS">
+    <id name="id" type="long" unsaved-value="0">
+      <column name="JOB_CTR_PROD_ID" sql-type="NUMBER" />
+      <generator class="sequence">
+        <param name="sequence">JOB_CTR_PROD_SEQ</param>
+      </generator>
+    </id>
+    <many-to-one name="jobContractVessel" column="JOB_CTR_VESSEL_ID" class="JobContractVessel" index="JOB_CTR_PRODS_index_0" />
+    <property name="prodSeqNum" type="java.lang.Integer">
+      <column name="ITS_PROD_SEQ_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="jobNumber" type="string">
+      <column name="JOB_NUMBER" length="128" />
+    </property>
+    <property name="linkedVslRow" type="java.lang.Integer">
+      <column name="ITS_LINKED_VSL_ROW" sql-type="NUMBER" />
+    </property>
+    <property name="sampSeqId" type="java.lang.Integer">
+      <column name="ITS_SAMP_SEQ_ID" sql-type="NUMBER" />
+    </property>
+    <property name="jobProductName" type="string">
+      <column name="JOB_PRODUCT_NAME" length="256" not-null="true" />
+    </property>
+    <property name="destination" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="DESTINATION" length="256" />
+    </property>
+    <property name="group" type="string">
+      <meta attribute="scope-field">@NotBlank @Length(min=0, max=40) private</meta>
+      <column name="JOB_PRODUCT_GROUP" length="40" not-null="true" />
+    </property>
+    <property name="productGroupMaster" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=45) private</meta>
+      <column name="PRODUCT_GROUP_MASTER" length="45" />
+    </property>
+    <property name="option" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="JOB_PRODUCT_OPTION" length="4" />
+    </property>
+    <property name="plusMinus" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="PLUS_MINUS" length="4" />
+    </property>
+    <property name="drafts" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=64) private</meta>
+      <column name="JOB_PRODUCT_DRAFTS" length="64" />
+    </property>
+    <property name="tanks" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=256) private</meta>
+      <column name="JOB_PRODUCT_TANKS" length="256" />
+    </property>
+    <property name="plusMinusPct" type="int">
+      <column name="PLUS_MINUS_PCT" sql-type="NUMBER" />
+    </property>
+    <property name="productQty" type="double">
+      <column name="PRODUCT_QTY" sql-type="NUMBER(15, 3)" />
+    </property>
+    <property name="uom" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=4) private</meta>
+      <column name="UOM" length="4" />
+    </property>
+    <property name="sortOrderNum" type="java.lang.Integer">
+      <column name="SORT_ORDER_NUM" sql-type="NUMBER" />
+    </property>
+    <property name="notChargeInd" type="java.lang.Boolean">
+      <column name="NOT_CHARGE_IND" />
+    </property>
+    <set name="jobContractProductServices" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractProductService" />
+    </set>
+    <set name="results" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_P_INSP_RLT_ID">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractProductInspectionResult" />
+    </set>
+    <set name="jobContractTests" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractTest" />
+    </set>
+    <set name="jobContractManualTests" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractManualTest" />
+    </set>
+    <set name="jobContractSlates" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="SORT_ORDER_NUM">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractSlate" />
+    </set>
+    <set name="controls" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="JOB_CTR_P_CTL_ID">
+      <key>
+        <column name="JOB_CTR_PROD_ID" />
+      </key>
+      <one-to-many class="JobContractProdControl" />
+    </set>
+  </class>
+</hibernate-mapping>
+

@@ -1,0 +1,46 @@
+package model;
+
+public class StudentList {
+	private String name;
+	private int class1;
+	private String grade;
+	private int marks;
+	private String address;
+	private int id;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getClass1() {
+		return class1;
+	}
+	public void setClass1(int class1) {
+		this.class1 = class1;
+	}
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+	public int getMarks() {
+		return marks;
+	}
+	public void setMarks(int marks) {
+		this.marks = marks;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	}

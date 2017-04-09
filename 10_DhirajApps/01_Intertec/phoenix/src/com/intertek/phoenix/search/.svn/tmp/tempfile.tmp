@@ -1,0 +1,100 @@
+/*
+ * Copyright © 2009 Intertek Group, plc. All Rights Reserved.
+ *  
+ * Reproduction or use of this file without express written consent is prohibited.
+ */
+package com.intertek.phoenix.search;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+
+import com.intertek.locator.ServiceLocator;
+import com.intertek.pagination.Pagination;
+import com.intertek.phoenix.PhoenixException;
+import com.intertek.phoenix.dao.SortInfo;
+<<<<<<< .mine
+//import com.intertek.web.controller.BaseSimpleFormController;
+=======
+>>>>>>> .r5758
+
+
+/**
+ * The one and only search controller
+ * 
+ * @author Eric Nguyen
+ */
+public class SearchFormController extends SimpleFormController {
+    public SearchFormController() {
+        super();
+        setCommandClass(SearchForm.class);
+        setSessionForm(true);
+    }
+
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        SearchForm myForm = (SearchForm) command;
+        doSearch(request, myForm);
+        return showForm(request, response, errors);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void doSearch(HttpServletRequest request, SearchForm myForm) throws PhoenixException, IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException {
+        List<?> results = new ArrayList();
+
+        SortInfo sortInfo = null;
+        int totalRecords = myForm.getPagination() == null ? Pagination.UNDEFINED : myForm.getPagination().getTotalRecord();
+        Pagination pagination = doPagination(myForm.getPageNumber(), totalRecords);
+        myForm.setPagination(pagination);
+        if (myForm instanceof SpecificSearch) {
+            SpecificSearch form = (SpecificSearch) myForm;
+            List<?> list = form.buildResult(pagination, sortInfo);
+            myForm.setResult(list);
+        }
+        else {
+            SearchService searchService = (SearchService) ServiceLocator.getInstance().getBean("searchService");
+            results = searchService.advancedSearch(myForm.getEntityType(), buildCriteria(myForm), pagination, sortInfo);
+            myForm.setResult(results);
+        }
+        pagination.calculatePages();
+    }
+
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        SearchForm myForm = SearchFormFactory.getInstance().getSearchForm(request);
+        myForm.setSearchForm(request.getParameter("searchForm"));
+        doSearch(request, myForm);
+        return myForm;
+    }
+
+    private List<SearchCriteria> buildCriteria(SearchForm form) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+        List<SearchableCriteria> scs = form.getSearchableCriteria();
+        for (SearchableCriteria sc : scs) {
+            String searchValue = BeanUtils.getProperty(form, sc.getFormPath());
+            if (searchValue != null && !searchValue.isEmpty()) {
+                criteria.add(new SearchCriteria(sc.getEntityAttribute(), searchValue, sc.getOperator()));
+            }
+        }
+        return criteria;
+    }
+
+    private Pagination doPagination(String numStr, int totalRecords) {
+        int pageNumber = 0;
+        try {
+            pageNumber = Integer.parseInt(numStr);
+        }
+        catch (Exception e) {
+            pageNumber = 1;
+        }
+        Pagination pagination = new Pagination(totalRecords, 20, pageNumber, 10);
+        return pagination;
+    }
+}

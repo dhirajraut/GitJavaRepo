@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/phoenix/!svn/ver/7229/branches/phx2.1/conf/xsl/inbound
+END
+PSBillableItems.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/phoenix/!svn/ver/6427/branches/phx2.1/conf/xsl/inbound/PSBillableItems.xsl
+END
+DCAppJobOrder.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/phoenix/!svn/ver/7217/branches/phx2.1/conf/xsl/inbound/DCAppJobOrder.xsl
+END
+employee.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/phoenix/!svn/ver/6766/branches/phx2.1/conf/xsl/inbound/employee.xsl
+END
+DCAppBillableItems.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/phoenix/!svn/ver/6409/branches/phx2.1/conf/xsl/inbound/DCAppBillableItems.xsl
+END
+ECSJobOrder.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/7229/branches/phx2.1/conf/xsl/inbound/ECSJobOrder.xsl
+END
+marketRates.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/phoenix/!svn/ver/6210/branches/phx2.1/conf/xsl/inbound/marketRates.xsl
+END

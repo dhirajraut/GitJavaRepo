@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="deptpackage">
+
+	<class name="Department" table="DEPT2">
+		<id name="id" column="ID">
+			<generator class="increment"/>
+		</id>
+		<property name="name" column="NAME" not-null="true"/>
+        <property name="location" column="LOCATION" not-null="true"/>
+
+        <bag name="employees"
+                inverse="false"
+                cascade="all"
+                fetch="join"
+                lazy="true"
+        >
+        <!--
+            Inverse - both side
+            Cascade - If you delete department, all employees under it will get deleted.
+            fetch - Internal Join query.
+            lazy - Load all the related objects.
+         -->
+            <key column="id" />
+            <one-to-many class="emppackage.Employee"/>
+        </bag>
+	</class>
+
+</hibernate-mapping>

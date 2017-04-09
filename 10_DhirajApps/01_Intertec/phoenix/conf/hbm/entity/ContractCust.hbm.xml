@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.intertek.entity">
+  <meta attribute="extra-import">org.springmodules.validation.bean.conf.loader.annotation.handler.*</meta>
+  <class name="ContractCust" table="CONTRACT_CUSTS">
+    <composite-id name="contractCustId" class="ContractCustId">
+      <meta attribute="use-in-equals">true</meta>
+      <key-property name="custCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+        <column name="CUST_CODE" length="15" />
+      </key-property>
+      <key-property name="contractCode" type="string">
+        <meta attribute="scope-field">@NotBlank @Length(min=0, max=15) private</meta>
+        <column name="CONTRACT_CODE" length="15" />
+      </key-property>
+    </composite-id>
+    <many-to-one name="customer" class="Customer" insert="false" update="false">
+      <column name="CUST_CODE" index="CONTRACT_CUSTS_index_0" />
+    </many-to-one>
+    <many-to-one name="contract" class="Contract" insert="false" update="false">
+      <column name="CONTRACT_CODE" index="CONTRACT_CUSTS_index_1" />
+    </many-to-one>
+    <property name="status" type="string">
+      <meta attribute="scope-field">@Length(min=0, max=1) private</meta>
+      <column name="STATUS" length="1" />
+    </property>
+  </class>
+</hibernate-mapping>
+

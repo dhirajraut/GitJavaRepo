@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.intertek.com/ESB/ECSJobOrderResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.intertek.com/ESB/ECSJobOrderResponse" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetJobOrderRequest" type="JobOrderRequestType">
+		<xs:annotation>
+			<xs:documentation>Job Order ESB Response</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="JobOrderRequestType">
+		<xs:sequence>
+			<xs:element name="MessageData" type="MessageDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageDataType">
+		<xs:sequence>
+			<xs:element name="JobNumber" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

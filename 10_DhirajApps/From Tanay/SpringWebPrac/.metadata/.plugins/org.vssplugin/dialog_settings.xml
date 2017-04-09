@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="EditionSelectionDialog">
+		<item key="showComments" value="false"/>
+		<item key="showNoLabels" value="false"/>
+		<item key="onlyShowLastLabel" value="false"/>
+	</section>
+	<section name="VSSProviderSettings">
+		<item key="sourceMountPoint" value="/"/>
+		<item key="supportsMultipleCheckouts" value="false"/>
+		<item key="mountPoint" value="$/"/>
+	</section>
+	<section name="checkOutView">
+	</section>
+</section>
